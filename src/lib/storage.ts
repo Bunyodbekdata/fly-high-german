@@ -35,6 +35,24 @@ const STORAGE_KEYS = {
 
 const CURRENT_CURRICULUM_VERSION = 'v3_menschen_a1_alignment';
 
+export const PROFILE_UPDATED_EVENT = 'fgn-profile-updated';
+
+/** Local calendar date as YYYY-MM-DD (not UTC, so the day flips at local midnight). */
+const toLocalDateKey = (d: Date): string => {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+};
+
+const todayKey = (): string => toLocalDateKey(new Date());
+
+const yesterdayKey = (): string => {
+  const d = new Date();
+  d.setDate(d.getDate() - 1);
+  return toLocalDateKey(d);
+};
+
 class StorageService {
   private isBrowser = typeof window !== 'undefined';
 
@@ -70,7 +88,7 @@ class StorageService {
       localStorage.setItem(STORAGE_KEYS.VERSION, CURRENT_CURRICULUM_VERSION);
     }
 
-    // Default mock user profile if not logged in
+    // Default guest profile for first-time visitors — starts with honest zero stats
     if (!localStorage.getItem(STORAGE_KEYS.USER_PROFILE)) {
       const defaultUser: UserProfile = {
         id: 'usr-demo-1',
@@ -79,12 +97,69 @@ class StorageService {
         role: 'student',
         currentLevel: 'a1-1',
         dailyGoalMinutes: 20,
-        streakDays: 3,
-        xpPoints: 180,
+        streakDays: 0,
+        xpPoints: 0,
         createdAt: new Date().toISOString()
       };
       localStorage.setItem(STORAGE_KEYS.USER_PROFILE, JSON.stringify(defaultUser));
     }
+
+    this.normalizeProfileStats();
+  }
+
+  /**
+   * Repairs stats on load:
+   * - Legacy profiles (no lastActiveDate) carried fake starter numbers, so streak is reset
+   *   and XP is recomputed from actually completed lessons (50 XP each).
+   * - A streak whose last activity is older than yesterday is broken and shown as 0.
+   */
+  private normalizeProfileStats() {
+    const raw = localStorage.getItem(STORAGE_KEYS.USER_PROFILE);
+    if (!raw) return;
+    let profile: UserProfile;
+    try {
+      profile = JSON.parse(raw);
+    } catch {
+      return;
+    }
+
+    let changed = false;
+
+    if (!profile.lastActiveDate) {
+      const completed = Object.values(this.getLessonProgress()).filter(p => p.completed).length;
+      const realXp = completed * 50;
+      if (profile.streakDays !== 0 || profile.xpPoints !== realXp) {
+        profile.streakDays = 0;
+        profile.xpPoints = realXp;
+        changed = true;
+      }
+    } else if (
+      profile.lastActiveDate !== todayKey() &&
+      profile.lastActiveDate !== yesterdayKey() &&
+      profile.streakDays !== 0
+    ) {
+      profile.streakDays = 0;
+      changed = true;
+    }
+
+    if (changed) {
+      localStorage.setItem(STORAGE_KEYS.USER_PROFILE, JSON.stringify(profile));
+    }
+  }
+
+  /** Call on any genuine learning action. Increments the streak at most once per calendar day. */
+  public recordActivity(): void {
+    if (!this.isBrowser) return;
+    const profile = this.getUserProfile();
+    if (!profile) return;
+
+    const today = todayKey();
+    if (profile.lastActiveDate === today) return;
+
+    profile.streakDays =
+      profile.lastActiveDate === yesterdayKey() ? (profile.streakDays || 0) + 1 : 1;
+    profile.lastActiveDate = today;
+    this.saveUserProfile(profile);
   }
 
   // --- Educational Content Retrieval ---
@@ -236,6 +311,8 @@ class StorageService {
   public saveUserProfile(profile: UserProfile): void {
     if (!this.isBrowser) return;
     localStorage.setItem(STORAGE_KEYS.USER_PROFILE, JSON.stringify(profile));
+    // Let AuthContext refresh so XP/streak update without a page reload
+    window.dispatchEvent(new Event(PROFILE_UPDATED_EVENT));
   }
 
   // --- Progress Tracking (Section 13) ---
@@ -260,6 +337,8 @@ class StorageService {
       tabCompleted: {}
     };
 
+    const wasCompleted = existing.completed;
+
     if (data.completed !== undefined) {
       existing.completed = data.completed;
       if (data.completed) {
@@ -280,12 +359,14 @@ class StorageService {
 
     localStorage.setItem(STORAGE_KEYS.LESSON_PROGRESS, JSON.stringify(allProgress));
 
-    // Update user stats and XP points
+    // XP is awarded only the first time a lesson is completed (re-doing a lesson doesn't farm XP)
     const profile = this.getUserProfile();
-    if (profile && data.completed) {
+    if (profile && data.completed && !wasCompleted) {
       profile.xpPoints = (profile.xpPoints || 0) + 50;
       this.saveUserProfile(profile);
     }
+
+    this.recordActivity();
   }
 
   public getVocabularyProgress(): Record<string, VocabularyProgress> {
@@ -322,6 +403,9 @@ class StorageService {
     existing.lastReviewedAt = new Date().toISOString();
     all[vocabId] = existing;
     localStorage.setItem(STORAGE_KEYS.VOCAB_PROGRESS, JSON.stringify(all));
+    if (mastered) {
+      this.recordActivity();
+    }
   }
 
   // --- Reset to Initial Data (for Admin/Testing) ---

@@ -1,7 +1,16 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { UserProfile, CEFRLevelCode } from '../types/database';
-import { storageService } from '../lib/storage';
+import { storageService, PROFILE_UPDATED_EVENT } from '../lib/storage';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
+
+/**
+ * Owner email that gets the admin role. Set VITE_ADMIN_EMAIL in Vercel env vars.
+ * NOTE: until real Supabase auth is wired up (roadmap phase 2) passwords are not verified,
+ * so this only hides the admin UI from regular users — it is not real security.
+ */
+const ADMIN_EMAIL = (import.meta.env.VITE_ADMIN_EMAIL || '').trim().toLowerCase();
+const roleForEmail = (email: string): 'student' | 'admin' =>
+  ADMIN_EMAIL && email.trim().toLowerCase() === ADMIN_EMAIL ? 'admin' : 'student';
 
 interface AuthContextType {
   user: UserProfile | null;
@@ -38,19 +47,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
+  // Keep XP / streak in sync when storageService updates the profile (lesson completed, etc.)
+  useEffect(() => {
+    const handleProfileUpdated = () => setUser(storageService.getUserProfile());
+    window.addEventListener(PROFILE_UPDATED_EVENT, handleProfileUpdated);
+    return () => window.removeEventListener(PROFILE_UPDATED_EVENT, handleProfileUpdated);
+  }, []);
+
   const login = async (email: string, _pass: string): Promise<boolean> => {
-    // Check if admin login
-    const isAdmin = email.toLowerCase().includes('admin');
+    const role = roleForEmail(email);
     const existing = storageService.getUserProfile();
     const newUser: UserProfile = {
       id: existing?.id || 'usr-' + Date.now(),
       email,
-      name: isAdmin ? 'Admin Ustoz' : (existing?.name || 'Talaba'),
-      role: isAdmin ? 'admin' : 'student',
+      name: role === 'admin' ? 'Admin Ustoz' : (existing?.name || 'Talaba'),
+      role,
       currentLevel: existing?.currentLevel || 'a1-1',
       dailyGoalMinutes: existing?.dailyGoalMinutes || 20,
-      streakDays: (existing?.streakDays || 0) + 1,
-      xpPoints: existing?.xpPoints || 100,
+      // Logging in is not learning: keep the real streak/XP untouched
+      streakDays: existing?.streakDays ?? 0,
+      xpPoints: existing?.xpPoints ?? 0,
+      lastActiveDate: existing?.lastActiveDate,
       createdAt: existing?.createdAt || new Date().toISOString()
     };
     storageService.saveUserProfile(newUser);
@@ -59,15 +76,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const register = async (name: string, email: string, _pass: string): Promise<boolean> => {
+    const existing = storageService.getUserProfile();
     const newUser: UserProfile = {
       id: 'usr-' + Date.now(),
       email,
       name,
-      role: email.toLowerCase().includes('admin') ? 'admin' : 'student',
-      currentLevel: 'a1-1',
+      role: roleForEmail(email),
+      currentLevel: existing?.currentLevel || 'a1-1',
       dailyGoalMinutes: 20,
-      streakDays: 1,
-      xpPoints: 50,
+      // Progress made as a guest on this device carries over
+      streakDays: existing?.streakDays ?? 0,
+      xpPoints: existing?.xpPoints ?? 0,
+      lastActiveDate: existing?.lastActiveDate,
       createdAt: new Date().toISOString()
     };
     storageService.saveUserProfile(newUser);

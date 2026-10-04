@@ -7,7 +7,7 @@ import { CEFRLevelCode } from '../types/database';
 import { LevelBadge } from '../components/common/Badge';
 
 export const ProfilePage: React.FC = () => {
-  const { user, updateProfile, switchRole, logout, setUserLevel } = useAuth();
+  const { user, updateProfile, logout, setUserLevel } = useAuth();
   const { completedLessonsCount, masteredVocabCount } = useProgress();
   const levels = storageService.getLevels();
 
@@ -46,9 +46,11 @@ export const ProfilePage: React.FC = () => {
             <h3 className="text-xl font-bold text-slate-900">{user?.name}</h3>
             <p className="text-xs text-slate-500 font-mono">{user?.email}</p>
             <div className="flex items-center space-x-2 mt-2">
-              <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 capitalize">
-                Rol: {user?.role}
-              </span>
+              {user?.role === 'admin' && (
+                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700">
+                  Admin
+                </span>
+              )}
               <LevelBadge code={user?.currentLevel || 'a1-1'} />
             </div>
           </div>
@@ -57,13 +59,13 @@ export const ProfilePage: React.FC = () => {
         <div className="flex items-center space-x-3">
           <div className="p-3 rounded-2xl bg-amber-50 border border-amber-200 text-center min-w-[80px]">
             <Flame size={18} className="mx-auto text-amber-500 fill-amber-500 mb-0.5" />
-            <div className="text-base font-bold text-amber-900">{user?.streakDays || 1} kun</div>
+            <div className="text-base font-bold text-amber-900">{user?.streakDays ?? 0} kun</div>
             <div className="text-[10px] text-amber-600">Silsila</div>
           </div>
 
           <div className="p-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-center min-w-[80px]">
             <Award size={18} className="mx-auto text-emerald-600 mb-0.5" />
-            <div className="text-base font-bold text-emerald-900">{user?.xpPoints || 150} XP</div>
+            <div className="text-base font-bold text-emerald-900">{user?.xpPoints ?? 0} XP</div>
             <div className="text-[10px] text-emerald-600">Tajriba</div>
           </div>
 
@@ -138,17 +140,7 @@ export const ProfilePage: React.FC = () => {
           </div>
         </div>
 
-        <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <button
-              type="button"
-              onClick={() => switchRole(user?.role === 'admin' ? 'student' : 'admin')}
-              className="text-xs text-slate-500 hover:text-slate-800 underline font-medium"
-            >
-              Rolni almashtirish ({user?.role === 'admin' ? 'Talabaga o‘tish' : 'Adminlikka o‘tish'})
-            </button>
-          </div>
-
+        <div className="pt-4 border-t border-slate-100 flex items-center justify-end">
           <button
             type="submit"
             className="px-6 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-sm font-bold shadow-sm transition"

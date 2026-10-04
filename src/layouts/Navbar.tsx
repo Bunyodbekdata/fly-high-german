@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
-  const { user, isAuthenticated, isAdmin, switchRole } = useAuth();
+  const { user, isAuthenticated, isAdmin } = useAuth();
   const { isDark, toggleTheme } = useTheme();
   const location = useLocation();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -123,11 +123,11 @@ export const Navbar: React.FC = () => {
               {/* Learning Streak */}
               {user && (
                 <div 
-                  title={`O‘rganish silsilasi: ${user.streakDays || 1} kun`}
+                  title={`O‘rganish silsilasi: ${user.streakDays ?? 0} kun`}
                   className="hidden sm:flex items-center space-x-1 px-2.5 py-1 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/80 text-amber-700 dark:text-amber-300 text-xs font-bold"
                 >
-                  <Flame size={14} className="text-amber-500 fill-amber-500 animate-pulse" />
-                  <span>{user.streakDays || 1} kun</span>
+                  <Flame size={14} className={(user.streakDays ?? 0) > 0 ? 'text-amber-500 fill-amber-500 animate-pulse' : 'text-amber-400'} />
+                  <span>{user.streakDays ?? 0} kun</span>
                 </div>
               )}
 
@@ -141,15 +141,6 @@ export const Navbar: React.FC = () => {
                   Admin
                 </Link>
               )}
-
-              {/* Role Switcher Demo Tooltip for convenience */}
-              <button
-                onClick={() => switchRole(isAdmin ? 'student' : 'admin')}
-                title="Talaba yoki Admin holatiga o‘tish (Demo)"
-                className="hidden xl:inline-flex text-[11px] font-mono px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition"
-              >
-                Rol: {user?.role || 'student'} 🔄
-              </button>
 
               {/* Student Dashboard or Login Link */}
               {isAuthenticated ? (

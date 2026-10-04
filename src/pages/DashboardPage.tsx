@@ -56,13 +56,13 @@ export const DashboardPage: React.FC = () => {
           <div className="flex items-center space-x-4">
             <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 text-center min-w-[100px]">
               <Flame size={24} className="mx-auto text-amber-400 fill-amber-400 animate-pulse mb-1" />
-              <div className="text-xl font-black">{user?.streakDays || 1} kun</div>
+              <div className="text-xl font-black">{user?.streakDays ?? 0} kun</div>
               <div className="text-[11px] text-slate-300">Silsila</div>
             </div>
 
             <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 text-center min-w-[100px]">
               <Award size={24} className="mx-auto text-emerald-400 mb-1" />
-              <div className="text-xl font-black">{user?.xpPoints || 150} XP</div>
+              <div className="text-xl font-black">{user?.xpPoints ?? 0} XP</div>
               <div className="text-[11px] text-slate-300">Tajriba</div>
             </div>
           </div>

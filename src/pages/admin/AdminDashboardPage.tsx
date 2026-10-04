@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { storageService } from '../../lib/storage';
 import { useAuth } from '../../context/AuthContext';
 import { Lesson, VocabularyItem, GrammarTopic, CEFRLevelCode } from '../../types/database';
 import { LevelBadge, ArticleBadge } from '../../components/common/Badge';
 import { 
   ShieldCheck, 
+  ShieldAlert,
   Plus, 
   Trash2, 
   Check, 
@@ -19,7 +21,27 @@ import {
 } from 'lucide-react';
 
 export const AdminDashboardPage: React.FC = () => {
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
+
+  if (!isAdmin) {
+    return (
+      <div className="max-w-md mx-auto py-24 px-4 text-center space-y-4">
+        <div className="w-16 h-16 mx-auto rounded-3xl bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-600">
+          <ShieldAlert size={32} />
+        </div>
+        <h2 className="text-xl font-bold text-slate-900">Kirish cheklangan</h2>
+        <p className="text-xs text-slate-500 leading-relaxed">
+          Ushbu sahifa faqat platforma ma'murlari (admin) uchun mo‘ljallangan. Agar siz admin bo‘lsangiz, tegishli hisob bilan tizimga kiring.
+        </p>
+        <Link
+          to="/"
+          className="inline-block px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold transition shadow-sm"
+        >
+          Bosh sahifaga qaytish
+        </Link>
+      </div>
+    );
+  }
   const [activeTab, setActiveTab] = useState<'lessons' | 'vocabulary' | 'grammar'>('lessons');
   const [lessons, setLessons] = useState<Lesson[]>(() => storageService.getLessons());
   const [vocabulary, setVocabulary] = useState<VocabularyItem[]>(() => storageService.getAllVocabulary());

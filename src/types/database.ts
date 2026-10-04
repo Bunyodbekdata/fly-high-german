@@ -276,6 +276,8 @@ export interface UserProfile {
   dailyGoalMinutes: number;
   streakDays: number;
   xpPoints: number;
+  /** Local calendar date (YYYY-MM-DD) of the last real learning activity; drives the daily streak. */
+  lastActiveDate?: string;
   createdAt: string;
 }
 

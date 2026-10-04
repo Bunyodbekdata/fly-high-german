@@ -22,12 +22,16 @@ import {
   Play
 } from 'lucide-react';
 import { storageService } from '../lib/storage';
+import { useProgress } from '../context/ProgressContext';
 import { AudioButton } from '../components/common/AudioButton';
 import { LevelBadge } from '../components/common/Badge';
 
 export const HomePage: React.FC = () => {
   const levels = storageService.getLevels();
   const sampleLesson = storageService.getLessonById('les-1');
+  const { completedLessonsCount, getNextIncompleteLesson } = useProgress();
+  const nextLesson = getNextIncompleteLesson() || sampleLesson;
+  const isReturningLearner = completedLessonsCount > 0;
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
   const faqs = [
@@ -87,7 +91,7 @@ export const HomePage: React.FC = () => {
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-950 dark:text-white tracking-tight max-w-4xl mx-auto leading-[1.12]">
             Nemis tilini{' '}
             <span className="bg-gradient-to-r from-brand-600 via-indigo-600 to-rose-600 bg-clip-text text-transparent">
-              noldan B1 gacha
+              noldan A1 darajagacha
             </span>{' '}
             mustaqil o‘rganing.
           </h1>
@@ -101,10 +105,14 @@ export const HomePage: React.FC = () => {
           {/* Action Buttons */}
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
-              to="/courses/a1-1/lesson/les-1"
+              to={`/courses/${nextLesson?.levelCode || 'a1-1'}/lesson/${nextLesson?.id || 'les-1'}`}
               className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-base shadow-glow transition transform hover:-translate-y-0.5 inline-flex items-center justify-center space-x-2"
             >
-              <span>1-Darsni Boshlash (Bepul)</span>
+              <span>
+                {isReturningLearner
+                  ? `Darsni davom ettirish (#${nextLesson?.orderIndex || 1}-dars)`
+                  : '1-Darsni Boshlash (Bepul)'}
+              </span>
               <ArrowRight size={18} />
             </Link>
 

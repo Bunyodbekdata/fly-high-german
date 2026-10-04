@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { storageService } from '../lib/storage';
 import { useProgress } from '../context/ProgressContext';
 import { VocabCard } from '../components/vocabulary/VocabCard';
@@ -16,16 +17,24 @@ import {
 } from 'lucide-react';
 
 export const VocabularyPage: React.FC = () => {
+  const [searchParams] = useSearchParams();
   const allVocab = storageService.getAllVocabulary();
   const levels = storageService.getLevels();
   const { vocabProgress } = useProgress();
 
   const [selectedLevel, setSelectedLevel] = useState<string>('all');
   const [selectedType, setSelectedType] = useState<string>('all');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(() => searchParams.get('search') || '');
   const [onlyFavorites, setOnlyFavorites] = useState(false);
   const [onlyUnlearned, setOnlyUnlearned] = useState(false);
   const [isFlashcardMode, setIsFlashcardMode] = useState(false);
+
+  useEffect(() => {
+    const queryParam = searchParams.get('search');
+    if (queryParam !== null) {
+      setSearchQuery(queryParam);
+    }
+  }, [searchParams]);
 
   // Filter logic
   const filteredVocab = useMemo(() => {
