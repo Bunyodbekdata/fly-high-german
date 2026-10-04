@@ -10,6 +10,7 @@ import {
   VocabularyProgress, 
   CEFRLevelCode 
 } from '../types/database';
+import { UserVideoNote } from '../types/youtube';
 import { 
   INITIAL_LEVELS, 
   INITIAL_MODULES, 
@@ -405,6 +406,45 @@ class StorageService {
     localStorage.setItem(STORAGE_KEYS.VOCAB_PROGRESS, JSON.stringify(all));
     if (mastered) {
       this.recordActivity();
+    }
+  }
+
+  // --- Personal Video Vocabulary Notes (Cross-Video Notebook) ---
+
+  public getAllUserVideoNotes(): UserVideoNote[] {
+    if (!this.isBrowser) return [];
+    const notes: UserVideoNote[] = [];
+    try {
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('fgn_video_notes_')) {
+          const raw = localStorage.getItem(key);
+          if (raw) {
+            const list = JSON.parse(raw);
+            if (Array.isArray(list)) {
+              notes.push(...list);
+            }
+          }
+        }
+      }
+    } catch (e) {
+      console.error('Failed to read video notes', e);
+    }
+    return notes.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }
+
+  public deleteUserVideoNote(noteId: string, videoId: string): void {
+    if (!this.isBrowser) return;
+    try {
+      const key = `fgn_video_notes_${videoId}`;
+      const raw = localStorage.getItem(key);
+      if (raw) {
+        const list: UserVideoNote[] = JSON.parse(raw);
+        const filtered = list.filter(n => n.id !== noteId);
+        localStorage.setItem(key, JSON.stringify(filtered));
+      }
+    } catch (e) {
+      console.error('Failed to delete video note', e);
     }
   }
 
