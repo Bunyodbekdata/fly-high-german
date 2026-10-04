@@ -83,7 +83,7 @@ export const YoutubeStudioPlayer: React.FC<YoutubeStudioPlayerProps> = ({
   }, [video.id]);
 
   const effectiveId = YoutubeStorageService.getVideoEffectiveId(video);
-  const embedUrl = `https://www.youtube-nocookie.com/embed/${effectiveId}?autoplay=1&rel=0&modestbranding=1`;
+  const embedUrl = `https://www.youtube-nocookie.com/embed/${effectiveId}?autoplay=1&rel=0&modestbranding=1&playsinline=1&enablejsapi=1`;
 
   // Find previous and next video in this channel
   const currentIndex = allChannelVideos.findIndex(v => v.id === video.id);
@@ -198,13 +198,14 @@ export const YoutubeStudioPlayer: React.FC<YoutubeStudioPlayerProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex flex-col justify-between overflow-hidden animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col justify-between overflow-hidden animate-in fade-in duration-200">
       {/* Studio Top Navigation Bar */}
-      <header className="h-16 bg-slate-900 border-b border-slate-800 px-4 sm:px-6 flex items-center justify-between flex-shrink-0 text-white">
-        <div className="flex items-center space-x-3 truncate">
+      <header className="h-14 sm:h-16 bg-slate-900 border-b border-slate-800 px-3 sm:px-6 flex items-center justify-between flex-shrink-0 text-white z-30">
+        <div className="flex items-center space-x-2 sm:space-x-3 truncate">
           <button
             onClick={onClose}
-            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition flex items-center space-x-1.5 text-xs font-bold"
+            className="p-1.5 sm:p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition flex items-center space-x-1.5 text-xs font-bold"
+            title="Katalogga qaytish"
           >
             <ChevronLeft size={16} />
             <span className="hidden sm:inline">Katalogga qaytish</span>
@@ -212,40 +213,41 @@ export const YoutubeStudioPlayer: React.FC<YoutubeStudioPlayerProps> = ({
 
           <div className="h-5 w-px bg-slate-800 hidden sm:block" />
 
-          <div className="flex flex-col truncate">
-            <div className="flex items-center space-x-2">
-              <span className="px-2 py-0.5 rounded-md bg-brand-600 text-[10px] font-extrabold uppercase">
+          <div className="flex flex-col truncate min-w-0">
+            <div className="flex items-center space-x-1.5 sm:space-x-2">
+              <span className="px-1.5 sm:px-2 py-0.5 rounded-md bg-brand-600 text-[9px] sm:text-[10px] font-extrabold uppercase">
                 {channel.name}
               </span>
-              <span className="text-xs text-slate-400 font-semibold truncate">
-                {video.episodeNumber}-dars ({video.duration} min)
+              <span className="text-[11px] sm:text-xs text-slate-400 font-semibold truncate">
+                #{video.episodeNumber}-dars ({video.duration} min)
               </span>
             </div>
-            <h2 className="text-sm font-bold text-white truncate max-w-md sm:max-w-xl">
+            <h2 className="text-xs sm:text-sm font-bold text-white truncate max-w-[170px] sm:max-w-md md:max-w-xl">
               {video.titleUz}
             </h2>
           </div>
         </div>
 
         {/* Right Action Tools */}
-        <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
+        <div className="flex items-center space-x-1.5 sm:space-x-3 flex-shrink-0">
           {/* Mark as Completed Toggle */}
           <button
             onClick={handleToggleCompleted}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition ${
+            className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition ${
               isCompleted
                 ? 'bg-emerald-600 text-white shadow-sm'
                 : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
             }`}
+            title={isCompleted ? "O‘zlashtirilgan" : "Tugallangan deb belgilash"}
           >
             <BookmarkCheck size={15} className={isCompleted ? "text-white" : "text-slate-400"} />
-            <span className="hidden md:inline">{isCompleted ? 'Dars o‘zlashtirildi' : 'Tugallangan deb belgilash'}</span>
+            <span className="hidden md:inline">{isCompleted ? 'O‘zlashtirildi' : 'Tugallangan deb belgilash'}</span>
           </button>
 
           {/* Quick Edit YouTube Link */}
           <button
             onClick={() => setIsEditingUrl(!isEditingUrl)}
-            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition"
+            className="p-1.5 sm:p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition"
             title="YouTube havolasini o‘zgartirish"
           >
             <Edit3 size={15} />
@@ -254,56 +256,57 @@ export const YoutubeStudioPlayer: React.FC<YoutubeStudioPlayerProps> = ({
           {/* Close Studio Button */}
           <button
             onClick={onClose}
-            className="p-2 rounded-xl bg-slate-800 hover:bg-red-600 text-slate-300 hover:text-white transition"
-            title="Yopish (Esc)"
+            className="p-1.5 sm:p-2 rounded-xl bg-slate-800 hover:bg-red-600 text-slate-300 hover:text-white transition"
+            title="Yopish"
+            aria-label="Yopish"
           >
-            <X size={18} />
+            <X size={17} />
           </button>
         </div>
       </header>
 
-      {/* Main Studio Body: Video Player (Left) + Interactive Studio (Right) */}
-      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
-        {/* Left: Responsive Distraction-Free YouTube Cinema Frame */}
-        <div className="flex-1 bg-black flex flex-col justify-center items-center relative overflow-hidden p-2 sm:p-4">
-          <div className="w-full max-w-5xl aspect-video bg-slate-950 rounded-2xl overflow-hidden shadow-2xl border border-slate-800/80 relative">
+      {/* Main Studio Body: Video Player (Left/Top) + Interactive Studio (Right/Bottom) */}
+      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden min-h-0">
+        {/* Left/Top: Responsive Distraction-Free YouTube Cinema Frame (Never squished on mobile) */}
+        <div className="w-full lg:flex-1 bg-black flex flex-col justify-center items-center relative flex-shrink-0 lg:flex-shrink p-2 sm:p-4 border-b lg:border-b-0 border-slate-800">
+          <div className="w-full max-w-5xl aspect-video bg-slate-950 rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl border border-slate-800/80 relative min-h-[195px] sm:min-h-[260px] max-h-[38vh] lg:max-h-none">
             <iframe
               src={embedUrl}
               title={video.titleUz}
-              className="w-full h-full border-0"
+              className="w-full h-full border-0 absolute inset-0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
             />
           </div>
 
           {/* Quick Player Bar: Previous / Next Episode Navigation */}
-          <div className="w-full max-w-5xl flex items-center justify-between mt-3 px-2 text-xs">
+          <div className="w-full max-w-5xl flex items-center justify-between mt-2 sm:mt-3 px-1 sm:px-2 text-xs">
             <button
               onClick={() => prevVideo && onSelectVideo(prevVideo)}
               disabled={!prevVideo}
-              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-slate-900/90 text-slate-300 hover:text-white hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed transition"
+              className="flex items-center space-x-1 sm:space-x-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl bg-slate-900/90 text-slate-300 hover:text-white hover:bg-slate-800 disabled:opacity-30 disabled:cursor-not-allowed transition text-[11px] sm:text-xs"
             >
-              <ChevronLeft size={16} />
-              <span>Oldingi dars: #{prevVideo ? prevVideo.episodeNumber : '-'}</span>
+              <ChevronLeft size={15} />
+              <span>Oldingi: #{prevVideo ? prevVideo.episodeNumber : '-'}</span>
             </button>
 
-            <span className="text-slate-400 font-medium hidden sm:inline">
-              Nemischa nomi: <span className="text-slate-200 font-semibold">{video.titleDe}</span>
+            <span className="text-slate-400 font-medium hidden sm:inline truncate max-w-xs px-2">
+              Nemischa: <span className="text-slate-200 font-semibold">{video.titleDe}</span>
             </span>
 
             <button
               onClick={() => nextVideo && onSelectVideo(nextVideo)}
               disabled={!nextVideo}
-              className="flex items-center space-x-1.5 px-4 py-1.5 rounded-xl bg-brand-600 text-white hover:bg-brand-500 disabled:opacity-30 disabled:cursor-not-allowed font-bold transition shadow-sm"
+              className="flex items-center space-x-1 sm:space-x-1.5 px-3 sm:px-4 py-1 sm:py-1.5 rounded-xl bg-brand-600 text-white hover:bg-brand-500 disabled:opacity-30 disabled:cursor-not-allowed font-bold transition shadow-sm text-[11px] sm:text-xs"
             >
-              <span>Keyingi dars: #{nextVideo ? nextVideo.episodeNumber : '-'}</span>
-              <ChevronRight size={16} />
+              <span>Keyingi: #{nextVideo ? nextVideo.episodeNumber : '-'}</span>
+              <ChevronRight size={15} />
             </button>
           </div>
 
           {/* YouTube Link Customizer Modal if opened */}
           {isEditingUrl && (
-            <div className="absolute top-6 left-1/2 -translate-x-1/2 w-full max-w-lg bg-slate-900 border border-slate-700 p-4 rounded-2xl shadow-2xl z-30 space-y-3 animate-in fade-in">
+            <div className="absolute top-4 sm:top-6 left-1/2 -translate-x-1/2 w-[92%] sm:w-full max-w-lg bg-slate-900 border border-slate-700 p-4 rounded-2xl shadow-2xl z-40 space-y-3 animate-in fade-in">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-white flex items-center space-x-1.5">
                   <Edit3 size={13} className="text-brand-400" />
@@ -335,49 +338,49 @@ export const YoutubeStudioPlayer: React.FC<YoutubeStudioPlayerProps> = ({
           )}
         </div>
 
-        {/* Right: Shadowing Studio & Interactive Practice Panel */}
-        <div className="w-full lg:w-[440px] xl:w-[480px] bg-slate-900 border-t lg:border-t-0 lg:border-l border-slate-800 flex flex-col justify-between overflow-hidden flex-shrink-0">
+        {/* Right/Bottom: Shadowing Studio & Interactive Practice Panel */}
+        <div className="flex-1 lg:flex-initial w-full lg:w-[440px] xl:w-[480px] bg-slate-900 border-t lg:border-t-0 lg:border-l border-slate-800 flex flex-col justify-between overflow-hidden min-h-0">
           {/* Panel Tab Switcher */}
-          <div className="flex items-center border-b border-slate-800 p-2 gap-1 bg-slate-950/60">
+          <div className="flex items-center border-b border-slate-800 p-1.5 sm:p-2 gap-1 bg-slate-950/70 flex-shrink-0">
             <button
               onClick={() => setActiveTab('shadowing')}
-              className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 transition ${
+              className={`flex-1 py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-xl text-[11px] sm:text-xs font-bold flex items-center justify-center space-x-1 sm:space-x-1.5 transition ${
                 activeTab === 'shadowing'
                   ? 'bg-brand-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
               }`}
             >
-              <Mic size={14} />
+              <Mic size={13} />
               <span>Shadowing ({video.shadowingPhrases.length})</span>
             </button>
 
             <button
               onClick={() => setActiveTab('vocab')}
-              className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 transition ${
+              className={`flex-1 py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-xl text-[11px] sm:text-xs font-bold flex items-center justify-center space-x-1 sm:space-x-1.5 transition ${
                 activeTab === 'vocab'
                   ? 'bg-brand-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
               }`}
             >
-              <BookMarked size={14} />
-              <span>Lug‘at daftari ({notes.length})</span>
+              <BookMarked size={13} />
+              <span>Lug‘at ({notes.length})</span>
             </button>
 
             <button
               onClick={() => setActiveTab('playlist')}
-              className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center space-x-1.5 transition ${
+              className={`flex-1 py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-xl text-[11px] sm:text-xs font-bold flex items-center justify-center space-x-1 sm:space-x-1.5 transition ${
                 activeTab === 'playlist'
                   ? 'bg-brand-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
               }`}
             >
-              <ListFilter size={14} />
+              <ListFilter size={13} />
               <span>Pleylist ({allChannelVideos.length})</span>
             </button>
           </div>
 
-          {/* Panel Content (Scrollable) */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          {/* Panel Content (Scrollable with min-h-0) */}
+          <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-4 min-h-0">
             {/* TAB 1: SHADOWING TALAFFUZ VA TAKRORLASH */}
             {activeTab === 'shadowing' && (
               <div className="space-y-4">
