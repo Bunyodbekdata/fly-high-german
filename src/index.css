@@ -23,6 +23,40 @@
   @apply bg-purple-100 text-purple-700 border border-purple-200 dark:bg-purple-950/60 dark:text-purple-300 dark:border-purple-800;
 }
 
+/* German Article Card Glows */
+.glow-der {
+  box-shadow: 0 0 20px -3px rgba(37, 99, 235, 0.3);
+}
+.glow-die {
+  box-shadow: 0 0 20px -3px rgba(225, 29, 72, 0.3);
+}
+.glow-das {
+  box-shadow: 0 0 20px -3px rgba(5, 150, 105, 0.3);
+}
+.glow-plural {
+  box-shadow: 0 0 20px -3px rgba(124, 58, 237, 0.3);
+}
+
+/* 3D Flashcard Flip Utilities */
+.perspective-1000 {
+  perspective: 1000px;
+}
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* Safe Area Inset */
+.safe-area-pb {
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0.75rem));
+}
+
 /* Modern Card Glow */
 .glass-panel {
   background: rgba(255, 255, 255, 0.85);
@@ -46,12 +80,21 @@
 ::-webkit-scrollbar-track {
   background: #f1f5f9;
 }
+.dark ::-webkit-scrollbar-track {
+  background: #0f172a;
+}
 ::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 9999px;
 }
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
 }
 
 /* Smooth Interactive Transitions */

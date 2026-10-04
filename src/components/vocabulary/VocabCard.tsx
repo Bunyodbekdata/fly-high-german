@@ -15,36 +15,42 @@ export const VocabCard: React.FC<VocabCardProps> = ({ item }) => {
   const isFavorite = progress?.isFavorite || false;
   const isMastered = progress?.status === 'mastered';
 
-  const articleConfig: Record<string, { border: string; tag: string; accent: string }> = {
+  const articleConfig: Record<string, { border: string; tag: string; accent: string; glow: string }> = {
     der: {
-      border: 'border-l-4 border-l-blue-500 hover:border-blue-300',
-      tag: 'bg-blue-50 text-blue-700 border-blue-200',
-      accent: 'text-blue-700',
+      border: 'border-l-4 border-l-blue-500 dark:border-l-blue-400',
+      tag: 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/60 dark:text-blue-300 dark:border-blue-800',
+      accent: 'text-blue-600 dark:text-blue-400',
+      glow: 'hover:shadow-glow-der',
     },
     die: {
-      border: 'border-l-4 border-l-rose-500 hover:border-rose-300',
-      tag: 'bg-rose-50 text-rose-700 border-rose-200',
-      accent: 'text-rose-700',
+      border: 'border-l-4 border-l-rose-500 dark:border-l-rose-400',
+      tag: 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-800',
+      accent: 'text-rose-600 dark:text-rose-400',
+      glow: 'hover:shadow-glow-die',
     },
     das: {
-      border: 'border-l-4 border-l-amber-500 hover:border-amber-300',
-      tag: 'bg-amber-50 text-amber-700 border-amber-200',
-      accent: 'text-amber-700',
+      border: 'border-l-4 border-l-emerald-500 dark:border-l-emerald-400',
+      tag: 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800',
+      accent: 'text-emerald-600 dark:text-emerald-400',
+      glow: 'hover:shadow-glow-das',
     },
   };
 
   const articleStyles = (item.article && articleConfig[item.article]) || {
-    border: 'border-l-4 border-l-purple-400 hover:border-purple-300',
-    tag: 'bg-purple-50 text-purple-700 border-purple-200',
-    accent: 'text-slate-900',
+    border: 'border-l-4 border-l-purple-500 dark:border-l-purple-400',
+    tag: 'bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950/60 dark:text-purple-300 dark:border-purple-800',
+    accent: 'text-purple-600 dark:text-purple-400',
+    glow: 'hover:shadow-glow-plural',
   };
 
   return (
     <div
-      className={`p-4 rounded-2xl bg-white border transition-all duration-200 hover:shadow-card group relative ${
+      className={`p-4 rounded-2xl bg-white dark:bg-slate-900 border transition-all duration-200 group relative ${
+        articleStyles.glow
+      } ${
         isMastered
-          ? 'border-emerald-300 bg-emerald-50/20'
-          : `border-slate-200 ${articleStyles.border}`
+          ? 'border-emerald-400 dark:border-emerald-600 bg-emerald-50/30 dark:bg-emerald-950/20'
+          : `border-slate-200 dark:border-slate-800 ${articleStyles.border}`
       }`}
     >
       {/* Top Header: Word Type, Level & Actions */}
@@ -61,8 +67,8 @@ export const VocabCard: React.FC<VocabCardProps> = ({ item }) => {
             title={isMastered ? "Yodlangan so‘z" : "Yodlangan deb belgilash"}
             className={`p-1.5 rounded-lg transition ${
               isMastered
-                ? 'text-emerald-600 bg-emerald-100/70'
-                : 'text-slate-300 hover:text-emerald-500 hover:bg-slate-100'
+                ? 'text-emerald-600 dark:text-emerald-400 bg-emerald-100/70 dark:bg-emerald-950/60'
+                : 'text-slate-300 dark:text-slate-600 hover:text-emerald-500 hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >
             <CheckCircle size={17} />
@@ -73,8 +79,8 @@ export const VocabCard: React.FC<VocabCardProps> = ({ item }) => {
             title={isFavorite ? "Sevimlilardan o‘chirish" : "Sevimlilarga qo‘shish"}
             className={`p-1.5 rounded-lg transition ${
               isFavorite
-                ? 'text-amber-500 bg-amber-50'
-                : 'text-slate-300 hover:text-amber-500 hover:bg-slate-100'
+                ? 'text-amber-500 bg-amber-50 dark:bg-amber-950/60'
+                : 'text-slate-300 dark:text-slate-600 hover:text-amber-500 hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >
             <Star size={17} fill={isFavorite ? 'currentColor' : 'none'} />
@@ -85,7 +91,7 @@ export const VocabCard: React.FC<VocabCardProps> = ({ item }) => {
       {/* Main German Word with Audio */}
       <div className="flex items-center justify-between mb-2">
         <div>
-          <h4 className="text-lg font-bold text-slate-900 group-hover:text-brand-600 transition-colors flex items-center gap-1.5">
+          <h4 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors flex items-center gap-1.5">
             {item.article && (
               <span className={`text-sm font-extrabold ${articleStyles.accent}`}>
                 {item.article}
@@ -94,8 +100,8 @@ export const VocabCard: React.FC<VocabCardProps> = ({ item }) => {
             <span>{item.article ? item.german.replace(/^(der|die|das)\s+/i, '') : item.german}</span>
           </h4>
           {item.plural && (
-            <span className="text-xs text-slate-500 font-mono">
-              Plural: <span className="font-semibold text-slate-700">{item.plural}</span>
+            <span className="text-xs text-slate-500 dark:text-slate-400 font-mono">
+              Plural: <span className="font-semibold text-slate-700 dark:text-slate-300">{item.plural}</span>
             </span>
           )}
         </div>
@@ -103,21 +109,21 @@ export const VocabCard: React.FC<VocabCardProps> = ({ item }) => {
       </div>
 
       {/* Uzbek Translation */}
-      <div className="pt-2 border-t border-slate-100 text-slate-700 font-medium text-sm mb-3">
+      <div className="pt-2 border-t border-slate-100 dark:border-slate-800 text-slate-700 dark:text-slate-200 font-medium text-sm mb-3">
         {item.uzbek}
       </div>
 
       {/* Example Sentence with Audio */}
       {item.exampleDe && (
-        <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs">
+        <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 text-xs">
           <div className="flex items-start justify-between">
-            <p className="font-semibold text-slate-800 italic pr-2">
+            <p className="font-semibold text-slate-800 dark:text-slate-200 italic pr-2">
               "{item.exampleDe}"
             </p>
             <AudioButton text={item.exampleDe} size="sm" />
           </div>
           {item.exampleUz && (
-            <p className="text-slate-500 mt-1 text-[11px]">
+            <p className="text-slate-500 dark:text-slate-400 mt-1 text-[11px]">
               {item.exampleUz}
             </p>
           )}

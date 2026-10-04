@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Lesson } from '../../types/database';
-import { ArrowLeft, Clock, CheckCircle, Volume2, Sparkles } from 'lucide-react';
+import { ArrowLeft, Clock, CheckCircle2, Volume2, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { LevelBadge } from '../common/Badge';
 import { audioService } from '../../lib/audio';
@@ -51,22 +51,22 @@ export const LessonHeader: React.FC<LessonHeaderProps> = ({
   const progressPercent = Math.min(100, Math.round((completedCount / tabs.length) * 100));
 
   return (
-    <div className="bg-white/95 backdrop-blur-md border-b border-slate-200/90 sticky top-16 z-30 shadow-xs">
+    <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200/90 dark:border-slate-800 sticky top-16 z-30 shadow-xs transition-colors duration-200">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-3 pb-2.5">
         {/* Top Breadcrumb & Status & Audio Speed */}
         <div className="flex items-center justify-between mb-2.5">
           <button
             onClick={() => navigate(`/levels/${lesson.levelCode}`)}
-            className="inline-flex items-center text-xs font-bold text-slate-500 hover:text-brand-600 transition"
+            className="inline-flex items-center text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition"
           >
             <ArrowLeft size={14} className="mr-1" />
             Kurs moduliga qaytish
           </button>
 
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2 sm:space-x-3">
             {/* Audio Speed Selector */}
-            <div className="hidden sm:flex items-center space-x-1 bg-slate-100/90 p-1 rounded-xl border border-slate-200/70 text-[11px] font-bold">
-              <span className="flex items-center text-slate-500 pl-1.5 pr-1">
+            <div className="hidden sm:flex items-center space-x-1 bg-slate-100/90 dark:bg-slate-800/90 p-1 rounded-xl border border-slate-200/70 dark:border-slate-700 text-[11px] font-bold">
+              <span className="flex items-center text-slate-500 dark:text-slate-400 pl-1.5 pr-1">
                 <Volume2 size={12} className="mr-1 text-slate-400" />
                 Ovoz:
               </span>
@@ -75,7 +75,7 @@ export const LessonHeader: React.FC<LessonHeaderProps> = ({
                 className={`px-2 py-0.5 rounded-lg transition ${
                   audioSpeed === 0.75
                     ? 'bg-brand-600 text-white shadow-2xs'
-                    : 'text-slate-600 hover:text-slate-900'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
                 }`}
                 title="Sekin tezlik (yangi boshlovchilar uchun)"
               >
@@ -86,7 +86,7 @@ export const LessonHeader: React.FC<LessonHeaderProps> = ({
                 className={`px-2 py-0.5 rounded-lg transition ${
                   audioSpeed === 0.88
                     ? 'bg-brand-600 text-white shadow-2xs'
-                    : 'text-slate-600 hover:text-slate-900'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
                 }`}
                 title="O‘quv tezligi (tavsiya etiladi)"
               >
@@ -97,7 +97,7 @@ export const LessonHeader: React.FC<LessonHeaderProps> = ({
                 className={`px-2 py-0.5 rounded-lg transition ${
                   audioSpeed === 1.0
                     ? 'bg-brand-600 text-white shadow-2xs'
-                    : 'text-slate-600 hover:text-slate-900'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
                 }`}
                 title="Tabiiy tezlik"
               >
@@ -105,14 +105,14 @@ export const LessonHeader: React.FC<LessonHeaderProps> = ({
               </button>
             </div>
 
-            <span className="flex items-center text-xs text-slate-500 font-medium">
+            <span className="flex items-center text-xs text-slate-500 dark:text-slate-400 font-medium">
               <Clock size={13} className="mr-1 text-slate-400" />
               {lesson.estimatedMinutes} daqiqa
             </span>
             <LevelBadge code={lesson.levelCode} />
             {isCompleted && (
-              <span className="inline-flex items-center text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
-                <CheckCircle size={12} className="mr-1 text-emerald-600" />
+              <span className="inline-flex items-center text-xs font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 px-2.5 py-0.5 rounded-full">
+                <CheckCircle2 size={12} className="mr-1 text-emerald-600 dark:text-emerald-400" />
                 Yakunlangan
               </span>
             )}
@@ -122,29 +122,29 @@ export const LessonHeader: React.FC<LessonHeaderProps> = ({
         {/* Lesson Titles & Progress Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
           <div>
-            <h1 className="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
+            <h1 className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
               <span>{lesson.titleDe}</span>
               {progressPercent === 100 && (
-                <span className="text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full flex items-center">
+                <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 px-2 py-0.5 rounded-full flex items-center">
                   <Sparkles size={11} className="mr-1" />
                   100% Tayyor
                 </span>
               )}
             </h1>
-            <p className="text-xs sm:text-sm font-semibold text-slate-500 mt-0.5">
+            <p className="text-xs sm:text-sm font-semibold text-slate-500 dark:text-slate-400 mt-0.5">
               {lesson.titleUz}
             </p>
           </div>
 
           {/* Gamified Progress indicator */}
           <div className="w-full sm:w-56 flex flex-col items-end">
-            <div className="flex items-center justify-between w-full text-[11px] font-bold text-slate-500 mb-1">
+            <div className="flex items-center justify-between w-full text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-1">
               <span>O‘zlashtirish:</span>
-              <span className="text-brand-600 font-extrabold">
+              <span className="text-brand-600 dark:text-brand-400 font-extrabold">
                 {completedCount}/9 qadam ({progressPercent}%)
               </span>
             </div>
-            <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden border border-slate-200/60">
+            <div className="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden border border-slate-200/60 dark:border-slate-700">
               <div
                 className="bg-gradient-to-r from-brand-500 to-emerald-500 h-full rounded-full transition-all duration-500"
                 style={{ width: `${progressPercent}%` }}
@@ -153,8 +153,8 @@ export const LessonHeader: React.FC<LessonHeaderProps> = ({
           </div>
         </div>
 
-        {/* Horizontal Scrollable Tabs */}
-        <div className="flex items-center space-x-1 sm:space-x-1.5 overflow-x-auto no-scrollbar border-t border-slate-100 pt-2 -mx-4 px-4 sm:mx-0 sm:px-0">
+        {/* Apple/Notion Styled Segmented Tab Bar */}
+        <div className="bg-slate-100/90 dark:bg-slate-800/90 p-1 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 flex items-center space-x-1 overflow-x-auto no-scrollbar -mx-4 px-2 sm:mx-0 sm:px-1">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
             const isTabDone = completedTabs[tab.id];
@@ -163,17 +163,17 @@ export const LessonHeader: React.FC<LessonHeaderProps> = ({
               <button
                 key={tab.id}
                 onClick={() => onTabChange(tab.id)}
-                className={`flex-shrink-0 px-3 py-1.5 sm:px-3 sm:py-1.5 rounded-xl text-xs font-bold transition-all relative flex items-center space-x-1 ${
+                className={`flex-shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold transition-all relative flex items-center space-x-1.5 ${
                   isActive
-                    ? 'bg-brand-600 text-white shadow-sm'
+                    ? 'bg-white dark:bg-brand-600 text-brand-700 dark:text-white shadow-xs font-extrabold border border-slate-200/50 dark:border-brand-500'
                     : isTabDone
-                    ? 'bg-emerald-50/80 border border-emerald-200/80 text-emerald-800 hover:bg-emerald-100'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                    ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60 hover:bg-emerald-100/70'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-700/50'
                 }`}
               >
                 <span>{tab.label}</span>
                 {isTabDone && !isActive && (
-                  <CheckCircle size={12} className="text-emerald-600" />
+                  <CheckCircle2 size={12} className="text-emerald-600 dark:text-emerald-400" />
                 )}
               </button>
             );
