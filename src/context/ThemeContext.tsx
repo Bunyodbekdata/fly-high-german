@@ -26,10 +26,17 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   useEffect(() => {
     const root = document.documentElement;
+    const themeColorMeta = document.getElementById('theme-color-meta');
     if (theme === 'dark') {
       root.classList.add('dark');
+      if (themeColorMeta) {
+        themeColorMeta.setAttribute('content', '#020617');
+      }
     } else {
       root.classList.remove('dark');
+      if (themeColorMeta) {
+        themeColorMeta.setAttribute('content', '#f8fafc');
+      }
     }
     localStorage.setItem('for_great_nation_theme', theme);
   }, [theme]);

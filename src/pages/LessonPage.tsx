@@ -127,7 +127,7 @@ export const LessonPage: React.FC = () => {
     currentIndex >= 0 && currentIndex + 1 < allLessons.length ? allLessons[currentIndex + 1] : null;
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col relative transition-colors duration-200">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col relative transition-colors duration-200 w-full max-w-full overflow-x-hidden">
       {/* Sticky Lesson Header with 9 structured coursebook tabs, progress & speed controls */}
       <LessonHeader
         lesson={lesson}

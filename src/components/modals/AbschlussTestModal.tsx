@@ -33,7 +33,7 @@ export const AbschlussTestModal: React.FC<AbschlussTestModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col shadow-2xl border border-slate-200 dark:border-slate-800 animate-in fade-in zoom-in-95 duration-200">
         {/* Header */}
         <div className="p-6 bg-gradient-to-r from-amber-600 via-orange-600 to-red-600 text-white flex items-start justify-between">
           <div>
@@ -61,10 +61,10 @@ export const AbschlussTestModal: React.FC<AbschlussTestModalProps> = ({
         <div className="p-6 overflow-y-auto flex-1 space-y-6">
           {testScore === null ? (
             <div>
-              <div className="p-4 rounded-2xl bg-amber-50/80 border border-amber-200 text-xs sm:text-sm text-amber-950 mb-6">
+              <div className="p-4 rounded-2xl bg-amber-50/80 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/80 text-xs sm:text-sm text-amber-950 dark:text-amber-200 mb-6">
                 <span className="font-bold block mb-1">Imtihon shartlari:</span>
                 <p className="leading-relaxed">{testData.descriptionUz}</p>
-                <div className="mt-3 flex items-center space-x-4 text-xs font-bold text-amber-800">
+                <div className="mt-3 flex items-center space-x-4 text-xs font-bold text-amber-800 dark:text-amber-300">
                   <span>Savollar soni: {testData.totalQuestions} ta</span>
                   <span>•</span>
                   <span>O‘tish bali: {testData.passingScore}%</span>
@@ -80,32 +80,32 @@ export const AbschlussTestModal: React.FC<AbschlussTestModalProps> = ({
             <div className="text-center py-8 space-y-6">
               {isPassed ? (
                 <div className="space-y-4">
-                  <div className="w-20 h-20 rounded-3xl bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-md">
+                  <div className="w-20 h-20 rounded-3xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto shadow-md">
                     <Award size={48} />
                   </div>
-                  <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold">
+                  <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-xs font-bold">
                     <Sparkles size={14} />
                     <span>Muvaffaqiyatli yakunlandi!</span>
                   </div>
-                  <h3 className="text-2xl sm:text-3xl font-black text-slate-900">
+                  <h3 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
                     Tabriklaymiz! Imtihondan o‘tdingiz!
                   </h3>
-                  <p className="text-lg text-slate-700">
-                    Sizning to‘plagan ballingiz: <strong className="text-emerald-600 text-2xl">{testScore}%</strong>
+                  <p className="text-lg text-slate-700 dark:text-slate-300">
+                    Sizning to‘plagan ballingiz: <strong className="text-emerald-600 dark:text-emerald-400 text-2xl">{testScore}%</strong>
                   </p>
                   
                   {/* Digital Certificate Preview Card */}
-                  <div className="max-w-md mx-auto p-6 rounded-3xl bg-gradient-to-br from-amber-50 via-white to-amber-50 border-2 border-amber-300 shadow-md text-center space-y-3">
-                    <span className="text-[11px] uppercase tracking-widest font-extrabold text-amber-800 block">
+                  <div className="max-w-md mx-auto p-6 rounded-3xl bg-gradient-to-br from-amber-50 via-white to-amber-50 dark:from-slate-800 dark:via-slate-850 dark:to-slate-800 border-2 border-amber-300 dark:border-amber-600/60 shadow-md text-center space-y-3">
+                    <span className="text-[11px] uppercase tracking-widest font-extrabold text-amber-800 dark:text-amber-400 block">
                       FOR GREAT NATION • CERTIFICATE OF COMPLETION
                     </span>
-                    <h4 className="text-xl font-black text-slate-900">
+                    <h4 className="text-xl font-black text-slate-900 dark:text-white">
                       {testData.titleDe}
                     </h4>
-                    <p className="text-xs text-slate-600 leading-relaxed">
+                    <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                       Ushbu sertifikat egasi nemis tili {levelCode.toUpperCase()} bosqichining barcha leksik, grammatik va muloqot talablarini a‘lo darajada bajarganini tasdiqlaydi.
                     </p>
-                    <div className="pt-2 text-[11px] font-bold text-amber-900 border-t border-amber-200">
+                    <div className="pt-2 text-[11px] font-bold text-amber-900 dark:text-amber-300 border-t border-amber-200 dark:border-amber-800/80">
                       CEFR A1 Standarti asosida tasdiqlangan
                     </div>
                   </div>
@@ -121,16 +121,16 @@ export const AbschlussTestModal: React.FC<AbschlussTestModalProps> = ({
                 </div>
               ) : (
                 <div className="space-y-4">
-                  <div className="w-20 h-20 rounded-3xl bg-red-100 text-red-600 flex items-center justify-center mx-auto shadow-md">
+                  <div className="w-20 h-20 rounded-3xl bg-red-100 dark:bg-red-950/60 text-red-600 dark:text-red-400 flex items-center justify-center mx-auto shadow-md">
                     <AlertTriangle size={48} />
                   </div>
-                  <h3 className="text-2xl font-black text-slate-900">
+                  <h3 className="text-2xl font-black text-slate-900 dark:text-white">
                     Imtihondan o‘ta olmadingiz
                   </h3>
-                  <p className="text-lg text-slate-700">
-                    Sizning to‘plagan ballingiz: <strong className="text-red-600 text-2xl">{testScore}%</strong> (Kerakli ball: {testData.passingScore}%)
+                  <p className="text-lg text-slate-700 dark:text-slate-300">
+                    Sizning to‘plagan ballingiz: <strong className="text-red-600 dark:text-red-400 text-2xl">{testScore}%</strong> (Kerakli ball: {testData.passingScore}%)
                   </p>
-                  <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto">
+                  <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto">
                     Xafa bo‘lmang! Imtihondagi xatolaringiz ustida ishlang, darslardagi grammatika va so‘zlarni qayta takrorlang va yana urinib ko‘ring.
                   </p>
 
@@ -143,7 +143,7 @@ export const AbschlussTestModal: React.FC<AbschlussTestModalProps> = ({
                     </button>
                     <button
                       onClick={onClose}
-                      className="px-6 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm"
+                      className="px-6 py-3 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-sm"
                     >
                       Darslarga qaytish
                     </button>

@@ -51,7 +51,7 @@ export const LessonHeader: React.FC<LessonHeaderProps> = ({
   const progressPercent = Math.min(100, Math.round((completedCount / tabs.length) * 100));
 
   return (
-    <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200/90 dark:border-slate-800 sticky top-16 z-30 shadow-xs transition-colors duration-200">
+    <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200/90 dark:border-slate-800 sticky top-16 z-30 shadow-xs transition-colors duration-200 w-full overflow-hidden">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-3 pb-2.5">
         {/* Top Breadcrumb & Status & Audio Speed */}
         <div className="flex items-center justify-between mb-2.5">
@@ -154,7 +154,7 @@ export const LessonHeader: React.FC<LessonHeaderProps> = ({
         </div>
 
         {/* Apple/Notion Styled Segmented Tab Bar */}
-        <div className="bg-slate-100/90 dark:bg-slate-800/90 p-1 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 flex items-center space-x-1 overflow-x-auto no-scrollbar -mx-4 px-2 sm:mx-0 sm:px-1">
+        <div className="bg-slate-100/90 dark:bg-slate-800/90 p-1 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 flex items-center space-x-1 overflow-x-auto no-scrollbar w-full max-w-full px-1">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
             const isTabDone = completedTabs[tab.id];
