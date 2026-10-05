@@ -15,10 +15,13 @@ import {
   Play, 
   CheckCircle2, 
   Sparkles,
-  HelpCircle,
-  Compass
+  Trophy,
+  Zap,
+  Target
 } from 'lucide-react';
 import { CEFRLevelCode } from '../types/database';
+import { getRankByXp, computeAchievements } from '../lib/gamification';
+import { AchievementBadges } from '../components/common/AchievementBadges';
 
 export const DashboardPage: React.FC = () => {
   const { user } = useAuth();
@@ -26,7 +29,8 @@ export const DashboardPage: React.FC = () => {
     completedLessonsCount, 
     getLevelProgress, 
     masteredVocabCount,
-    getNextIncompleteLesson 
+    getNextIncompleteLesson,
+    lessonProgress
   } = useProgress();
   const navigate = useNavigate();
 
@@ -37,7 +41,23 @@ export const DashboardPage: React.FC = () => {
   const levelProgress = getLevelProgress(currentLevelCode);
   const nextLesson = getNextIncompleteLesson() || storageService.getLessonById('les-1');
 
-  const hasStarted = (user?.xpPoints ?? 0) > 0 || completedLessonsCount > 0;
+  const xp = user?.xpPoints ?? 0;
+  const streak = user?.streakDays ?? 0;
+  const hasStarted = xp > 0 || completedLessonsCount > 0;
+
+  const { currentRank, nextRank, progressPercent, xpToNext } = getRankByXp(xp);
+  const badges = computeAchievements({
+    xpPoints: xp,
+    streakDays: streak,
+    completedLessonsCount,
+    masteredVocabCount,
+    lessonProgress
+  });
+
+  const dailyGoalMinutes = user?.dailyGoalMinutes || 20;
+  // Compute approximate minutes completed today based on completed steps or 15 mins per completed lesson
+  const estimatedTodayMinutes = Math.min(dailyGoalMinutes, (hasStarted ? 15 : 0) + (streak > 0 ? 5 : 0));
+  const dailyProgressPercent = Math.min(100, Math.round((estimatedTodayMinutes / dailyGoalMinutes) * 100));
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10 transition-colors duration-200">
@@ -48,9 +68,9 @@ export const DashboardPage: React.FC = () => {
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-3 max-w-xl">
             <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/10 text-xs font-semibold text-blue-200 backdrop-blur-md">
-              <span>Xush kelibsiz!</span>
+              <span>{currentRank.badge} {currentRank.titleUz}</span>
               <span>•</span>
-              <span>Kunlik maqsad: 20 daqiqa</span>
+              <span>Kunlik maqsad: {dailyGoalMinutes} daqiqa</span>
             </div>
             <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
               Assalomu alaykum, {user?.name || 'Talaba'}!
@@ -63,19 +83,57 @@ export const DashboardPage: React.FC = () => {
           </div>
 
           {/* Quick Streak & XP Badges */}
-          <div className="flex items-center space-x-4">
-            <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 text-center min-w-[100px]">
+          <div className="flex items-center space-x-3 sm:space-x-4">
+            <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 text-center min-w-[95px]">
               <Flame size={24} className="mx-auto text-amber-400 fill-amber-400 animate-pulse mb-1" />
-              <div className="text-xl font-black">{user?.streakDays ?? 0} kun</div>
-              <div className="text-[11px] text-slate-300">Silsila</div>
+              <div className="text-xl font-black">{streak} kun</div>
+              <div className="text-[11px] text-slate-300 font-medium">Silsila</div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 text-center min-w-[100px]">
+            <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 text-center min-w-[95px]">
               <Award size={24} className="mx-auto text-emerald-400 mb-1" />
-              <div className="text-xl font-black">{user?.xpPoints ?? 0} XP</div>
-              <div className="text-[11px] text-slate-300">Tajriba</div>
+              <div className="text-xl font-black">{xp} XP</div>
+              <div className="text-[11px] text-slate-300 font-medium">Tajriba</div>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 text-center min-w-[95px] hidden sm:block">
+              <span className="text-2xl block mb-1">{currentRank.badge}</span>
+              <div className="text-xs font-bold truncate max-w-[85px]">{currentRank.titleDe}</div>
+              <div className="text-[11px] text-slate-300 font-medium">{currentRank.tier}-Rutba</div>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Gamified Level & Rank Bar */}
+      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm space-y-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 rounded-2xl bg-brand-50 dark:bg-brand-950/60 border border-brand-100 dark:border-brand-900/50 flex items-center justify-center text-2xl shadow-xs">
+              <span>{currentRank.badge}</span>
+            </div>
+            <div>
+              <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">
+                O‘quvchi rutbasi (Tier {currentRank.tier})
+              </span>
+              <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                {currentRank.titleUz} ({currentRank.titleDe})
+              </h3>
+            </div>
+          </div>
+
+          {nextRank && (
+            <div className="text-xs text-slate-500 dark:text-slate-400 sm:text-right">
+              Keyingi darajagacha: <strong className="text-brand-600 dark:text-brand-400">+{xpToNext} XP</strong> kerak ({nextRank.badge} {nextRank.titleUz})
+            </div>
+          )}
+        </div>
+
+        <div className="w-full h-2.5 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+          <div
+            className="h-full rounded-full bg-gradient-to-r from-brand-600 via-indigo-600 to-emerald-500 transition-all duration-500"
+            style={{ width: `${progressPercent}%` }}
+          />
         </div>
       </div>
 
@@ -163,6 +221,11 @@ export const DashboardPage: React.FC = () => {
             <ArrowRight size={13} className="ml-1" />
           </Link>
         </div>
+      </div>
+
+      {/* Achievement Badges Showcase in Dashboard */}
+      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm">
+        <AchievementBadges badges={badges} compact />
       </div>
 
       {/* Quick Launchpad to Tools */}

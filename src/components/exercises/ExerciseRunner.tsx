@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { ExerciseItem } from '../../types/database';
-import { CheckCircle2, XCircle, RefreshCw, Award, ArrowRight, Lightbulb } from 'lucide-react';
+import { CheckCircle2, XCircle, RefreshCw, Award, ArrowRight, Lightbulb, Volume2, VolumeX } from 'lucide-react';
 import { AudioButton } from '../common/AudioButton';
+import { sfx } from '../../lib/gamification';
 import confetti from 'canvas-confetti';
 
 interface ExerciseRunnerProps {
@@ -20,6 +21,12 @@ export const ExerciseRunner: React.FC<ExerciseRunnerProps> = ({
   const [isAnswerChecked, setIsAnswerChecked] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [score, setScore] = useState(0);
+  const [isMuted, setIsMuted] = useState(() => sfx.isMuted());
+
+  const handleToggleMute = () => {
+    const next = sfx.toggleMute();
+    setIsMuted(next);
+  };
 
   // Interactive sentence ordering state
   const [selectedWordOrder, setSelectedWordOrder] = useState<string[]>([]);
@@ -102,6 +109,9 @@ export const ExerciseRunner: React.FC<ExerciseRunnerProps> = ({
 
     if (isCorrect) {
       setScore(prev => prev + 1);
+      sfx.playCorrect();
+    } else {
+      sfx.playIncorrect();
     }
     setIsAnswerChecked(true);
   };
@@ -140,6 +150,7 @@ export const ExerciseRunner: React.FC<ExerciseRunnerProps> = ({
       if (onFinish) onFinish(finalScore);
 
       if (finalScore >= 70) {
+        sfx.playFanfare();
         try {
           confetti({
             particleCount: 80,
@@ -214,9 +225,18 @@ export const ExerciseRunner: React.FC<ExerciseRunnerProps> = ({
   }
 
   const isArticleType = currentExercise.type === 'article_selection';
+  const progressPercent = Math.round(((currentIndex + (isAnswerChecked ? 1 : 0)) / exercises.length) * 100);
 
   return (
     <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-card overflow-hidden max-w-2xl mx-auto my-4">
+      {/* Duolingo-style Top Progress Bar */}
+      <div className="w-full h-2.5 bg-slate-100 dark:bg-slate-800 overflow-hidden">
+        <div
+          className="h-full bg-gradient-to-r from-brand-600 via-indigo-600 to-emerald-500 transition-all duration-300 shadow-xs"
+          style={{ width: `${progressPercent}%` }}
+        />
+      </div>
+
       {/* Top Header */}
       <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/70 dark:bg-slate-850/80">
         <div>
@@ -234,8 +254,21 @@ export const ExerciseRunner: React.FC<ExerciseRunnerProps> = ({
             )}
           </h4>
         </div>
-        <div className="text-xs font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-800 px-3 py-1 rounded-full border border-slate-200 dark:border-slate-700 shadow-2xs">
-          To‘g‘ri: {score}
+
+        <div className="flex items-center space-x-2">
+          {/* Mute / Unmute Sound FX Toggle */}
+          <button
+            type="button"
+            onClick={handleToggleMute}
+            title={isMuted ? 'Ovoz effektlarini yoqish' : 'Ovoz effektlarini o‘chirish'}
+            className="w-8 h-8 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center justify-center transition shadow-2xs"
+          >
+            {isMuted ? <VolumeX size={15} /> : <Volume2 size={15} className="text-brand-600 dark:text-brand-400" />}
+          </button>
+
+          <div className="text-xs font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-800 px-3 py-1 rounded-full border border-slate-200 dark:border-slate-700 shadow-2xs">
+            To‘g‘ri: {score}
+          </div>
         </div>
       </div>
 

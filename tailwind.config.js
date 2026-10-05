@@ -31,6 +31,10 @@ export default {
           die: '#e11d48',
           das: '#059669',
           plural: '#7c3aed',
+        },
+        slate: {
+          750: '#26334d',
+          850: '#172033',
         }
       },
       fontFamily: {
@@ -55,6 +59,8 @@ export default {
         'pulse-subtle': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'float': 'float 4s ease-in-out infinite',
         'soundwave': 'soundwave 0.8s ease-in-out infinite alternate',
+        'fadeIn': 'fadeIn 0.25s ease-out forwards',
+        'scaleUp': 'scaleUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards',
       },
       keyframes: {
         float: {
@@ -64,6 +70,14 @@ export default {
         soundwave: {
           '0%': { height: '4px' },
           '100%': { height: '18px' },
+        },
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        scaleUp: {
+          '0%': { opacity: '0', transform: 'scale(0.94)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
         }
       }
     },
