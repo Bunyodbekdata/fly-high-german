@@ -15,31 +15,27 @@ export const VocabCard: React.FC<VocabCardProps> = ({ item }) => {
   const isFavorite = progress?.isFavorite || false;
   const isMastered = progress?.status === 'mastered';
 
-  const articleConfig: Record<string, { border: string; tag: string; accent: string; glow: string }> = {
+  const articleConfig: Record<string, { border: string; accent: string; glow: string }> = {
     der: {
       border: 'border-l-4 border-l-blue-500 dark:border-l-blue-400',
-      tag: 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/60 dark:text-blue-300 dark:border-blue-800',
-      accent: 'text-blue-600 dark:text-blue-400',
+      accent: 'article-accent-der',
       glow: 'hover:shadow-glow-der',
     },
     die: {
       border: 'border-l-4 border-l-rose-500 dark:border-l-rose-400',
-      tag: 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-800',
-      accent: 'text-rose-600 dark:text-rose-400',
+      accent: 'article-accent-die',
       glow: 'hover:shadow-glow-die',
     },
     das: {
       border: 'border-l-4 border-l-emerald-500 dark:border-l-emerald-400',
-      tag: 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800',
-      accent: 'text-emerald-600 dark:text-emerald-400',
+      accent: 'article-accent-das',
       glow: 'hover:shadow-glow-das',
     },
   };
 
   const articleStyles = (item.article && articleConfig[item.article]) || {
     border: 'border-l-4 border-l-purple-500 dark:border-l-purple-400',
-    tag: 'bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950/60 dark:text-purple-300 dark:border-purple-800',
-    accent: 'text-purple-600 dark:text-purple-400',
+    accent: 'article-accent-plural',
     glow: 'hover:shadow-glow-plural',
   };
 

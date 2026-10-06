@@ -11,6 +11,45 @@ interface ExerciseRunnerProps {
   titleUz?: string;
 }
 
+/**
+ * Seed data stores exercise types in kebab-case ('multiple-choice', 'fill-blank',
+ * 'word-order'), while the ExerciseType union also declares snake_case
+ * ('fill_in_the_blank'). Normalizing once keeps every downstream branch in sync.
+ */
+type NormalizedExerciseType =
+  | 'multiple_choice'
+  | 'article_selection'
+  | 'fill_blank'
+  | 'sentence_ordering'
+  | 'matching'
+  | 'translation'
+  | 'unknown';
+
+const normalizeExerciseType = (raw: string): NormalizedExerciseType => {
+  const key = String(raw || '').trim().toLowerCase().replace(/-/g, '_');
+  switch (key) {
+    case 'multiple_choice':
+      return 'multiple_choice';
+    case 'article_selection':
+      return 'article_selection';
+    case 'fill_blank':
+    case 'fill_in_the_blank':
+    case 'fill_in_blank':
+      return 'fill_blank';
+    case 'sentence_ordering':
+    case 'sentence_order':
+    case 'word_order':
+    case 'word_ordering':
+      return 'sentence_ordering';
+    case 'matching':
+      return 'matching';
+    case 'translation':
+      return 'translation';
+    default:
+      return 'unknown';
+  }
+};
+
 export const ExerciseRunner: React.FC<ExerciseRunnerProps> = ({ 
   exercises, 
   onFinish,
@@ -70,20 +109,22 @@ export const ExerciseRunner: React.FC<ExerciseRunnerProps> = ({
     }
   };
 
-  const isMultipleChoiceType = 
-    currentExercise.type === 'multiple_choice' || 
-    currentExercise.type === 'multiple-choice' || 
-    currentExercise.type === 'article_selection' ||
-    (currentExercise.type === 'fill-blank' && currentExercise.options && currentExercise.options.length > 0);
+  // Every branch below reads the normalized type so a kebab-case seed type and a
+  // snake_case DB type can never behave differently.
+  const currentType = normalizeExerciseType(currentExercise.type);
+  const hasOptions = Array.isArray(currentExercise.options) && currentExercise.options.length > 0;
 
-  const isSentenceOrderingType = 
-    currentExercise.type === 'sentence_ordering' || 
-    currentExercise.type === 'word-order';
+  const isMultipleChoiceType =
+    currentType === 'multiple_choice' ||
+    currentType === 'article_selection' ||
+    (currentType === 'fill_blank' && hasOptions);
 
-  const isFillBlankType = 
-    currentExercise.type === 'fill_in_the_blank' || 
-    (currentExercise.type === 'fill-blank' && (!currentExercise.options || currentExercise.options.length === 0)) ||
-    currentExercise.type === 'translation';
+  const isSentenceOrderingType = currentType === 'sentence_ordering';
+
+  const isFillBlankType =
+    (currentType === 'fill_blank' && !hasOptions) || currentType === 'translation';
+
+  const isMatchingType = currentType === 'matching';
 
   const checkAnswer = () => {
     let isCorrect = false;
@@ -100,7 +141,7 @@ export const ExerciseRunner: React.FC<ExerciseRunnerProps> = ({
       const expected = String(currentExercise.correctAnswer).trim();
       isCorrect = formedSentence.toLowerCase() === expected.toLowerCase();
       setUserAnswers({ ...userAnswers, [currentIndex]: formedSentence });
-    } else if (currentExercise.type === 'matching') {
+    } else if (isMatchingType) {
       const correctPairs = currentExercise.pairs || [];
       const allMatched = correctPairs.every(p => matchedPairs[p.left] === p.right);
       isCorrect = allMatched && Object.keys(matchedPairs).length === correctPairs.length;
@@ -128,7 +169,7 @@ export const ExerciseRunner: React.FC<ExerciseRunnerProps> = ({
     if (isSentenceOrderingType) {
       return String(ans || selectedWordOrder.join(' ')).trim().toLowerCase() === String(currentExercise.correctAnswer).trim().toLowerCase();
     }
-    if (currentExercise.type === 'matching') {
+    if (isMatchingType) {
       const correctPairs = currentExercise.pairs || [];
       return correctPairs.every(p => matchedPairs[p.left] === p.right);
     }
@@ -146,7 +187,9 @@ export const ExerciseRunner: React.FC<ExerciseRunnerProps> = ({
       setCurrentIndex(prev => prev + 1);
     } else {
       setIsFinished(true);
-      const finalScore = Math.round(((score + (isCurrentCorrect() ? 1 : 0)) / exercises.length) * 100);
+      // `score` already includes the answer just checked, so it is the final tally.
+      // Adding it again here is what used to push a perfect quiz past 100%.
+      const finalScore = Math.round((score / exercises.length) * 100);
       if (onFinish) onFinish(finalScore);
 
       if (finalScore >= 70) {
@@ -224,7 +267,7 @@ export const ExerciseRunner: React.FC<ExerciseRunnerProps> = ({
     );
   }
 
-  const isArticleType = currentExercise.type === 'article_selection';
+  const isArticleType = currentType === 'article_selection';
   const progressPercent = Math.round(((currentIndex + (isAnswerChecked ? 1 : 0)) / exercises.length) * 100);
 
   return (
@@ -245,11 +288,11 @@ export const ExerciseRunner: React.FC<ExerciseRunnerProps> = ({
           </span>
           <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100 mt-0.5">
             {titleUz || (
-              currentExercise.type === 'multiple_choice' ? 'To‘g‘ri javobni tanlang' :
-              currentExercise.type === 'article_selection' ? 'To‘g‘ri artiklni tanlang (der, die, das)' :
-              currentExercise.type === 'fill_in_the_blank' ? 'Bo‘sh joyni to‘ldiring' :
-              currentExercise.type === 'sentence_ordering' ? 'So‘zlarni to‘g‘ri tartibda joylashtiring' :
-              currentExercise.type === 'matching' ? 'O‘zbekcha va nemischa juftliklarni moslang' :
+              currentType === 'multiple_choice' ? 'To‘g‘ri javobni tanlang' :
+              currentType === 'article_selection' ? 'To‘g‘ri artiklni tanlang (der, die, das)' :
+              currentType === 'fill_blank' ? 'Bo‘sh joyni to‘ldiring' :
+              currentType === 'sentence_ordering' ? 'So‘zlarni to‘g‘ri tartibda joylashtiring' :
+              currentType === 'matching' ? 'O‘zbekcha va nemischa juftliklarni moslang' :
               'Nemis tiliga tarjima qiling'
             )}
           </h4>
@@ -429,7 +472,7 @@ export const ExerciseRunner: React.FC<ExerciseRunnerProps> = ({
         )}
 
         {/* 4. Matching */}
-        {currentExercise.type === 'matching' && currentExercise.pairs && (
+        {isMatchingType && currentExercise.pairs && (
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">Nemischa</span>
@@ -531,10 +574,10 @@ export const ExerciseRunner: React.FC<ExerciseRunnerProps> = ({
           <button
             onClick={checkAnswer}
             disabled={
-              ((currentExercise.type === 'multiple_choice' || currentExercise.type === 'article_selection') && !userAnswers[currentIndex]) ||
-              ((currentExercise.type === 'fill_in_the_blank' || currentExercise.type === 'translation') && !textInput.trim()) ||
-              (currentExercise.type === 'sentence_ordering' && selectedWordOrder.length === 0) ||
-              (currentExercise.type === 'matching' && Object.keys(matchedPairs).length < (currentExercise.pairs?.length || 1))
+              (isMultipleChoiceType && !userAnswers[currentIndex]) ||
+              (isFillBlankType && !textInput.trim()) ||
+              (isSentenceOrderingType && selectedWordOrder.length === 0) ||
+              (isMatchingType && Object.keys(matchedPairs).length < (currentExercise.pairs?.length || 1))
             }
             className="px-6 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm transition shadow-sm disabled:opacity-40 disabled:cursor-not-allowed"
           >

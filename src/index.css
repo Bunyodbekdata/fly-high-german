@@ -48,6 +48,20 @@
   @apply bg-purple-100 text-purple-700 border border-purple-200 dark:bg-purple-950/60 dark:text-purple-300 dark:border-purple-800;
 }
 
+/* German Article Accent Text (matches badge hues, dark-mode safe) */
+.article-accent-der {
+  @apply text-blue-600 dark:text-blue-400;
+}
+.article-accent-die {
+  @apply text-rose-600 dark:text-rose-400;
+}
+.article-accent-das {
+  @apply text-emerald-600 dark:text-emerald-400;
+}
+.article-accent-plural {
+  @apply text-purple-600 dark:text-purple-400;
+}
+
 /* German Article Card Glows */
 .glow-der {
   box-shadow: 0 0 20px -3px rgba(37, 99, 235, 0.3);

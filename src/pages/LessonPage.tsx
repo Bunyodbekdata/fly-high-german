@@ -97,6 +97,11 @@ export const LessonPage: React.FC = () => {
   const currentProgress = lessonProgress[lesson.id];
   const completedTabs = currentProgress?.tabCompleted || {};
 
+  // The celebration used to claim all 9 steps no matter how many were opened.
+  const totalTabs = tabOrder.length;
+  const completedTabCount = tabOrder.filter(t => completedTabs[t.id]).length;
+  const allTabsCompleted = completedTabCount >= totalTabs;
+
   const currentTabIdx = tabOrder.findIndex(t => t.id === activeTab);
   const currentTabInfo = tabOrder[currentTabIdx] || tabOrder[0];
 
@@ -321,8 +326,23 @@ export const LessonPage: React.FC = () => {
                 Barakalla, {user?.name || "O‘quvchi"}!
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-2 leading-relaxed">
-                Siz <strong className="text-brand-600 dark:text-brand-400">"{lesson.titleDe}"</strong> darsining barcha 9 bosqichini to‘liq o‘zlashtirdingiz.
+                {allTabsCompleted ? (
+                  <>
+                    Siz <strong className="text-brand-600 dark:text-brand-400">"{lesson.titleDe}"</strong> darsining
+                    barcha {totalTabs} bosqichini to‘liq o‘zlashtirdingiz.
+                  </>
+                ) : (
+                  <>
+                    Siz <strong className="text-brand-600 dark:text-brand-400">"{lesson.titleDe}"</strong> darsining{' '}
+                    {completedTabCount} / {totalTabs} bosqichini ko‘rib chiqib, amaliy mashqlarni yakunladingiz.
+                  </>
+                )}
               </p>
+
+              <div className="inline-flex items-center space-x-2 mt-3 px-4 py-2 rounded-2xl bg-brand-50 dark:bg-brand-950/40 border border-brand-200 dark:border-brand-900/60">
+                <span className="text-xs font-bold text-brand-700 dark:text-brand-300">Mashqlar natijasi:</span>
+                <span className="text-sm font-black text-brand-700 dark:text-brand-300">{earnedScore}%</span>
+              </div>
             </div>
 
             {/* Gamification Stats: +50 XP & Streak Flame */}

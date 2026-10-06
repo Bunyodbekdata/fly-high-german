@@ -7,6 +7,21 @@ export interface AudioPlayOptions {
   engine?: 'auto' | 'google' | 'webspeech';
 }
 
+/**
+ * Why playback produced no sound. Surfaced to the UI so a silent failure can
+ * never look like a successful click again.
+ */
+export type AudioFailureReason = 'voice_missing' | 'unsupported' | 'playback_failed';
+
+/**
+ * Outcome of a speak() call. `reason` is only set when playback genuinely
+ * could not happen, so a deliberate stop is never reported as an error.
+ */
+export interface AudioPlayResult {
+  ok: boolean;
+  reason?: AudioFailureReason;
+}
+
 class AudioService {
   private currentAudio: HTMLAudioElement | null = null;
   private isPlayingAudio = false;
@@ -18,6 +33,7 @@ class AudioService {
   private recordedAudioUrl: string | null = null;
   private listeners: Set<(speaking: boolean) => void> = new Set();
   private speedListeners: Set<(speed: number) => void> = new Set();
+  private lastFailureReason: AudioFailureReason | null = null;
   private preferredRate = 0.88;
 
   constructor() {
@@ -75,6 +91,44 @@ class AudioService {
       } catch (err) {
         console.error('Audio state listener error', err);
       }
+    });
+  }
+
+  /**
+   * Records why the last attempt produced no sound. The reason travels back
+   * through speak(), so only the button the learner pressed reacts to it.
+   */
+  private markFailure(reason: AudioFailureReason) {
+    this.lastFailureReason = reason;
+  }
+
+  /**
+   * Voices are populated asynchronously in most browsers, so a first click can
+   * arrive before the German voice exists. Wait briefly for the list instead of
+   * declaring the feature broken on the spot.
+   */
+  private ensureVoices(timeoutMs = 700): Promise<void> {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+      return Promise.resolve();
+    }
+    if (this.germanVoice || window.speechSynthesis.getVoices().length > 0) {
+      return Promise.resolve();
+    }
+
+    const synth = window.speechSynthesis;
+    return new Promise((resolve) => {
+      let timer: ReturnType<typeof setTimeout>;
+      const finish = () => {
+        synth.removeEventListener('voiceschanged', onChange);
+        clearTimeout(timer);
+        resolve();
+      };
+      const onChange = () => {
+        this.initVoices();
+        finish();
+      };
+      timer = setTimeout(finish, timeoutMs);
+      synth.addEventListener('voiceschanged', onChange);
     });
   }
 
@@ -187,25 +241,28 @@ class AudioService {
    * Defaults to high-quality German studio audio, falling back to WebSpeech
    * only if an authentic German system voice exists.
    */
-  public async speak(text: string, rate?: number): Promise<void> {
+  public async speak(text: string, rate?: number): Promise<AudioPlayResult> {
     this.stop(); // Stop any currently playing audio
 
     const effectiveRate = rate !== undefined ? rate : this.getSpeed();
     const cleanedText = this.cleanGermanText(text);
-    if (!cleanedText) return;
+    this.lastFailureReason = null;
+    if (!cleanedText) return { ok: false };
 
     this.notifyState(true);
     const abortController = new AbortController();
     this.queueAbortController = abortController;
 
+    let spoke = false;
     try {
       // 1. Primary Engine: Google German Neural TTS Audio Stream
       await this.playViaGoogleTTS(cleanedText, effectiveRate, abortController.signal);
+      spoke = !abortController.signal.aborted;
     } catch (err) {
       console.warn('Google German TTS unavailable, testing Web Speech fallback...', err);
       // 2. Secondary Engine: Web Speech API (with verified German voice)
       if (!abortController.signal.aborted) {
-        await this.playViaWebSpeech(cleanedText, effectiveRate);
+        spoke = await this.playViaWebSpeech(cleanedText, effectiveRate);
       }
     } finally {
       if (this.queueAbortController === abortController) {
@@ -213,6 +270,13 @@ class AudioService {
         this.notifyState(false);
       }
     }
+
+    // A superseded request or a deliberate stop reports no reason, so the UI
+    // warns only when playback genuinely could not happen.
+    if (spoke) return { ok: true };
+    return this.lastFailureReason
+      ? { ok: false, reason: this.lastFailureReason }
+      : { ok: false };
   }
 
   /**
@@ -292,41 +356,45 @@ class AudioService {
    * Fallback engine: Web Speech API.
    * STRICT: only speaks if an authentic German voice is verified!
    */
-  private playViaWebSpeech(text: string, rate: number): Promise<void> {
-    return new Promise((resolve) => {
-      if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
-        resolve();
-        return;
-      }
+  private async playViaWebSpeech(text: string, rate: number): Promise<boolean> {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+      this.markFailure('unsupported');
+      return false;
+    }
 
+    await this.ensureVoices();
+
+    if (!this.voicesLoaded) {
+      this.initVoices();
+    }
+
+    // Safeguard: Never speak German with an English/Russian voice!
+    const germanVoice = this.germanVoice;
+    if (!germanVoice) {
+      console.warn(
+        'Hech qanday nemis tili ovoz moduli (de-DE) topilmadi. Noto‘g‘ri talaffuzning oldini olish uchun to‘xtatildi.'
+      );
+      this.markFailure('voice_missing');
+      return false;
+    }
+
+    return new Promise<boolean>((resolve) => {
       window.speechSynthesis.cancel();
 
-      if (!this.voicesLoaded) {
-        this.initVoices();
-      }
-
-      // Safeguard: Never speak German with an English/Russian voice!
-      if (!this.germanVoice) {
-        console.warn(
-          'Hech qanday nemis tili ovoz moduli (de-DE) topilmadi. Noto‘g‘ri talaffuzning oldini olish uchun to‘xtatildi.'
-        );
-        resolve();
-        return;
-      }
-
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.voice = this.germanVoice;
-      utterance.lang = this.germanVoice.lang || 'de-DE';
+      utterance.voice = germanVoice;
+      utterance.lang = germanVoice.lang || 'de-DE';
       utterance.rate = rate;
       utterance.pitch = 1.0;
 
       utterance.onend = () => {
-        resolve();
+        resolve(true);
       };
 
       utterance.onerror = (e) => {
         console.warn('WebSpeech error', e);
-        resolve();
+        this.markFailure('playback_failed');
+        resolve(false);
       };
 
       window.speechSynthesis.speak(utterance);
