@@ -401,7 +401,7 @@ export const AdminDashboardPage: React.FC = () => {
       {/* MODAL: CREATE LESSON */}
       {isAddLessonModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-elevated border border-slate-200 dark:border-slate-800 space-y-4">
             <h3 className="text-xl font-bold text-slate-900 dark:text-white">
               Yangi Dars Qo‘shish (Admin)
             </h3>
@@ -501,7 +501,7 @@ export const AdminDashboardPage: React.FC = () => {
       {/* MODAL: CREATE VOCABULARY */}
       {isAddVocabModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-elevated border border-slate-200 dark:border-slate-800 space-y-4">
             <h3 className="text-xl font-bold text-slate-900 dark:text-white">
               Yangi So‘z Qo‘shish (Admin)
             </h3>

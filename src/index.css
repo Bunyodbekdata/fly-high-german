@@ -25,6 +25,9 @@
     overflow-x: hidden;
     overscroll-behavior-x: none;
     position: relative;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
   #root {
     width: 100%;
@@ -33,6 +36,18 @@
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
+  }
+
+  /* Accessible, consistent focus ring for keyboard users only. */
+  :focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.35);
+    border-radius: 0.75rem;
+  }
+
+  /* Keep long words from breaking the narrow mobile layout. */
+  h1, h2, h3, h4 {
+    text-wrap: balance;
   }
 }
 
@@ -66,16 +81,16 @@
 
 /* German Article Card Glows */
 .glow-der {
-  box-shadow: 0 0 20px -3px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 0 20px -3px rgba(37, 99, 235, 0.28);
 }
 .glow-die {
-  box-shadow: 0 0 20px -3px rgba(225, 29, 72, 0.3);
+  box-shadow: 0 0 20px -3px rgba(225, 29, 72, 0.28);
 }
 .glow-das {
-  box-shadow: 0 0 20px -3px rgba(5, 150, 105, 0.3);
+  box-shadow: 0 0 20px -3px rgba(5, 150, 105, 0.28);
 }
 .glow-plural {
-  box-shadow: 0 0 20px -3px rgba(124, 58, 237, 0.3);
+  box-shadow: 0 0 20px -3px rgba(124, 58, 237, 0.28);
 }
 
 /* 3D Flashcard Flip Utilities */
@@ -115,30 +130,36 @@
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
-}
-.dark ::-webkit-scrollbar-track {
-  background: #0f172a;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #e2e8f0;
   border-radius: 9999px;
 }
 .dark ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #1e293b;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #cbd5e1;
 }
 .dark ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: #334155;
 }
 
 /* Smooth Interactive Transitions */
 .transition-smooth {
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hide scrollbar for horizontally scrollable segmented controls */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }

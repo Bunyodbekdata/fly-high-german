@@ -23,8 +23,8 @@ export const GrammarTab: React.FC<GrammarTabProps> = ({ grammar, grammarDiscover
     <div className="max-w-4xl mx-auto py-8 px-4 space-y-8 transition-colors duration-200">
       {/* 1. Guided Grammar Discovery (Inductive Learning) */}
       {grammarDiscovery && (
-        <div className="bg-gradient-to-br from-indigo-50/70 via-white to-blue-50/70 dark:from-indigo-950/40 dark:via-slate-900 dark:to-slate-900 rounded-3xl border border-indigo-200/80 dark:border-indigo-800/80 p-6 sm:p-8 shadow-sm space-y-4">
-          <div className="flex items-center space-x-2 text-indigo-700 dark:text-indigo-300 font-bold text-xs uppercase tracking-wider">
+        <div className="bg-white dark:bg-slate-900/60 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-soft space-y-4">
+          <div className="flex items-center space-x-2 text-brand-600 dark:text-brand-400 font-bold text-caption uppercase tracking-wider">
             <Compass size={16} />
             <span>Grammatik qoidani kashf qilish (Grammatik entdecken)</span>
           </div>

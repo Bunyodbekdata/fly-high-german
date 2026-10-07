@@ -13,22 +13,23 @@ export const CoursesPage: React.FC = () => {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10 transition-colors duration-200">
       {/* Banner to Pronunciation Lab */}
-      <div className="bg-gradient-to-r from-blue-700 via-indigo-700 to-brand-800 dark:from-blue-900 dark:via-indigo-950 dark:to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-card flex flex-col md:flex-row items-start md:items-center justify-between gap-6 border border-blue-600/30">
-        <div className="space-y-2">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-bold text-blue-100">
+      <div className="bg-slate-900 rounded-2xl p-6 sm:p-8 text-white shadow-soft flex flex-col md:flex-row items-start md:items-center justify-between gap-6 border border-slate-800 relative overflow-hidden">
+        <div className="absolute -top-16 -right-16 w-64 h-64 bg-brand-500/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="space-y-2 relative z-10">
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-caption font-bold text-slate-200">
             <Sparkles size={14} />
             <span>Yangi o‘rganuvchilar uchun tavsiya</span>
           </div>
           <h2 className="text-xl sm:text-2xl font-black">
             Nemis tili talaffuz va fonetika laboratoriyasi
           </h2>
-          <p className="text-xs sm:text-sm text-blue-100 max-w-xl leading-relaxed">
+          <p className="text-caption sm:text-body text-slate-300 max-w-xl leading-relaxed">
             Nemis alifbosi, umlautlar (ä, ö, ü, ß), diftonglar (ei, ie, eu) va maxsus birikmalar (sch, sp, st, ch) ni audiolari va o‘zbekcha qoidalari bilan o‘rganing.
           </p>
         </div>
         <Link
           to="/pronunciation"
-          className="px-6 py-3 rounded-2xl bg-white text-brand-900 font-extrabold text-sm shadow-md hover:bg-blue-50 transition flex items-center space-x-2 flex-shrink-0"
+          className="px-6 py-3 rounded-xl bg-brand-600 text-white font-bold text-sm shadow-soft hover:bg-brand-700 transition flex items-center space-x-2 flex-shrink-0 relative z-10"
         >
           <Volume2 size={16} />
           <span>Fonetika xonasiga o‘tish</span>

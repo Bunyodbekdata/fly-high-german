@@ -33,18 +33,18 @@ export const AbschlussTestModal: React.FC<AbschlussTestModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col shadow-2xl border border-slate-200 dark:border-slate-800 animate-in fade-in zoom-in-95 duration-200">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col shadow-elevated border border-slate-200 dark:border-slate-800 animate-in fade-in zoom-in-95 duration-200">
         {/* Header */}
-        <div className="p-6 bg-gradient-to-r from-amber-600 via-orange-600 to-red-600 text-white flex items-start justify-between">
+        <div className="p-6 bg-brand-600 text-white flex items-start justify-between">
           <div>
-            <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-white/20 text-xs font-bold text-amber-100 mb-2">
+            <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-white/20 text-caption font-bold text-white/90 mb-2">
               <GraduationCap size={14} />
               <span>Bosqich Yakuniy Imtihoni (Abschluss-Test)</span>
             </div>
             <h2 className="text-xl sm:text-2xl font-black">
               {testData.titleDe}
             </h2>
-            <p className="text-xs sm:text-sm text-amber-100 mt-0.5">
+            <p className="text-caption text-white/80 mt-0.5">
               {testData.titleUz}
             </p>
           </div>

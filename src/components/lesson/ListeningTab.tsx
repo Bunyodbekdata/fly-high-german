@@ -102,10 +102,10 @@ export const ListeningTab: React.FC<ListeningTabProps> = ({ listening3Stage, lis
           </div>
 
           {/* Central Audio Play Banner */}
-          <div className="mt-6 p-6 rounded-2xl bg-gradient-to-r from-brand-600 to-indigo-700 text-white shadow-md">
+          <div className="mt-6 p-6 rounded-2xl bg-brand-600 text-white shadow-soft">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               <div>
-                <span className="text-xs uppercase tracking-wider text-blue-200 font-bold block mb-1">
+                <span className="text-caption uppercase tracking-wider text-white/80 font-bold block mb-1">
                   Nemischa audio muloqot
                 </span>
                 <p className="text-sm sm:text-base font-medium opacity-90">
@@ -449,10 +449,10 @@ export const ListeningTab: React.FC<ListeningTabProps> = ({ listening3Stage, lis
         </div>
 
         {/* Player Box */}
-        <div className="p-6 rounded-2xl bg-gradient-to-r from-brand-600 to-blue-700 text-white mb-8 shadow-md">
+        <div className="p-6 rounded-2xl bg-brand-600 text-white mb-8 shadow-soft">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
-              <span className="text-xs uppercase tracking-wider text-blue-200 font-bold block mb-1">
+              <span className="text-caption uppercase tracking-wider text-white/80 font-bold block mb-1">
                 Nemischa audio muloqot
               </span>
               <p className="text-sm sm:text-base font-medium opacity-90">

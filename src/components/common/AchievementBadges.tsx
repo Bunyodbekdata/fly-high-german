@@ -111,7 +111,7 @@ export const AchievementBadges: React.FC<AchievementBadgesProps> = ({ badges, co
       {/* Badge Detail Modal */}
       {selectedBadge && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in">
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-slate-200 dark:border-slate-800 text-center space-y-4 animate-in zoom-in-95">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 max-w-sm w-full shadow-elevated border border-slate-200 dark:border-slate-800 text-center space-y-4 animate-in zoom-in-95">
             <div className="flex justify-end">
               <button
                 onClick={() => setSelectedBadge(null)}

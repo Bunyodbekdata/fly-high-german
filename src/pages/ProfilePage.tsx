@@ -94,7 +94,7 @@ export const ProfilePage: React.FC = () => {
       </div>
 
       {/* Gamification Rank Progression Card */}
-      <div className="bg-gradient-to-br from-slate-900 via-brand-950 to-indigo-950 rounded-3xl p-6 sm:p-8 text-white shadow-card border border-slate-800 space-y-4">
+      <div className="bg-slate-900 rounded-2xl p-6 sm:p-8 text-white shadow-soft border border-slate-800 space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center space-x-3">
             <div className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center text-3xl shadow-inner border border-white/15">
@@ -102,7 +102,7 @@ export const ProfilePage: React.FC = () => {
             </div>
             <div>
               <div className="flex items-center space-x-2">
-                <span className="text-xs uppercase tracking-wider text-blue-300 font-bold">
+                <span className="text-caption uppercase tracking-wider text-brand-300 font-bold">
                   {currentRank.tier}-Rutba • {currentRank.titleDe}
                 </span>
               </div>
@@ -114,28 +114,28 @@ export const ProfilePage: React.FC = () => {
 
           {nextRank && (
             <div className="text-left sm:text-right">
-              <span className="text-xs text-slate-300 block">Keyingi rutbagacha:</span>
-              <span className="text-sm font-bold text-emerald-400">
+              <span className="text-caption text-slate-400 block">Keyingi rutbagacha:</span>
+              <span className="text-body font-bold text-emerald-400">
                 +{xpToNext} XP kerak ({nextRank.badge} {nextRank.titleUz})
               </span>
             </div>
           )}
         </div>
 
-        <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-2xl">
+        <p className="text-caption text-slate-400 leading-relaxed max-w-2xl">
           {currentRank.descriptionUz}
         </p>
 
         {/* Progress to next level */}
         <div className="space-y-1.5 pt-2">
-          <div className="flex justify-between text-xs font-semibold text-slate-300">
+          <div className="flex justify-between text-caption font-semibold text-slate-400">
             <span>{currentRank.minXp} XP</span>
             <span>{progressPercent}% bajarildi</span>
             <span>{nextRank ? `${nextRank.minXp} XP` : 'Maksimal daraja'}</span>
           </div>
           <div className="w-full h-3 rounded-full bg-white/15 overflow-hidden backdrop-blur-sm p-0.5">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 shadow-glow transition-all duration-500"
+              className="h-full rounded-full bg-gradient-to-r from-brand-500 to-brand-600 transition-all duration-500"
               style={{ width: `${progressPercent}%` }}
             />
           </div>
@@ -143,7 +143,7 @@ export const ProfilePage: React.FC = () => {
       </div>
 
       {/* Achievement Badges Showcase */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-soft">
         <AchievementBadges badges={badges} />
       </div>
 

@@ -26,20 +26,20 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   }[size];
 
   const colorGradients = {
-    brand: 'bg-gradient-to-r from-brand-500 to-blue-600',
-    emerald: 'bg-gradient-to-r from-emerald-500 to-teal-600',
-    amber: 'bg-gradient-to-r from-amber-400 to-orange-500',
+    brand: 'bg-gradient-to-r from-brand-500 to-brand-600',
+    emerald: 'bg-gradient-to-r from-emerald-500 to-emerald-600',
+    amber: 'bg-gradient-to-r from-amber-400 to-amber-500',
   }[color];
 
   return (
     <div className={`w-full ${className}`}>
       {(label || showPercent) && (
-        <div className="flex justify-between items-center mb-1 text-xs font-medium text-slate-600">
+        <div className="flex justify-between items-center mb-1.5 text-caption font-medium text-slate-600 dark:text-slate-400">
           {label && <span>{label}</span>}
-          {showPercent && <span className="font-semibold text-slate-800">{clamped}%</span>}
+          {showPercent && <span className="font-semibold text-slate-800 dark:text-slate-200">{clamped}%</span>}
         </div>
       )}
-      <div className={`w-full bg-slate-100 rounded-full overflow-hidden ${sizeClasses}`}>
+      <div className={`w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden ${sizeClasses}`}>
         <div
           className={`${colorGradients} ${sizeClasses} rounded-full transition-all duration-500 ease-out`}
           style={{ width: `${clamped}%` }}

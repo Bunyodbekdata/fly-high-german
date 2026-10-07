@@ -58,7 +58,7 @@ export const LevelPage: React.FC = () => {
   if (!isA1 || level.isComingSoon) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-16 text-center space-y-6">
-        <div className="w-20 h-20 rounded-3xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto shadow-sm">
+        <div className="w-20 h-20 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto shadow-soft">
           <Lock size={36} />
         </div>
         <div>
@@ -73,7 +73,7 @@ export const LevelPage: React.FC = () => {
           </p>
         </div>
 
-        <div className="p-6 rounded-3xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-left space-y-3 shadow-sm max-w-md mx-auto">
+        <div className="p-6 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-left space-y-3 shadow-soft max-w-md mx-auto">
           <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">
             Tavsiya etilgan o‘quv rejasi:
           </span>
@@ -131,7 +131,7 @@ export const LevelPage: React.FC = () => {
       </div>
 
       {/* Level Header Card */}
-      <div className="bg-white dark:bg-slate-800/90 rounded-3xl border border-slate-200 dark:border-slate-700 p-6 sm:p-8 shadow-card">
+      <div className="bg-white dark:bg-slate-900/60 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-soft">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-slate-100 dark:border-slate-700">
           <div className="space-y-2">
             <div className="flex items-center space-x-3">
@@ -241,24 +241,24 @@ export const LevelPage: React.FC = () => {
             return (
               <div key={mod.id} className="relative">
                 {/* Module Island Header */}
-                <div className="mb-6 p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-brand-600 via-indigo-600 to-blue-700 text-white shadow-card flex items-center justify-between gap-4">
+                <div className="mb-6 p-5 sm:p-6 rounded-2xl bg-slate-900 dark:bg-slate-900/70 border border-slate-800 text-white shadow-soft flex items-center justify-between gap-4">
                   <div>
-                    <span className="text-xs font-mono font-bold text-blue-200 uppercase tracking-wider block mb-0.5">
+                    <span className="text-2xs font-mono font-bold text-brand-400 uppercase tracking-wider block mb-1">
                       {mod.titleUz}
                     </span>
                     <h3 className="text-lg sm:text-xl font-black">
                       {mod.titleDe}
                     </h3>
-                    <p className="text-xs text-blue-100 mt-1 max-w-xl">
+                    <p className="text-caption text-slate-400 mt-1 max-w-xl">
                       {mod.descriptionUz}
                     </p>
                   </div>
                   <div className="hidden sm:flex flex-col items-end flex-shrink-0">
-                    <span className="text-xs font-bold text-blue-200">
+                    <span className="text-caption font-bold text-slate-400">
                       {moduleLessons.filter(l => isLessonCompleted(l.id)).length} / {moduleLessons.length} dars
                     </span>
                     {allModCompleted && (
-                      <span className="text-[11px] font-bold text-emerald-300 bg-emerald-950/40 px-2.5 py-0.5 rounded-full border border-emerald-500/40 mt-1 flex items-center">
+                      <span className="text-2xs font-bold text-emerald-300 bg-emerald-950/40 px-2.5 py-1 rounded-full border border-emerald-500/40 mt-1.5 flex items-center">
                         <Check size={11} className="mr-1" /> Modul yakunlandi
                       </span>
                     )}
@@ -266,7 +266,7 @@ export const LevelPage: React.FC = () => {
                 </div>
 
                 {/* Milestone Nodes Along a Connected Path */}
-                <div className="relative pl-6 sm:pl-10 space-y-6 before:content-[''] before:absolute before:left-12 sm:before:left-16 before:top-4 before:bottom-4 before:w-1 before:bg-gradient-to-b before:from-brand-300 before:via-indigo-300 before:to-emerald-300 dark:before:from-brand-800 dark:before:via-indigo-900 dark:before:to-emerald-800 before:rounded-full">
+                <div className="relative pl-6 sm:pl-10 space-y-6 before:content-[''] before:absolute before:left-12 sm:before:left-16 before:top-4 before:bottom-4 before:w-0.5 before:bg-slate-200 dark:before:bg-slate-800 before:rounded-full">
                   {moduleLessons.map((lesson, lessonIdx) => {
                     const completed = isLessonCompleted(lesson.id);
                     const isCurrent = lesson.id === firstUncompletedId;
@@ -345,26 +345,26 @@ export const LevelPage: React.FC = () => {
                   {/* Module Checkpoint Test Node */}
                   {reviewData && (
                     <div className="relative flex items-center space-x-4 sm:space-x-6 pt-2">
-                      <div className="relative z-10 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-amber-500 text-white flex items-center justify-center shadow-md ring-4 ring-amber-100 dark:ring-amber-950/60 flex-shrink-0">
+                      <div className="relative z-10 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-slate-900 dark:bg-slate-800 text-brand-400 flex items-center justify-center shadow-md ring-4 ring-slate-100 dark:ring-slate-900 border border-slate-700 flex-shrink-0">
                         <Flag size={20} className="fill-current" />
                       </div>
 
-                      <div className="flex-1 p-4 rounded-2xl bg-gradient-to-r from-amber-50/70 to-orange-50/70 dark:from-amber-950/30 dark:to-orange-950/30 border border-amber-200 dark:border-amber-800/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                      <div className="flex-1 p-4 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                         <div>
-                          <span className="text-[11px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider block">
+                          <span className="text-2xs font-bold text-brand-600 dark:text-brand-400 uppercase tracking-wider block">
                             Modul Yakuniy Nazorati
                           </span>
                           <h4 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">
                             {mod.titleDe}: Takrorlash va Mini-Test
                           </h4>
-                          <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
+                          <p className="text-caption text-slate-500 dark:text-slate-400 mt-0.5">
                             Ushbu modulda o‘tilgan barcha mavzularni mustahkamlovchi test
                           </p>
                         </div>
 
                         <button
                           onClick={() => setSelectedModuleReview(mod.id)}
-                          className="px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-xs transition flex items-center space-x-1.5 self-start sm:self-auto flex-shrink-0"
+                          className="px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-caption shadow-2xs transition flex items-center space-x-1.5 self-start sm:self-auto flex-shrink-0"
                         >
                           <Sparkles size={13} />
                           <span>Mini-Testni topshirish</span>
@@ -378,23 +378,23 @@ export const LevelPage: React.FC = () => {
           })}
 
           {/* Level Final Exam Trophy Checkpoint */}
-          <div className="p-8 rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 border border-indigo-500/40 text-white shadow-2xl text-center relative overflow-hidden">
-            <div className="w-16 h-16 rounded-3xl bg-amber-400 text-slate-950 flex items-center justify-center mx-auto mb-4 shadow-lg">
+          <div className="p-8 rounded-2xl bg-slate-900 dark:bg-slate-900/80 border border-slate-800 text-white shadow-soft text-center relative overflow-hidden">
+            <div className="w-16 h-16 rounded-2xl bg-brand-500 text-white flex items-center justify-center mx-auto mb-4 shadow-lg">
               <Award size={36} />
             </div>
-            <span className="text-xs font-mono font-extrabold uppercase tracking-widest text-amber-400 block mb-1">
+            <span className="text-2xs font-mono font-extrabold uppercase tracking-widest text-brand-400 block mb-1.5">
               Rasmiy Formatdagi Yakuniy Sinov
             </span>
             <h3 className="text-2xl sm:text-3xl font-black">
               {level.title}: Goethe-Zertifikat A1 Abschluss-Test
             </h3>
-            <p className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto mt-2 leading-relaxed">
+            <p className="text-caption text-slate-400 max-w-xl mx-auto mt-2 leading-relaxed">
               Barcha 4 ta modul va 12 ta darsni tugatgach, Gyote Instituti rasmiy formatidagi 20 savolli yakuniy imtihonni topshiring va bilimingizni tasdiqlang.
             </p>
             <div className="pt-6">
               <button
                 onClick={() => setIsAbschlussTestOpen(true)}
-                className="px-8 py-4 rounded-2xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-sm sm:text-base shadow-glow transition inline-flex items-center space-x-2"
+                className="px-8 py-4 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm sm:text-base shadow-soft transition inline-flex items-center space-x-2"
               >
                 <Award size={18} />
                 <span>Yakuniy Imtihonni Topshirish</span>
@@ -493,17 +493,17 @@ export const LevelPage: React.FC = () => {
 
                 {/* Module Review & Mini-Test Footer Button */}
                 {reviewData && (
-                  <div className="p-4 bg-gradient-to-r from-blue-50/50 to-indigo-50/50 dark:from-slate-900/60 dark:to-indigo-950/40 border-t border-slate-200/80 dark:border-slate-700 flex items-center justify-between">
+                  <div className="p-4 bg-slate-50 dark:bg-slate-900/60 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <Sparkles size={16} className="text-indigo-600 dark:text-indigo-400" />
-                      <span className="text-xs font-bold text-indigo-900 dark:text-indigo-200">
+                      <Sparkles size={16} className="text-brand-600 dark:text-brand-400" />
+                      <span className="text-caption font-bold text-slate-800 dark:text-slate-200">
                         {mod.titleDe}: Xulosa va Mini-Test
                       </span>
                     </div>
 
                     <button
                       onClick={() => setSelectedModuleReview(mod.id)}
-                      className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-2xs transition"
+                      className="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-caption shadow-2xs transition"
                     >
                       Takrorlash & Test
                     </button>

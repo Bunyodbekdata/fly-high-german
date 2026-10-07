@@ -109,19 +109,19 @@ export const ListeningPage: React.FC = () => {
               </div>
 
               {/* Big Audio Player Box */}
-              <div className="p-6 rounded-2xl bg-gradient-to-r from-brand-600 to-blue-700 text-white shadow-md flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="p-6 rounded-2xl bg-brand-600 text-white shadow-soft flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
-                  <span className="text-xs uppercase tracking-wider text-blue-200 font-bold block mb-1">
+                  <span className="text-caption uppercase tracking-wider text-white/80 font-bold block mb-1">
                     Audioni tinglash
                   </span>
-                  <p className="text-sm font-medium opacity-90">
+                  <p className="text-body font-medium text-white/90">
                     Ovozni diqqat bilan eshiting va savollarni yeching.
                   </p>
                 </div>
 
                 <button
                   onClick={handlePlayFullAudio}
-                  className="px-6 py-3 rounded-2xl bg-white text-brand-700 hover:bg-blue-50 font-bold text-sm flex items-center space-x-2 transition shadow-lg flex-shrink-0"
+                  className="px-6 py-3 rounded-xl bg-white text-brand-700 hover:bg-brand-50 font-bold text-sm flex items-center space-x-2 transition shadow-soft flex-shrink-0"
                 >
                   {isPlayingFull ? <Pause size={18} /> : <Play size={18} className="fill-current" />}
                   <span>{isPlayingFull ? 'To‘xtatish' : 'Audioni tinglash'}</span>

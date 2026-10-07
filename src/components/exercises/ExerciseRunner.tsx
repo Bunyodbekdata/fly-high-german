@@ -223,7 +223,7 @@ export const ExerciseRunner: React.FC<ExerciseRunnerProps> = ({
     const passed = finalScorePercent >= 70;
 
     return (
-      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 shadow-card text-center max-w-xl mx-auto my-6 animate-in fade-in">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-8 shadow-soft text-center max-w-xl mx-auto my-6 animate-in fade-in">
         <div className={`w-20 h-20 mx-auto rounded-3xl flex items-center justify-center mb-5 ${
           passed 
             ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400' 
@@ -271,11 +271,11 @@ export const ExerciseRunner: React.FC<ExerciseRunnerProps> = ({
   const progressPercent = Math.round(((currentIndex + (isAnswerChecked ? 1 : 0)) / exercises.length) * 100);
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-card overflow-hidden max-w-2xl mx-auto my-4">
+    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-soft overflow-hidden max-w-2xl mx-auto my-4">
       {/* Duolingo-style Top Progress Bar */}
       <div className="w-full h-2.5 bg-slate-100 dark:bg-slate-800 overflow-hidden">
         <div
-          className="h-full bg-gradient-to-r from-brand-600 via-indigo-600 to-emerald-500 transition-all duration-300 shadow-xs"
+          className="h-full bg-gradient-to-r from-brand-500 to-brand-600 transition-all duration-300"
           style={{ width: `${progressPercent}%` }}
         />
       </div>

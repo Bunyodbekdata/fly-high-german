@@ -57,24 +57,29 @@ export const HomePage: React.FC = () => {
     }
   ];
 
+  // A single restrained treatment for all nine steps keeps the grid calm and
+  // on-brand; the step number carries the orange accent instead of nine hues.
+  const stepAccent =
+    'text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950/40 border-brand-200 dark:border-brand-900';
+
   const courseSteps = [
-    { num: '01', titleDe: 'Einstieg', titleUz: 'Hayotiy vaziyat & Kirish', icon: Sparkles, color: 'text-amber-500 bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800' },
-    { num: '02', titleDe: 'Dialog', titleUz: 'Jonli nemischa muloqot', icon: Headphones, color: 'text-blue-500 bg-blue-50 dark:bg-blue-950/40 border-blue-200 dark:border-blue-800' },
-    { num: '03', titleDe: 'Wortschatz', titleUz: 'der/die/das rangli lug‘at', icon: Bookmark, color: 'text-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800' },
-    { num: '04', titleDe: 'Grammatik', titleUz: 'V2 so‘z tartibi & Jadvallar', icon: FileText, color: 'text-purple-500 bg-purple-50 dark:bg-purple-950/40 border-purple-200 dark:border-purple-800' },
-    { num: '05', titleDe: 'Hören', titleUz: '3-Bosqichli tinglab tushunish', icon: Volume2, color: 'text-indigo-500 bg-indigo-50 dark:bg-indigo-950/40 border-indigo-200 dark:border-indigo-800' },
-    { num: '06', titleDe: 'Lesen', titleUz: 'Matn bilan ishlash & Savollar', icon: BookOpen, color: 'text-cyan-500 bg-cyan-50 dark:bg-cyan-950/40 border-cyan-200 dark:border-cyan-800' },
-    { num: '07', titleDe: 'Schreiben', titleUz: 'Tayanch iboralar bilan yozish', icon: PenTool, color: 'text-rose-500 bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-800' },
-    { num: '08', titleDe: 'Shadowing', titleUz: 'Mikrofon bilan talaffuz mashqi', icon: Mic, color: 'text-teal-500 bg-teal-50 dark:bg-teal-950/40 border-teal-200 dark:border-teal-800' },
-    { num: '09', titleDe: 'Übungen', titleUz: 'Interaktiv testlar & Tushuntirish', icon: Award, color: 'text-amber-600 bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800' },
+    { num: '01', titleDe: 'Einstieg', titleUz: 'Hayotiy vaziyat & Kirish', icon: Sparkles, color: stepAccent },
+    { num: '02', titleDe: 'Dialog', titleUz: 'Jonli nemischa muloqot', icon: Headphones, color: stepAccent },
+    { num: '03', titleDe: 'Wortschatz', titleUz: 'der/die/das rangli lug‘at', icon: Bookmark, color: stepAccent },
+    { num: '04', titleDe: 'Grammatik', titleUz: 'V2 so‘z tartibi & Jadvallar', icon: FileText, color: stepAccent },
+    { num: '05', titleDe: 'Hören', titleUz: '3-Bosqichli tinglab tushunish', icon: Volume2, color: stepAccent },
+    { num: '06', titleDe: 'Lesen', titleUz: 'Matn bilan ishlash & Savollar', icon: BookOpen, color: stepAccent },
+    { num: '07', titleDe: 'Schreiben', titleUz: 'Tayanch iboralar bilan yozish', icon: PenTool, color: stepAccent },
+    { num: '08', titleDe: 'Shadowing', titleUz: 'Mikrofon bilan talaffuz mashqi', icon: Mic, color: stepAccent },
+    { num: '09', titleDe: 'Übungen', titleUz: 'Interaktiv testlar & Tushuntirish', icon: Award, color: stepAccent },
   ];
 
   return (
     <div className="space-y-20 pb-20 transition-colors duration-200">
       {/* 1. HERO SECTION WITH AURORA GLOW & 3D INTERACTIVE CARD */}
       <section className="relative pt-12 sm:pt-20 pb-16 overflow-hidden bg-gradient-to-b from-brand-50/60 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 border-b border-slate-200/80 dark:border-slate-800">
-        {/* Subtle Aurora Ambient Lights */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-gradient-to-tr from-brand-600/15 via-rose-500/10 to-amber-400/15 rounded-full blur-3xl pointer-events-none -z-0" />
+        {/* Soft single-hue ambient wash — kept restrained for a calmer, editorial hero */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[640px] h-[320px] bg-brand-500/10 rounded-full blur-3xl pointer-events-none -z-0" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           {/* German Flag Badge */}
@@ -88,9 +93,9 @@ export const HomePage: React.FC = () => {
           </div>
 
           {/* Main Headline */}
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-950 dark:text-white tracking-tight max-w-4xl mx-auto leading-[1.12]">
+          <h1 className="text-3xl sm:text-5xl font-black text-slate-950 dark:text-white tracking-tight max-w-4xl mx-auto leading-[1.14]">
             Nemis tilini{' '}
-            <span className="bg-gradient-to-r from-brand-600 via-indigo-600 to-rose-600 bg-clip-text text-transparent">
+            <span className="text-brand-600 dark:text-brand-500">
               noldan A1 darajagacha
             </span>{' '}
             mustaqil o‘rganing.
@@ -106,7 +111,7 @@ export const HomePage: React.FC = () => {
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               to={`/courses/${nextLesson?.levelCode || 'a1-1'}/lesson/${nextLesson?.id || 'les-1'}`}
-              className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-base shadow-glow transition transform hover:-translate-y-0.5 inline-flex items-center justify-center space-x-2"
+              className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-base shadow-soft transition-colors inline-flex items-center justify-center space-x-2"
             >
               <span>
                 {isReturningLearner
@@ -145,22 +150,20 @@ export const HomePage: React.FC = () => {
 
           {/* Feature Highlights Metrics */}
           <div className="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-4xl mx-auto">
-            <div className="p-4 rounded-2xl bg-white dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 text-center">
-              <span className="block text-2xl font-black text-brand-600 dark:text-brand-400">24 ta</span>
-              <span className="text-xs font-bold text-slate-600 dark:text-slate-400">A1.1 & A1.2 Darslari</span>
-            </div>
-            <div className="p-4 rounded-2xl bg-white dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 text-center">
-              <span className="block text-2xl font-black text-emerald-600 dark:text-emerald-400">300+</span>
-              <span className="text-xs font-bold text-slate-600 dark:text-slate-400">Nemischa So‘zlar</span>
-            </div>
-            <div className="p-4 rounded-2xl bg-white dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 text-center">
-              <span className="block text-2xl font-black text-indigo-600 dark:text-indigo-400">9 Bosqich</span>
-              <span className="text-xs font-bold text-slate-600 dark:text-slate-400">Xalqaro Metodika</span>
-            </div>
-            <div className="p-4 rounded-2xl bg-white dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 text-center">
-              <span className="block text-2xl font-black text-amber-600 dark:text-amber-400">100%</span>
-              <span className="text-xs font-bold text-slate-600 dark:text-slate-400">O‘zbekcha Tushuntirish</span>
-            </div>
+            {[
+              { value: '24 ta', label: 'A1.1 & A1.2 Darslari' },
+              { value: '300+', label: 'Nemischa So‘zlar' },
+              { value: '9', label: 'Bosqichli Metodika' },
+              { value: '100%', label: 'O‘zbekcha Tushuntirish' },
+            ].map((stat) => (
+              <div
+                key={stat.label}
+                className="p-5 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800 text-center"
+              >
+                <span className="block text-2xl font-black text-slate-900 dark:text-white">{stat.value}</span>
+                <span className="text-caption font-medium text-slate-500 dark:text-slate-400">{stat.label}</span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -185,7 +188,7 @@ export const HomePage: React.FC = () => {
             return (
               <div
                 key={step.num}
-                className="p-5 rounded-3xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 shadow-xs hover:shadow-card hover:border-brand-300 dark:hover:border-brand-600 transition group flex items-start space-x-4"
+                className="p-5 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 shadow-2xs hover:shadow-soft hover:border-brand-300 dark:hover:border-brand-700 transition group flex items-start space-x-4"
               >
                 <div className={`w-12 h-12 rounded-2xl border flex items-center justify-center flex-shrink-0 font-extrabold ${step.color}`}>
                   <Icon size={20} />
@@ -225,7 +228,7 @@ export const HomePage: React.FC = () => {
           {levels.map((lvl) => (
             <div
               key={lvl.id}
-              className="bg-white dark:bg-slate-800/80 rounded-3xl border border-slate-200 dark:border-slate-700/80 p-6 shadow-sm hover:shadow-card hover:border-brand-300 dark:hover:border-brand-600 transition-all duration-300 flex flex-col justify-between group"
+              className="bg-white dark:bg-slate-900/60 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-2xs hover:shadow-soft hover:border-brand-300 dark:hover:border-brand-700 transition-all duration-300 flex flex-col justify-between group"
             >
               <div>
                 <div className="flex items-center justify-between mb-4">
@@ -264,29 +267,30 @@ export const HomePage: React.FC = () => {
       {/* 4. FREE SAMPLE LESSON PREVIEW */}
       {sampleLesson && (
         <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-br from-brand-600 via-indigo-700 to-blue-900 rounded-3xl p-8 sm:p-12 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
+          <div className="bg-slate-900 rounded-2xl border border-slate-800 p-8 sm:p-12 text-white shadow-soft flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
+            <div className="absolute -top-16 -right-16 w-72 h-72 bg-brand-500/20 rounded-full blur-3xl pointer-events-none" />
             <div className="space-y-4 max-w-xl relative z-10">
-              <span className="px-3 py-1 rounded-full bg-white/20 text-xs font-bold uppercase tracking-wider text-white backdrop-blur-md">
+              <span className="px-3 py-1 rounded-full bg-white/10 text-caption font-bold uppercase tracking-wider text-white backdrop-blur-md">
                 Bepul namuna dars
               </span>
               <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
                 {sampleLesson.titleDe} — {sampleLesson.titleUz}
               </h3>
-              <p className="text-sm text-blue-100 leading-relaxed">
+              <p className="text-body text-slate-300 leading-relaxed">
                 Ushbu dars orqali nemis tilida salomlashish, hol-ahvol so‘rash va xayrlashishni o‘rganasiz. 
                 Hech qanday to‘lovlarsiz hoziroq sinab ko‘ring!
               </p>
 
               <div className="flex flex-wrap gap-2 pt-2">
-                <span className="text-xs bg-black/20 px-3 py-1 rounded-lg">10 ta lug‘at so‘zi</span>
-                <span className="text-xs bg-black/20 px-3 py-1 rounded-lg">sein / heißen fe‘li</span>
-                <span className="text-xs bg-black/20 px-3 py-1 rounded-lg">Audio & Shadowing</span>
+                <span className="text-caption bg-white/10 px-3 py-1 rounded-lg">10 ta lug‘at so‘zi</span>
+                <span className="text-caption bg-white/10 px-3 py-1 rounded-lg">sein / heißen fe‘li</span>
+                <span className="text-caption bg-white/10 px-3 py-1 rounded-lg">Audio & Shadowing</span>
               </div>
             </div>
 
             <Link
               to="/courses/a1-1/lesson/les-1"
-              className="px-8 py-4 rounded-2xl bg-white text-brand-700 hover:bg-blue-50 font-extrabold text-sm sm:text-base shadow-lg transition flex-shrink-0 inline-flex items-center space-x-2 relative z-10"
+              className="px-8 py-4 rounded-2xl bg-brand-600 text-white hover:bg-brand-700 font-bold text-sm sm:text-base shadow-soft transition flex-shrink-0 inline-flex items-center space-x-2 relative z-10"
             >
               <span>Darsni Boshlash</span>
               <ArrowRight size={18} />
