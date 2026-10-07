@@ -35,6 +35,7 @@ export const VocabularyPage: React.FC = () => {
   // Curriculum filter state
   const [selectedLevel, setSelectedLevel] = useState<string>('all');
   const [selectedType, setSelectedType] = useState<string>('all');
+  const [selectedArticle, setSelectedArticle] = useState<'all' | 'der' | 'die' | 'das'>('all');
   const [searchQuery, setSearchQuery] = useState(() => searchParams.get('search') || '');
   const [onlyFavorites, setOnlyFavorites] = useState(false);
   const [onlyUnlearned, setOnlyUnlearned] = useState(false);
@@ -61,6 +62,7 @@ export const VocabularyPage: React.FC = () => {
     return allVocab.filter((item) => {
       if (selectedLevel !== 'all' && item.levelCode !== selectedLevel) return false;
       if (selectedType !== 'all' && item.wordType !== selectedType) return false;
+      if (selectedArticle !== 'all' && item.article !== selectedArticle) return false;
 
       const progress = vocabProgress[item.id];
       if (onlyFavorites && !progress?.isFavorite) return false;
@@ -245,11 +247,61 @@ export const VocabularyPage: React.FC = () => {
               </div>
             </div>
 
+            {/* German Article Filter Row */}
+            <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs font-semibold">
+              <span className="text-slate-400 mr-1 flex items-center">
+                Artikl:
+              </span>
+              <button
+                onClick={() => setSelectedArticle('all')}
+                className={`px-3 py-1 rounded-xl transition ${
+                  selectedArticle === 'all'
+                    ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
+                }`}
+              >
+                Barchasi
+              </button>
+              <button
+                onClick={() => setSelectedArticle(selectedArticle === 'der' ? 'all' : 'der')}
+                className={`px-3 py-1 rounded-xl transition flex items-center space-x-1.5 ${
+                  selectedArticle === 'der'
+                    ? 'bg-blue-600 text-white font-bold shadow-xs'
+                    : 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 hover:bg-blue-100'
+                }`}
+              >
+                <span className="w-2 h-2 rounded-full bg-blue-500" />
+                <span>der (Maskulin)</span>
+              </button>
+              <button
+                onClick={() => setSelectedArticle(selectedArticle === 'die' ? 'all' : 'die')}
+                className={`px-3 py-1 rounded-xl transition flex items-center space-x-1.5 ${
+                  selectedArticle === 'die'
+                    ? 'bg-rose-600 text-white font-bold shadow-xs'
+                    : 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 hover:bg-rose-100'
+                }`}
+              >
+                <span className="w-2 h-2 rounded-full bg-rose-500" />
+                <span>die (Feminin)</span>
+              </button>
+              <button
+                onClick={() => setSelectedArticle(selectedArticle === 'das' ? 'all' : 'das')}
+                className={`px-3 py-1 rounded-xl transition flex items-center space-x-1.5 ${
+                  selectedArticle === 'das'
+                    ? 'bg-emerald-600 text-white font-bold shadow-xs'
+                    : 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100'
+                }`}
+              >
+                <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                <span>das (Neutral)</span>
+              </button>
+            </div>
+
             {/* Quick Filters */}
             <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs font-medium">
               <span className="text-slate-400 mr-1 flex items-center">
                 <Filter size={13} className="mr-1" />
-                Filtrlar:
+                Holat:
               </span>
 
               {/* SRS Due Filter */}
@@ -289,11 +341,12 @@ export const VocabularyPage: React.FC = () => {
                 <span>Faqat yodlanmaganlar</span>
               </button>
 
-              {(selectedLevel !== 'all' || selectedType !== 'all' || searchQuery || onlyFavorites || onlyUnlearned || onlyDueSrs) && (
+              {(selectedLevel !== 'all' || selectedType !== 'all' || selectedArticle !== 'all' || searchQuery || onlyFavorites || onlyUnlearned || onlyDueSrs) && (
                 <button
                   onClick={() => {
                     setSelectedLevel('all');
                     setSelectedType('all');
+                    setSelectedArticle('all');
                     setSearchQuery('');
                     setOnlyFavorites(false);
                     setOnlyUnlearned(false);

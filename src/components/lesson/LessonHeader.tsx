@@ -1,6 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Lesson } from '../../types/database';
-import { ArrowLeft, Clock, CheckCircle2, Volume2, Sparkles } from 'lucide-react';
+import { 
+  ArrowLeft, 
+  Clock, 
+  CheckCircle2, 
+  Volume2, 
+  Sparkles,
+  Headphones,
+  Bookmark,
+  FileText,
+  BookOpen,
+  PenTool,
+  Mic,
+  Award
+} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { LevelBadge } from '../common/Badge';
 import { audioService } from '../../lib/audio';
@@ -35,15 +48,15 @@ export const LessonHeader: React.FC<LessonHeaderProps> = ({
   };
 
   const tabs = [
-    { id: 'warmup', label: '1. Kirish' },
-    { id: 'dialogue', label: '2. Muloqot' },
-    { id: 'vocabulary', label: '3. Lug‘at' },
-    { id: 'grammar', label: '4. Grammatika' },
-    { id: 'listening', label: '5. Tinglash' },
-    { id: 'reading', label: '6. O‘qish' },
-    { id: 'writing', label: '7. Yozish' },
-    { id: 'shadowing', label: '8. Talaffuz' },
-    { id: 'practice', label: '9. Mashqlar' },
+    { id: 'warmup', num: '1', label: 'Kirish', de: 'Einstieg', icon: Sparkles },
+    { id: 'dialogue', num: '2', label: 'Muloqot', de: 'Dialog', icon: Headphones },
+    { id: 'vocabulary', num: '3', label: 'Lug‘at', de: 'Wortschatz', icon: Bookmark },
+    { id: 'grammar', num: '4', label: 'Grammatika', de: 'Grammatik', icon: FileText },
+    { id: 'listening', num: '5', label: 'Tinglash', de: 'Hören', icon: Volume2 },
+    { id: 'reading', num: '6', label: 'O‘qish', de: 'Lesen', icon: BookOpen },
+    { id: 'writing', num: '7', label: 'Yozish', de: 'Schreiben', icon: PenTool },
+    { id: 'shadowing', num: '8', label: 'Talaffuz', de: 'Shadowing', icon: Mic },
+    { id: 'practice', num: '9', label: 'Mashqlar', de: 'Übungen', icon: Award },
   ];
 
   // Calculate completed tabs count
@@ -153,9 +166,10 @@ export const LessonHeader: React.FC<LessonHeaderProps> = ({
           </div>
         </div>
 
-        {/* Apple/Notion Styled Segmented Tab Bar */}
-        <div className="bg-slate-100/90 dark:bg-slate-800/90 p-1 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 flex items-center space-x-1 overflow-x-auto no-scrollbar w-full max-w-full px-1">
+        {/* Apple/Hueber Styled Segmented Tab Bar */}
+        <div className="bg-slate-100/90 dark:bg-slate-800/90 p-1.5 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 flex items-center space-x-1.5 overflow-x-auto no-scrollbar w-full max-w-full px-1.5">
           {tabs.map((tab) => {
+            const Icon = tab.icon;
             const isActive = activeTab === tab.id;
             const isTabDone = completedTabs[tab.id];
 
@@ -163,17 +177,29 @@ export const LessonHeader: React.FC<LessonHeaderProps> = ({
               <button
                 key={tab.id}
                 onClick={() => onTabChange(tab.id)}
-                className={`flex-shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold transition-all relative flex items-center space-x-1.5 ${
+                className={`flex-shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold transition-all relative flex items-center space-x-2 group ${
                   isActive
-                    ? 'bg-white dark:bg-brand-600 text-brand-700 dark:text-white shadow-xs font-extrabold border border-slate-200/50 dark:border-brand-500'
+                    ? 'bg-white dark:bg-brand-600 text-brand-700 dark:text-white shadow-xs font-extrabold border border-slate-200/60 dark:border-brand-500 scale-[1.02]'
                     : isTabDone
                     ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/60 hover:bg-emerald-100/70'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-700/50'
                 }`}
               >
-                <span>{tab.label}</span>
-                {isTabDone && !isActive && (
-                  <CheckCircle2 size={12} className="text-emerald-600 dark:text-emerald-400" />
+                <span className={`w-5 h-5 rounded-lg flex items-center justify-center text-[10px] font-bold ${
+                  isActive
+                    ? 'bg-brand-100 dark:bg-brand-700 text-brand-700 dark:text-white'
+                    : isTabDone
+                    ? 'bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300'
+                    : 'bg-slate-200/70 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
+                }`}>
+                  <Icon size={12} />
+                </span>
+                <span className="flex flex-col text-left leading-tight">
+                  <span className="text-[11px] font-bold tracking-tight">{tab.num}. {tab.label}</span>
+                  <span className="text-[9px] font-medium opacity-70 hidden sm:block font-serif tracking-normal">{tab.de}</span>
+                </span>
+                {isTabDone && (
+                  <CheckCircle2 size={12} className={isActive ? 'text-emerald-500 dark:text-white' : 'text-emerald-600 dark:text-emerald-400'} />
                 )}
               </button>
             );
