@@ -112,7 +112,7 @@ export const VocabularyPage: React.FC = () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `FlyHigh_Lugat_Daftar_${new Date().toISOString().slice(0, 10)}.txt`;
+    a.download = `FGN_Lugat_Daftar_${new Date().toISOString().slice(0, 10)}.txt`;
     a.click();
     URL.revokeObjectURL(url);
   };

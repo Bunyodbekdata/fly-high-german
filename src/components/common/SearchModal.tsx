@@ -300,7 +300,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => 
             <span>Yopish</span>
           </button>
           <span className="text-slate-500 dark:text-slate-400 font-medium">
-            Fly High German Platform
+            FOR GREAT NATION
           </span>
         </div>
       </div>
