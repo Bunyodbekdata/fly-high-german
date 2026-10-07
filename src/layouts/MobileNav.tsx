@@ -14,8 +14,8 @@ export const MobileNav: React.FC = () => {
   ];
 
   return (
-    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-t border-slate-200/90 dark:border-slate-800/90 px-3 py-1.5 safe-area-pb shadow-lg transition-colors">
-      <div className="flex items-center justify-around max-w-md mx-auto">
+    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 px-2 py-1 safe-area-pb shadow-lg transition-colors">
+      <div className="flex items-center justify-around">
         {links.map((link) => {
           const Icon = link.icon;
           const isActive = 
@@ -27,14 +27,12 @@ export const MobileNav: React.FC = () => {
             <Link
               key={link.to}
               to={link.to}
-              className={`flex flex-col items-center justify-center py-1 px-3 rounded-2xl transition-all duration-200 active:scale-95 relative ${
-                isActive 
-                  ? 'text-brand-600 dark:text-brand-400 font-extrabold bg-brand-50/80 dark:bg-brand-950/60 border border-brand-200/60 dark:border-brand-800/60 shadow-2xs' 
-                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              className={`flex flex-col items-center justify-center py-1.5 px-2 rounded-xl transition ${
+                isActive ? 'text-brand-600 dark:text-brand-400 font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
-              <Icon size={19} className={isActive ? 'stroke-[2.5] text-brand-600 dark:text-brand-400' : 'stroke-2'} />
-              <span className="text-[10px] tracking-tight mt-0.5 leading-none">{link.label}</span>
+              <Icon size={20} className={isActive ? 'stroke-[2.5]' : 'stroke-2'} />
+              <span className="text-[10px] tracking-tight mt-0.5">{link.label}</span>
             </Link>
           );
         })}
