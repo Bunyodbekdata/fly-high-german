@@ -210,7 +210,7 @@ export const LevelPage: React.FC = () => {
             className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${
               viewMode === 'roadmap'
                 ? 'bg-brand-600 text-white shadow-sm'
-                : 'text-slate-600 dark:text-slate-300 hover:text-slate-900'
+                : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <MapPin size={14} />
@@ -221,7 +221,7 @@ export const LevelPage: React.FC = () => {
             className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${
               viewMode === 'grid'
                 ? 'bg-brand-600 text-white shadow-sm'
-                : 'text-slate-600 dark:text-slate-300 hover:text-slate-900'
+                : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <LayoutList size={14} />

@@ -26,11 +26,11 @@ export const AdminDashboardPage: React.FC = () => {
   if (!isAdmin) {
     return (
       <div className="max-w-md mx-auto py-24 px-4 text-center space-y-4">
-        <div className="w-16 h-16 mx-auto rounded-3xl bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-600">
+        <div className="w-16 h-16 mx-auto rounded-3xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 flex items-center justify-center text-rose-600 dark:text-rose-400">
           <ShieldAlert size={32} />
         </div>
-        <h2 className="text-xl font-bold text-slate-900">Kirish cheklangan</h2>
-        <p className="text-xs text-slate-500 leading-relaxed">
+        <h2 className="text-xl font-bold text-slate-900 dark:text-white">Kirish cheklangan</h2>
+        <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
           Ushbu sahifa faqat platforma ma'murlari (admin) uchun mo‘ljallangan. Agar siz admin bo‘lsangiz, tegishli hisob bilan tizimga kiring.
         </p>
         <Link
@@ -162,17 +162,17 @@ export const AdminDashboardPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center space-x-2">
-            <span className="p-1 rounded-lg bg-indigo-100 text-indigo-700">
+            <span className="p-1 rounded-lg bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-400">
               <ShieldCheck size={18} />
             </span>
-            <span className="text-xs font-bold uppercase tracking-wider text-indigo-600">
+            <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
               Boshqaruv Paneli (Admin Portal)
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-1">
             Ta‘lim Mazmunini Boshqarish
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
             Darslar, lug‘at va grammatika qoidalarini kodga tegmasdan real vaqtda qo‘shish va tahrirlash.
           </p>
         </div>
@@ -180,7 +180,7 @@ export const AdminDashboardPage: React.FC = () => {
         <div className="flex items-center space-x-3">
           <button
             onClick={handleResetDefaults}
-            className="px-4 py-2 rounded-xl border border-slate-300 text-slate-600 hover:bg-slate-100 text-xs font-semibold flex items-center space-x-1.5 transition"
+            className="px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold flex items-center space-x-1.5 transition"
             title="Boshlang‘ich darslarni qayta yuklash"
           >
             <RotateCcw size={14} />
@@ -190,13 +190,13 @@ export const AdminDashboardPage: React.FC = () => {
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center space-x-2 border-b border-slate-200">
+      <div className="flex items-center space-x-2 border-b border-slate-200 dark:border-slate-800">
         <button
           onClick={() => setActiveTab('lessons')}
           className={`py-3 px-4 font-bold text-sm border-b-2 transition flex items-center space-x-2 ${
             activeTab === 'lessons'
-              ? 'border-brand-600 text-brand-600'
-              : 'border-transparent text-slate-500 hover:text-slate-800'
+              ? 'border-brand-600 text-brand-600 dark:text-brand-400'
+              : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white'
           }`}
         >
           <BookOpen size={16} />
@@ -207,8 +207,8 @@ export const AdminDashboardPage: React.FC = () => {
           onClick={() => setActiveTab('vocabulary')}
           className={`py-3 px-4 font-bold text-sm border-b-2 transition flex items-center space-x-2 ${
             activeTab === 'vocabulary'
-              ? 'border-brand-600 text-brand-600'
-              : 'border-transparent text-slate-500 hover:text-slate-800'
+              ? 'border-brand-600 text-brand-600 dark:text-brand-400'
+              : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white'
           }`}
         >
           <Bookmark size={16} />
@@ -219,8 +219,8 @@ export const AdminDashboardPage: React.FC = () => {
           onClick={() => setActiveTab('grammar')}
           className={`py-3 px-4 font-bold text-sm border-b-2 transition flex items-center space-x-2 ${
             activeTab === 'grammar'
-              ? 'border-brand-600 text-brand-600'
-              : 'border-transparent text-slate-500 hover:text-slate-800'
+              ? 'border-brand-600 text-brand-600 dark:text-brand-400'
+              : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white'
           }`}
         >
           <FileText size={16} />
@@ -232,7 +232,7 @@ export const AdminDashboardPage: React.FC = () => {
       {activeTab === 'lessons' && (
         <div className="space-y-4">
           <div className="flex justify-between items-center">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
               Barcha Darslar Ro‘yxati
             </h3>
             <button
@@ -244,9 +244,9 @@ export const AdminDashboardPage: React.FC = () => {
             </button>
           </div>
 
-          <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
-            <table className="min-w-full divide-y divide-slate-200 text-left text-xs sm:text-sm">
-              <thead className="bg-slate-50 text-slate-500 font-semibold uppercase tracking-wider">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+            <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-800 text-left text-xs sm:text-sm">
+              <thead className="bg-slate-50 dark:bg-slate-850 text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider">
                 <tr>
                   <th className="px-5 py-3.5">Tartib</th>
                   <th className="px-5 py-3.5">Daraja</th>
@@ -255,9 +255,9 @@ export const AdminDashboardPage: React.FC = () => {
                   <th className="px-5 py-3.5 text-right">Amallar</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 bg-white">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80 bg-white dark:bg-slate-900">
                 {lessons.map((lesson) => (
-                  <tr key={lesson.id} className="hover:bg-slate-50/70 transition">
+                  <tr key={lesson.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-850 transition">
                     <td className="px-5 py-3 font-mono font-bold text-slate-400">
                       #{lesson.orderIndex}
                     </td>
@@ -265,16 +265,16 @@ export const AdminDashboardPage: React.FC = () => {
                       <LevelBadge code={lesson.levelCode} />
                     </td>
                     <td className="px-5 py-3">
-                      <div className="font-bold text-slate-900">{lesson.titleDe}</div>
-                      <div className="text-xs text-slate-500">{lesson.titleUz}</div>
+                      <div className="font-bold text-slate-900 dark:text-white">{lesson.titleDe}</div>
+                      <div className="text-xs text-slate-500 dark:text-slate-400">{lesson.titleUz}</div>
                     </td>
                     <td className="px-5 py-3">
                       <button
                         onClick={() => handleTogglePublish(lesson.id)}
                         className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold transition ${
                           lesson.isPublished
-                            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                            : 'bg-slate-100 text-slate-500 border border-slate-200'
+                            ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
+                            : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700'
                         }`}
                       >
                         {lesson.isPublished ? (
@@ -293,7 +293,7 @@ export const AdminDashboardPage: React.FC = () => {
                     <td className="px-5 py-3 text-right space-x-2">
                       <button
                         onClick={() => handleDeleteLesson(lesson.id)}
-                        className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition"
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/50 transition"
                         title="O‘chirish"
                       >
                         <Trash2 size={16} />
@@ -311,7 +311,7 @@ export const AdminDashboardPage: React.FC = () => {
       {activeTab === 'vocabulary' && (
         <div className="space-y-4">
           <div className="flex justify-between items-center">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
               Barcha Lug‘atlar Ro‘yxati
             </h3>
             <button
@@ -323,9 +323,9 @@ export const AdminDashboardPage: React.FC = () => {
             </button>
           </div>
 
-          <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
-            <table className="min-w-full divide-y divide-slate-200 text-left text-xs sm:text-sm">
-              <thead className="bg-slate-50 text-slate-500 font-semibold uppercase tracking-wider">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+            <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-800 text-left text-xs sm:text-sm">
+              <thead className="bg-slate-50 dark:bg-slate-850 text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider">
                 <tr>
                   <th className="px-5 py-3.5">Artikl</th>
                   <th className="px-5 py-3.5">Nemischa So‘z</th>
@@ -334,17 +334,17 @@ export const AdminDashboardPage: React.FC = () => {
                   <th className="px-5 py-3.5 text-right">Amal</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 bg-white">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80 bg-white dark:bg-slate-900">
                 {vocabulary.map((vocab) => (
-                  <tr key={vocab.id} className="hover:bg-slate-50/70 transition">
+                  <tr key={vocab.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-850 transition">
                     <td className="px-5 py-3">
                       {vocab.article && <ArticleBadge article={vocab.article} />}
                     </td>
-                    <td className="px-5 py-3 font-bold text-slate-900">
+                    <td className="px-5 py-3 font-bold text-slate-900 dark:text-white">
                       {vocab.german}
                       {vocab.plural && <span className="text-xs text-slate-400 font-mono ml-2 font-normal">({vocab.plural})</span>}
                     </td>
-                    <td className="px-5 py-3 text-slate-700">
+                    <td className="px-5 py-3 text-slate-700 dark:text-slate-300">
                       {vocab.uzbek}
                     </td>
                     <td className="px-5 py-3">
@@ -353,7 +353,7 @@ export const AdminDashboardPage: React.FC = () => {
                     <td className="px-5 py-3 text-right">
                       <button
                         onClick={() => handleDeleteVocab(vocab.id)}
-                        className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition"
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/50 transition"
                       >
                         <Trash2 size={16} />
                       </button>
@@ -369,25 +369,25 @@ export const AdminDashboardPage: React.FC = () => {
       {/* TAB 3: GRAMMAR TOPICS */}
       {activeTab === 'grammar' && (
         <div className="space-y-4">
-          <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
-            <table className="min-w-full divide-y divide-slate-200 text-left text-xs sm:text-sm">
-              <thead className="bg-slate-50 text-slate-500 font-semibold uppercase tracking-wider">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+            <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-800 text-left text-xs sm:text-sm">
+              <thead className="bg-slate-50 dark:bg-slate-850 text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider">
                 <tr>
                   <th className="px-5 py-3.5">Daraja</th>
                   <th className="px-5 py-3.5">Nemischa Nom</th>
                   <th className="px-5 py-3.5">O‘zbekcha Nom</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 bg-white">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80 bg-white dark:bg-slate-900">
                 {grammar.map((topic) => (
-                  <tr key={topic.id} className="hover:bg-slate-50/70 transition">
+                  <tr key={topic.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-850 transition">
                     <td className="px-5 py-3">
                       <LevelBadge code={topic.levelCode} />
                     </td>
-                    <td className="px-5 py-3 font-bold text-slate-900">
+                    <td className="px-5 py-3 font-bold text-slate-900 dark:text-white">
                       {topic.titleDe}
                     </td>
-                    <td className="px-5 py-3 text-slate-700">
+                    <td className="px-5 py-3 text-slate-700 dark:text-slate-300">
                       {topic.titleUz}
                     </td>
                   </tr>
@@ -401,13 +401,13 @@ export const AdminDashboardPage: React.FC = () => {
       {/* MODAL: CREATE LESSON */}
       {isAddLessonModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl border border-slate-200 space-y-4">
-            <h3 className="text-xl font-bold text-slate-900">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4">
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white">
               Yangi Dars Qo‘shish (Admin)
             </h3>
             <form onSubmit={handleCreateLesson} className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">
                   Dars Nomi (Nemischa)
                 </label>
                 <input
@@ -416,12 +416,12 @@ export const AdminDashboardPage: React.FC = () => {
                   value={newTitleDe}
                   onChange={(e) => setNewTitleDe(e.target.value)}
                   placeholder="Lektion 16: Meine Reise"
-                  className="w-full px-4 py-2 rounded-xl border border-slate-300 text-sm font-medium"
+                  className="w-full px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 text-sm font-medium focus:ring-2 focus:ring-brand-500 outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">
                   Dars Nomi (O‘zbekcha)
                 </label>
                 <input
@@ -430,18 +430,18 @@ export const AdminDashboardPage: React.FC = () => {
                   value={newTitleUz}
                   onChange={(e) => setNewTitleUz(e.target.value)}
                   placeholder="16-Dars: Mening sayohatim"
-                  className="w-full px-4 py-2 rounded-xl border border-slate-300 text-sm font-medium"
+                  className="w-full px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 text-sm font-medium focus:ring-2 focus:ring-brand-500 outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">
                   CEFR Bosqichi
                 </label>
                 <select
                   value={newLevel}
                   onChange={(e) => setNewLevel(e.target.value as any)}
-                  className="w-full px-4 py-2 rounded-xl border border-slate-300 text-sm font-medium"
+                  className="w-full px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm font-medium focus:ring-2 focus:ring-brand-500 outline-none"
                 >
                   <option value="a1-1">A1.1</option>
                   <option value="a1-2">A1.2</option>
@@ -453,7 +453,7 @@ export const AdminDashboardPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">
                   Qisqa tavsif (O‘zbekcha)
                 </label>
                 <textarea
@@ -461,12 +461,12 @@ export const AdminDashboardPage: React.FC = () => {
                   value={newDescUz}
                   onChange={(e) => setNewDescUz(e.target.value)}
                   placeholder="Ushbu darsda o‘rganiladigan asosiy mavzu..."
-                  className="w-full px-4 py-2 rounded-xl border border-slate-300 text-sm font-medium"
+                  className="w-full px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 text-sm font-medium focus:ring-2 focus:ring-brand-500 outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">
                   Dars maqsadlari (Har bir qatorda bittadan)
                 </label>
                 <textarea
@@ -474,7 +474,7 @@ export const AdminDashboardPage: React.FC = () => {
                   value={newObjectives}
                   onChange={(e) => setNewObjectives(e.target.value)}
                   placeholder="Sayohat haqida gapirish&#10;Chipta sotib olish"
-                  className="w-full px-4 py-2 rounded-xl border border-slate-300 text-sm font-medium"
+                  className="w-full px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 text-sm font-medium focus:ring-2 focus:ring-brand-500 outline-none"
                 />
               </div>
 
@@ -482,13 +482,13 @@ export const AdminDashboardPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsAddLessonModalOpen(false)}
-                  className="px-4 py-2 rounded-xl border text-slate-600 text-xs font-bold"
+                  className="px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-bold transition"
                 >
                   Bekor qilish
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow-sm"
+                  className="px-5 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow-sm transition"
                 >
                   Darsni Saqlash
                 </button>
@@ -501,20 +501,20 @@ export const AdminDashboardPage: React.FC = () => {
       {/* MODAL: CREATE VOCABULARY */}
       {isAddVocabModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl border border-slate-200 space-y-4">
-            <h3 className="text-xl font-bold text-slate-900">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4">
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white">
               Yangi So‘z Qo‘shish (Admin)
             </h3>
             <form onSubmit={handleCreateVocab} className="space-y-4">
               <div className="grid grid-cols-3 gap-2">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">
                     Artikl
                   </label>
                   <select
                     value={vocabArticle}
                     onChange={(e) => setVocabArticle(e.target.value as any)}
-                    className="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-brand-500 outline-none"
                   >
                     <option value="">(Yo‘q)</option>
                     <option value="der">der (Maskulin)</option>
@@ -523,7 +523,7 @@ export const AdminDashboardPage: React.FC = () => {
                   </select>
                 </div>
                 <div className="col-span-2">
-                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">
                     Nemischa so‘z
                   </label>
                   <input
@@ -532,13 +532,13 @@ export const AdminDashboardPage: React.FC = () => {
                     value={vocabGerman}
                     onChange={(e) => setVocabGerman(e.target.value)}
                     placeholder="der Zug / reisen"
-                    className="w-full px-4 py-2 rounded-xl border border-slate-300 text-sm font-medium"
+                    className="w-full px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 text-sm font-medium focus:ring-2 focus:ring-brand-500 outline-none"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">
                   O‘zbekcha tarjimasi
                 </label>
                 <input
@@ -547,12 +547,12 @@ export const AdminDashboardPage: React.FC = () => {
                   value={vocabUzbek}
                   onChange={(e) => setVocabUzbek(e.target.value)}
                   placeholder="poyezd / sayohat qilmoq"
-                  className="w-full px-4 py-2 rounded-xl border border-slate-300 text-sm font-medium"
+                  className="w-full px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 text-sm font-medium focus:ring-2 focus:ring-brand-500 outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">
                   Namuna gap (Nemischa)
                 </label>
                 <input
@@ -560,7 +560,7 @@ export const AdminDashboardPage: React.FC = () => {
                   value={vocabExampleDe}
                   onChange={(e) => setVocabExampleDe(e.target.value)}
                   placeholder="Der Zug fährt um 9 Uhr ab."
-                  className="w-full px-4 py-2 rounded-xl border border-slate-300 text-sm font-medium"
+                  className="w-full px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 text-sm font-medium focus:ring-2 focus:ring-brand-500 outline-none"
                 />
               </div>
 
@@ -568,13 +568,13 @@ export const AdminDashboardPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsAddVocabModalOpen(false)}
-                  className="px-4 py-2 rounded-xl border text-slate-600 text-xs font-bold"
+                  className="px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-bold transition"
                 >
                   Bekor qilish
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow-sm"
+                  className="px-5 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold shadow-sm transition"
                 >
                   So‘zni Saqlash
                 </button>

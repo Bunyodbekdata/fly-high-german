@@ -44,23 +44,23 @@ export const AuthPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto px-4 py-16">
-      <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-card space-y-6">
+    <div className="max-w-md mx-auto px-4 py-16 transition-colors duration-200">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 shadow-card space-y-6">
         {/* Brand header */}
         <div className="text-center space-y-2">
-          <div className="w-12 h-12 mx-auto rounded-2xl bg-brand-50 border border-brand-100 flex items-center justify-center text-brand-600 mb-3">
+          <div className="w-12 h-12 mx-auto rounded-2xl bg-brand-50 dark:bg-brand-950/60 border border-brand-100 dark:border-brand-800 flex items-center justify-center text-brand-600 dark:text-brand-400 mb-3">
             {isLogin ? <LogIn size={24} /> : <UserPlus size={24} />}
           </div>
-          <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+          <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             {isLogin ? 'Hisobga kirish' : 'Ro‘yxatdan o‘tish'}
           </h1>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-500 dark:text-slate-400">
             FOR GREAT NATION — Nemis tili ta‘lim platformasi
           </p>
         </div>
 
         {error && (
-          <div className="p-3 rounded-xl bg-red-50 text-red-700 text-xs font-semibold">
+          <div className="p-3 rounded-xl bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-xs font-semibold">
             {error}
           </div>
         )}
@@ -69,7 +69,7 @@ export const AuthPage: React.FC = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           {!isLogin && (
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase mb-1.5">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1.5">
                 Ism va Familiya
               </label>
               <input
@@ -77,13 +77,13 @@ export const AuthPage: React.FC = () => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Jasur Karimov"
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm font-medium focus:ring-2 focus:ring-brand-500 outline-none"
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 text-sm font-medium focus:ring-2 focus:ring-brand-500 outline-none"
               />
             </div>
           )}
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase mb-1.5">
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1.5">
               Elektron pochta (Email)
             </label>
             <input
@@ -91,12 +91,12 @@ export const AuthPage: React.FC = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="talaba@greatnation.uz"
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm font-medium focus:ring-2 focus:ring-brand-500 outline-none"
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 text-sm font-medium focus:ring-2 focus:ring-brand-500 outline-none"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase mb-1.5">
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1.5">
               Parol
             </label>
             <input
@@ -104,7 +104,7 @@ export const AuthPage: React.FC = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm font-medium focus:ring-2 focus:ring-brand-500 outline-none"
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 text-sm font-medium focus:ring-2 focus:ring-brand-500 outline-none"
             />
           </div>
 
@@ -118,25 +118,25 @@ export const AuthPage: React.FC = () => {
         </form>
 
         {/* Quick Demo Switchers */}
-        <div className="pt-4 border-t border-slate-100 space-y-2">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block text-center">
+        <div className="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-2">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 block text-center">
             Tezkor kirish (Sinov profillari):
           </span>
           <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
               onClick={handleDemoStudent}
-              className="py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition flex items-center justify-center space-x-1"
+              className="py-2 px-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-750 text-slate-800 dark:text-slate-200 text-xs font-bold transition flex items-center justify-center space-x-1"
             >
-              <Sparkles size={14} className="text-brand-600" />
+              <Sparkles size={14} className="text-brand-600 dark:text-brand-400" />
               <span>Talaba profili</span>
             </button>
             <button
               type="button"
               onClick={handleDemoAdmin}
-              className="py-2 px-3 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-800 text-xs font-bold transition flex items-center justify-center space-x-1"
+              className="py-2 px-3 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-indigo-800 dark:text-indigo-200 text-xs font-bold transition flex items-center justify-center space-x-1"
             >
-              <Shield size={14} className="text-indigo-600" />
+              <Shield size={14} className="text-indigo-600 dark:text-indigo-400" />
               <span>Admin profili</span>
             </button>
           </div>
@@ -150,7 +150,7 @@ export const AuthPage: React.FC = () => {
               setIsLogin(!isLogin);
               setError('');
             }}
-            className="text-xs text-brand-600 hover:underline font-semibold"
+            className="text-xs text-brand-600 dark:text-brand-400 hover:underline font-semibold"
           >
             {isLogin
               ? 'Hisobingiz yo‘qmi? Ro‘yxatdan o‘ting'

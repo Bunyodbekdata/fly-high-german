@@ -9,6 +9,7 @@
     width: 100%;
     min-height: 100%;
     overflow-x: hidden;
+    overscroll-behavior-x: none;
     -webkit-text-size-adjust: 100%;
   }
   html.dark {
@@ -22,6 +23,7 @@
     min-height: 100vh;
     min-height: 100dvh;
     overflow-x: hidden;
+    overscroll-behavior-x: none;
     position: relative;
   }
   #root {
