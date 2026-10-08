@@ -21,6 +21,15 @@ const AuthPage = lazy(() => import('./pages/AuthPage').then((m) => ({ default: m
 const AdminDashboardPage = lazy(() =>
   import('./pages/admin/AdminDashboardPage').then((m) => ({ default: m.AdminDashboardPage }))
 );
+const CertificateTestsPage = lazy(() =>
+  import('./pages/CertificateTestsPage').then((m) => ({ default: m.CertificateTestsPage }))
+);
+const CertificateTestRoomPage = lazy(() =>
+  import('./pages/CertificateTestRoomPage').then((m) => ({ default: m.CertificateTestRoomPage }))
+);
+const CertificateResultPage = lazy(() =>
+  import('./pages/CertificateResultPage').then((m) => ({ default: m.CertificateResultPage }))
+);
 
 export const App: React.FC = () => {
   return (
@@ -40,6 +49,9 @@ export const App: React.FC = () => {
                 <Route path="listening" element={<ListeningPage />} />
                 <Route path="reading" element={<ReadingPage />} />
                 <Route path="shadowing" element={<ShadowingPage />} />
+                <Route path="certificate-tests" element={<CertificateTestsPage />} />
+                <Route path="certificate-tests/:testId" element={<CertificateTestRoomPage />} />
+                <Route path="certificate-tests/results/:attemptId" element={<CertificateResultPage />} />
                 <Route path="dashboard" element={<DashboardPage />} />
                 <Route path="profile" element={<ProfilePage />} />
                 <Route path="auth" element={<AuthPage />} />

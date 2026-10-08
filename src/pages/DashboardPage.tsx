@@ -228,6 +228,146 @@ export const DashboardPage: React.FC = () => {
         <AchievementBadges badges={badges} compact />
       </div>
 
+      {/* Certificate Assessment Progress Integration */}
+      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm space-y-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h3 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
+              <Award size={20} className="text-amber-500" />
+              <span>Sertifikat Testlari (Assessments)</span>
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              A1.1 va A1.2 darajalari bo‘yicha olingan natijalar va rasmiy ichki sertifikatlar
+            </p>
+          </div>
+          <Link
+            to="/certificate-tests"
+            className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-black transition self-start shadow-xs"
+          >
+            <span>Barcha testlar</span>
+            <ArrowRight size={14} />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* A1.1 Card */}
+          {(() => {
+            const a11 = storageService.getCertificateLevelStats('a1-1');
+            return (
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <span className="px-2 py-0.5 rounded-lg text-xs font-black bg-brand-600 text-white">
+                      A1.1
+                    </span>
+                    <h4 className="text-xs font-bold text-slate-900 dark:text-white">
+                      A1.1 Assessment (Lesen & Hören)
+                    </h4>
+                  </div>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
+                    a11.isPassed 
+                      ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300' 
+                      : a11.attemptsCount > 0 
+                        ? 'bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300' 
+                        : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                  }`}>
+                    {a11.isPassed ? '✅ O‘tilgan' : a11.attemptsCount > 0 ? '❌ O‘tilmagan' : 'Topshirilmagan'}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                  <div className="bg-white dark:bg-slate-900 p-2 rounded-xl border border-slate-100 dark:border-slate-800">
+                    <span className="text-[10px] text-slate-400 block">Eng yaxshi</span>
+                    <span className="font-black text-slate-800 dark:text-slate-200">
+                      {a11.bestPercentage !== null ? `${a11.bestPercentage}%` : '—'}
+                    </span>
+                  </div>
+                  <div className="bg-white dark:bg-slate-900 p-2 rounded-xl border border-slate-100 dark:border-slate-800">
+                    <span className="text-[10px] text-slate-400 block">Oxirgi</span>
+                    <span className="font-black text-slate-800 dark:text-slate-200">
+                      {a11.lastPercentage !== null ? `${a11.lastPercentage}%` : '—'}
+                    </span>
+                  </div>
+                  <div className="bg-white dark:bg-slate-900 p-2 rounded-xl border border-slate-100 dark:border-slate-800">
+                    <span className="text-[10px] text-slate-400 block">Urinishlar</span>
+                    <span className="font-black text-slate-800 dark:text-slate-200">
+                      {a11.attemptsCount} ta
+                    </span>
+                  </div>
+                </div>
+
+                <div className="pt-1">
+                  <Link
+                    to="/certificate-tests/cert_test_a11"
+                    className="w-full py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold text-center block transition shadow-xs"
+                  >
+                    {a11.attemptsCount > 0 ? 'Qayta topshirish' : 'Testni boshlash'}
+                  </Link>
+                </div>
+              </div>
+            );
+          })()}
+
+          {/* A1.2 Card */}
+          {(() => {
+            const a12 = storageService.getCertificateLevelStats('a1-2');
+            return (
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <span className="px-2 py-0.5 rounded-lg text-xs font-black bg-brand-600 text-white">
+                      A1.2
+                    </span>
+                    <h4 className="text-xs font-bold text-slate-900 dark:text-white">
+                      A1.2 Assessment (Lesen & Hören)
+                    </h4>
+                  </div>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
+                    a12.isPassed 
+                      ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300' 
+                      : a12.attemptsCount > 0 
+                        ? 'bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300' 
+                        : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                  }`}>
+                    {a12.isPassed ? '✅ O‘tilgan' : a12.attemptsCount > 0 ? '❌ O‘tilmagan' : 'Topshirilmagan'}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                  <div className="bg-white dark:bg-slate-900 p-2 rounded-xl border border-slate-100 dark:border-slate-800">
+                    <span className="text-[10px] text-slate-400 block">Eng yaxshi</span>
+                    <span className="font-black text-slate-800 dark:text-slate-200">
+                      {a12.bestPercentage !== null ? `${a12.bestPercentage}%` : '—'}
+                    </span>
+                  </div>
+                  <div className="bg-white dark:bg-slate-900 p-2 rounded-xl border border-slate-100 dark:border-slate-800">
+                    <span className="text-[10px] text-slate-400 block">Oxirgi</span>
+                    <span className="font-black text-slate-800 dark:text-slate-200">
+                      {a12.lastPercentage !== null ? `${a12.lastPercentage}%` : '—'}
+                    </span>
+                  </div>
+                  <div className="bg-white dark:bg-slate-900 p-2 rounded-xl border border-slate-100 dark:border-slate-800">
+                    <span className="text-[10px] text-slate-400 block">Urinishlar</span>
+                    <span className="font-black text-slate-800 dark:text-slate-200">
+                      {a12.attemptsCount} ta
+                    </span>
+                  </div>
+                </div>
+
+                <div className="pt-1">
+                  <Link
+                    to="/certificate-tests/cert_test_a12"
+                    className="w-full py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold text-center block transition shadow-xs"
+                  >
+                    {a12.attemptsCount > 0 ? 'Qayta topshirish' : 'Testni boshlash'}
+                  </Link>
+                </div>
+              </div>
+            );
+          })()}
+        </div>
+      </div>
+
       {/* Quick Launchpad to Tools */}
       <div>
         <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">

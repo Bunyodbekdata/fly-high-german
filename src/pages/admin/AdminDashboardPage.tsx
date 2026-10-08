@@ -17,8 +17,10 @@ import {
   Bookmark, 
   FileText, 
   RotateCcw,
-  Sparkles 
+  Sparkles,
+  Award
 } from 'lucide-react';
+import { AdminCertificateTestsTab } from '../../components/admin/AdminCertificateTestsTab';
 
 export const AdminDashboardPage: React.FC = () => {
   const { user, isAdmin } = useAuth();
@@ -42,7 +44,7 @@ export const AdminDashboardPage: React.FC = () => {
       </div>
     );
   }
-  const [activeTab, setActiveTab] = useState<'lessons' | 'vocabulary' | 'grammar'>('lessons');
+  const [activeTab, setActiveTab] = useState<'lessons' | 'vocabulary' | 'grammar' | 'certificate_tests'>('lessons');
   const [lessons, setLessons] = useState<Lesson[]>(() => storageService.getLessons());
   const [vocabulary, setVocabulary] = useState<VocabularyItem[]>(() => storageService.getAllVocabulary());
   const [grammar, setGrammar] = useState<GrammarTopic[]>(() => storageService.getAllGrammar());
@@ -226,6 +228,18 @@ export const AdminDashboardPage: React.FC = () => {
           <FileText size={16} />
           <span>Grammatika ({grammar.length})</span>
         </button>
+
+        <button
+          onClick={() => setActiveTab('certificate_tests')}
+          className={`py-3 px-4 font-bold text-sm border-b-2 transition flex items-center space-x-2 ${
+            activeTab === 'certificate_tests'
+              ? 'border-amber-500 text-amber-600 dark:text-amber-400'
+              : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white'
+          }`}
+        >
+          <Award size={16} />
+          <span>Sertifikat Testlari</span>
+        </button>
       </div>
 
       {/* TAB 1: LESSONS MANAGEMENT */}
@@ -396,6 +410,11 @@ export const AdminDashboardPage: React.FC = () => {
             </table>
           </div>
         </div>
+      )}
+
+      {/* TAB 4: CERTIFICATE TESTS MANAGEMENT */}
+      {activeTab === 'certificate_tests' && (
+        <AdminCertificateTestsTab />
       )}
 
       {/* MODAL: CREATE LESSON */}

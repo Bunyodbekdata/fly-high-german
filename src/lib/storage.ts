@@ -10,6 +10,7 @@ import {
   VocabularyProgress, 
   CEFRLevelCode 
 } from '../types/database';
+import { CertificateTest, CertificateAttempt, Certificate } from '../types/certificate';
 import { UserVideoNote } from '../types/youtube';
 import { 
   INITIAL_LEVELS, 
@@ -19,6 +20,7 @@ import {
   ALL_INITIAL_GRAMMAR, 
   ALL_INITIAL_SHADOWING 
 } from './seedData';
+import { INITIAL_CERTIFICATE_TESTS } from './seedCertificateTests';
 import { supabase, isSupabaseConfigured } from './supabase';
 
 const STORAGE_KEYS = {
@@ -32,6 +34,9 @@ const STORAGE_KEYS = {
   USER_PROFILE: 'fgn_user_profile',
   LESSON_PROGRESS: 'fgn_lesson_progress',
   VOCAB_PROGRESS: 'fgn_vocab_progress',
+  CERTIFICATE_TESTS: 'fgn_certificate_tests',
+  CERTIFICATE_ATTEMPTS: 'fgn_certificate_attempts',
+  CERTIFICATES: 'fgn_certificates',
 };
 
 const CURRENT_CURRICULUM_VERSION = 'v3_menschen_a1_alignment';
@@ -84,6 +89,9 @@ class StorageService {
     }
     if (needsCurriculumSync || !localStorage.getItem(STORAGE_KEYS.SHADOWING)) {
       localStorage.setItem(STORAGE_KEYS.SHADOWING, JSON.stringify(ALL_INITIAL_SHADOWING));
+    }
+    if (needsCurriculumSync || !localStorage.getItem(STORAGE_KEYS.CERTIFICATE_TESTS)) {
+      localStorage.setItem(STORAGE_KEYS.CERTIFICATE_TESTS, JSON.stringify(INITIAL_CERTIFICATE_TESTS));
     }
     if (needsCurriculumSync) {
       localStorage.setItem(STORAGE_KEYS.VERSION, CURRENT_CURRICULUM_VERSION);
@@ -448,6 +456,137 @@ class StorageService {
     }
   }
 
+  // --- Certificate Tests & Assessments System ---
+  public getCertificateTests(): CertificateTest[] {
+    if (!this.isBrowser) return INITIAL_CERTIFICATE_TESTS;
+    try {
+      const data = localStorage.getItem(STORAGE_KEYS.CERTIFICATE_TESTS);
+      return data ? JSON.parse(data) : INITIAL_CERTIFICATE_TESTS;
+    } catch {
+      return INITIAL_CERTIFICATE_TESTS;
+    }
+  }
+
+  public getCertificateTestById(testId: string): CertificateTest | undefined {
+    return this.getCertificateTests().find(t => t.id === testId);
+  }
+
+  public saveCertificateTest(test: CertificateTest): void {
+    if (!this.isBrowser) return;
+    const tests = this.getCertificateTests();
+    const idx = tests.findIndex(t => t.id === test.id);
+    if (idx >= 0) {
+      tests[idx] = test;
+    } else {
+      tests.push(test);
+    }
+    localStorage.setItem(STORAGE_KEYS.CERTIFICATE_TESTS, JSON.stringify(tests));
+  }
+
+  public getCertificateAttempts(userId?: string): CertificateAttempt[] {
+    if (!this.isBrowser) return [];
+    try {
+      const data = localStorage.getItem(STORAGE_KEYS.CERTIFICATE_ATTEMPTS);
+      const list: CertificateAttempt[] = data ? JSON.parse(data) : [];
+      if (userId) {
+        return list.filter(a => a.userId === userId);
+      }
+      return list;
+    } catch {
+      return [];
+    }
+  }
+
+  public getCertificateAttemptById(attemptId: string): CertificateAttempt | undefined {
+    return this.getCertificateAttempts().find(a => a.id === attemptId);
+  }
+
+  public saveCertificateAttempt(attempt: CertificateAttempt): void {
+    if (!this.isBrowser) return;
+    const attempts = this.getCertificateAttempts();
+    const idx = attempts.findIndex(a => a.id === attempt.id);
+    if (idx >= 0) {
+      attempts[idx] = attempt;
+    } else {
+      attempts.unshift(attempt);
+    }
+    localStorage.setItem(STORAGE_KEYS.CERTIFICATE_ATTEMPTS, JSON.stringify(attempts));
+  }
+
+  public getCertificates(userId?: string): Certificate[] {
+    if (!this.isBrowser) return [];
+    try {
+      const data = localStorage.getItem(STORAGE_KEYS.CERTIFICATES);
+      const list: Certificate[] = data ? JSON.parse(data) : [];
+      if (userId) {
+        return list.filter(c => c.userId === userId);
+      }
+      return list;
+    } catch {
+      return [];
+    }
+  }
+
+  public getCertificateById(certificateId: string): Certificate | undefined {
+    return this.getCertificates().find(c => c.certificateId === certificateId || c.id === certificateId);
+  }
+
+  public saveCertificate(certificate: Certificate): void {
+    if (!this.isBrowser) return;
+    const certs = this.getCertificates();
+    const idx = certs.findIndex(c => c.id === certificate.id || c.certificateId === certificate.certificateId);
+    if (idx >= 0) {
+      certs[idx] = certificate;
+    } else {
+      certs.unshift(certificate);
+    }
+    localStorage.setItem(STORAGE_KEYS.CERTIFICATES, JSON.stringify(certs));
+  }
+
+  public generateCertificateId(levelCode: string): string {
+    const cleanLevel = levelCode.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+    const year = new Date().getFullYear();
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let rand = '';
+    for (let i = 0; i < 6; i++) {
+      rand += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return `FGN-${cleanLevel}-${year}-${rand}`;
+  }
+
+  public getCertificateLevelStats(levelCode: string, userId?: string) {
+    const attempts = this.getCertificateAttempts(userId).filter(a => a.levelCode === levelCode && a.status === 'submitted');
+    const attemptsCount = attempts.length;
+    if (attemptsCount === 0) {
+      return {
+        attemptsCount: 0,
+        bestScore: null as number | null,
+        bestPercentage: null as number | null,
+        lastScore: null as number | null,
+        lastPercentage: null as number | null,
+        isPassed: false,
+        lastAttemptId: null as string | null,
+        certificateId: undefined as string | undefined,
+      };
+    }
+
+    const sortedByDate = [...attempts].sort((a, b) => new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime());
+    const last = sortedByDate[0];
+    const best = [...attempts].sort((a, b) => b.percentage - a.percentage)[0];
+    const isPassed = attempts.some(a => a.passed);
+
+    return {
+      attemptsCount,
+      bestScore: best.score,
+      bestPercentage: best.percentage,
+      lastScore: last.score,
+      lastPercentage: last.percentage,
+      isPassed,
+      lastAttemptId: last.id,
+      certificateId: best.certificateId || last.certificateId,
+    };
+  }
+
   // --- Reset to Initial Data (for Admin/Testing) ---
   public resetToFactoryDefault(): void {
     if (!this.isBrowser) return;
@@ -457,8 +596,11 @@ class StorageService {
     localStorage.setItem(STORAGE_KEYS.VOCABULARY, JSON.stringify(ALL_INITIAL_VOCABULARY));
     localStorage.setItem(STORAGE_KEYS.GRAMMAR, JSON.stringify(ALL_INITIAL_GRAMMAR));
     localStorage.setItem(STORAGE_KEYS.SHADOWING, JSON.stringify(ALL_INITIAL_SHADOWING));
+    localStorage.setItem(STORAGE_KEYS.CERTIFICATE_TESTS, JSON.stringify(INITIAL_CERTIFICATE_TESTS));
     localStorage.removeItem(STORAGE_KEYS.LESSON_PROGRESS);
     localStorage.removeItem(STORAGE_KEYS.VOCAB_PROGRESS);
+    localStorage.removeItem(STORAGE_KEYS.CERTIFICATE_ATTEMPTS);
+    localStorage.removeItem(STORAGE_KEYS.CERTIFICATES);
   }
 }
 

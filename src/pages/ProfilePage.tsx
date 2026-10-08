@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useProgress } from '../context/ProgressContext';
 import { storageService } from '../lib/storage';
-import { User, Award, Flame, LogOut, CheckCircle2, Bookmark, Sparkles, Trophy } from 'lucide-react';
+import { User, Award, Flame, LogOut, CheckCircle2, Bookmark, Sparkles, Trophy, ArrowRight, ChevronRight, History } from 'lucide-react';
 import { LevelBadge } from '../components/common/Badge';
 import { getRankByXp, computeAchievements } from '../lib/gamification';
 import { AchievementBadges } from '../components/common/AchievementBadges';
@@ -145,6 +146,142 @@ export const ProfilePage: React.FC = () => {
       {/* Achievement Badges Showcase */}
       <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-soft">
         <AchievementBadges badges={badges} />
+      </div>
+
+      {/* Certificate Tests Progress & History */}
+      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm space-y-6" id="progress">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+          <div>
+            <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <Award size={20} className="text-amber-500" />
+              <span>Sertifikat Testlari Tarixi va Natijalarim</span>
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Topshirilgan sinovlar, eng yaxshi ko‘rsatkichlar va erishilgan sertifikatlar
+            </p>
+          </div>
+          <Link
+            to="/certificate-tests"
+            className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold transition self-start"
+          >
+            <span>Testlar bo‘limiga o‘tish</span>
+            <ArrowRight size={13} />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* A1.1 Box */}
+          {(() => {
+            const a11 = storageService.getCertificateLevelStats('a1-1');
+            return (
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <span className="px-2.5 py-1 rounded-lg text-xs font-black bg-brand-600 text-white">
+                      A1.1
+                    </span>
+                    <span className="text-xs font-bold text-slate-900 dark:text-white">
+                      A1.1 Assessment
+                    </span>
+                  </div>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
+                    a11.isPassed 
+                      ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300' 
+                      : a11.attemptsCount > 0 
+                        ? 'bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300' 
+                        : 'bg-slate-200 dark:bg-slate-800 text-slate-600'
+                  }`}>
+                    {a11.isPassed ? '✅ Passed' : a11.attemptsCount > 0 ? '❌ Not passed' : 'Kutilmoqda'}
+                  </span>
+                </div>
+
+                <div className="space-y-1 text-xs text-slate-600 dark:text-slate-300">
+                  <div className="flex justify-between">
+                    <span>Best score:</span>
+                    <strong className="font-bold text-slate-900 dark:text-white">
+                      {a11.bestPercentage !== null ? `${a11.bestPercentage}%` : '—'}
+                    </strong>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Attempts:</span>
+                    <strong className="font-bold text-slate-900 dark:text-white">
+                      {a11.attemptsCount}
+                    </strong>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Last attempt:</span>
+                    <strong className="font-bold text-slate-900 dark:text-white">
+                      {a11.lastPercentage !== null ? `${a11.lastPercentage}%` : '—'}
+                    </strong>
+                  </div>
+                </div>
+
+                {a11.certificateId && (
+                  <div className="pt-1 text-[11px] text-amber-700 dark:text-amber-400 font-semibold flex items-center gap-1">
+                    <Sparkles size={12} />
+                    <span>Sertifikat ID: {a11.certificateId}</span>
+                  </div>
+                )}
+              </div>
+            );
+          })()}
+
+          {/* A1.2 Box */}
+          {(() => {
+            const a12 = storageService.getCertificateLevelStats('a1-2');
+            return (
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <span className="px-2.5 py-1 rounded-lg text-xs font-black bg-brand-600 text-white">
+                      A1.2
+                    </span>
+                    <span className="text-xs font-bold text-slate-900 dark:text-white">
+                      A1.2 Assessment
+                    </span>
+                  </div>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
+                    a12.isPassed 
+                      ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300' 
+                      : a12.attemptsCount > 0 
+                        ? 'bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300' 
+                        : 'bg-slate-200 dark:bg-slate-800 text-slate-600'
+                  }`}>
+                    {a12.isPassed ? '✅ Passed' : a12.attemptsCount > 0 ? '❌ Not passed' : 'Kutilmoqda'}
+                  </span>
+                </div>
+
+                <div className="space-y-1 text-xs text-slate-600 dark:text-slate-300">
+                  <div className="flex justify-between">
+                    <span>Best score:</span>
+                    <strong className="font-bold text-slate-900 dark:text-white">
+                      {a12.bestPercentage !== null ? `${a12.bestPercentage}%` : '—'}
+                    </strong>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Attempts:</span>
+                    <strong className="font-bold text-slate-900 dark:text-white">
+                      {a12.attemptsCount}
+                    </strong>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Last attempt:</span>
+                    <strong className="font-bold text-slate-900 dark:text-white">
+                      {a12.lastPercentage !== null ? `${a12.lastPercentage}%` : '—'}
+                    </strong>
+                  </div>
+                </div>
+
+                {a12.certificateId && (
+                  <div className="pt-1 text-[11px] text-amber-700 dark:text-amber-400 font-semibold flex items-center gap-1">
+                    <Sparkles size={12} />
+                    <span>Sertifikat ID: {a12.certificateId}</span>
+                  </div>
+                )}
+              </div>
+            );
+          })()}
+        </div>
       </div>
 
       {/* Profile Edit Form */}
