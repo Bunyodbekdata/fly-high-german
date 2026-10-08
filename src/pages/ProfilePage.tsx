@@ -181,7 +181,7 @@ export const ProfilePage: React.FC = () => {
                       A1.1
                     </span>
                     <span className="text-xs font-bold text-slate-900 dark:text-white">
-                      A1.1 Assessment
+                      Goethe A1.1 Test
                     </span>
                   </div>
                   <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
@@ -237,7 +237,7 @@ export const ProfilePage: React.FC = () => {
                       A1.2
                     </span>
                     <span className="text-xs font-bold text-slate-900 dark:text-white">
-                      A1.2 Assessment
+                      Goethe A1.2 Test
                     </span>
                   </div>
                   <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${

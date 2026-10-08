@@ -80,21 +80,20 @@ export const CertificateTestsPage: React.FC = () => {
         <div className="text-center max-w-3xl mx-auto space-y-3">
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-800 text-amber-800 dark:text-amber-300 text-xs font-bold">
             <Award size={14} className="text-amber-600" />
-            <span>Bilimni baholash va rasmiylashtirish</span>
+            <span>Goethe & telc Xalqaro Imtihon Standartlari</span>
           </div>
 
           <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-            🏆 Sertifikat testlari
+            🏆 Xalqaro Standartdagi Sertifikat Testlari
           </h1>
 
           <p className="text-base font-medium text-slate-600 dark:text-slate-300">
-            Bilimingizni sinab ko‘ring va o‘z darajangizni baholang.
+            Haqiqiy Goethe-Zertifikat A1 (Start Deutsch 1) va telc Deutsch A1 formatidagi namunaviy imtihonlar.
           </p>
 
           <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
-            Bu testlar For Great Nation kurslarida o‘rgangan bilimlaringizni tekshirish uchun mo‘ljallangan. 
-            Hozircha <strong className="text-slate-800 dark:text-slate-200">Lesen (O‘qish)</strong> va <strong className="text-slate-800 dark:text-slate-200">Hören (Tinglash)</strong> bo‘limlari mavjud. 
-            Schreiben va Sprechen keyingi bosqichlarda qo‘shiladi.
+            Ushbu testlar oddiy darslik savollari emas, balki xalqaro imtihon tayyorgarlik kitoblari (<em>Fit fürs Goethe-Zertifikat A1</em>, <em>Mit Erfolg zu Start Deutsch 1</em>) andozasida tuzilgan. 
+            Hozirda xalqaro standartdagi <strong className="text-slate-800 dark:text-slate-200">Lesen (O‘qish — E-Mail, E‘lonlar, Schilder)</strong> va <strong className="text-slate-800 dark:text-slate-200">Hören (Tinglash — Alltagsgespräche, Bahnhof/Flughafen Durchsagen, Anrufbeantworter)</strong> modullari to‘liq ishga tushirilgan.
           </p>
         </div>
 
@@ -102,10 +101,10 @@ export const CertificateTestsPage: React.FC = () => {
         <div className="max-w-3xl mx-auto rounded-2xl bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/60 p-4 flex items-start space-x-3 text-xs text-amber-900 dark:text-amber-200">
           <ShieldAlert size={20} className="text-amber-600 flex-shrink-0 mt-0.5" />
           <div className="space-y-1">
-            <p className="font-bold">Rasmiy sertifikat bo‘yicha muhim eslatma:</p>
+            <p className="font-bold">Xalqaro standart va rasmiy baholash haqida:</p>
             <p className="text-[11px] sm:text-xs text-amber-800 dark:text-amber-300 leading-relaxed">
-              Bu ichki <strong>For Great Nation baholash sertifikati</strong> bo‘lib, rasmiy Goethe-Zertifikat, telc yoki ÖSD sertifikati hisoblanmaydi. 
-              U sizning platformadagi darslarni qay darajada o‘zlashtirganingizni aniq ko‘rsatib beradi.
+              Test savollari xalqaro <strong>Goethe-Institut va telc A1 (Start Deutsch 1)</strong> namunaviy imtihon standartlariga to‘liq mos keladi. 
+              Muvaffaqiyatli topshirganingizda platformamizning maxsus seriya raqamli <strong>For Great Nation Sertifikati</strong> beriladi hamda rasmiy imtihonlarga tayyorgarlik darajangiz aniqlanadi.
             </p>
           </div>
         </div>

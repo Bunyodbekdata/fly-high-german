@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { storageService } from '../../lib/storage';
+import { INITIAL_CERTIFICATE_TESTS } from '../../lib/seedCertificateTests';
 import { CertificateTest, CertificateSection, CertificateQuestion, CertificateQuestionOption } from '../../types/certificate';
 import { 
   Award, 
@@ -237,21 +238,38 @@ export const AdminCertificateTestsTab: React.FC = () => {
           </p>
         </div>
 
-        <button
-          onClick={() => {
-            setEditingTest(null);
-            setFormLevel('a1-1');
-            setFormTitle('For Great Nation A1.1 Assessment');
-            setFormDesc('A1.1 daraja bilimlarini baholash');
-            setFormDuration(30);
-            setFormPassing(60);
-            setIsTestModalOpen(true);
-          }}
-          className="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs flex items-center space-x-1.5 transition shadow-xs self-start"
-        >
-          <Plus size={15} />
-          <span>Yangi Test Yaratish</span>
-        </button>
+        <div className="flex items-center gap-2 self-start flex-wrap">
+          <button
+            onClick={() => {
+              if (window.confirm('Barcha sertifikat testlarini rasmiy Goethe-Zertifikat A1 va telc xalqaro standartiga qaytarishni xohlaysizmi?')) {
+                INITIAL_CERTIFICATE_TESTS.forEach(t => storageService.saveCertificateTest(t));
+                localStorage.setItem('fgn_certificate_tests', JSON.stringify(INITIAL_CERTIFICATE_TESTS));
+                refreshTests();
+              }
+            }}
+            className="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs flex items-center space-x-1.5 transition border border-slate-200 dark:border-slate-700"
+            title="Xalqaro Goethe/telc testlarini qayta tiklash"
+          >
+            <Sparkles size={14} className="text-amber-500" />
+            <span>Goethe Standartini Tiklash</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setEditingTest(null);
+              setFormLevel('a1-1');
+              setFormTitle('Goethe-Zertifikat A1: Start Deutsch 1 — Teilprüfung A1.1');
+              setFormDesc('Xalqaro Goethe va telc A1 talablari bo‘yicha baholash imtihoni');
+              setFormDuration(30);
+              setFormPassing(60);
+              setIsTestModalOpen(true);
+            }}
+            className="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs flex items-center space-x-1.5 transition shadow-xs"
+          >
+            <Plus size={15} />
+            <span>Yangi Test Yaratish</span>
+          </button>
+        </div>
       </div>
 
       {/* Tests List */}

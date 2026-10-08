@@ -261,7 +261,7 @@ export const DashboardPage: React.FC = () => {
                       A1.1
                     </span>
                     <h4 className="text-xs font-bold text-slate-900 dark:text-white">
-                      A1.1 Assessment (Lesen & Hören)
+                      Goethe A1.1 Test (Lesen & Hören)
                     </h4>
                   </div>
                   <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
@@ -298,7 +298,7 @@ export const DashboardPage: React.FC = () => {
 
                 <div className="pt-1">
                   <Link
-                    to="/certificate-tests/cert_test_a11"
+                    to="/certificate-tests/cert-test-a1-1"
                     className="w-full py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold text-center block transition shadow-xs"
                   >
                     {a11.attemptsCount > 0 ? 'Qayta topshirish' : 'Testni boshlash'}
@@ -319,7 +319,7 @@ export const DashboardPage: React.FC = () => {
                       A1.2
                     </span>
                     <h4 className="text-xs font-bold text-slate-900 dark:text-white">
-                      A1.2 Assessment (Lesen & Hören)
+                      Goethe A1.2 Test (Lesen & Hören)
                     </h4>
                   </div>
                   <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
@@ -356,7 +356,7 @@ export const DashboardPage: React.FC = () => {
 
                 <div className="pt-1">
                   <Link
-                    to="/certificate-tests/cert_test_a12"
+                    to="/certificate-tests/cert-test-a1-2"
                     className="w-full py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold text-center block transition shadow-xs"
                   >
                     {a12.attemptsCount > 0 ? 'Qayta topshirish' : 'Testni boshlash'}

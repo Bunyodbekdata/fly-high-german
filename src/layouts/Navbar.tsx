@@ -31,14 +31,14 @@ export const Navbar: React.FC = () => {
   const primaryLinks = [
     { to: '/courses', label: 'Kurslar', icon: BookOpen },
     { to: '/vocabulary', label: 'Lug‘at', icon: Bookmark },
-    { to: '/grammar', label: 'Grammatika', icon: FileText },
+    { to: '/shadowing', label: 'Shadowing', icon: Mic },
     { to: '/certificate-tests', label: 'Sertifikat testlari', icon: Award, isBadge: true },
   ];
 
   const secondaryLinks = [
+    { to: '/grammar', label: 'Grammatika', icon: FileText },
     { to: '/listening', label: 'Tinglash', icon: Headphones },
     { to: '/reading', label: 'O‘qish', icon: FileText },
-    { to: '/shadowing', label: 'Shadowing', icon: Mic },
   ];
 
   const allNavLinks = [

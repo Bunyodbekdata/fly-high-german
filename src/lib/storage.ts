@@ -39,7 +39,7 @@ const STORAGE_KEYS = {
   CERTIFICATES: 'fgn_certificates',
 };
 
-const CURRENT_CURRICULUM_VERSION = 'v3_menschen_a1_alignment';
+const CURRENT_CURRICULUM_VERSION = 'v4_goethe_zertifikat_standard';
 
 export const PROFILE_UPDATED_EVENT = 'fgn-profile-updated';
 
@@ -461,14 +461,29 @@ class StorageService {
     if (!this.isBrowser) return INITIAL_CERTIFICATE_TESTS;
     try {
       const data = localStorage.getItem(STORAGE_KEYS.CERTIFICATE_TESTS);
-      return data ? JSON.parse(data) : INITIAL_CERTIFICATE_TESTS;
+      if (!data) return INITIAL_CERTIFICATE_TESTS;
+      const parsed: CertificateTest[] = JSON.parse(data);
+      // Auto-migrate if stored tests don't have the updated Goethe/telc standard questions
+      const hasUpdatedGoetheTests = Array.isArray(parsed) && parsed.some(t => t.titleDe.includes('Goethe-Zertifikat'));
+      if (!hasUpdatedGoetheTests) {
+        localStorage.setItem(STORAGE_KEYS.CERTIFICATE_TESTS, JSON.stringify(INITIAL_CERTIFICATE_TESTS));
+        return INITIAL_CERTIFICATE_TESTS;
+      }
+      return parsed;
     } catch {
       return INITIAL_CERTIFICATE_TESTS;
     }
   }
 
   public getCertificateTestById(testId: string): CertificateTest | undefined {
-    return this.getCertificateTests().find(t => t.id === testId);
+    const tests = this.getCertificateTests();
+    const cleanId = testId.toLowerCase().replace(/[^a-z0-9]/g, '');
+    return tests.find(t => 
+      t.id === testId || 
+      t.id.toLowerCase().replace(/[^a-z0-9]/g, '') === cleanId ||
+      (cleanId.includes('a11') && t.levelCode === 'a1-1') ||
+      (cleanId.includes('a12') && t.levelCode === 'a1-2')
+    );
   }
 
   public saveCertificateTest(test: CertificateTest): void {
