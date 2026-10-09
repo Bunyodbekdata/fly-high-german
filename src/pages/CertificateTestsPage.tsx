@@ -26,6 +26,8 @@ export const CertificateTestsPage: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  const [activeSkillTab, setActiveSkillTab] = useState<'listening' | 'reading' | 'all'>('listening');
+
   const [tests] = useState<CertificateTest[]>(() => {
     return storageService.getCertificateTests().filter(t => t.isPublished);
   });
@@ -65,12 +67,42 @@ export const CertificateTestsPage: React.FC = () => {
     };
   };
 
-  const futureLevels = [
-    { code: 'A2.1', title: 'A2.1 Assessment', desc: 'Kundalik vaziyatlar va kengaytirilgan grammatika' },
-    { code: 'A2.2', title: 'A2.2 Assessment', desc: 'Murakkab dialoglar va o‘rta daraja tayyorgarligi' },
-    { code: 'B1.1', title: 'B1.1 Assessment', desc: 'Erkin muloqot va mustaqil nutq asoslari' },
-    { code: 'B1.2', title: 'B1.2 Assessment', desc: 'B1 to‘liq sertifikat darajasi' },
-  ];
+  const filteredTests = tests.filter(test => {
+    if (activeSkillTab === 'listening') {
+      return test.skillFocus === 'listening';
+    }
+    if (activeSkillTab === 'reading') {
+      return test.skillFocus === 'reading';
+    }
+    return !test.skillFocus || test.skillFocus === 'all';
+  });
+
+  const getFutureLevels = () => {
+    if (activeSkillTab === 'listening') {
+      return [
+        { code: 'A2.1', title: 'A2.1 Hören (Tinglash)', desc: 'Kundalik suhbatlar va telefon muloqotlari' },
+        { code: 'A2.2', title: 'A2.2 Hören (Tinglash)', desc: 'Intervyu va stansiya e‘lonlari' },
+        { code: 'B1.1', title: 'B1.1 Hören (Tinglash)', desc: 'Radioreportajlar va batafsil fikr almashish' },
+        { code: 'B1.2', title: 'B1.2 Hören (Tinglash)', desc: 'B1 to‘liq tinglab tushunish darajasi' },
+      ];
+    }
+    if (activeSkillTab === 'reading') {
+      return [
+        { code: 'A2.1', title: 'A2.1 Lesen (O‘qish)', desc: 'Gazeta xabarlari va do‘stona xatlar' },
+        { code: 'A2.2', title: 'A2.2 Lesen (O‘qish)', desc: 'Yo‘riqnomalar va rasmiy bildirishnomalar' },
+        { code: 'B1.1', title: 'B1.1 Lesen (O‘qish)', desc: 'Maqolalar va tahliliy matnlar' },
+        { code: 'B1.2', title: 'B1.2 Lesen (O‘qish)', desc: 'B1 to‘liq o‘qib tushunish darajasi' },
+      ];
+    }
+    return [
+      { code: 'A2.1', title: 'A2.1 Kompleks Baholash', desc: 'Kundalik vaziyatlar va kengaytirilgan grammatika' },
+      { code: 'A2.2', title: 'A2.2 Kompleks Baholash', desc: 'Murakkab dialoglar va o‘rta daraja tayyorgarligi' },
+      { code: 'B1.1', title: 'B1.1 Kompleks Baholash', desc: 'Erkin muloqot va mustaqil nutq asoslari' },
+      { code: 'B1.2', title: 'B1.2 Kompleks Baholash', desc: 'B1 to‘liq sertifikat darajasi' },
+    ];
+  };
+
+  const futureLevels = getFutureLevels();
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-8 px-4 sm:px-6 lg:px-8">
@@ -113,8 +145,8 @@ export const CertificateTestsPage: React.FC = () => {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-4xl mx-auto">
           <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs text-center">
             <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Faol testlar</span>
-            <p className="text-2xl font-black text-slate-900 dark:text-white mt-1">2 ta</p>
-            <span className="text-[10px] text-brand-600 dark:text-brand-400 font-bold">A1.1 va A1.2</span>
+            <p className="text-2xl font-black text-slate-900 dark:text-white mt-1">{tests.length} ta</p>
+            <span className="text-[10px] text-brand-600 dark:text-brand-400 font-bold">Hören, Lesen, Kompleks</span>
           </div>
 
           <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs text-center">
@@ -140,21 +172,96 @@ export const CertificateTestsPage: React.FC = () => {
           </div>
         </div>
 
+        {/* Skill / Module Tabs Switcher */}
+        <div className="bg-white dark:bg-slate-900 p-2 sm:p-2.5 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xs">
+          <div className="grid grid-cols-3 gap-2">
+            <button
+              onClick={() => setActiveSkillTab('listening')}
+              className={`flex items-center justify-center space-x-2 py-3 px-3 sm:px-4 rounded-2xl font-bold text-xs sm:text-sm transition-all ${
+                activeSkillTab === 'listening'
+                  ? 'bg-purple-600 text-white shadow-md shadow-purple-500/20 scale-[1.01]'
+                  : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+              }`}
+            >
+              <Headphones size={18} className="flex-shrink-0" />
+              <div className="text-left">
+                <span className="block font-black leading-tight">🎧 Hören</span>
+                <span className="hidden sm:inline text-[11px] opacity-80 font-medium">Tinglab tushunish</span>
+              </div>
+            </button>
+
+            <button
+              onClick={() => setActiveSkillTab('reading')}
+              className={`flex items-center justify-center space-x-2 py-3 px-3 sm:px-4 rounded-2xl font-bold text-xs sm:text-sm transition-all ${
+                activeSkillTab === 'reading'
+                  ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20 scale-[1.01]'
+                  : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+              }`}
+            >
+              <BookOpen size={18} className="flex-shrink-0" />
+              <div className="text-left">
+                <span className="block font-black leading-tight">📖 Lesen</span>
+                <span className="hidden sm:inline text-[11px] opacity-80 font-medium">O‘qib tushunish</span>
+              </div>
+            </button>
+
+            <button
+              onClick={() => setActiveSkillTab('all')}
+              className={`flex items-center justify-center space-x-2 py-3 px-3 sm:px-4 rounded-2xl font-bold text-xs sm:text-sm transition-all ${
+                activeSkillTab === 'all'
+                  ? 'bg-brand-600 text-white shadow-md shadow-brand-500/20 scale-[1.01]'
+                  : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+              }`}
+            >
+              <Award size={18} className="flex-shrink-0" />
+              <div className="text-left">
+                <span className="block font-black leading-tight">🏆 Kompleks</span>
+                <span className="hidden sm:inline text-[11px] opacity-80 font-medium">Lesen + Hören</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
         {/* Active Assessment Cards */}
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <span>Mavjud baholash testlari</span>
-              <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-brand-300">
-                A1 daraja
-              </span>
-            </h2>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <div>
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <span>
+                  {activeSkillTab === 'listening' && '🎧 Tinglab Tushunish (Hören) Testlari'}
+                  {activeSkillTab === 'reading' && '📖 O‘qib Tushunish (Lesen) Testlari'}
+                  {activeSkillTab === 'all' && '🏆 Kompleks Xalqaro Imtihonlar (Lesen + Hören)'}
+                </span>
+                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                  {filteredTests.length} ta test
+                </span>
+              </h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                {activeSkillTab === 'listening' && 'Goethe-Institut va telc standarti bo‘yicha audio dialoglar, xabarlar va e‘lonlar.'}
+                {activeSkillTab === 'reading' && 'Goethe va telc A1 formati bo‘yicha e-mail, xatlar, rasmiy jadvallar va e‘lonlar.'}
+                {activeSkillTab === 'all' && 'Ikkala modulni o‘z ichiga olgan to‘liq sertifikat darajasi imtihonlari.'}
+              </p>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {tests.map((test) => {
+            {filteredTests.map((test) => {
               const stats = getTestStats(test.id);
               const questionCount = test.sections.reduce((acc, sec) => acc + sec.questions.length, 0);
+              const isListening = test.skillFocus === 'listening';
+              const isReading = test.skillFocus === 'reading';
+
+              const badgeColor = isListening 
+                ? 'bg-purple-600' 
+                : isReading 
+                ? 'bg-blue-600' 
+                : 'bg-brand-600';
+
+              const btnColor = isListening
+                ? 'bg-purple-600 hover:bg-purple-700 shadow-purple-600/20'
+                : isReading
+                ? 'bg-blue-600 hover:bg-blue-700 shadow-blue-600/20'
+                : 'bg-brand-600 hover:bg-brand-700 shadow-brand-600/20';
 
               return (
                 <div 
@@ -169,11 +276,11 @@ export const CertificateTestsPage: React.FC = () => {
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="px-3 py-1 rounded-xl text-xs font-black bg-brand-600 text-white shadow-xs">
+                          <span className={`px-3 py-1 rounded-xl text-xs font-black text-white shadow-xs ${badgeColor}`}>
                             {test.levelCode.toUpperCase()}
                           </span>
                           <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                            For Great Nation
+                            {isListening ? 'Hören Modul' : isReading ? 'Lesen Modul' : 'Goethe Standarti'}
                           </span>
                         </div>
                         <h3 className="text-lg font-black text-slate-900 dark:text-white mt-2">
@@ -198,14 +305,30 @@ export const CertificateTestsPage: React.FC = () => {
                         Test bo‘limlari:
                       </span>
                       <div className="flex flex-wrap gap-2">
-                        <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 text-xs font-semibold">
-                          <BookOpen size={13} />
-                          <span>📖 Lesen (O‘qish)</span>
-                        </span>
-                        <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-xl bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800 text-purple-700 dark:text-purple-300 text-xs font-semibold">
-                          <Headphones size={13} />
-                          <span>🎧 Hören (Tinglash)</span>
-                        </span>
+                        {isListening && (
+                          <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-xl bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800 text-purple-700 dark:text-purple-300 text-xs font-semibold">
+                            <Headphones size={13} />
+                            <span>🎧 Hören (Tinglash — {questionCount} ta audio)</span>
+                          </span>
+                        )}
+                        {isReading && (
+                          <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 text-xs font-semibold">
+                            <BookOpen size={13} />
+                            <span>📖 Lesen (O‘qish — {questionCount} ta matn)</span>
+                          </span>
+                        )}
+                        {!isListening && !isReading && (
+                          <>
+                            <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 text-xs font-semibold">
+                              <BookOpen size={13} />
+                              <span>📖 Lesen (6 ta matn)</span>
+                            </span>
+                            <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-xl bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800 text-purple-700 dark:text-purple-300 text-xs font-semibold">
+                              <Headphones size={13} />
+                              <span>🎧 Hören (6 ta audio)</span>
+                            </span>
+                          </>
+                        )}
                       </div>
                     </div>
 
@@ -267,7 +390,7 @@ export const CertificateTestsPage: React.FC = () => {
                   <div className="pt-2 space-y-2">
                     <button
                       onClick={() => navigate(`/certificate-tests/${test.id}`)}
-                      className="w-full py-3 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm shadow-sm flex items-center justify-center space-x-2 transition hover:scale-[1.01]"
+                      className={`w-full py-3 rounded-2xl text-white font-bold text-sm shadow-sm flex items-center justify-center space-x-2 transition hover:scale-[1.01] ${btnColor}`}
                     >
                       {stats.attemptsCount > 0 ? (
                         <>

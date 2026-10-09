@@ -241,6 +241,11 @@ class AudioService {
    * Defaults to high-quality German studio audio, falling back to WebSpeech
    * only if an authentic German system voice exists.
    */
+  /**
+   * Main method to play authentic German speech.
+   * Uses high-fidelity Web Speech API with sentence chunking and de-DE language tags,
+   * falling back to online audio stream.
+   */
   public async speak(text: string, rate?: number): Promise<AudioPlayResult> {
     this.stop(); // Stop any currently playing audio
 
@@ -255,15 +260,22 @@ class AudioService {
 
     let spoke = false;
     try {
-      // 1. Primary Engine: Google German Neural TTS Audio Stream
-      await this.playViaGoogleTTS(cleanedText, effectiveRate, abortController.signal);
-      spoke = !abortController.signal.aborted;
-    } catch (err) {
-      console.warn('Google German TTS unavailable, testing Web Speech fallback...', err);
-      // 2. Secondary Engine: Web Speech API (with verified German voice)
-      if (!abortController.signal.aborted) {
+      // 1. Primary Engine: Web Speech API (zero latency, offline capable, authentic German pronunciation)
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
         spoke = await this.playViaWebSpeech(cleanedText, effectiveRate);
       }
+
+      // 2. Secondary Engine: If Web Speech produced no output, try online audio stream
+      if (!spoke && !abortController.signal.aborted) {
+        try {
+          await this.playViaGoogleTTS(cleanedText, effectiveRate, abortController.signal);
+          spoke = !abortController.signal.aborted;
+        } catch (e) {
+          console.warn('Google TTS stream also unavailable:', e);
+        }
+      }
+    } catch (err) {
+      console.warn('Audio playback error:', err);
     } finally {
       if (this.queueAbortController === abortController) {
         this.queueAbortController = null;
@@ -271,8 +283,6 @@ class AudioService {
       }
     }
 
-    // A superseded request or a deliberate stop reports no reason, so the UI
-    // warns only when playback genuinely could not happen.
     if (spoke) return { ok: true };
     return this.lastFailureReason
       ? { ok: false, reason: this.lastFailureReason }
@@ -280,7 +290,7 @@ class AudioService {
   }
 
   /**
-   * Plays text using Google Translate's native German audio stream.
+   * Plays text using Google Translate's native German audio stream as a fallback.
    * Handles multi-sentence text by queueing audio chunks seamlessly.
    */
   private playViaGoogleTTS(
@@ -289,7 +299,7 @@ class AudioService {
     signal: AbortSignal
   ): Promise<void> {
     return new Promise((resolve, reject) => {
-      const chunks = this.splitIntoSentenceChunks(text, 160);
+      const chunks = this.splitIntoSentenceChunks(text, 140);
       let currentIndex = 0;
 
       const playNextChunk = () => {
@@ -301,51 +311,46 @@ class AudioService {
         if (currentIndex >= chunks.length) {
           this.currentAudio = null;
           resolve();
-          return;
+        } else {
+          const chunk = chunks[currentIndex];
+          currentIndex++;
+
+          const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=de&client=gtx&q=${encodeURIComponent(
+            chunk
+          )}`;
+
+          const audio = new Audio(audioUrl);
+          this.currentAudio = audio;
+          audio.playbackRate = Math.max(0.7, Math.min(rate, 1.2));
+
+          const cleanup = () => {
+            audio.onended = null;
+            audio.onerror = null;
+          };
+
+          audio.onended = () => {
+            cleanup();
+            setTimeout(() => {
+              if (!signal.aborted) {
+                playNextChunk();
+              } else {
+                resolve();
+              }
+            }, 100);
+          };
+
+          audio.onerror = () => {
+            cleanup();
+            this.currentAudio = null;
+            reject(new Error('Audio stream error'));
+          };
+
+          audio.play().catch((playErr) => {
+            cleanup();
+            this.currentAudio = null;
+            reject(playErr);
+          });
         }
-
-        const chunk = chunks[currentIndex];
-        currentIndex++;
-
-        // Encode clean text for native German audio
-        const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=de&client=tw-ob&q=${encodeURIComponent(
-          chunk
-        )}`;
-
-        const audio = new Audio(audioUrl);
-        this.currentAudio = audio;
-
-        // Apply playback speed: learners benefit from 0.85x - 0.9x
-        audio.playbackRate = Math.max(0.7, Math.min(rate, 1.2));
-
-        const cleanup = () => {
-          audio.onended = null;
-          audio.onerror = null;
-        };
-
-        audio.onended = () => {
-          cleanup();
-          // Small natural pause between sentences (120ms)
-          setTimeout(() => {
-            if (!signal.aborted) {
-              playNextChunk();
-            } else {
-              resolve();
-            }
-          }, 120);
-        };
-
-        audio.onerror = (e) => {
-          cleanup();
-          this.currentAudio = null;
-          reject(new Error('Audio playback failed or network blocked'));
-        };
-
-        audio.play().catch((playErr) => {
-          cleanup();
-          this.currentAudio = null;
-          reject(playErr);
-        });
       };
 
       playNextChunk();
@@ -353,8 +358,9 @@ class AudioService {
   }
 
   /**
-   * Fallback engine: Web Speech API.
-   * STRICT: only speaks if an authentic German voice is verified!
+   * Primary engine: Web Speech API.
+   * Speaks German with native German voices or built-in de-DE speech synthesis.
+   * Intelligent sentence chunking ensures Chrome/Edge never freeze on long passages.
    */
   private async playViaWebSpeech(text: string, rate: number): Promise<boolean> {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
@@ -362,42 +368,94 @@ class AudioService {
       return false;
     }
 
-    await this.ensureVoices();
+    await this.ensureVoices(400);
 
     if (!this.voicesLoaded) {
       this.initVoices();
     }
 
-    // Safeguard: Never speak German with an English/Russian voice!
-    const germanVoice = this.germanVoice;
-    if (!germanVoice) {
-      console.warn(
-        'Hech qanday nemis tili ovoz moduli (de-DE) topilmadi. Noto‘g‘ri talaffuzning oldini olish uchun to‘xtatildi.'
-      );
-      this.markFailure('voice_missing');
-      return false;
-    }
+    const synth = window.speechSynthesis;
+    const chunks = this.splitIntoSentenceChunks(text, 130);
 
     return new Promise<boolean>((resolve) => {
-      window.speechSynthesis.cancel();
+      try {
+        synth.cancel();
+        synth.resume();
+      } catch {
+        // ignore
+      }
 
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.voice = germanVoice;
-      utterance.lang = germanVoice.lang || 'de-DE';
-      utterance.rate = rate;
-      utterance.pitch = 1.0;
+      let currentIndex = 0;
+      let hasSpokenAny = false;
+      let heartbeatTimer: any = null;
 
-      utterance.onend = () => {
-        resolve(true);
+      // Chrome speech synthesis anti-pause heartbeat
+      heartbeatTimer = setInterval(() => {
+        if (synth.speaking && !synth.paused) {
+          synth.resume();
+        }
+      }, 2000);
+
+      const cleanup = () => {
+        if (heartbeatTimer) {
+          clearInterval(heartbeatTimer);
+          heartbeatTimer = null;
+        }
       };
 
-      utterance.onerror = (e) => {
-        console.warn('WebSpeech error', e);
-        this.markFailure('playback_failed');
-        resolve(false);
+      const speakNextChunk = () => {
+        if (this.queueAbortController?.signal.aborted) {
+          cleanup();
+          resolve(hasSpokenAny);
+          return;
+        }
+
+        if (currentIndex >= chunks.length) {
+          cleanup();
+          resolve(true);
+          return;
+        }
+
+        const chunkText = chunks[currentIndex];
+        currentIndex++;
+
+        const utterance = new SpeechSynthesisUtterance(chunkText);
+        if (this.germanVoice) {
+          utterance.voice = this.germanVoice;
+        }
+        // Always enforce German language code for pronunciation
+        utterance.lang = this.germanVoice?.lang || 'de-DE';
+        utterance.rate = Math.max(0.7, Math.min(rate, 1.15));
+        utterance.pitch = 1.0;
+
+        utterance.onstart = () => {
+          hasSpokenAny = true;
+        };
+
+        utterance.onend = () => {
+          setTimeout(speakNextChunk, 80);
+        };
+
+        utterance.onerror = (e) => {
+          console.warn('Speech chunk notification:', e);
+          if (currentIndex < chunks.length) {
+            setTimeout(speakNextChunk, 50);
+          } else {
+            cleanup();
+            resolve(hasSpokenAny);
+          }
+        };
+
+        try {
+          synth.speak(utterance);
+        } catch (speakErr) {
+          console.warn('SpeechSynthesis speak failed:', speakErr);
+          cleanup();
+          resolve(hasSpokenAny);
+        }
       };
 
-      window.speechSynthesis.speak(utterance);
+      speakNextChunk();
     });
   }
 

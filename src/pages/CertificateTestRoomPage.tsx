@@ -237,6 +237,8 @@ export const CertificateTestRoomPage: React.FC = () => {
         title: test.titleDe,
         score: totalScore,
         percentage,
+        readingScore: readingMaxScore > 0 ? readingScore : undefined,
+        listeningScore: listeningMaxScore > 0 ? listeningScore : undefined,
         readingPercentage,
         listeningPercentage,
         issuedAt: submittedAt,
@@ -357,7 +359,7 @@ export const CertificateTestRoomPage: React.FC = () => {
             <div>
               <span className="text-[11px] text-slate-400 font-semibold block">Bo‘limlar</span>
               <span className="text-xs font-black text-slate-800 dark:text-slate-200 mt-1 block">
-                Lesen & Hören
+                {test.skillFocus === 'listening' ? '🎧 Hören (Tinglash)' : test.skillFocus === 'reading' ? '📖 Lesen (O‘qish)' : 'Lesen & Hören'}
               </span>
             </div>
             <div>

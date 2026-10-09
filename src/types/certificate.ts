@@ -56,6 +56,7 @@ export interface CertificateTest {
   sections: CertificateSection[];
   totalPoints: number;
   totalQuestions: number;
+  skillFocus?: 'all' | 'reading' | 'listening';
   createdAt?: string;
   updatedAt?: string;
 }

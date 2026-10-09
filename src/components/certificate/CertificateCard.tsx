@@ -16,6 +16,11 @@ export const CertificateCard: React.FC<CertificateCardProps> = ({ certificate })
   const readingPct = certificate.readingPercentage;
   const listeningPct = certificate.listeningPercentage;
 
+  const isListeningOnly = certificate.title.includes('Hören') && !certificate.title.includes('Start Deutsch');
+  const isReadingOnly = certificate.title.includes('Lesen') && !certificate.title.includes('Start Deutsch');
+  const hasReading = !isListeningOnly && (certificate.readingScore !== undefined || !isReadingOnly);
+  const hasListening = !isReadingOnly && (certificate.listeningScore !== undefined || !isListeningOnly);
+
   const formattedDate = new Date(certificate.issuedAt).toLocaleDateString('uz-UZ', {
     year: 'numeric',
     month: 'long',
@@ -72,13 +77,16 @@ export const CertificateCard: React.FC<CertificateCardProps> = ({ certificate })
           </div>
 
           <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 max-w-lg mx-auto leading-relaxed pt-2">
-            platformamizdagi <strong className="font-bold text-slate-900 dark:text-white">{certificate.title}</strong> (Reading & Listening) 
+            platformamizdagi <strong className="font-bold text-slate-900 dark:text-white">{certificate.title}</strong>{' '}
+            {isListeningOnly ? '(Hören — Tinglab tushunish)' : isReadingOnly ? '(Lesen — O‘qib tushunish)' : '(Lesen & Hören)'}{' '}
             darajasi bo‘yicha topshiriqlarni muvaffaqiyatli yakunlab, o‘z bilimini isbotladi.
           </p>
         </div>
 
         {/* Scores & Details Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-white/80 dark:bg-slate-800/60 p-4 rounded-2xl border border-amber-200/60 dark:border-amber-900/40 text-center my-6">
+        <div className={`grid grid-cols-2 ${
+          (hasReading && hasListening) ? 'sm:grid-cols-4' : 'sm:grid-cols-3'
+        } gap-3 bg-white/80 dark:bg-slate-800/60 p-4 rounded-2xl border border-amber-200/60 dark:border-amber-900/40 text-center my-6`}>
           <div>
             <span className="text-[10px] uppercase font-bold text-slate-400 block">Umumiy ball</span>
             <span className="text-base sm:text-lg font-black text-amber-600 dark:text-amber-400">
@@ -87,21 +95,29 @@ export const CertificateCard: React.FC<CertificateCardProps> = ({ certificate })
             <span className="text-[10px] text-slate-400 block">{certificate.score} ball</span>
           </div>
 
-          <div>
-            <span className="text-[10px] uppercase font-bold text-slate-400 block">📖 Lesen</span>
-            <span className="text-base sm:text-lg font-black text-blue-600 dark:text-blue-400">
-              {readingPct}%
-            </span>
-            <span className="text-[10px] text-slate-400 block">{certificate.readingScore} ball</span>
-          </div>
+          {hasReading && (
+            <div>
+              <span className="text-[10px] uppercase font-bold text-slate-400 block">📖 Lesen</span>
+              <span className="text-base sm:text-lg font-black text-blue-600 dark:text-blue-400">
+                {readingPct}%
+              </span>
+              <span className="text-[10px] text-slate-400 block">
+                {certificate.readingScore !== undefined ? `${certificate.readingScore} ball` : 'Topshirildi'}
+              </span>
+            </div>
+          )}
 
-          <div>
-            <span className="text-[10px] uppercase font-bold text-slate-400 block">🎧 Hören</span>
-            <span className="text-base sm:text-lg font-black text-purple-600 dark:text-purple-400">
-              {listeningPct}%
-            </span>
-            <span className="text-[10px] text-slate-400 block">{certificate.listeningScore} ball</span>
-          </div>
+          {hasListening && (
+            <div>
+              <span className="text-[10px] uppercase font-bold text-slate-400 block">🎧 Hören</span>
+              <span className="text-base sm:text-lg font-black text-purple-600 dark:text-purple-400">
+                {listeningPct}%
+              </span>
+              <span className="text-[10px] text-slate-400 block">
+                {certificate.listeningScore !== undefined ? `${certificate.listeningScore} ball` : 'Topshirildi'}
+              </span>
+            </div>
+          )}
 
           <div>
             <span className="text-[10px] uppercase font-bold text-slate-400 block">Berilgan sana</span>

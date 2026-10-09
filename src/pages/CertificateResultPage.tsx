@@ -146,7 +146,9 @@ export const CertificateResultPage: React.FC = () => {
           </div>
 
           {/* Scores Breakdown Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto">
+          <div className={`grid grid-cols-1 ${
+            attempt.readingMaxScore > 0 && attempt.listeningMaxScore > 0 ? 'sm:grid-cols-3' : 'sm:grid-cols-2'
+          } gap-4 max-w-2xl mx-auto`}>
             {/* Overall */}
             <div className={`p-4 rounded-2xl border text-center ${
               attempt.passed
@@ -164,33 +166,37 @@ export const CertificateResultPage: React.FC = () => {
               </span>
             </div>
 
-            {/* Reading */}
-            <div className="p-4 rounded-2xl bg-blue-50/50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900/60 text-center">
-              <span className="text-xs font-bold text-blue-700 dark:text-blue-300 uppercase flex items-center justify-center gap-1">
-                <BookOpen size={13} />
-                <span>📖 Lesen</span>
-              </span>
-              <p className="text-3xl font-black text-blue-600 dark:text-blue-400 my-1">
-                {readingPct}%
-              </p>
-              <span className="text-xs text-slate-500">
-                {attempt.readingScore} / {attempt.readingMaxScore} ball
-              </span>
-            </div>
+            {/* Reading (only if test has reading) */}
+            {attempt.readingMaxScore > 0 && (
+              <div className="p-4 rounded-2xl bg-blue-50/50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900/60 text-center">
+                <span className="text-xs font-bold text-blue-700 dark:text-blue-300 uppercase flex items-center justify-center gap-1">
+                  <BookOpen size={13} />
+                  <span>📖 Lesen</span>
+                </span>
+                <p className="text-3xl font-black text-blue-600 dark:text-blue-400 my-1">
+                  {readingPct}%
+                </p>
+                <span className="text-xs text-slate-500">
+                  {attempt.readingScore} / {attempt.readingMaxScore} ball
+                </span>
+              </div>
+            )}
 
-            {/* Listening */}
-            <div className="p-4 rounded-2xl bg-purple-50/50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-900/60 text-center">
-              <span className="text-xs font-bold text-purple-700 dark:text-purple-300 uppercase flex items-center justify-center gap-1">
-                <Headphones size={13} />
-                <span>🎧 Hören</span>
-              </span>
-              <p className="text-3xl font-black text-purple-600 dark:text-purple-400 my-1">
-                {listeningPct}%
-              </p>
-              <span className="text-xs text-slate-500">
-                {attempt.listeningScore} / {attempt.listeningMaxScore} ball
-              </span>
-            </div>
+            {/* Listening (only if test has listening) */}
+            {attempt.listeningMaxScore > 0 && (
+              <div className="p-4 rounded-2xl bg-purple-50/50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-900/60 text-center">
+                <span className="text-xs font-bold text-purple-700 dark:text-purple-300 uppercase flex items-center justify-center gap-1">
+                  <Headphones size={13} />
+                  <span>🎧 Hören</span>
+                </span>
+                <p className="text-3xl font-black text-purple-600 dark:text-purple-400 my-1">
+                  {listeningPct}%
+                </p>
+                <span className="text-xs text-slate-500">
+                  {attempt.listeningScore} / {attempt.listeningMaxScore} ball
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Educational Feedback Section */}
@@ -203,21 +209,27 @@ export const CertificateResultPage: React.FC = () => {
             {attempt.passed ? (
               <div className="space-y-2 text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
                 <p>
-                  🎉 <strong>Ajoyib natija!</strong> Siz {test.levelCode.toUpperCase()} darajadagi asosiy matnlarni va audio dialoglarni muvaffaqiyatli o‘zlashtirganingizni ko‘rsatdingiz.
+                  🎉 <strong>Ajoyib natija!</strong> Siz {test.levelCode.toUpperCase()} darajadagi {
+                    test.skillFocus === 'listening' ? 'audio dialog va topshiriqlarni' :
+                    test.skillFocus === 'reading' ? 'matnli topshiriqlarni' :
+                    'asosiy matn va audio topshiriqlarni'
+                  } muvaffaqiyatli bajarganingizni ko‘rsatdingiz.
                 </p>
-                {readingPct >= 80 && (
+                {attempt.readingMaxScore > 0 && readingPct >= 80 && (
                   <p className="text-blue-700 dark:text-blue-300">
                     • 📖 <strong>Lesen:</strong> Nemischa matnlarni tushunish ko‘nikmangiz a'lo darajada shakllangan.
                   </p>
                 )}
-                {listeningPct >= 80 ? (
-                  <p className="text-purple-700 dark:text-purple-300">
-                    • 🎧 <strong>Hören:</strong> Tinglab tushunish bo‘yicha eshitish sezgingiz juda yaxshi.
-                  </p>
-                ) : (
-                  <p className="text-amber-700 dark:text-amber-300">
-                    • 🎧 <strong>Hören:</strong> Listening natijangiz yetarli, biroq audio mashqlar va kundalik tinglash mashg‘ulotlarini davom ettirish tavsiya etiladi.
-                  </p>
+                {attempt.listeningMaxScore > 0 && (
+                  listeningPct >= 80 ? (
+                    <p className="text-purple-700 dark:text-purple-300">
+                      • 🎧 <strong>Hören:</strong> Tinglab tushunish bo‘yicha eshitish sezgingiz juda yaxshi.
+                    </p>
+                  ) : (
+                    <p className="text-amber-700 dark:text-amber-300">
+                      • 🎧 <strong>Hören:</strong> Listening natijangiz yetarli, biroq audio mashqlar va kundalik tinglash mashg‘ulotlarini davom ettirish tavsiya etiladi.
+                    </p>
+                  )
                 )}
               </div>
             ) : (
@@ -225,12 +237,12 @@ export const CertificateResultPage: React.FC = () => {
                 <p>
                   Sizga quyidagi bo‘limlarni qayta ko‘rib chiqish va mustahkamlash tavsiya etiladi:
                 </p>
-                {readingPct < 60 && (
+                {attempt.readingMaxScore > 0 && readingPct < 60 && (
                   <p className="text-blue-700 dark:text-blue-300">
                     • 📖 <strong>O‘qish bo‘limi:</strong> {test.levelCode.toUpperCase()} lug‘at boyligini oshirish va matnlarni qayta o‘qib chiqish.
                   </p>
                 )}
-                {listeningPct < 60 && (
+                {attempt.listeningMaxScore > 0 && listeningPct < 60 && (
                   <p className="text-purple-700 dark:text-purple-300">
                     • 🎧 <strong>Tinglash bo‘limi:</strong> Tinglash mashqlarini sekinroq tezlikda bir necha bor qayta eshitish.
                   </p>
