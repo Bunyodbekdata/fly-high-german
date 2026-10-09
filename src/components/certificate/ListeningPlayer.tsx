@@ -103,7 +103,7 @@ export const ListeningPlayer: React.FC<ListeningPlayerProps> = ({
     <div className="bg-slate-100 dark:bg-slate-800/80 rounded-2xl p-4 border border-slate-200 dark:border-slate-700/80 space-y-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <div className="p-2 rounded-xl bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300">
+          <div className="p-2 rounded-xl bg-brand-100 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400">
             <Volume2 size={18} />
           </div>
           <div>
@@ -127,8 +127,8 @@ export const ListeningPlayer: React.FC<ListeningPlayerProps> = ({
           </button>
 
           {isPlaying && (
-            <div className="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300 text-[10px] font-bold animate-pulse">
-              <span className="w-1.5 h-1.5 rounded-full bg-purple-600 animate-ping mr-1" />
+            <div className="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-brand-300 text-[10px] font-bold animate-pulse">
+              <span className="w-1.5 h-1.5 rounded-full bg-brand-600 animate-ping mr-1" />
               <span>O‘qilmoqda...</span>
             </div>
           )}
@@ -142,7 +142,7 @@ export const ListeningPlayer: React.FC<ListeningPlayerProps> = ({
           className={`flex-1 py-2.5 px-4 rounded-xl text-xs font-bold flex items-center justify-center space-x-2 transition ${
             isPlaying
               ? 'bg-amber-600 hover:bg-amber-700 text-white'
-              : 'bg-purple-600 hover:bg-purple-700 text-white shadow-xs'
+              : 'bg-brand-600 hover:bg-brand-700 text-white shadow-xs'
           }`}
           aria-label={isPlaying ? 'Pauza' : 'Tinglash'}
         >
@@ -180,8 +180,8 @@ export const ListeningPlayer: React.FC<ListeningPlayerProps> = ({
       </div>
 
       {showHelperText && audioText && (
-        <div className="mt-2 p-3 rounded-xl bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800 text-xs text-purple-900 dark:text-purple-200 font-serif leading-relaxed animate-in fade-in">
-          <p className="font-sans font-bold text-[10px] text-purple-600 dark:text-purple-400 mb-1">
+        <div className="mt-2 p-3 rounded-xl bg-slate-50 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 text-xs text-slate-800 dark:text-slate-200 font-serif leading-relaxed animate-in fade-in">
+          <p className="font-sans font-bold text-[10px] text-brand-600 dark:text-brand-400 mb-1">
             📢 Audio matni (Tinglab tushunish uchun):
           </p>
           <p className="italic">{audioText}</p>

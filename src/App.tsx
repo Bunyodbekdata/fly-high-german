@@ -4,6 +4,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider } from './context/AuthContext';
 import { ProgressProvider } from './context/ProgressContext';
 import { MainLayout } from './layouts/MainLayout';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
 
 const HomePage = lazy(() => import('./pages/HomePage').then((m) => ({ default: m.HomePage })));
 const CoursesPage = lazy(() => import('./pages/CoursesPage').then((m) => ({ default: m.CoursesPage })));
@@ -30,39 +31,45 @@ const CertificateTestRoomPage = lazy(() =>
 const CertificateResultPage = lazy(() =>
   import('./pages/CertificateResultPage').then((m) => ({ default: m.CertificateResultPage }))
 );
+const PrivacyPage = lazy(() => import('./pages/PrivacyPage').then((m) => ({ default: m.PrivacyPage })));
+const TermsPage = lazy(() => import('./pages/TermsPage').then((m) => ({ default: m.TermsPage })));
 
 export const App: React.FC = () => {
   return (
-    <BrowserRouter>
-      <ThemeProvider>
-        <AuthProvider>
-          <ProgressProvider>
-            <Routes>
-              <Route path="/" element={<MainLayout />}>
-                <Route index element={<HomePage />} />
-                <Route path="courses" element={<CoursesPage />} />
-                <Route path="pronunciation" element={<PronunciationPage />} />
-                <Route path="levels/:levelCode" element={<LevelPage />} />
-                <Route path="courses/:levelCode/lesson/:lessonId" element={<LessonPage />} />
-                <Route path="vocabulary" element={<VocabularyPage />} />
-                <Route path="grammar" element={<GrammarPage />} />
-                <Route path="listening" element={<ListeningPage />} />
-                <Route path="reading" element={<ReadingPage />} />
-                <Route path="shadowing" element={<ShadowingPage />} />
-                <Route path="certificate-tests" element={<CertificateTestsPage />} />
-                <Route path="certificate-tests/:testId" element={<CertificateTestRoomPage />} />
-                <Route path="certificate-tests/results/:attemptId" element={<CertificateResultPage />} />
-                <Route path="dashboard" element={<DashboardPage />} />
-                <Route path="profile" element={<ProfilePage />} />
-                <Route path="auth" element={<AuthPage />} />
-                <Route path="admin" element={<AdminDashboardPage />} />
-                <Route path="*" element={<Navigate to="/" replace />} />
-              </Route>
-            </Routes>
-          </ProgressProvider>
-        </AuthProvider>
-      </ThemeProvider>
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <ThemeProvider>
+          <AuthProvider>
+            <ProgressProvider>
+              <Routes>
+                <Route path="/" element={<MainLayout />}>
+                  <Route index element={<HomePage />} />
+                  <Route path="courses" element={<CoursesPage />} />
+                  <Route path="pronunciation" element={<PronunciationPage />} />
+                  <Route path="levels/:levelCode" element={<LevelPage />} />
+                  <Route path="courses/:levelCode/lesson/:lessonId" element={<LessonPage />} />
+                  <Route path="vocabulary" element={<VocabularyPage />} />
+                  <Route path="grammar" element={<GrammarPage />} />
+                  <Route path="listening" element={<ListeningPage />} />
+                  <Route path="reading" element={<ReadingPage />} />
+                  <Route path="shadowing" element={<ShadowingPage />} />
+                  <Route path="certificate-tests" element={<CertificateTestsPage />} />
+                  <Route path="certificate-tests/:testId" element={<CertificateTestRoomPage />} />
+                  <Route path="certificate-tests/results/:attemptId" element={<CertificateResultPage />} />
+                  <Route path="dashboard" element={<DashboardPage />} />
+                  <Route path="profile" element={<ProfilePage />} />
+                  <Route path="auth" element={<AuthPage />} />
+                  <Route path="admin" element={<AdminDashboardPage />} />
+                  <Route path="privacy" element={<PrivacyPage />} />
+                  <Route path="terms" element={<TermsPage />} />
+                  <Route path="*" element={<Navigate to="/" replace />} />
+                </Route>
+              </Routes>
+            </ProgressProvider>
+          </AuthProvider>
+        </ThemeProvider>
+      </BrowserRouter>
+    </ErrorBoundary>
   );
 };
 

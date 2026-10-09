@@ -171,12 +171,26 @@ class StorageService {
     this.saveUserProfile(profile);
   }
 
+  /**
+   * Safely reads and parses JSON from localStorage with fallbacks,
+   * completely preventing JSON.parse SyntaxErrors from crashing the app.
+   */
+  private safeReadJSON<T>(key: string, fallback: T): T {
+    if (!this.isBrowser) return fallback;
+    try {
+      const data = localStorage.getItem(key);
+      if (!data) return fallback;
+      return JSON.parse(data) as T;
+    } catch (e) {
+      console.warn(`[StorageService] Buzilgan JSON aniqlandi (${key}), standart qiymatga qaytarildi:`, e);
+      return fallback;
+    }
+  }
+
   // --- Educational Content Retrieval ---
 
   public getLevels(): Level[] {
-    if (!this.isBrowser) return INITIAL_LEVELS;
-    const data = localStorage.getItem(STORAGE_KEYS.LEVELS);
-    return data ? JSON.parse(data) : INITIAL_LEVELS;
+    return this.safeReadJSON(STORAGE_KEYS.LEVELS, INITIAL_LEVELS);
   }
 
   public getLevelByCode(code: string): Level | undefined {
@@ -184,9 +198,7 @@ class StorageService {
   }
 
   public getModules(levelId?: string): Module[] {
-    if (!this.isBrowser) return INITIAL_MODULES;
-    const data = localStorage.getItem(STORAGE_KEYS.MODULES);
-    const modules: Module[] = data ? JSON.parse(data) : INITIAL_MODULES;
+    const modules: Module[] = this.safeReadJSON(STORAGE_KEYS.MODULES, INITIAL_MODULES);
     if (levelId) {
       return modules.filter(m => m.levelId === levelId).sort((a, b) => a.orderIndex - b.orderIndex);
     }
@@ -194,9 +206,7 @@ class StorageService {
   }
 
   public getLessons(moduleId?: string, levelCode?: CEFRLevelCode): Lesson[] {
-    if (!this.isBrowser) return INITIAL_LESSONS;
-    const data = localStorage.getItem(STORAGE_KEYS.LESSONS);
-    let lessons: Lesson[] = data ? JSON.parse(data) : INITIAL_LESSONS;
+    let lessons: Lesson[] = this.safeReadJSON(STORAGE_KEYS.LESSONS, INITIAL_LESSONS);
     
     if (moduleId) {
       lessons = lessons.filter(l => l.moduleId === moduleId);
@@ -213,21 +223,15 @@ class StorageService {
   }
 
   public getAllVocabulary(): VocabularyItem[] {
-    if (!this.isBrowser) return ALL_INITIAL_VOCABULARY;
-    const data = localStorage.getItem(STORAGE_KEYS.VOCABULARY);
-    return data ? JSON.parse(data) : ALL_INITIAL_VOCABULARY;
+    return this.safeReadJSON(STORAGE_KEYS.VOCABULARY, ALL_INITIAL_VOCABULARY);
   }
 
   public getAllGrammar(): GrammarTopic[] {
-    if (!this.isBrowser) return ALL_INITIAL_GRAMMAR;
-    const data = localStorage.getItem(STORAGE_KEYS.GRAMMAR);
-    return data ? JSON.parse(data) : ALL_INITIAL_GRAMMAR;
+    return this.safeReadJSON(STORAGE_KEYS.GRAMMAR, ALL_INITIAL_GRAMMAR);
   }
 
   public getAllShadowing(levelCode?: CEFRLevelCode): ShadowingExercise[] {
-    if (!this.isBrowser) return ALL_INITIAL_SHADOWING;
-    const data = localStorage.getItem(STORAGE_KEYS.SHADOWING);
-    const list: ShadowingExercise[] = data ? JSON.parse(data) : ALL_INITIAL_SHADOWING;
+    const list: ShadowingExercise[] = this.safeReadJSON(STORAGE_KEYS.SHADOWING, ALL_INITIAL_SHADOWING);
     if (levelCode) {
       return list.filter(s => s.levelCode === levelCode);
     }
@@ -312,24 +316,22 @@ class StorageService {
   // --- User Profile & Authentication ---
 
   public getUserProfile(): UserProfile | null {
-    if (!this.isBrowser) return null;
-    const data = localStorage.getItem(STORAGE_KEYS.USER_PROFILE);
-    return data ? JSON.parse(data) : null;
+    return this.safeReadJSON<UserProfile | null>(STORAGE_KEYS.USER_PROFILE, null);
   }
 
   public saveUserProfile(profile: UserProfile): void {
     if (!this.isBrowser) return;
     localStorage.setItem(STORAGE_KEYS.USER_PROFILE, JSON.stringify(profile));
-    // Let AuthContext refresh so XP/streak update without a page reload
-    window.dispatchEvent(new Event(PROFILE_UPDATED_EVENT));
+    // Let AuthContext refresh asynchronously so React render phase is not interrupted
+    setTimeout(() => {
+      window.dispatchEvent(new Event(PROFILE_UPDATED_EVENT));
+    }, 0);
   }
 
   // --- Progress Tracking (Section 13) ---
 
   public getLessonProgress(): Record<string, LessonProgress> {
-    if (!this.isBrowser) return {};
-    const data = localStorage.getItem(STORAGE_KEYS.LESSON_PROGRESS);
-    return data ? JSON.parse(data) : {};
+    return this.safeReadJSON<Record<string, LessonProgress>>(STORAGE_KEYS.LESSON_PROGRESS, {});
   }
 
   public updateLessonProgress(
@@ -379,9 +381,7 @@ class StorageService {
   }
 
   public getVocabularyProgress(): Record<string, VocabularyProgress> {
-    if (!this.isBrowser) return {};
-    const data = localStorage.getItem(STORAGE_KEYS.VOCAB_PROGRESS);
-    return data ? JSON.parse(data) : {};
+    return this.safeReadJSON<Record<string, VocabularyProgress>>(STORAGE_KEYS.VOCAB_PROGRESS, {});
   }
 
   public toggleFavoriteVocab(vocabId: string): boolean {
@@ -504,17 +504,11 @@ class StorageService {
   }
 
   public getCertificateAttempts(userId?: string): CertificateAttempt[] {
-    if (!this.isBrowser) return [];
-    try {
-      const data = localStorage.getItem(STORAGE_KEYS.CERTIFICATE_ATTEMPTS);
-      const list: CertificateAttempt[] = data ? JSON.parse(data) : [];
-      if (userId) {
-        return list.filter(a => a.userId === userId);
-      }
-      return list;
-    } catch {
-      return [];
+    const list: CertificateAttempt[] = this.safeReadJSON<CertificateAttempt[]>(STORAGE_KEYS.CERTIFICATE_ATTEMPTS, []);
+    if (userId) {
+      return list.filter(a => a.userId === userId);
     }
+    return list;
   }
 
   public getCertificateAttemptById(attemptId: string): CertificateAttempt | undefined {
@@ -534,17 +528,11 @@ class StorageService {
   }
 
   public getCertificates(userId?: string): Certificate[] {
-    if (!this.isBrowser) return [];
-    try {
-      const data = localStorage.getItem(STORAGE_KEYS.CERTIFICATES);
-      const list: Certificate[] = data ? JSON.parse(data) : [];
-      if (userId) {
-        return list.filter(c => c.userId === userId);
-      }
-      return list;
-    } catch {
-      return [];
+    const list: Certificate[] = this.safeReadJSON<Certificate[]>(STORAGE_KEYS.CERTIFICATES, []);
+    if (userId) {
+      return list.filter(c => c.userId === userId);
     }
+    return list;
   }
 
   public getCertificateById(certificateId: string): Certificate | undefined {

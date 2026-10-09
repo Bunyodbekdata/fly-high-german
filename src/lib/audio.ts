@@ -412,7 +412,7 @@ class AudioService {
 
         if (currentIndex >= chunks.length) {
           cleanup();
-          resolve(true);
+          resolve(hasSpokenAny);
           return;
         }
 
@@ -438,7 +438,7 @@ class AudioService {
 
         utterance.onerror = (e) => {
           console.warn('Speech chunk notification:', e);
-          if (currentIndex < chunks.length) {
+          if (currentIndex < chunks.length && hasSpokenAny) {
             setTimeout(speakNextChunk, 50);
           } else {
             cleanup();

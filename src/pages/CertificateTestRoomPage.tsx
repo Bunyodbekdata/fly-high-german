@@ -40,8 +40,27 @@ export const CertificateTestRoomPage: React.FC = () => {
   const [isConfirmSubmitOpen, setIsConfirmSubmitOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Timer Ref
+  // Timer & Submission Guard Refs
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const isSubmittingRef = useRef<boolean>(false);
+  const endTimeRef = useRef<number | null>(null);
+
+  // Keep a reference to current state so the timer interval never needs to re-subscribe on answers/flags
+  const stateRef = useRef({
+    answers,
+    flagged,
+    currentQuestionIndex,
+    test,
+  });
+
+  useEffect(() => {
+    stateRef.current = {
+      answers,
+      flagged,
+      currentQuestionIndex,
+      test,
+    };
+  }, [answers, flagged, currentQuestionIndex, test]);
 
   // Load Test Data
   useEffect(() => {
@@ -71,7 +90,17 @@ export const CertificateTestRoomPage: React.FC = () => {
           setAnswers(parsed.answers || {});
           setFlagged(parsed.flagged || {});
           setTimeLeft(parsed.timeLeft);
-          setCurrentQuestionIndex(parsed.currentQuestionIndex || 0);
+          const safeSavedIdx = typeof parsed.currentQuestionIndex === 'number' && parsed.currentQuestionIndex >= 0
+            ? parsed.currentQuestionIndex
+            : 0;
+          setCurrentQuestionIndex(safeSavedIdx);
+
+          if (parsed.endTime && typeof parsed.endTime === 'number' && parsed.endTime > Date.now()) {
+            endTimeRef.current = parsed.endTime;
+          } else {
+            endTimeRef.current = Date.now() + parsed.timeLeft * 1000;
+          }
+
           setStatus('active');
         }
       } catch {
@@ -98,44 +127,83 @@ export const CertificateTestRoomPage: React.FC = () => {
     return list;
   }, [test]);
 
-  const currentItem = allQuestionsWithSection[currentQuestionIndex];
+  // Safe question index calculation to prevent out-of-bounds crashes
+  const safeQuestionIndex = useMemo(() => {
+    if (allQuestionsWithSection.length === 0) return 0;
+    return Math.max(0, Math.min(currentQuestionIndex, allQuestionsWithSection.length - 1));
+  }, [currentQuestionIndex, allQuestionsWithSection.length]);
 
-  // Timer Effect when test is 'active'
+  // Keep state index clamped in sync when questions change
+  useEffect(() => {
+    if (allQuestionsWithSection.length > 0 && currentQuestionIndex >= allQuestionsWithSection.length) {
+      setCurrentQuestionIndex(Math.max(0, allQuestionsWithSection.length - 1));
+    }
+  }, [currentQuestionIndex, allQuestionsWithSection.length]);
+
+  const currentItem = allQuestionsWithSection[safeQuestionIndex] || allQuestionsWithSection[0] || null;
+
+  // Timer Effect when test is 'active' - True Wall-Clock Timer
+  // Does NOT depend on answers or flagged, so selecting answers will NEVER reset interval or lose time
   useEffect(() => {
     if (status !== 'active') return;
 
-    timerRef.current = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev <= 1) {
-          clearInterval(timerRef.current!);
-          // Auto submit
-          handleAutoSubmit();
-          return 0;
-        }
+    if (!endTimeRef.current) {
+      const initialSeconds = timeLeft > 0 ? timeLeft : (test ? test.durationMinutes * 60 : 1800);
+      endTimeRef.current = Date.now() + initialSeconds * 1000;
+    }
 
-        // Save progress periodically to localStorage
-        const newTime = prev - 1;
-        if (test) {
-          const savedStateKey = `fgn_cert_attempt_${test.id}`;
+    const interval = setInterval(() => {
+      if (isSubmittingRef.current) {
+        clearInterval(interval);
+        return;
+      }
+
+      const now = Date.now();
+      const remainingSeconds = Math.max(0, Math.ceil((endTimeRef.current! - now) / 1000));
+      setTimeLeft(remainingSeconds);
+
+      // Periodically persist progress to localStorage using latest ref state
+      const currentTest = stateRef.current.test;
+      if (currentTest) {
+        try {
+          const savedStateKey = `fgn_cert_attempt_${currentTest.id}`;
           localStorage.setItem(savedStateKey, JSON.stringify({
             status: 'active',
-            timeLeft: newTime,
-            answers,
-            flagged,
-            currentQuestionIndex,
+            timeLeft: remainingSeconds,
+            endTime: endTimeRef.current,
+            answers: stateRef.current.answers,
+            flagged: stateRef.current.flagged,
+            currentQuestionIndex: stateRef.current.currentQuestionIndex,
           }));
+        } catch (e) {
+          console.warn('Failed to save attempt state:', e);
         }
-        return newTime;
-      });
+      }
+
+      // Time expired: auto-submit once
+      if (remainingSeconds <= 0) {
+        clearInterval(interval);
+        if (!isSubmittingRef.current) {
+          handleSubmitTest(true);
+        }
+      }
     }, 1000);
 
+    timerRef.current = interval;
+
     return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
     };
-  }, [status, answers, flagged, currentQuestionIndex, test]);
+  }, [status]);
 
   // Start Test Action
   const handleStartTest = () => {
+    if (!test) return;
+    endTimeRef.current = Date.now() + test.durationMinutes * 60 * 1000;
+    setTimeLeft(test.durationMinutes * 60);
     setStatus('active');
   };
 
@@ -164,20 +232,32 @@ export const CertificateTestRoomPage: React.FC = () => {
 
   // Auto-submit when time expires
   const handleAutoSubmit = () => {
-    handleSubmitTest(true);
+    if (!isSubmittingRef.current) {
+      handleSubmitTest(true);
+    }
   };
 
   // Finalize and Submit Test
   const handleSubmitTest = (wasTimeExpired = false) => {
-    if (!test || isSubmitting) return;
+    if (!test || isSubmittingRef.current) return;
+    isSubmittingRef.current = true;
     setIsSubmitting(true);
 
     if (timerRef.current) {
       clearInterval(timerRef.current);
+      timerRef.current = null;
     }
 
     // Clear saved active attempt state
-    localStorage.removeItem(`fgn_cert_attempt_${test.id}`);
+    try {
+      localStorage.removeItem(`fgn_cert_attempt_${test.id}`);
+    } catch {
+      // ignore
+    }
+
+    // Calculate score using latest answers from ref
+    const currentAnswers = stateRef.current.answers;
+    const currentFlagged = stateRef.current.flagged;
 
     // Calculate score
     let readingScore = 0;
@@ -188,7 +268,7 @@ export const CertificateTestRoomPage: React.FC = () => {
 
     test.sections.forEach(sec => {
       sec.questions.forEach(q => {
-        const selected = answers[q.id];
+        const selected = currentAnswers[q.id];
         const isCorrect = selected === q.correctAnswer;
         const earned = isCorrect ? q.points : 0;
 
@@ -205,7 +285,7 @@ export const CertificateTestRoomPage: React.FC = () => {
           selectedAnswer: selected,
           isCorrect,
           pointsEarned: earned,
-          isFlagged: !!flagged[q.id],
+          isFlagged: !!currentFlagged[q.id],
         };
       });
     });
@@ -410,6 +490,24 @@ export const CertificateTestRoomPage: React.FC = () => {
   }
 
   // 2. Active Test View
+  if (status === 'active' && !currentItem) {
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 text-center space-y-4">
+          <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+            Savol yuklanmoqda...
+          </p>
+          <button
+            onClick={() => setCurrentQuestionIndex(0)}
+            className="px-4 py-2 rounded-xl bg-brand-600 text-white text-xs font-bold"
+          >
+            1-savolga qaytish
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   const isTimeLow = timeLeft <= 300; // < 5 mins
   const isTimeCritical = timeLeft <= 120; // < 2 mins
 
@@ -472,7 +570,7 @@ export const CertificateTestRoomPage: React.FC = () => {
               {/* Question Header & Flag Toggle */}
               <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
                 <span className="text-xs font-bold text-slate-500 dark:text-slate-400">
-                  Savol {currentQuestionIndex + 1} / {totalQuestions}
+                  Savol {safeQuestionIndex + 1} / {totalQuestions}
                 </span>
 
                 <button
@@ -569,9 +667,9 @@ export const CertificateTestRoomPage: React.FC = () => {
               <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
                 <button
                   onClick={() => setCurrentQuestionIndex(prev => Math.max(0, prev - 1))}
-                  disabled={currentQuestionIndex === 0}
+                  disabled={safeQuestionIndex === 0}
                   className={`px-4 py-2.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition ${
-                    currentQuestionIndex === 0
+                    safeQuestionIndex === 0
                       ? 'opacity-40 cursor-not-allowed text-slate-400'
                       : 'bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200'
                   }`}
@@ -580,7 +678,7 @@ export const CertificateTestRoomPage: React.FC = () => {
                   <span>Oldingi savol</span>
                 </button>
 
-                {currentQuestionIndex < totalQuestions - 1 ? (
+                {safeQuestionIndex < totalQuestions - 1 ? (
                   <button
                     onClick={() => setCurrentQuestionIndex(prev => Math.min(totalQuestions - 1, prev + 1))}
                     className="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold flex items-center space-x-1.5 transition shadow-xs"
@@ -637,7 +735,7 @@ export const CertificateTestRoomPage: React.FC = () => {
               {/* Numbered Grid */}
               <div className="grid grid-cols-5 gap-2 max-h-72 overflow-y-auto pr-1">
                 {allQuestionsWithSection.map((item, idx) => {
-                  const isCurrent = idx === currentQuestionIndex;
+                  const isCurrent = idx === safeQuestionIndex;
                   const isAnswered = !!answers[item.question.id];
                   const isFlagged = !!flagged[item.question.id];
 
