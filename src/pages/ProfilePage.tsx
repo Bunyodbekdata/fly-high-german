@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useProgress } from '../context/ProgressContext';
@@ -16,6 +16,13 @@ export const ProfilePage: React.FC = () => {
   const [name, setName] = useState(user?.name || '');
   const [dailyGoal, setDailyGoal] = useState(user?.dailyGoalMinutes || 20);
   const [savedMessage, setSavedMessage] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setName(user.name);
+      setDailyGoal(user.dailyGoalMinutes);
+    }
+  }, [user]);
 
   const xp = user?.xpPoints ?? 0;
   const streak = user?.streakDays ?? 0;

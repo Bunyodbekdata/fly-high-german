@@ -256,9 +256,46 @@ CREATE POLICY "Public read writing" ON public.writing_tasks FOR SELECT USING (tr
 CREATE POLICY "Public read shadowing" ON public.shadowing_exercises FOR SELECT USING (true);
 CREATE POLICY "Public read exercises" ON public.exercises FOR SELECT USING (true);
 
--- User profiles: Users can read all basic profiles, but edit only their own
+-- User profiles: Users can read all basic profiles, edit only their own, insert own
 CREATE POLICY "Users can read profiles" ON public.profiles FOR SELECT USING (true);
+CREATE POLICY "Users can insert own profile" ON public.profiles FOR INSERT WITH CHECK (auth.uid() = id);
 CREATE POLICY "Users can update own profile" ON public.profiles FOR UPDATE USING (auth.uid() = id);
+CREATE POLICY "Admins manage profiles" ON public.profiles FOR ALL USING (
+    EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin')
+);
+
+-- Automatic profile sync trigger from auth.users to public.profiles
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS trigger AS $$
+BEGIN
+  INSERT INTO public.profiles (
+    id,
+    email,
+    full_name,
+    role,
+    current_level,
+    daily_goal_minutes,
+    streak_days,
+    xp_points
+  ) VALUES (
+    new.id,
+    new.email,
+    COALESCE(new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'name', 'Talaba'),
+    'student'::user_role,
+    'a1-1'::cefr_level_code,
+    20,
+    0,
+    0
+  )
+  ON CONFLICT (id) DO NOTHING;
+  RETURN new;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
 -- Lesson progress: Users can only see and modify their own progress
 CREATE POLICY "Users read own lesson progress" ON public.lesson_progress FOR SELECT USING (auth.uid() = user_id);

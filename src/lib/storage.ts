@@ -21,7 +21,6 @@ import {
   ALL_INITIAL_SHADOWING 
 } from './seedData';
 import { INITIAL_CERTIFICATE_TESTS } from './seedCertificateTests';
-import { supabase, isSupabaseConfigured } from './supabase';
 
 const STORAGE_KEYS = {
   VERSION: 'fgn_curriculum_version',
