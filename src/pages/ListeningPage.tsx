@@ -4,11 +4,12 @@ import { Headphones, Play, Pause, Eye, EyeOff, CheckCircle2, XCircle } from 'luc
 import { AudioButton } from '../components/common/AudioButton';
 import { LevelBadge } from '../components/common/Badge';
 import { audioService } from '../lib/audio';
+import { ListeningExercise } from '../types/database';
 
 export const ListeningPage: React.FC = () => {
   const lessons = storageService.getLessons();
   const allListening = lessons.flatMap(l => 
-    (l.listening || []).map(lis => ({ ...lis, levelCode: l.levelCode, lessonTitle: l.titleDe }))
+    (l.listening || []).map((lis: ListeningExercise) => ({ ...lis, levelCode: l.levelCode, lessonTitle: l.titleDe }))
   );
 
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -134,9 +135,9 @@ export const ListeningPage: React.FC = () => {
                   <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                     Dialog qismlari:
                   </h4>
-                  {current.dialogue.map((line: any, idx: number) => (
+                  {current.dialogue.map((line: { speaker: string; textDe: string; textUz: string }, idx: number) => (
                     <div
-                      key={idx}
+                      key={`${line.speaker}-${idx}`}
                       className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700 flex items-start justify-between gap-3"
                     >
                       <div>
@@ -194,7 +195,7 @@ export const ListeningPage: React.FC = () => {
                   <h3 className="font-bold text-slate-900 dark:text-white text-base">
                     Tushunish savollari:
                   </h3>
-                  {current.questions.map((q: any, qIdx: number) => (
+                  {current.questions.map((q: { id: string; questionUz: string; options: string[]; correctIndex: number; explanationUz: string }, qIdx: number) => (
                     <div key={q.id} className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
                       <p className="text-sm font-semibold text-slate-900 dark:text-white mb-3">
                         {qIdx + 1}. {q.questionUz}
@@ -211,7 +212,7 @@ export const ListeningPage: React.FC = () => {
 
                           return (
                             <button
-                              key={optIdx}
+                              key={`${q.id}-opt-${optIdx}`}
                               onClick={() => handleSelectOption(q.id, optIdx)}
                               disabled={checked}
                               className={`w-full p-2.5 rounded-xl border text-left text-xs sm:text-sm font-medium flex items-center justify-between transition ${optStyle}`}

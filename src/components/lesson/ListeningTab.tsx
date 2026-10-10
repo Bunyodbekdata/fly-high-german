@@ -369,9 +369,9 @@ export const ListeningTab: React.FC<ListeningTabProps> = ({ listening3Stage, lis
                 <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2">
                   Matn jumlama-jumla tahlili:
                 </h4>
-                {active3Stage.stage3Transcript.dialogue.map((line, idx) => (
+                {active3Stage.stage3Transcript.dialogue.map((line) => (
                   <div
-                    key={idx}
+                    key={`${line.speaker}-${line.textDe}`}
                     className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex items-start justify-between gap-3"
                   >
                     <div>
@@ -397,9 +397,9 @@ export const ListeningTab: React.FC<ListeningTabProps> = ({ listening3Stage, lis
                     Ushbu audiodan muhim so‘zlar:
                   </h4>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    {active3Stage.stage3Transcript.keyVocabulary.map((item, idx) => (
+                    {active3Stage.stage3Transcript.keyVocabulary.map((item) => (
                       <div
-                        key={idx}
+                        key={item.german}
                         className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700 flex items-center justify-between text-xs sm:text-sm"
                       >
                         <div>

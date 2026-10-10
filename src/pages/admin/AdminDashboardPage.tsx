@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { storageService } from '../../lib/storage';
 import { useAuth } from '../../context/AuthContext';
-import { Lesson, VocabularyItem, GrammarTopic, CEFRLevelCode } from '../../types/database';
+import { Lesson, VocabularyItem, GrammarTopic, CEFRLevelCode, GermanArticle, WordType } from '../../types/database';
 import { LevelBadge, ArticleBadge } from '../../components/common/Badge';
 import { 
   ShieldCheck, 
@@ -18,9 +18,11 @@ import {
   FileText, 
   RotateCcw,
   Sparkles,
-  Award
+  Award,
+  Database
 } from 'lucide-react';
 import { AdminCertificateTestsTab } from '../../components/admin/AdminCertificateTestsTab';
+import { AdminDatabaseHealthTab } from '../../components/admin/AdminDatabaseHealthTab';
 
 /**
  * Huquq yo‘q ekrani — alohida komponent, chunki hooklardan OLDIN qaytish
@@ -46,7 +48,7 @@ const AdminAccessDenied: React.FC = () => (
 
 const AdminDashboardContent: React.FC = () => {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState<'lessons' | 'vocabulary' | 'grammar' | 'certificate_tests'>('lessons');
+  const [activeTab, setActiveTab] = useState<'lessons' | 'vocabulary' | 'grammar' | 'certificate_tests' | 'database'>('lessons');
   const [lessons, setLessons] = useState<Lesson[]>(() => storageService.getLessons());
   const [vocabulary, setVocabulary] = useState<VocabularyItem[]>(() => storageService.getAllVocabulary());
   const [grammar, setGrammar] = useState<GrammarTopic[]>(() => storageService.getAllGrammar());
@@ -62,12 +64,12 @@ const AdminDashboardContent: React.FC = () => {
   // Modal state for adding vocabulary
   const [isAddVocabModalOpen, setIsAddVocabModalOpen] = useState(false);
   const [vocabGerman, setVocabGerman] = useState('');
-  const [vocabArticle, setVocabArticle] = useState<'der' | 'die' | 'das' | ''>('');
+  const [vocabArticle, setVocabArticle] = useState<GermanArticle | ''>('');
   const [vocabPlural, setVocabPlural] = useState('');
   const [vocabUzbek, setVocabUzbek] = useState('');
   const [vocabExampleDe, setVocabExampleDe] = useState('');
   const [vocabExampleUz, setVocabExampleUz] = useState('');
-  const [vocabType, setVocabType] = useState<any>('noun');
+  const [vocabType, setVocabType] = useState<WordType>('noun');
 
   const refreshAll = () => {
     setLessons([...storageService.getLessons()]);
@@ -129,7 +131,7 @@ const AdminDashboardContent: React.FC = () => {
       lessonId: 'les-custom',
       levelCode: 'a1-1',
       german: vocabGerman,
-      article: vocabArticle ? (vocabArticle as any) : null,
+      article: vocabArticle ? vocabArticle : null,
       plural: vocabPlural || null,
       uzbek: vocabUzbek,
       exampleDe: vocabExampleDe,
@@ -241,6 +243,18 @@ const AdminDashboardContent: React.FC = () => {
         >
           <Award size={16} />
           <span>Sertifikat Testlari</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('database')}
+          className={`py-3 px-4 font-bold text-sm border-b-2 transition flex items-center space-x-2 ${
+            activeTab === 'database'
+              ? 'border-brand-600 text-brand-600 dark:text-brand-400'
+              : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white'
+          }`}
+        >
+          <Database size={16} />
+          <span>Baza & Supabase</span>
         </button>
       </div>
 
@@ -419,6 +433,11 @@ const AdminDashboardContent: React.FC = () => {
         <AdminCertificateTestsTab />
       )}
 
+      {/* TAB 5: DATABASE & SUPABASE HEALTH DIAGNOSTICS */}
+      {activeTab === 'database' && (
+        <AdminDatabaseHealthTab />
+      )}
+
       {/* MODAL: CREATE LESSON */}
       {isAddLessonModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
@@ -461,7 +480,7 @@ const AdminDashboardContent: React.FC = () => {
                 </label>
                 <select
                   value={newLevel}
-                  onChange={(e) => setNewLevel(e.target.value as any)}
+                  onChange={(e) => setNewLevel(e.target.value as CEFRLevelCode)}
                   className="w-full px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm font-medium focus:ring-2 focus:ring-brand-500 outline-none"
                 >
                   <option value="a1-1">A1.1</option>
@@ -534,7 +553,7 @@ const AdminDashboardContent: React.FC = () => {
                   </label>
                   <select
                     value={vocabArticle}
-                    onChange={(e) => setVocabArticle(e.target.value as any)}
+                    onChange={(e) => setVocabArticle(e.target.value as GermanArticle | '')}
                     className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-brand-500 outline-none"
                   >
                     <option value="">(Yo‘q)</option>

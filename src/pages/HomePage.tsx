@@ -315,7 +315,7 @@ export const HomePage: React.FC = () => {
             const isOpen = openFaqIndex === idx;
             return (
               <div
-                key={idx}
+                key={faq.q}
                 className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/80 overflow-hidden shadow-2xs transition"
               >
                 <button

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { storageService } from '../lib/storage';
-import { CertificateAttempt, CertificateTest, Certificate } from '../types/certificate';
+import { CertificateAttempt, CertificateTest, Certificate, CertificateQuestionOption } from '../types/certificate';
 import { CertificateCard } from '../components/certificate/CertificateCard';
 import { 
   Award, 
@@ -371,7 +371,7 @@ export const CertificateResultPage: React.FC = () => {
 
                     {/* Options list */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs pt-1">
-                      {q.options.map((opt: any) => {
+                      {q.options.map((opt: CertificateQuestionOption) => {
                         const isStudentChoice = ans.selectedAnswer === opt.id;
                         const isRightAnswer = q.correctAnswer === opt.id;
 

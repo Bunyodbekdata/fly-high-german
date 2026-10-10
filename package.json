@@ -7,7 +7,10 @@
     "dev": "vite",
     "typecheck": "tsc --noEmit",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "lint": "tsc --noEmit",
+    "test": "node scripts/test-integrity.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.1",

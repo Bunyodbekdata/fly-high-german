@@ -85,9 +85,9 @@ export const ShadowingTab: React.FC<ShadowingTabProps> = ({ shadowing, onNext })
             Jumla: {currentIndex + 1} / {shadowing.length}
           </span>
           <div className="flex space-x-1.5">
-            {shadowing.map((_, idx) => (
+            {shadowing.map((item, idx) => (
               <span
-                key={idx}
+                key={`shadow-dot-${item.id}`}
                 className={`w-2.5 h-2.5 rounded-full transition-all ${
                   idx === currentIndex
                     ? 'w-6 bg-brand-600'

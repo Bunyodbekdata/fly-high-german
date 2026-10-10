@@ -59,8 +59,9 @@ export const AuthPage: React.FC = () => {
           navigate('/dashboard');
         }
       }
-    } catch (err: any) {
-      setError(err?.message || 'Tarmoq xatosi yuz berdi.');
+    } catch (err: unknown) {
+      const errMsg = err instanceof Error ? err.message : 'Tarmoq xatosi yuz berdi.';
+      setError(errMsg);
     } finally {
       setIsSubmitting(false);
     }

@@ -35,8 +35,8 @@ export const GrammarTab: React.FC<GrammarTabProps> = ({ grammar, grammarDiscover
 
           {/* Discovery Examples */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-3">
-            {grammarDiscovery.discoveryExamples.map((ex, idx) => (
-              <div key={idx} className="p-3.5 rounded-2xl bg-white dark:bg-slate-800 border border-brand-100 dark:border-slate-700 shadow-2xs">
+            {grammarDiscovery.discoveryExamples.map((ex) => (
+              <div key={ex.german} className="p-3.5 rounded-2xl bg-white dark:bg-slate-800 border border-brand-100 dark:border-slate-700 shadow-2xs">
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-slate-900 dark:text-white text-sm sm:text-base">{ex.german}</span>
                   <AudioButton text={ex.german} size="sm" />
@@ -50,14 +50,14 @@ export const GrammarTab: React.FC<GrammarTabProps> = ({ grammar, grammarDiscover
           </div>
 
           {/* Pattern Explanation & Formula */}
-          <div className="p-4 rounded-2xl bg-brand-900 dark:bg-brand-950 text-white space-y-2 shadow-sm border border-brand-800">
+          <div className="p-4 rounded-2xl bg-brand-950 dark:bg-slate-900 text-white space-y-2 shadow-sm border border-brand-800 dark:border-slate-800">
             <span className="text-xs font-bold text-brand-300 uppercase tracking-wider block">
               Xulosa va qoida formulasi:
             </span>
             <p className="text-xs sm:text-sm text-brand-100 leading-relaxed font-medium">
               {grammarDiscovery.patternExplanationUz}
             </p>
-            <div className="pt-2 border-t border-brand-800 text-xs sm:text-sm font-mono font-bold text-amber-300">
+            <div className="pt-2 border-t border-brand-800/80 text-xs sm:text-sm font-mono font-bold text-amber-300">
               📐 Formula: {grammarDiscovery.ruleFormulaUz}
             </div>
           </div>

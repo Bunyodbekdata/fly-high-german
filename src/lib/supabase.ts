@@ -57,10 +57,11 @@ export const checkSupabaseConnection = async (): Promise<{
       message: `Supabase bilan ulanish muvaffaqiyatli (${latencyMs}ms)`,
       latencyMs,
     };
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const errMsg = err instanceof Error ? err.message : 'Tarmoq xatosi';
     return {
       connected: false,
-      message: `Ulanishda kutilmagan nosozlik: ${err?.message || 'Tarmoq xatosi'}`,
+      message: `Ulanishda kutilmagan nosozlik: ${errMsg}`,
     };
   }
 };

@@ -27,10 +27,10 @@ export interface CertificateQuestion {
   audioUrl?: string; // Optional pre-recorded audio file path
   transcriptDe?: string; // Transcript shown ONLY after test submission
   options: CertificateQuestionOption[];
-  correctAnswer: string | string[]; // Option ID or matching mapping
+  correctAnswer?: string | string[]; // Hidden during active examination
   pairs?: { left: string; right: string }[]; // For matching tasks
   points: number;
-  explanationUz: string;
+  explanationUz?: string; // Provided only after examination submission
 }
 
 export interface CertificateSection {
@@ -63,7 +63,7 @@ export interface CertificateTest {
 
 export interface CertificateAttemptAnswer {
   questionId: string;
-  selectedAnswer: any;
+  selectedAnswer: string | number | boolean | string[] | null;
   isCorrect?: boolean;
   pointsEarned?: number;
   isFlagged?: boolean;

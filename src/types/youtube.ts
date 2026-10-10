@@ -1,3 +1,5 @@
+import { GermanArticle } from './database';
+
 export type YoutubeLevel = 'a1' | 'a2' | 'b1' | 'b2' | string;
 
 export interface ShadowingPhrase {

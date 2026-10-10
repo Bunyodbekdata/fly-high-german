@@ -387,7 +387,7 @@ export const VocabularyPage: React.FC = () => {
                   <div className="space-y-1.5">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2">
-                        {note.article && <ArticleBadge article={note.article as any} />}
+                        {note.article && <ArticleBadge article={note.article} />}
                         <h4 className="text-base font-extrabold text-slate-900 dark:text-white">
                           {note.german}
                         </h4>

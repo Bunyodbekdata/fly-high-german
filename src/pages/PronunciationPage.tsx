@@ -107,7 +107,7 @@ export const PronunciationPage: React.FC = () => {
               <div className="space-y-2">
                 {rule.examples.map((ex, idx) => (
                   <div
-                    key={idx}
+                    key={ex.german}
                     className="p-3 rounded-xl bg-slate-50/70 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-700/70 flex items-center justify-between"
                   >
                     <div>

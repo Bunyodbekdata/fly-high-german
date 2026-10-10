@@ -75,7 +75,7 @@ export const YoutubeChannelCard: React.FC<YoutubeChannelCardProps> = ({ channel,
           <div className="flex flex-wrap gap-1.5 pt-1">
             {channel.tags.slice(0, 3).map((tag, idx) => (
               <span 
-                key={idx}
+                key={tag}
                 className="px-2 py-0.5 rounded-lg bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 text-[10px] font-semibold"
               >
                 #{tag}

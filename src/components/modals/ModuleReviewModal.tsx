@@ -3,6 +3,7 @@ import { ModuleReviewData } from '../../lib/seedReviewsData';
 import { AudioButton } from '../common/AudioButton';
 import { ExerciseRunner } from '../exercises/ExerciseRunner';
 import { ArticleBadge } from '../common/Badge';
+import { GermanArticle } from '../../types/database';
 import { X, CheckCircle2, Award, BookOpen, Bookmark, FileText, CheckSquare, Sparkles, ArrowRight } from 'lucide-react';
 
 interface ModuleReviewModalProps {
@@ -112,9 +113,9 @@ export const ModuleReviewModal: React.FC<ModuleReviewModalProps> = ({
                   Siz endi quyidagilarni bajara olasiz:
                 </h4>
                 <div className="space-y-2">
-                  {reviewData.checklistUz.map((item, idx) => (
+                  {reviewData.checklistUz.map((item) => (
                     <div
-                      key={idx}
+                      key={item}
                       className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700 flex items-start space-x-3 text-xs sm:text-sm text-slate-800 dark:text-slate-200 font-medium"
                     >
                       <CheckCircle2 size={16} className="text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
@@ -131,8 +132,8 @@ export const ModuleReviewModal: React.FC<ModuleReviewModalProps> = ({
                   Modulning asosiy grammatik qoidalari:
                 </h4>
                 <div className="space-y-3">
-                  {reviewData.grammarNotesUz.map((gn, idx) => (
-                    <div key={idx} className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
+                  {reviewData.grammarNotesUz.map((gn) => (
+                    <div key={gn.title} className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
                       <span className="font-bold text-sm text-slate-900 dark:text-white block mb-1">
                         {gn.title}
                       </span>
@@ -164,15 +165,15 @@ export const ModuleReviewModal: React.FC<ModuleReviewModalProps> = ({
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {reviewData.keyVocab.map((v, idx) => (
+                {reviewData.keyVocab.map((v) => (
                   <div
-                    key={idx}
+                    key={v.german}
                     className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 flex items-center justify-between"
                   >
                     <div>
                       <div className="flex items-center space-x-2">
                         {v.article && (
-                          <ArticleBadge article={v.article as any} />
+                          <ArticleBadge article={v.article as GermanArticle} />
                         )}
                         <span className="font-bold text-slate-900 dark:text-white text-sm">
                           {v.german}

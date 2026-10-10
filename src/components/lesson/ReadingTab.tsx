@@ -69,7 +69,7 @@ export const ReadingTab: React.FC<ReadingTabProps> = ({ reading, onNext }) => {
             <div className="flex flex-wrap gap-2">
               {material.vocabularyHints.map((hint, idx) => (
                 <span
-                  key={idx}
+                  key={hint.german}
                   className="inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-brand-200 dark:border-slate-700 text-slate-800 dark:text-slate-200"
                 >
                   <span className="font-bold text-brand-700 dark:text-brand-400 mr-1.5">{hint.german}</span>

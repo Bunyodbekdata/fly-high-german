@@ -387,7 +387,7 @@ class AudioService {
 
       let currentIndex = 0;
       let hasSpokenAny = false;
-      let heartbeatTimer: any = null;
+      let heartbeatTimer: ReturnType<typeof setInterval> | null = null;
 
       // Chrome speech synthesis anti-pause heartbeat
       heartbeatTimer = setInterval(() => {

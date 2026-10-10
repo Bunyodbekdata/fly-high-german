@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { storageService } from '../../lib/storage';
 import { INITIAL_CERTIFICATE_TESTS } from '../../lib/seedCertificateTests';
 import { CertificateTest, CertificateSection, CertificateQuestion, CertificateQuestionOption } from '../../types/certificate';
+import { CEFRLevelCode } from '../../types/database';
 import { 
   Award, 
   Plus, 
@@ -33,7 +34,7 @@ export const AdminCertificateTestsTab: React.FC = () => {
   const [editingQuestion, setEditingQuestion] = useState<CertificateQuestion | null>(null);
 
   // Form states for test modal
-  const [formLevel, setFormLevel] = useState<'a1-1' | 'a1-2'>('a1-1');
+  const [formLevel, setFormLevel] = useState<CEFRLevelCode>('a1-1');
   const [formTitle, setFormTitle] = useState('');
   const [formDesc, setFormDesc] = useState('');
   const [formDuration, setFormDuration] = useState(30);
@@ -71,7 +72,7 @@ export const AdminCertificateTestsTab: React.FC = () => {
 
   const handleOpenEditTest = (test: CertificateTest) => {
     setEditingTest(test);
-    setFormLevel(test.levelCode as any);
+    setFormLevel(test.levelCode);
     setFormTitle(test.titleDe || test.titleUz);
     setFormDesc(test.descriptionUz);
     setFormDuration(test.durationMinutes);
@@ -93,7 +94,7 @@ export const AdminCertificateTestsTab: React.FC = () => {
         durationMinutes: formDuration,
         passingPercentage: formPassing,
         updatedAt: new Date().toISOString(),
-      } as any;
+      };
       storageService.saveCertificateTest(updated);
     } else {
       const newTest: CertificateTest = {
@@ -467,7 +468,7 @@ export const AdminCertificateTestsTab: React.FC = () => {
                 </label>
                 <select
                   value={formLevel}
-                  onChange={(e) => setFormLevel(e.target.value as any)}
+                  onChange={(e) => setFormLevel(e.target.value as CEFRLevelCode)}
                   className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                 >
                   <option value="a1-1">A1.1</option>

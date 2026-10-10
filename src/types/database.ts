@@ -134,8 +134,8 @@ export interface Lesson {
   practice?: ExerciseItem[];
 
   // Legacy fallback support
-  listening?: any[];
-  writing?: any[];
+  listening?: ListeningExercise[];
+  writing?: WritingTask[];
 }
 
 export interface VocabularyItem {
@@ -248,7 +248,7 @@ export interface ExerciseItem {
   promptDe?: string;
   blankSentence?: string;
   options?: string[];
-  correctAnswer: any;
+  correctAnswer: string | number | boolean | string[] | Record<string, string> | null;
   pairs?: { left: string; right: string }[];
   wordsToOrder?: string[];
   scrambledWords?: string[];

@@ -34,8 +34,8 @@ export const ObjectivesTab: React.FC<ObjectivesTabProps> = ({
             Bu darsdan keyin siz nimalarni o‘rganasiz:
           </h3>
           <ul className="space-y-4">
-            {objectives.map((obj, idx) => (
-              <li key={idx} className="flex items-start space-x-3">
+            {objectives.map((obj) => (
+              <li key={obj} className="flex items-start space-x-3">
                 <CheckCircle2 className="w-5 h-5 text-brand-600 flex-shrink-0 mt-0.5" />
                 <span className="text-slate-800 font-medium text-sm sm:text-base leading-snug">
                   {obj}

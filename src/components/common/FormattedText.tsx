@@ -59,7 +59,7 @@ export const FormattedText: React.FC<FormattedTextProps> = ({ text, className = 
       {lines.map((line, idx) => {
         const trimmed = line.trim();
         if (!trimmed) {
-          return <div key={idx} className="h-2" />;
+          return <div key={`empty-${idx}`} className="h-2" />;
         }
 
         const isBullet = trimmed.startsWith('- ') || trimmed.startsWith('• ');
@@ -68,7 +68,7 @@ export const FormattedText: React.FC<FormattedTextProps> = ({ text, className = 
         if (isBullet) {
           const content = trimmed.replace(/^[-•]\s*/, '');
           return (
-            <div key={idx} className="flex items-start space-x-2 pl-2">
+            <div key={`bullet-${idx}-${content.slice(0, 15)}`} className="flex items-start space-x-2 pl-2">
               <span className="w-1.5 h-1.5 rounded-full bg-brand-500 mt-2 flex-shrink-0" />
               <div className="flex-1">{parseInline(content)}</div>
             </div>
@@ -80,7 +80,7 @@ export const FormattedText: React.FC<FormattedTextProps> = ({ text, className = 
           const num = match ? match[1] : '';
           const content = match ? match[2] : trimmed;
           return (
-            <div key={idx} className="flex items-start space-x-2 pl-2">
+            <div key={`num-${idx}-${num}`} className="flex items-start space-x-2 pl-2">
               <span className="font-bold text-brand-600 dark:text-brand-400 text-xs mt-0.5 flex-shrink-0">
                 {num}
               </span>
@@ -90,7 +90,7 @@ export const FormattedText: React.FC<FormattedTextProps> = ({ text, className = 
         }
 
         return (
-          <p key={idx}>
+          <p key={`p-${idx}-${trimmed.slice(0, 15)}`}>
             {parseInline(line)}
           </p>
         );

@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { storageService } from '../lib/storage';
-import { createAttemptId, submitAttemptForServerGrading } from '../lib/certificateGrading';
+import { certificateService } from '../lib/certificateService';
+import { createAttemptId } from '../lib/certificateGrading';
 import { useAuth } from '../context/AuthContext';
 import { CertificateTest, CertificateQuestion, CertificateAttempt, CertificateAttemptAnswer, Certificate } from '../types/certificate';
 import { ListeningPlayer } from '../components/certificate/ListeningPlayer';
@@ -65,7 +66,7 @@ export const CertificateTestRoomPage: React.FC = () => {
     };
   }, [answers, flagged, currentQuestionIndex, test]);
 
-  // Load Test Data
+  // Load Test Data asynchronously via secure certificateService
   useEffect(() => {
     if (!testId) {
       setError('Test identifikatori ko‘rsatilmadi.');
@@ -73,49 +74,63 @@ export const CertificateTestRoomPage: React.FC = () => {
       return;
     }
 
-    const foundTest = storageService.getCertificateTestById(testId);
-    if (!foundTest) {
-      setError('Bunday test topilmadi yoki u hali nashr etilmagan.');
-      setLoading(false);
-      return;
-    }
+    let isCancelled = false;
 
-    setTest(foundTest);
-    setTimeLeft(foundTest.durationMinutes * 60);
+    certificateService.getTestById(testId).then((foundTest) => {
+      if (isCancelled) return;
 
-    // Check if there was an ongoing attempt saved locally for this test
-    const savedStateKey = `fgn_cert_attempt_${foundTest.id}`;
-    const savedState = localStorage.getItem(savedStateKey);
-    if (savedState) {
-      try {
-        const parsed = JSON.parse(savedState);
-        if (parsed.status === 'active' && parsed.timeLeft > 0) {
-          setAnswers(parsed.answers || {});
-          setFlagged(parsed.flagged || {});
-          setTimeLeft(parsed.timeLeft);
-          const safeSavedIdx = typeof parsed.currentQuestionIndex === 'number' && parsed.currentQuestionIndex >= 0
-            ? parsed.currentQuestionIndex
-            : 0;
-          setCurrentQuestionIndex(safeSavedIdx);
-
-          // MUHIM: imtihonni "pauza" qilib bo'lmaydi. Saqlangan muddat o'tgan
-          // bo'lsa uni qayta tiklamaymiz — aks holda tabni yopib, keyin qaytib
-          // kelgan talaba qolgan vaqtni yana oladi. Muddat o'tgan bo'lsa taymer
-          // darhol 0 ga tushadi va urinish avtomatik yakunlanadi.
-          if (typeof parsed.endTime === 'number' && parsed.endTime > 0) {
-            endTimeRef.current = parsed.endTime;
-          } else {
-            endTimeRef.current = Date.now() + parsed.timeLeft * 1000;
-          }
-
-          setStatus('active');
-        }
-      } catch {
-        localStorage.removeItem(savedStateKey);
+      if (!foundTest) {
+        setError('Bunday test topilmadi yoki u hali nashr etilmagan.');
+        setLoading(false);
+        return;
       }
-    }
 
-    setLoading(false);
+      setTest(foundTest);
+      setTimeLeft(foundTest.durationMinutes * 60);
+
+      // Check if there was an ongoing attempt saved locally for this test
+      const savedStateKey = `fgn_cert_attempt_${foundTest.id}`;
+      const savedState = localStorage.getItem(savedStateKey);
+      if (savedState) {
+        try {
+          const parsed = JSON.parse(savedState);
+          if (parsed.status === 'active' && parsed.timeLeft > 0) {
+            setAnswers(parsed.answers || {});
+            setFlagged(parsed.flagged || {});
+            setTimeLeft(parsed.timeLeft);
+            const safeSavedIdx = typeof parsed.currentQuestionIndex === 'number' && parsed.currentQuestionIndex >= 0
+              ? parsed.currentQuestionIndex
+              : 0;
+            setCurrentQuestionIndex(safeSavedIdx);
+
+            // MUHIM: imtihonni "pauza" qilib bo'lmaydi. Saqlangan muddat o'tgan
+            // bo'lsa uni qayta tiklamaymiz — aks holda tabni yopib, keyin qaytib
+            // kelgan talaba qolgan vaqtni yana oladi. Muddat o'tgan bo'lsa taymer
+            // darhol 0 ga tushadi va urinish avtomatik yakunlanadi.
+            if (typeof parsed.endTime === 'number' && parsed.endTime > 0) {
+              endTimeRef.current = parsed.endTime;
+            } else {
+              endTimeRef.current = Date.now() + parsed.timeLeft * 1000;
+            }
+
+            setStatus('active');
+          }
+        } catch {
+          localStorage.removeItem(savedStateKey);
+        }
+      }
+
+      setLoading(false);
+    }).catch((err) => {
+      if (isCancelled) return;
+      console.warn('Failed to load test:', err);
+      setError('Test ma‘lumotlarini yuklashda xatolik yuz berdi.');
+      setLoading(false);
+    });
+
+    return () => {
+      isCancelled = true;
+    };
   }, [testId]);
 
   // Flatten all questions across sections
@@ -244,7 +259,7 @@ export const CertificateTestRoomPage: React.FC = () => {
     }
   };
 
-  // Finalize and Submit Test
+  // Finalize and Submit Test via secure certificateService
   const handleSubmitTest = async (wasTimeExpired = false) => {
     if (!test || isSubmittingRef.current) return;
     isSubmittingRef.current = true;
@@ -271,155 +286,45 @@ export const CertificateTestRoomPage: React.FC = () => {
       : durationSeconds;
     const durationSecondsUsed = Math.max(0, Math.min(durationSeconds, elapsedSeconds));
 
-    // Calculate score using latest answers from ref
     const currentAnswers = stateRef.current.answers;
-    const currentFlagged = stateRef.current.flagged;
-
-    // Calculate score
-    let readingScore = 0;
-    let readingMaxScore = 0;
-    let listeningScore = 0;
-    let listeningMaxScore = 0;
-    const answersMap: Record<string, CertificateAttemptAnswer> = {};
-
-    test.sections.forEach(sec => {
-      sec.questions.forEach(q => {
-        const selected = currentAnswers[q.id];
-        const isCorrect = selected === q.correctAnswer;
-        const earned = isCorrect ? q.points : 0;
-
-        if (sec.skill === 'reading') {
-          readingMaxScore += q.points;
-          if (isCorrect) readingScore += q.points;
-        } else {
-          listeningMaxScore += q.points;
-          if (isCorrect) listeningScore += q.points;
-        }
-
-        answersMap[q.id] = {
-          questionId: q.id,
-          selectedAnswer: selected,
-          isCorrect,
-          pointsEarned: earned,
-          isFlagged: !!currentFlagged[q.id],
-        };
-      });
-    });
-
-    const totalScore = readingScore + listeningScore;
-    const maxScore = readingMaxScore + listeningMaxScore;
-    const percentage = maxScore > 0 ? Math.round((totalScore / maxScore) * 100) : 0;
-    const readingPercentage = readingMaxScore > 0 ? Math.round((readingScore / readingMaxScore) * 100) : 0;
-    const listeningPercentage = listeningMaxScore > 0 ? Math.round((listeningScore / listeningMaxScore) * 100) : 0;
-    const passed = percentage >= test.passingPercentage;
-
-    // Bulut rejimida ID UUID bo'ladi — serverda ham aynan shu ID bilan yoziladi.
     const attemptId = createAttemptId(user?.id);
     const userId = user?.id || 'guest_user';
     const userName = user?.name || 'Talaba';
-    const submittedAt = new Date().toISOString();
 
-    let certId: string | undefined = undefined;
-    let certificateRecord: Certificate | null = null;
-
-    // Sertifikat yozuvi (mahalliy). Yakuniy qaror server baholashidan keyin qabul qilinadi.
-    if (passed) {
-      certId = storageService.generateCertificateId(test.levelCode);
-      certificateRecord = {
-        id: `cert_${Date.now()}`,
-        certificateId: certId,
+    try {
+      const result = await certificateService.submitAttempt({
+        attemptId,
+        testId: test.id,
         userId,
         userName,
-        attemptId,
         levelCode: test.levelCode,
-        title: test.titleDe,
-        score: totalScore,
-        percentage,
-        readingScore: readingMaxScore > 0 ? readingScore : undefined,
-        listeningScore: listeningMaxScore > 0 ? listeningScore : undefined,
-        readingPercentage,
-        listeningPercentage,
-        issuedAt: submittedAt,
-        status: 'valid',
-      };
-    }
+        durationSecondsUsed,
+        answers: currentAnswers,
+      });
 
-    // Save Attempt
-    const attemptRecord: CertificateAttempt = {
-      id: attemptId,
-      userId,
-      userName,
-      testId: test.id,
-      levelCode: test.levelCode,
-      startedAt: new Date(Date.now() - durationSecondsUsed * 1000).toISOString(),
-      submittedAt,
-      durationSecondsUsed,
-      score: totalScore,
-      maxScore,
-      percentage,
-      passed,
-      readingScore,
-      readingMaxScore,
-      readingPercentage,
-      listeningScore,
-      listeningMaxScore,
-      listeningPercentage,
-      certificateId: certId,
-      status: wasTimeExpired ? 'expired' : 'submitted',
-      answers: answersMap,
-      gradedBy: 'local',
-    };
-
-    let finalAttempt = attemptRecord;
-
-    // --- Server baholash ---
-    // Javoblar kaliti klientga tushadi, shuning uchun haqiqiy natija faqat
-    // Supabase RPC qaytargan qiymat bo'lishi kerak. Bu javob o'zgartirilsa
-    // yoki qo'lda soxta urinish yozilsa ham sertifikat berilmaydi.
-    const serverResult = await submitAttemptForServerGrading(attemptRecord, currentAnswers);
-    if (serverResult) {
-      finalAttempt = {
-        ...attemptRecord,
-        score: serverResult.score,
-        percentage: serverResult.percentage,
-        passed: serverResult.passed,
-        certificateId: serverResult.certificateId,
-        status: serverResult.passed ? 'submitted' : attemptRecord.status,
-        gradedBy: 'server',
-      };
-
-      if (serverResult.certificateId) {
-        certificateRecord = {
-          id: certificateRecord?.id || `cert_${Date.now()}`,
-          certificateId: serverResult.certificateId,
-          userId,
-          userName,
-          attemptId,
-          levelCode: test.levelCode,
-          title: test.titleDe,
-          score: serverResult.score,
-          percentage: serverResult.percentage,
-          readingScore: readingMaxScore > 0 ? finalAttempt.readingScore : undefined,
-          listeningScore: listeningMaxScore > 0 ? finalAttempt.listeningScore : undefined,
-          readingPercentage: finalAttempt.readingPercentage,
-          listeningPercentage: finalAttempt.listeningPercentage,
-          issuedAt: submittedAt,
-          status: 'valid',
-        };
-      } else {
-        // Server "o'tmadi" deb hisobladi — mahalliy sertifikat bekor qilinadi.
-        certificateRecord = null;
+      if (wasTimeExpired) {
+        result.attempt.status = 'expired';
+        storageService.saveCertificateAttempt(result.attempt);
       }
+
+      navigate(`/certificate-tests/results/${result.attempt.id}`);
+    } catch (err) {
+      console.warn('Submission error, fallback to local evaluation:', err);
+      const fallback = certificateService.gradeLocally({
+        attemptId,
+        testId: test.id,
+        userId,
+        userName,
+        levelCode: test.levelCode,
+        durationSecondsUsed,
+        answers: currentAnswers,
+      });
+      if (wasTimeExpired) {
+        fallback.status = 'expired';
+      }
+      storageService.saveCertificateAttempt(fallback);
+      navigate(`/certificate-tests/results/${fallback.id}`);
     }
-
-    if (certificateRecord) {
-      storageService.saveCertificate(certificateRecord);
-    }
-
-    storageService.saveCertificateAttempt(finalAttempt);
-
-    // Redirect to results page
-    navigate(`/certificate-tests/results/${attemptId}`);
   };
 
   // Eng yangi submit funksiyasini refga yozamiz — interval eski closure'da

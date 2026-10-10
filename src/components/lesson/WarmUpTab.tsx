@@ -58,7 +58,7 @@ export const WarmUpTab: React.FC<WarmUpTabProps> = ({
                 <div className="space-y-2">
                   {warmUp.miniDialogue.map((line, idx) => (
                     <div
-                      key={idx}
+                      key={`warmup-${line.speaker}-${line.textDe || idx}`}
                       className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex items-center justify-between"
                     >
                       <div>
@@ -86,7 +86,7 @@ export const WarmUpTab: React.FC<WarmUpTabProps> = ({
           </h3>
           <ul className="space-y-2.5">
             {objectives.map((obj, idx) => (
-              <li key={idx} className="flex items-start space-x-3 text-sm text-slate-800 dark:text-slate-200 font-medium">
+              <li key={`warmup-obj-${idx}-${obj}`} className="flex items-start space-x-3 text-sm text-slate-800 dark:text-slate-200 font-medium">
                 <span className="w-1.5 h-1.5 rounded-full bg-brand-600 dark:bg-brand-400 mt-2 flex-shrink-0" />
                 <span>{obj}</span>
               </li>

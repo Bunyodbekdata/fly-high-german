@@ -156,12 +156,26 @@ const initLocalVault = async () => {
   }
 };
 
-const mapDbRowToUserProfile = (row: any, fallbackEmail = ''): UserProfile => {
+interface DbProfileRow {
+  id: string;
+  email?: string | null;
+  full_name?: string | null;
+  avatar_url?: string | null;
+  role?: 'student' | 'admin' | null;
+  current_level?: string | null;
+  daily_goal_minutes?: number | null;
+  streak_days?: number | null;
+  xp_points?: number | null;
+  last_activity_date?: string | null;
+  created_at?: string | null;
+}
+
+const mapDbRowToUserProfile = (row: DbProfileRow, fallbackEmail = ''): UserProfile => {
   return {
     id: row.id,
     email: row.email || fallbackEmail,
     name: row.full_name || 'Talaba',
-    avatarUrl: row.avatar_url,
+    avatarUrl: row.avatar_url || undefined,
     // Bulut rejimida rol ma'lumotlar bazasidan olinadi; env'dagi admin email
     // faqat zaxira (UI) signali.
     role:
@@ -172,7 +186,7 @@ const mapDbRowToUserProfile = (row: any, fallbackEmail = ''): UserProfile => {
     dailyGoalMinutes: row.daily_goal_minutes ?? 20,
     streakDays: row.streak_days ?? 0,
     xpPoints: row.xp_points ?? 0,
-    lastActiveDate: row.last_activity_date,
+    lastActiveDate: row.last_activity_date || undefined,
     createdAt: row.created_at || new Date().toISOString(),
   };
 };
@@ -366,8 +380,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setUser(userProfile);
           return { success: true };
         }
-      } catch (err: any) {
-        return { success: false, error: err?.message || 'Tarmoqqa ulanishda xatolik yuz berdi.' };
+      } catch (err: unknown) {
+        const errorMsg = err instanceof Error ? err.message : 'Tarmoqqa ulanishda xatolik yuz berdi.';
+        return { success: false, error: errorMsg };
       }
     }
 
@@ -498,8 +513,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
           return { success: true };
         }
-      } catch (err: any) {
-        return { success: false, error: err?.message || 'Ro‘yxatdan o‘tishda xatolik yuz berdi.' };
+      } catch (err: unknown) {
+        const errorMsg = err instanceof Error ? err.message : 'Ro‘yxatdan o‘tishda xatolik yuz berdi.';
+        return { success: false, error: errorMsg };
       }
     }
 
@@ -582,7 +598,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const client = supabase;
     if (isSupabaseConfigured && client && user.id && !user.id.startsWith('usr-guest')) {
       try {
-        const dbUpdates: any = { updated_at: new Date().toISOString() };
+        const dbUpdates: Record<string, unknown> = { updated_at: new Date().toISOString() };
         if (updates.name !== undefined) dbUpdates.full_name = updates.name;
         if (updates.avatarUrl !== undefined) dbUpdates.avatar_url = updates.avatarUrl;
         if (updates.currentLevel !== undefined) dbUpdates.current_level = updates.currentLevel;

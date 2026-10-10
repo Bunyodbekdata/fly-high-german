@@ -380,7 +380,7 @@ export const ExerciseRunner: React.FC<ExerciseRunnerProps> = ({
 
               return (
                 <button
-                  key={idx}
+                  key={`opt-${currentExercise.id}-${idx}-${option}`}
                   onClick={() => handleSelectOption(option)}
                   disabled={isAnswerChecked}
                   className={`w-full p-4 rounded-xl border text-left font-medium flex items-center justify-between transition ${itemClasses}`}
@@ -482,7 +482,7 @@ export const ExerciseRunner: React.FC<ExerciseRunnerProps> = ({
 
                 return (
                   <button
-                    key={idx}
+                    key={`left-${p.left}`}
                     onClick={() => handlePairClick('left', p.left)}
                     disabled={isAnswerChecked || isMatched}
                     className={`w-full p-3 rounded-xl border text-left text-sm font-semibold transition ${
@@ -501,12 +501,12 @@ export const ExerciseRunner: React.FC<ExerciseRunnerProps> = ({
 
             <div className="space-y-2">
               <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">O‘zbekcha</span>
-              {currentExercise.pairs.map((p, idx) => {
+              {currentExercise.pairs.map((p) => {
                 const isMatched = Object.values(matchedPairs).includes(p.right);
 
                 return (
                   <button
-                    key={idx}
+                    key={`right-${p.right}`}
                     onClick={() => handlePairClick('right', p.right)}
                     disabled={isAnswerChecked || isMatched}
                     className={`w-full p-3 rounded-xl border text-left text-sm font-semibold transition ${

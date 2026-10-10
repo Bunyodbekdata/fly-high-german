@@ -2,19 +2,19 @@ import React from 'react';
 import { GermanArticle, CEFRLevelCode, WordType } from '../../types/database';
 
 interface ArticleBadgeProps {
-  article?: GermanArticle | null;
+  article?: GermanArticle | string | null;
   className?: string;
 }
 
 export const ArticleBadge: React.FC<ArticleBadgeProps> = ({ article, className = '' }) => {
   if (!article) return null;
 
-  // Shared token layer from index.css keeps light + dark variants in one place
-  const config = {
-    der: { label: 'der', class: 'article-badge-der' },
-    die: { label: 'die', class: 'article-badge-die' },
-    das: { label: 'das', class: 'article-badge-das' },
-  }[article];
+  const key = article.toLowerCase();
+  const config = 
+    key === 'der' ? { label: 'der', class: 'article-badge-der' } :
+    key === 'die' ? { label: 'die', class: 'article-badge-die' } :
+    key === 'das' ? { label: 'das', class: 'article-badge-das' } :
+    { label: article, class: 'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700' };
 
   return (
     <span

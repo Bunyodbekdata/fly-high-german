@@ -90,7 +90,7 @@ export const ContextDialogueTab: React.FC<ContextDialogueTabProps> = ({ dialogue
         <div className="space-y-3 pt-2">
           {dialogue.lines.map((line, idx) => (
             <div
-              key={idx}
+              key={`dialogue-${line.speaker}-${line.textDe || idx}`}
               className="p-4 rounded-2xl bg-slate-50/70 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-brand-200 dark:hover:border-slate-600 transition flex items-start justify-between gap-3"
             >
               <div>
@@ -118,7 +118,7 @@ export const ContextDialogueTab: React.FC<ContextDialogueTabProps> = ({ dialogue
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {dialogue.usefulPhrases.map((phrase, idx) => (
-                <div key={idx} className="p-3.5 rounded-2xl bg-amber-50/60 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/80 text-xs">
+                <div key={`dialogue-phrase-${phrase.german || idx}`} className="p-3.5 rounded-2xl bg-amber-50/60 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/80 text-xs">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-amber-950 dark:text-amber-100 text-sm">{phrase.german}</span>
                     <AudioButton text={phrase.german} size="sm" />

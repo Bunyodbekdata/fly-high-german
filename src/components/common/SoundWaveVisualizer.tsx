@@ -38,7 +38,7 @@ export const SoundWaveVisualizer: React.FC<SoundWaveProps> = ({
     >
       {Array.from({ length: bars }).map((_, i) => (
         <span
-          key={i}
+          key={`sw-bar-${i}`}
           className={`${barWidthClasses} rounded-full ${color} transition-all duration-300 ${
             active ? 'animate-soundwave' : 'h-1 opacity-40'
           }`}

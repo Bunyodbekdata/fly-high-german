@@ -79,7 +79,7 @@ export const WritingTab: React.FC<WritingTabProps> = ({ scaffold, writing, onNex
               <div className="flex flex-wrap gap-2">
                 {activeScaffold.controlledScaffolding.sentenceStarters.map((starter, idx) => (
                   <button
-                    key={idx}
+                    key={`starter-${idx}-${starter}`}
                     type="button"
                     onClick={() => handleInsertStarter(starter)}
                     className="inline-flex items-center px-3.5 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-brand-400 dark:hover:border-brand-500 text-xs font-semibold text-slate-800 dark:text-slate-200 hover:text-brand-700 dark:hover:text-brand-300 shadow-2xs transition group"
@@ -102,7 +102,7 @@ export const WritingTab: React.FC<WritingTabProps> = ({ scaffold, writing, onNex
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {activeScaffold.usefulVocabulary.map((vocab, idx) => (
                   <div
-                    key={idx}
+                    key={`vocab-${vocab.german || idx}`}
                     className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-750 flex items-center justify-between text-xs"
                   >
                     <div>

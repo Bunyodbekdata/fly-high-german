@@ -1,4 +1,5 @@
 // Gamification System: Ranks, XP Progress, Achievement Badges, and Web Audio SFX
+import { LessonProgress } from '../types/database';
 
 export interface GamificationRank {
   tier: number;
@@ -119,18 +120,18 @@ export function computeAchievements(params: {
   streakDays: number;
   completedLessonsCount: number;
   masteredVocabCount: number;
-  lessonProgress: Record<string, any>;
+  lessonProgress: Record<string, LessonProgress>;
 }): AchievementBadge[] {
   const { streakDays, completedLessonsCount, masteredVocabCount, lessonProgress } = params;
 
   // Count lessons with high score (100%)
   const perfectScoresCount = Object.values(lessonProgress).filter(
-    (p: any) => p?.completed && p?.score >= 100
+    (p) => Boolean(p?.completed && (p?.score ?? 0) >= 100)
   ).length;
 
   // Count lessons with completed shadowing tab
   const shadowingCompletedCount = Object.values(lessonProgress).filter(
-    (p: any) => p?.tabCompleted?.shadowing
+    (p) => Boolean(p?.tabCompleted?.shadowing)
   ).length;
 
   return [
@@ -233,7 +234,7 @@ let audioCtx: AudioContext | null = null;
 
 function getAudioContext(): AudioContext | null {
   if (typeof window === 'undefined') return null;
-  const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+  const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
   if (!AudioContextClass) return null;
   if (!audioCtx || audioCtx.state === 'closed') {
     audioCtx = new AudioContextClass();
