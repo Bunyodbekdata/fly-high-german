@@ -34,7 +34,7 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   const isLessonCompleted = (lessonId: string): boolean => {
-    return Boolean(lessonProgress[lessonId]?.completed);
+    return lessonProgress[lessonId]?.completed === true;
   };
 
   const getLessonScore = (lessonId: string): number => {
@@ -48,8 +48,8 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return Math.round((completed / lessons.length) * 100);
   };
 
-  const completedLessonsCount = Object.values(lessonProgress).filter(p => p.completed).length;
-  const masteredVocabCount = Object.values(vocabProgress).filter(v => v.status === 'mastered').length;
+  const completedLessonsCount = Object.values(lessonProgress).filter(p => p && p.completed === true).length;
+  const masteredVocabCount = Object.values(vocabProgress).filter(v => v && v.status === 'mastered').length;
 
   const completeLesson = (lessonId: string, score: number) => {
     storageService.updateLessonProgress(lessonId, { completed: true, score });

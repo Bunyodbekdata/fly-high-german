@@ -58,11 +58,21 @@ const yesterdayKey = (): string => {
   return toLocalDateKey(d);
 };
 
+const isPlainObject = (value: unknown): boolean =>
+  typeof value === 'object' && value !== null && !Array.isArray(value);
+
 class StorageService {
   private isBrowser = typeof window !== 'undefined';
 
   constructor() {
-    this.initDefaultData();
+    // Modul yuklanishida portlash "oq ekran" beradi va uni React ErrorBoundary
+    // ushlay olmaydi. Shuning uchun boshlang'ich tayyorgarlik hech qachon
+    // tashqariga xato chiqarmasligi shart.
+    try {
+      this.initDefaultData();
+    } catch (e) {
+      console.error('[StorageService] Boshlang‘ich ma’lumotlarni tayyorlashda xatolik:', e);
+    }
   }
 
   private initDefaultData() {
@@ -134,7 +144,9 @@ class StorageService {
     let changed = false;
 
     if (!profile.lastActiveDate) {
-      const completed = Object.values(this.getLessonProgress()).filter(p => p.completed).length;
+      const completed = Object.values(this.getLessonProgress()).filter(
+        p => p && p.completed === true
+      ).length;
       const realXp = completed * 50;
       if (profile.streakDays !== 0 || profile.xpPoints !== realXp) {
         profile.streakDays = 0;
@@ -174,22 +186,54 @@ class StorageService {
    * Safely reads and parses JSON from localStorage with fallbacks,
    * completely preventing JSON.parse SyntaxErrors from crashing the app.
    */
-  private safeReadJSON<T>(key: string, fallback: T): T {
+  private safeReadJSON<T>(
+    key: string,
+    fallback: T,
+    validate?: (value: unknown) => boolean
+  ): T {
     if (!this.isBrowser) return fallback;
     try {
       const data = localStorage.getItem(key);
       if (!data) return fallback;
-      return JSON.parse(data) as T;
+      const parsed = JSON.parse(data) as T;
+      // Sintaksis to'g'ri bo'lsa ham shakl buzilgan bo'lishi mumkin
+      // (masalan `{"lesson-x": null}`) — bunday qiymat keyinroq portlaydi.
+      if (validate && !validate(parsed)) {
+        console.warn(`[StorageService] Kutilmagan ma'lumot shakli (${key}), standart qiymatga qaytarildi.`);
+        return fallback;
+      }
+      return parsed;
     } catch (e) {
       console.warn(`[StorageService] Buzilgan JSON aniqlandi (${key}), standart qiymatga qaytarildi:`, e);
       return fallback;
     }
   }
 
+  /**
+   * Record ichidagi yaroqsiz yozuvlarni (null, massiv, satr) tashlab yuboradi.
+   * `{ "lesson-x": null }` kabi qiymat `.completed` o'qilganda ilovani
+   * portlatardi (ProgressContext ham, normalizeProfileStats ham).
+   */
+  private filterValidRecords<T>(raw: Record<string, T>, key: string): Record<string, T> {
+    const clean: Record<string, T> = {};
+    let dropped = 0;
+    for (const [id, value] of Object.entries(raw)) {
+      if (isPlainObject(value)) {
+        clean[id] = value;
+      } else {
+        dropped++;
+      }
+    }
+    if (dropped > 0) {
+      console.warn(`[StorageService] ${key}: ${dropped} ta yaroqsiz yozuv tashlab yuborildi.`);
+    }
+    return clean;
+  }
+
   // --- Educational Content Retrieval ---
 
   public getLevels(): Level[] {
-    return this.safeReadJSON(STORAGE_KEYS.LEVELS, INITIAL_LEVELS);
+    return this.safeReadJSON(STORAGE_KEYS.LEVELS, INITIAL_LEVELS, Array.isArray);
   }
 
   public getLevelByCode(code: string): Level | undefined {
@@ -197,7 +241,7 @@ class StorageService {
   }
 
   public getModules(levelId?: string): Module[] {
-    const modules: Module[] = this.safeReadJSON(STORAGE_KEYS.MODULES, INITIAL_MODULES);
+    const modules: Module[] = this.safeReadJSON(STORAGE_KEYS.MODULES, INITIAL_MODULES, Array.isArray);
     if (levelId) {
       return modules.filter(m => m.levelId === levelId).sort((a, b) => a.orderIndex - b.orderIndex);
     }
@@ -205,7 +249,7 @@ class StorageService {
   }
 
   public getLessons(moduleId?: string, levelCode?: CEFRLevelCode): Lesson[] {
-    let lessons: Lesson[] = this.safeReadJSON(STORAGE_KEYS.LESSONS, INITIAL_LESSONS);
+    let lessons: Lesson[] = this.safeReadJSON(STORAGE_KEYS.LESSONS, INITIAL_LESSONS, Array.isArray);
     
     if (moduleId) {
       lessons = lessons.filter(l => l.moduleId === moduleId);
@@ -222,15 +266,19 @@ class StorageService {
   }
 
   public getAllVocabulary(): VocabularyItem[] {
-    return this.safeReadJSON(STORAGE_KEYS.VOCABULARY, ALL_INITIAL_VOCABULARY);
+    return this.safeReadJSON(STORAGE_KEYS.VOCABULARY, ALL_INITIAL_VOCABULARY, Array.isArray);
   }
 
   public getAllGrammar(): GrammarTopic[] {
-    return this.safeReadJSON(STORAGE_KEYS.GRAMMAR, ALL_INITIAL_GRAMMAR);
+    return this.safeReadJSON(STORAGE_KEYS.GRAMMAR, ALL_INITIAL_GRAMMAR, Array.isArray);
   }
 
   public getAllShadowing(levelCode?: CEFRLevelCode): ShadowingExercise[] {
-    const list: ShadowingExercise[] = this.safeReadJSON(STORAGE_KEYS.SHADOWING, ALL_INITIAL_SHADOWING);
+    const list: ShadowingExercise[] = this.safeReadJSON(
+      STORAGE_KEYS.SHADOWING,
+      ALL_INITIAL_SHADOWING,
+      Array.isArray
+    );
     if (levelCode) {
       return list.filter(s => s.levelCode === levelCode);
     }
@@ -315,7 +363,11 @@ class StorageService {
   // --- User Profile & Authentication ---
 
   public getUserProfile(): UserProfile | null {
-    return this.safeReadJSON<UserProfile | null>(STORAGE_KEYS.USER_PROFILE, null);
+    return this.safeReadJSON<UserProfile | null>(
+      STORAGE_KEYS.USER_PROFILE,
+      null,
+      v => v === null || isPlainObject(v)
+    );
   }
 
   public saveUserProfile(profile: UserProfile): void {
@@ -330,7 +382,12 @@ class StorageService {
   // --- Progress Tracking (Section 13) ---
 
   public getLessonProgress(): Record<string, LessonProgress> {
-    return this.safeReadJSON<Record<string, LessonProgress>>(STORAGE_KEYS.LESSON_PROGRESS, {});
+    const raw = this.safeReadJSON<Record<string, LessonProgress>>(
+      STORAGE_KEYS.LESSON_PROGRESS,
+      {},
+      isPlainObject
+    );
+    return this.filterValidRecords<LessonProgress>(raw, STORAGE_KEYS.LESSON_PROGRESS);
   }
 
   public updateLessonProgress(
@@ -380,7 +437,12 @@ class StorageService {
   }
 
   public getVocabularyProgress(): Record<string, VocabularyProgress> {
-    return this.safeReadJSON<Record<string, VocabularyProgress>>(STORAGE_KEYS.VOCAB_PROGRESS, {});
+    const raw = this.safeReadJSON<Record<string, VocabularyProgress>>(
+      STORAGE_KEYS.VOCAB_PROGRESS,
+      {},
+      isPlainObject
+    );
+    return this.filterValidRecords<VocabularyProgress>(raw, STORAGE_KEYS.VOCAB_PROGRESS);
   }
 
   public toggleFavoriteVocab(vocabId: string): boolean {
@@ -461,9 +523,23 @@ class StorageService {
     try {
       const data = localStorage.getItem(STORAGE_KEYS.CERTIFICATE_TESTS);
       if (!data) return INITIAL_CERTIFICATE_TESTS;
-      const parsed: CertificateTest[] = JSON.parse(data);
+      const raw: CertificateTest[] = JSON.parse(data);
+      if (!Array.isArray(raw)) {
+        console.warn('[StorageService] Sertifikat testlari shakli buzilgan, standart to‘plamga qaytarildi.');
+        localStorage.setItem(STORAGE_KEYS.CERTIFICATE_TESTS, JSON.stringify(INITIAL_CERTIFICATE_TESTS));
+        return INITIAL_CERTIFICATE_TESTS;
+      }
+      // Har bir test to‘liq tuzilgan bo‘lishi shart: bo‘limlar massivi bo‘lmasa
+      // test xonasi render paytida portlaydi.
+      const parsed: CertificateTest[] = raw.filter(
+        t => !!t && typeof t.id === 'string' && Array.isArray(t.sections)
+      );
+      if (parsed.length === 0) {
+        console.warn('[StorageService] Yaroqli sertifikat testi topilmadi, standart to‘plam qaytarildi.');
+        return INITIAL_CERTIFICATE_TESTS;
+      }
       // Auto-migrate if stored tests don't have separated listening/reading tests
-      const hasSeparatedSkills = Array.isArray(parsed) && parsed.some(t => t.skillFocus === 'listening');
+      const hasSeparatedSkills = parsed.some(t => t.skillFocus === 'listening');
       if (!hasSeparatedSkills) {
         localStorage.setItem(STORAGE_KEYS.CERTIFICATE_TESTS, JSON.stringify(INITIAL_CERTIFICATE_TESTS));
         return INITIAL_CERTIFICATE_TESTS;
@@ -476,17 +552,11 @@ class StorageService {
 
   public getCertificateTestById(testId: string): CertificateTest | undefined {
     const tests = this.getCertificateTests();
+    if (!testId) return undefined;
+    // Faqat ANIQ moslik: xato ID boshqa imtihonni ochib yubormasligi kerak.
     const cleanId = testId.toLowerCase().replace(/[^a-z0-9]/g, '');
-    return tests.find(t => 
-      t.id === testId || 
-      t.id.toLowerCase().replace(/[^a-z0-9]/g, '') === cleanId
-    ) || tests.find(t =>
-      (cleanId.includes('listening') && cleanId.includes('a11') && t.id.includes('a1-1-listening')) ||
-      (cleanId.includes('listening') && cleanId.includes('a12') && t.id.includes('a1-2-listening')) ||
-      (cleanId.includes('reading') && cleanId.includes('a11') && t.id.includes('a1-1-reading')) ||
-      (cleanId.includes('reading') && cleanId.includes('a12') && t.id.includes('a1-2-reading')) ||
-      (cleanId.includes('a11') && t.levelCode === 'a1-1') ||
-      (cleanId.includes('a12') && t.levelCode === 'a1-2')
+    return tests.find(
+      t => t.id === testId || t.id.toLowerCase().replace(/[^a-z0-9]/g, '') === cleanId
     );
   }
 
@@ -503,7 +573,11 @@ class StorageService {
   }
 
   public getCertificateAttempts(userId?: string): CertificateAttempt[] {
-    const list: CertificateAttempt[] = this.safeReadJSON<CertificateAttempt[]>(STORAGE_KEYS.CERTIFICATE_ATTEMPTS, []);
+    const list: CertificateAttempt[] = this.safeReadJSON<CertificateAttempt[]>(
+      STORAGE_KEYS.CERTIFICATE_ATTEMPTS,
+      [],
+      Array.isArray
+    );
     if (userId) {
       return list.filter(a => a.userId === userId);
     }
@@ -527,7 +601,11 @@ class StorageService {
   }
 
   public getCertificates(userId?: string): Certificate[] {
-    const list: Certificate[] = this.safeReadJSON<Certificate[]>(STORAGE_KEYS.CERTIFICATES, []);
+    const list: Certificate[] = this.safeReadJSON<Certificate[]>(
+      STORAGE_KEYS.CERTIFICATES,
+      [],
+      Array.isArray
+    );
     if (userId) {
       return list.filter(c => c.userId === userId);
     }
