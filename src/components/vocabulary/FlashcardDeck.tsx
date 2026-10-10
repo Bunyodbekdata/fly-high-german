@@ -82,9 +82,9 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({ items, onClose }) 
       };
     }
     return {
-      bg: 'from-purple-500/10 via-purple-50/50 to-white dark:from-purple-950/40 dark:via-slate-900 dark:to-slate-900',
-      border: 'border-purple-400 dark:border-purple-600',
-      text: 'text-purple-600 dark:text-purple-400',
+      bg: 'from-violet-500/10 via-violet-50/50 to-white dark:from-violet-950/40 dark:via-slate-900 dark:to-slate-900',
+      border: 'border-violet-400 dark:border-violet-600',
+      text: 'text-violet-600 dark:text-violet-400',
       glow: 'glow-plural',
     };
   };

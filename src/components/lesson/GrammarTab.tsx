@@ -36,12 +36,12 @@ export const GrammarTab: React.FC<GrammarTabProps> = ({ grammar, grammarDiscover
           {/* Discovery Examples */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-3">
             {grammarDiscovery.discoveryExamples.map((ex, idx) => (
-              <div key={idx} className="p-3.5 rounded-2xl bg-white dark:bg-slate-800 border border-indigo-100 dark:border-slate-700 shadow-2xs">
+              <div key={idx} className="p-3.5 rounded-2xl bg-white dark:bg-slate-800 border border-brand-100 dark:border-slate-700 shadow-2xs">
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-slate-900 dark:text-white text-sm sm:text-base">{ex.german}</span>
                   <AudioButton text={ex.german} size="sm" />
                 </div>
-                <div className="text-xs text-indigo-600 dark:text-indigo-400 font-semibold font-mono mt-1">
+                <div className="text-xs text-brand-600 dark:text-brand-400 font-semibold font-mono mt-1">
                   E‘tibor bering: {ex.highlight}
                 </div>
                 <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{ex.uzbek}</div>
@@ -50,14 +50,14 @@ export const GrammarTab: React.FC<GrammarTabProps> = ({ grammar, grammarDiscover
           </div>
 
           {/* Pattern Explanation & Formula */}
-          <div className="p-4 rounded-2xl bg-indigo-900 dark:bg-indigo-950 text-white space-y-2 shadow-sm border border-indigo-800">
-            <span className="text-xs font-bold text-indigo-300 uppercase tracking-wider block">
+          <div className="p-4 rounded-2xl bg-brand-900 dark:bg-brand-950 text-white space-y-2 shadow-sm border border-brand-800">
+            <span className="text-xs font-bold text-brand-300 uppercase tracking-wider block">
               Xulosa va qoida formulasi:
             </span>
-            <p className="text-xs sm:text-sm text-indigo-100 leading-relaxed font-medium">
+            <p className="text-xs sm:text-sm text-brand-100 leading-relaxed font-medium">
               {grammarDiscovery.patternExplanationUz}
             </p>
-            <div className="pt-2 border-t border-indigo-800 text-xs sm:text-sm font-mono font-bold text-amber-300">
+            <div className="pt-2 border-t border-brand-800 text-xs sm:text-sm font-mono font-bold text-amber-300">
               📐 Formula: {grammarDiscovery.ruleFormulaUz}
             </div>
           </div>

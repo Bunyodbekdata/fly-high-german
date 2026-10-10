@@ -373,7 +373,7 @@ export const AdminCertificateTestsTab: React.FC = () => {
                           {sec.skill === 'reading' ? (
                             <BookOpen size={16} className="text-blue-500" />
                           ) : (
-                            <Headphones size={16} className="text-purple-500" />
+                            <Headphones size={16} className="text-brand-500" />
                           )}
                           <h5 className="text-xs font-black uppercase text-slate-800 dark:text-slate-200">
                             {sec.titleDe || sec.titleUz} ({sec.questions.length} ta savol)
@@ -414,7 +414,7 @@ export const AdminCertificateTestsTab: React.FC = () => {
                               )}
 
                               {q.audioText && (
-                                <p className="text-[11px] text-purple-600 dark:text-purple-400 truncate max-w-lg">
+                                <p className="text-[11px] text-brand-600 dark:text-brand-400 truncate max-w-lg">
                                   🎧 Audio matn: {q.audioText.substring(0, 80)}...
                                 </p>
                               )}
@@ -597,7 +597,7 @@ export const AdminCertificateTestsTab: React.FC = () => {
               </div>
 
               <div>
-                <label className="font-bold text-purple-700 dark:text-purple-300 block mb-1">
+                <label className="font-bold text-brand-700 dark:text-brand-300 block mb-1">
                   🎧 Audio ovoz matni (Hören savoli uchun)
                 </label>
                 <textarea

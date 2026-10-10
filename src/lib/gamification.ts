@@ -54,7 +54,7 @@ export const RANKS: GamificationRank[] = [
     minXp: 801,
     maxXp: 1500,
     color: 'text-blue-700 bg-blue-100 border-blue-300 dark:bg-blue-950/60 dark:text-blue-400 dark:border-blue-800',
-    gradient: 'from-blue-600 to-indigo-700',
+    gradient: 'from-blue-600 to-blue-800',
     descriptionUz: 'A1.2 darslarida murakkab fe‘llar, Dativ va o‘tgan zamon (Perfekt) bo‘yicha tajribali o‘quvchi.'
   },
   {
@@ -64,8 +64,8 @@ export const RANKS: GamificationRank[] = [
     badge: '👑',
     minXp: 1501,
     maxXp: 5000,
-    color: 'text-purple-700 bg-purple-100 border-purple-300 dark:bg-purple-950/60 dark:text-purple-400 dark:border-purple-800',
-    gradient: 'from-purple-600 to-pink-600',
+    color: 'text-brand-700 bg-brand-100 border-brand-300 dark:bg-brand-950/60 dark:text-brand-400 dark:border-brand-800',
+    gradient: 'from-brand-600 to-pink-600',
     descriptionUz: 'A1 bosqichini 100% muvaffaqiyatli yakunlagan xalqaro darajadagi bitiruvchi.'
   }
 ];

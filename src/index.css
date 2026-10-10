@@ -62,7 +62,7 @@
   @apply bg-emerald-100 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800;
 }
 .article-badge-plural {
-  @apply bg-purple-100 text-purple-700 border border-purple-200 dark:bg-purple-950/60 dark:text-purple-300 dark:border-purple-800;
+  @apply bg-violet-100 text-violet-700 border border-violet-200 dark:bg-violet-950/60 dark:text-violet-300 dark:border-violet-800;
 }
 
 /* German Article Accent Text (matches badge hues, dark-mode safe) */
@@ -76,7 +76,7 @@
   @apply text-emerald-600 dark:text-emerald-400;
 }
 .article-accent-plural {
-  @apply text-purple-600 dark:text-purple-400;
+  @apply text-violet-600 dark:text-violet-400;
 }
 
 /* German Article Card Glows */

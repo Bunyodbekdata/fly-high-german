@@ -40,7 +40,7 @@ export const YOUTUBE_CHANNELS: YoutubeChannel[] = [
     instructorUz: 'Ibrat Farzandlari ustozlari',
     descriptionUz: 'Yoshlar ishlari agentligining eng mashhur loyihasi. Salomlashish, tanishuvlar, grammatika, kundalik dialoglar va A1 imtihonga tayyorgarlik bo‘yicha 100 ta to‘liq video dars.',
     avatarUrl: 'https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&fit=crop&w=200&h=200&q=80',
-    bannerGradient: 'from-blue-700 via-indigo-700 to-purple-800',
+    bannerGradient: 'from-blue-700 via-blue-800 to-blue-900',
     totalVideos: 100,
     tags: ['Noldan boshlash', 'Grammatika', 'Muloqot', 'A1', 'Ibrat'],
     externalPlaylistUrl: 'https://youtube.com/playlist?list=PLkREkayoYCyIYpyhgshcTvsBTsKU8oJUi'
@@ -82,7 +82,7 @@ export const YOUTUBE_CHANNELS: YoutubeChannel[] = [
     instructorUz: 'Ibrat Farzandlari ustozlari',
     descriptionUz: 'A1 darajasini tugatganlar uchun davomiy bosqich: modal fe’llar, o‘tgan zamon (Perfekt), fe’l boshqaruvi va erkin so‘zlashuv mavzulari.',
     avatarUrl: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=200&h=200&q=80',
-    bannerGradient: 'from-purple-700 via-pink-700 to-rose-700',
+    bannerGradient: 'from-brand-700 via-pink-700 to-rose-700',
     totalVideos: 50,
     tags: ['A2', 'Perfekt', 'Modalverben', 'So‘zlashuv']
   }

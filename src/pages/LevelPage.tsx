@@ -180,7 +180,7 @@ export const LevelPage: React.FC = () => {
             <div className="text-[11px] text-slate-500 dark:text-slate-400">Reading</div>
           </div>
           <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800">
-            <PenTool size={18} className="mx-auto text-purple-600 dark:text-purple-400 mb-1" />
+            <PenTool size={18} className="mx-auto text-brand-600 dark:text-brand-400 mb-1" />
             <div className="text-base font-extrabold text-slate-900 dark:text-white">{totalWriting || 15}</div>
             <div className="text-[11px] text-slate-500 dark:text-slate-400">Writing</div>
           </div>
@@ -311,7 +311,7 @@ export const LevelPage: React.FC = () => {
                                 <Clock size={11} className="mr-0.5" />
                                 {lesson.estimatedMinutes} daq
                               </span>
-                              <span className="text-[10px] font-bold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 px-2 py-0.5 rounded-md border border-indigo-200 dark:border-indigo-800">
+                              <span className="text-[10px] font-bold text-brand-700 dark:text-brand-300 bg-brand-50 dark:bg-brand-950/60 px-2 py-0.5 rounded-md border border-brand-200 dark:border-brand-800">
                                 9 ta bosqich
                               </span>
                             </div>

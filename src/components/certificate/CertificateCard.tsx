@@ -110,7 +110,7 @@ export const CertificateCard: React.FC<CertificateCardProps> = ({ certificate })
           {hasListening && (
             <div>
               <span className="text-[10px] uppercase font-bold text-slate-400 block">🎧 Hören</span>
-              <span className="text-base sm:text-lg font-black text-purple-600 dark:text-purple-400">
+              <span className="text-base sm:text-lg font-black text-brand-600 dark:text-brand-400">
                 {listeningPct}%
               </span>
               <span className="text-[10px] text-slate-400 block">

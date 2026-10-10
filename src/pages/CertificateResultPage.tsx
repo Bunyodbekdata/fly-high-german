@@ -184,12 +184,12 @@ export const CertificateResultPage: React.FC = () => {
 
             {/* Listening (only if test has listening) */}
             {attempt.listeningMaxScore > 0 && (
-              <div className="p-4 rounded-2xl bg-purple-50/50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-900/60 text-center">
-                <span className="text-xs font-bold text-purple-700 dark:text-purple-300 uppercase flex items-center justify-center gap-1">
+              <div className="p-4 rounded-2xl bg-brand-50/50 dark:bg-brand-950/20 border border-brand-200 dark:border-brand-900/60 text-center">
+                <span className="text-xs font-bold text-brand-700 dark:text-brand-300 uppercase flex items-center justify-center gap-1">
                   <Headphones size={13} />
                   <span>🎧 Hören</span>
                 </span>
-                <p className="text-3xl font-black text-purple-600 dark:text-purple-400 my-1">
+                <p className="text-3xl font-black text-brand-600 dark:text-brand-400 my-1">
                   {listeningPct}%
                 </p>
                 <span className="text-xs text-slate-500">
@@ -222,7 +222,7 @@ export const CertificateResultPage: React.FC = () => {
                 )}
                 {attempt.listeningMaxScore > 0 && (
                   listeningPct >= 80 ? (
-                    <p className="text-purple-700 dark:text-purple-300">
+                    <p className="text-brand-700 dark:text-brand-300">
                       • 🎧 <strong>Hören:</strong> Tinglab tushunish bo‘yicha eshitish sezgingiz juda yaxshi.
                     </p>
                   ) : (
@@ -243,7 +243,7 @@ export const CertificateResultPage: React.FC = () => {
                   </p>
                 )}
                 {attempt.listeningMaxScore > 0 && listeningPct < 60 && (
-                  <p className="text-purple-700 dark:text-purple-300">
+                  <p className="text-brand-700 dark:text-brand-300">
                     • 🎧 <strong>Tinglash bo‘limi:</strong> Tinglash mashqlarini sekinroq tezlikda bir necha bor qayta eshitish.
                   </p>
                 )}
@@ -358,8 +358,8 @@ export const CertificateResultPage: React.FC = () => {
 
                     {/* Transcript if listening question */}
                     {q.sectionType === 'listening' && (q.transcriptDe || q.audioText) && (
-                      <div className="bg-purple-50/70 dark:bg-purple-950/30 p-3 rounded-xl border border-purple-200/60 dark:border-purple-900/40 text-xs space-y-1">
-                        <span className="font-bold text-purple-700 dark:text-purple-300 flex items-center gap-1 text-[11px]">
+                      <div className="bg-brand-50/70 dark:bg-brand-950/30 p-3 rounded-xl border border-brand-200/60 dark:border-brand-900/40 text-xs space-y-1">
+                        <span className="font-bold text-brand-700 dark:text-brand-300 flex items-center gap-1 text-[11px]">
                           <Volume2 size={13} />
                           <span>Audio transkripti:</span>
                         </span>

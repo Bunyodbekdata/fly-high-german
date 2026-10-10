@@ -34,7 +34,7 @@ export const VocabCard: React.FC<VocabCardProps> = ({ item }) => {
   };
 
   const articleStyles = (item.article && articleConfig[item.article]) || {
-    border: 'border-l-4 border-l-purple-500 dark:border-l-purple-400',
+    border: 'border-l-4 border-l-violet-500 dark:border-l-violet-400',
     accent: 'article-accent-plural',
     glow: 'hover:shadow-glow-plural',
   };

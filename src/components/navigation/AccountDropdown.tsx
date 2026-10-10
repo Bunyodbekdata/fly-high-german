@@ -69,7 +69,7 @@ export const AccountDropdown: React.FC = () => {
         aria-haspopup="true"
         aria-label="Hisob menyusi"
       >
-        <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-brand-600 to-indigo-600 text-white flex items-center justify-center text-xs font-bold shadow-xs">
+        <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-brand-500 to-brand-700 text-white flex items-center justify-center text-xs font-bold shadow-xs">
           {initial}
         </div>
         <span className="max-w-[100px] truncate hidden md:inline font-bold">
@@ -182,13 +182,13 @@ export const AccountDropdown: React.FC = () => {
               <Link
                 to="/admin"
                 onClick={() => setIsOpen(false)}
-                className="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-indigo-700 dark:text-indigo-300 bg-indigo-50/70 dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition"
+                className="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-brand-700 dark:text-brand-300 bg-brand-50/70 dark:bg-brand-950/40 hover:bg-brand-100 dark:hover:bg-brand-900/50 transition"
               >
                 <div className="flex items-center space-x-2.5">
-                  <ShieldCheck size={15} className="text-indigo-600 dark:text-indigo-400" />
+                  <ShieldCheck size={15} className="text-brand-600 dark:text-brand-400" />
                   <span>Admin Panel</span>
                 </div>
-                <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-indigo-200 dark:bg-indigo-800 text-indigo-900 dark:text-indigo-100">
+                <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-brand-200 dark:bg-brand-800 text-brand-900 dark:text-brand-100">
                   Admin
                 </span>
               </Link>

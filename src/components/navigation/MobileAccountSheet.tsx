@@ -68,7 +68,7 @@ export const MobileAccountSheet: React.FC<MobileAccountSheetProps> = ({ isOpen, 
         {/* Header */}
         <div className="px-5 py-3 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-600 to-indigo-600 text-white flex items-center justify-center text-sm font-bold shadow-xs">
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-500 to-brand-700 text-white flex items-center justify-center text-sm font-bold shadow-xs">
               {initial}
             </div>
             <div>
@@ -177,13 +177,13 @@ export const MobileAccountSheet: React.FC<MobileAccountSheetProps> = ({ isOpen, 
                   <Link
                     to="/admin"
                     onClick={onClose}
-                    className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-bold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60"
+                    className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-bold text-brand-700 dark:text-brand-300 bg-brand-50 dark:bg-brand-950/60"
                   >
                     <div className="flex items-center space-x-3">
-                      <ShieldCheck size={18} className="text-indigo-600 dark:text-indigo-400" />
+                      <ShieldCheck size={18} className="text-brand-600 dark:text-brand-400" />
                       <span>Admin Panel</span>
                     </div>
-                    <span className="text-[10px] uppercase font-black px-1.5 py-0.5 rounded bg-indigo-200 dark:bg-indigo-800 text-indigo-900 dark:text-indigo-100">
+                    <span className="text-[10px] uppercase font-black px-1.5 py-0.5 rounded bg-brand-200 dark:bg-brand-800 text-brand-900 dark:text-brand-100">
                       Admin
                     </span>
                   </Link>

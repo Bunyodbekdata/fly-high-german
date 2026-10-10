@@ -172,7 +172,7 @@ export const Navbar: React.FC = () => {
                 className="lg:hidden flex items-center space-x-1.5 p-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700"
                 aria-label="Profil va hisob"
               >
-                <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-brand-600 to-indigo-600 text-white flex items-center justify-center text-xs font-bold">
+                <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-brand-500 to-brand-700 text-white flex items-center justify-center text-xs font-bold">
                   {user ? (user.name || 'T').charAt(0).toUpperCase() : <User size={13} />}
                 </div>
               </button>

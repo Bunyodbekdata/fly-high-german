@@ -352,7 +352,7 @@ export const ExerciseRunner: React.FC<ExerciseRunnerProps> = ({
                 } else if (isDas) {
                   itemClasses = 'border-emerald-200 dark:border-emerald-800/60 hover:border-emerald-500 hover:shadow-glow-das bg-white dark:bg-slate-850 text-emerald-900 dark:text-emerald-300';
                 } else if (isPlural) {
-                  itemClasses = 'border-purple-200 dark:border-purple-800/60 hover:border-purple-500 hover:shadow-glow-plural bg-white dark:bg-slate-850 text-purple-900 dark:text-purple-300';
+                  itemClasses = 'border-brand-200 dark:border-brand-800/60 hover:border-brand-500 bg-white dark:bg-slate-850 text-brand-900 dark:text-brand-300';
                 }
               }
 
@@ -364,7 +364,7 @@ export const ExerciseRunner: React.FC<ExerciseRunnerProps> = ({
                 } else if (isArticleType && isDas) {
                   itemClasses = 'border-emerald-500 dark:border-emerald-500 bg-emerald-50/90 dark:bg-emerald-950/60 ring-2 ring-emerald-500/20 shadow-glow-das text-emerald-950 dark:text-emerald-200 font-bold';
                 } else if (isArticleType && isPlural) {
-                  itemClasses = 'border-purple-500 dark:border-purple-500 bg-purple-50/90 dark:bg-purple-950/60 ring-2 ring-purple-500/20 shadow-glow-plural text-purple-950 dark:text-purple-200 font-bold';
+                  itemClasses = 'border-brand-500 dark:border-brand-500 bg-brand-50/90 dark:bg-brand-950/60 ring-2 ring-brand-500/20 text-brand-950 dark:text-brand-200 font-bold';
                 } else {
                   itemClasses = 'border-brand-500 dark:border-brand-500 bg-brand-50/80 dark:bg-brand-950/50 ring-2 ring-brand-500/20 text-brand-950 dark:text-brand-200 font-bold';
                 }

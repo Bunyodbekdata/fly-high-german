@@ -179,7 +179,7 @@ export const CertificateTestsPage: React.FC = () => {
               onClick={() => setActiveSkillTab('listening')}
               className={`flex items-center justify-center space-x-2 py-3 px-3 sm:px-4 rounded-2xl font-bold text-xs sm:text-sm transition-all ${
                 activeSkillTab === 'listening'
-                  ? 'bg-purple-600 text-white shadow-md shadow-purple-500/20 scale-[1.01]'
+                  ? 'bg-brand-600 text-white shadow-md shadow-brand-500/20 scale-[1.01]'
                   : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
               }`}
             >
@@ -252,13 +252,13 @@ export const CertificateTestsPage: React.FC = () => {
               const isReading = test.skillFocus === 'reading';
 
               const badgeColor = isListening 
-                ? 'bg-purple-600' 
+                ? 'bg-brand-600' 
                 : isReading 
                 ? 'bg-blue-600' 
                 : 'bg-brand-600';
 
               const btnColor = isListening
-                ? 'bg-purple-600 hover:bg-purple-700 shadow-purple-600/20'
+                ? 'bg-brand-600 hover:bg-brand-700 shadow-brand-600/20'
                 : isReading
                 ? 'bg-blue-600 hover:bg-blue-700 shadow-blue-600/20'
                 : 'bg-brand-600 hover:bg-brand-700 shadow-brand-600/20';
@@ -306,7 +306,7 @@ export const CertificateTestsPage: React.FC = () => {
                       </span>
                       <div className="flex flex-wrap gap-2">
                         {isListening && (
-                          <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-xl bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800 text-purple-700 dark:text-purple-300 text-xs font-semibold">
+                          <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-xl bg-brand-50 dark:bg-brand-950/40 border border-brand-200 dark:border-brand-800 text-brand-700 dark:text-brand-300 text-xs font-semibold">
                             <Headphones size={13} />
                             <span>🎧 Hören (Tinglash — {questionCount} ta audio)</span>
                           </span>
@@ -323,7 +323,7 @@ export const CertificateTestsPage: React.FC = () => {
                               <BookOpen size={13} />
                               <span>📖 Lesen (6 ta matn)</span>
                             </span>
-                            <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-xl bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800 text-purple-700 dark:text-purple-300 text-xs font-semibold">
+                            <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-xl bg-brand-50 dark:bg-brand-950/40 border border-brand-200 dark:border-brand-800 text-brand-700 dark:text-brand-300 text-xs font-semibold">
                               <Headphones size={13} />
                               <span>🎧 Hören (6 ta audio)</span>
                             </span>

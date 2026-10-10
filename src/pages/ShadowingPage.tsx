@@ -306,7 +306,7 @@ export const ShadowingPage: React.FC = () => {
                   <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block">
                     O‘zlashtirish foizi
                   </span>
-                  <p className="text-xl sm:text-2xl font-black text-indigo-600 dark:text-indigo-400 mt-1">
+                  <p className="text-xl sm:text-2xl font-black text-brand-600 dark:text-brand-400 mt-1">
                     {levelStats.percentage}%
                   </p>
                 </div>

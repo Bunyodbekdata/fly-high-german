@@ -257,8 +257,8 @@ export const VocabularyPage: React.FC = () => {
                 onClick={() => setOnlyDueSrs(!onlyDueSrs)}
                 className={`px-3 py-1 rounded-xl transition flex items-center space-x-1.5 ${
                   onlyDueSrs
-                    ? 'bg-indigo-600 text-white font-bold shadow-2xs'
-                    : 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 border border-indigo-200 dark:border-indigo-800'
+                    ? 'bg-brand-600 text-white font-bold shadow-2xs'
+                    : 'bg-brand-50 dark:bg-brand-950/60 text-brand-700 dark:text-brand-300 hover:bg-brand-100 border border-brand-200 dark:border-brand-800'
                 }`}
               >
                 <Clock size={13} />
