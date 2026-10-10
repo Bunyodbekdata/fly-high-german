@@ -91,6 +91,11 @@ export interface CertificateAttempt {
   answers: Record<string, CertificateAttemptAnswer>;
   certificateId?: string;
   status: 'in_progress' | 'submitted' | 'expired';
+  /**
+   * Natija qayerda hisoblandi: 'server' — Supabase RPC tasdiqlagan (ishonchli),
+   * 'local' yoki belgilanmagan — offline/demo rejim.
+   */
+  gradedBy?: 'server' | 'local';
 }
 
 export interface Certificate {

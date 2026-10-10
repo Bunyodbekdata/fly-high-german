@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { storageService } from '../lib/storage';
+import { createAttemptId, submitAttemptForServerGrading } from '../lib/certificateGrading';
 import { useAuth } from '../context/AuthContext';
 import { CertificateTest, CertificateQuestion, CertificateAttempt, CertificateAttemptAnswer, Certificate } from '../types/certificate';
 import { ListeningPlayer } from '../components/certificate/ListeningPlayer';
@@ -44,6 +45,8 @@ export const CertificateTestRoomPage: React.FC = () => {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const isSubmittingRef = useRef<boolean>(false);
   const endTimeRef = useRef<number | null>(null);
+  // Interval har doim ENG YANGI submit funksiyasini chaqirishi uchun.
+  const submitRef = useRef<(wasTimeExpired?: boolean) => void>(() => {});
 
   // Keep a reference to current state so the timer interval never needs to re-subscribe on answers/flags
   const stateRef = useRef({
@@ -95,7 +98,11 @@ export const CertificateTestRoomPage: React.FC = () => {
             : 0;
           setCurrentQuestionIndex(safeSavedIdx);
 
-          if (parsed.endTime && typeof parsed.endTime === 'number' && parsed.endTime > Date.now()) {
+          // MUHIM: imtihonni "pauza" qilib bo'lmaydi. Saqlangan muddat o'tgan
+          // bo'lsa uni qayta tiklamaymiz — aks holda tabni yopib, keyin qaytib
+          // kelgan talaba qolgan vaqtni yana oladi. Muddat o'tgan bo'lsa taymer
+          // darhol 0 ga tushadi va urinish avtomatik yakunlanadi.
+          if (typeof parsed.endTime === 'number' && parsed.endTime > 0) {
             endTimeRef.current = parsed.endTime;
           } else {
             endTimeRef.current = Date.now() + parsed.timeLeft * 1000;
@@ -184,7 +191,7 @@ export const CertificateTestRoomPage: React.FC = () => {
       if (remainingSeconds <= 0) {
         clearInterval(interval);
         if (!isSubmittingRef.current) {
-          handleSubmitTest(true);
+          submitRef.current(true);
         }
       }
     }, 1000);
@@ -238,7 +245,7 @@ export const CertificateTestRoomPage: React.FC = () => {
   };
 
   // Finalize and Submit Test
-  const handleSubmitTest = (wasTimeExpired = false) => {
+  const handleSubmitTest = async (wasTimeExpired = false) => {
     if (!test || isSubmittingRef.current) return;
     isSubmittingRef.current = true;
     setIsSubmitting(true);
@@ -254,6 +261,15 @@ export const CertificateTestRoomPage: React.FC = () => {
     } catch {
       // ignore
     }
+
+    // Vaqt hisobi devor soatiga (endTimeRef) tayanadi: shu sababli taymer
+    // avtomatik yakunlaganda ham davomiylik to'g'ri chiqadi (avval 0 bo'lardi).
+    const durationSeconds = (test.durationMinutes || 0) * 60;
+    const deadline = endTimeRef.current;
+    const elapsedSeconds = deadline
+      ? Math.round((Date.now() - (deadline - durationSeconds * 1000)) / 1000)
+      : durationSeconds;
+    const durationSecondsUsed = Math.max(0, Math.min(durationSeconds, elapsedSeconds));
 
     // Calculate score using latest answers from ref
     const currentAnswers = stateRef.current.answers;
@@ -297,17 +313,19 @@ export const CertificateTestRoomPage: React.FC = () => {
     const listeningPercentage = listeningMaxScore > 0 ? Math.round((listeningScore / listeningMaxScore) * 100) : 0;
     const passed = percentage >= test.passingPercentage;
 
-    const attemptId = `att_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+    // Bulut rejimida ID UUID bo'ladi — serverda ham aynan shu ID bilan yoziladi.
+    const attemptId = createAttemptId(user?.id);
     const userId = user?.id || 'guest_user';
     const userName = user?.name || 'Talaba';
     const submittedAt = new Date().toISOString();
 
     let certId: string | undefined = undefined;
+    let certificateRecord: Certificate | null = null;
 
-    // Issue Certificate if Passed
+    // Sertifikat yozuvi (mahalliy). Yakuniy qaror server baholashidan keyin qabul qilinadi.
     if (passed) {
       certId = storageService.generateCertificateId(test.levelCode);
-      const newCert: Certificate = {
+      certificateRecord = {
         id: `cert_${Date.now()}`,
         certificateId: certId,
         userId,
@@ -324,7 +342,6 @@ export const CertificateTestRoomPage: React.FC = () => {
         issuedAt: submittedAt,
         status: 'valid',
       };
-      storageService.saveCertificate(newCert);
     }
 
     // Save Attempt
@@ -334,9 +351,9 @@ export const CertificateTestRoomPage: React.FC = () => {
       userName,
       testId: test.id,
       levelCode: test.levelCode,
-      startedAt: new Date(Date.now() - (test.durationMinutes * 60 - timeLeft) * 1000).toISOString(),
+      startedAt: new Date(Date.now() - durationSecondsUsed * 1000).toISOString(),
       submittedAt,
-      durationSecondsUsed: test.durationMinutes * 60 - timeLeft,
+      durationSecondsUsed,
       score: totalScore,
       maxScore,
       percentage,
@@ -350,13 +367,66 @@ export const CertificateTestRoomPage: React.FC = () => {
       certificateId: certId,
       status: wasTimeExpired ? 'expired' : 'submitted',
       answers: answersMap,
+      gradedBy: 'local',
     };
 
-    storageService.saveCertificateAttempt(attemptRecord);
+    let finalAttempt = attemptRecord;
+
+    // --- Server baholash ---
+    // Javoblar kaliti klientga tushadi, shuning uchun haqiqiy natija faqat
+    // Supabase RPC qaytargan qiymat bo'lishi kerak. Bu javob o'zgartirilsa
+    // yoki qo'lda soxta urinish yozilsa ham sertifikat berilmaydi.
+    const serverResult = await submitAttemptForServerGrading(attemptRecord, currentAnswers);
+    if (serverResult) {
+      finalAttempt = {
+        ...attemptRecord,
+        score: serverResult.score,
+        percentage: serverResult.percentage,
+        passed: serverResult.passed,
+        certificateId: serverResult.certificateId,
+        status: serverResult.passed ? 'submitted' : attemptRecord.status,
+        gradedBy: 'server',
+      };
+
+      if (serverResult.certificateId) {
+        certificateRecord = {
+          id: certificateRecord?.id || `cert_${Date.now()}`,
+          certificateId: serverResult.certificateId,
+          userId,
+          userName,
+          attemptId,
+          levelCode: test.levelCode,
+          title: test.titleDe,
+          score: serverResult.score,
+          percentage: serverResult.percentage,
+          readingScore: readingMaxScore > 0 ? finalAttempt.readingScore : undefined,
+          listeningScore: listeningMaxScore > 0 ? finalAttempt.listeningScore : undefined,
+          readingPercentage: finalAttempt.readingPercentage,
+          listeningPercentage: finalAttempt.listeningPercentage,
+          issuedAt: submittedAt,
+          status: 'valid',
+        };
+      } else {
+        // Server "o'tmadi" deb hisobladi — mahalliy sertifikat bekor qilinadi.
+        certificateRecord = null;
+      }
+    }
+
+    if (certificateRecord) {
+      storageService.saveCertificate(certificateRecord);
+    }
+
+    storageService.saveCertificateAttempt(finalAttempt);
 
     // Redirect to results page
     navigate(`/certificate-tests/results/${attemptId}`);
   };
+
+  // Eng yangi submit funksiyasini refga yozamiz — interval eski closure'da
+  // qolib ketmasligi uchun (avvalgi xatoda davomiylik 0 bo'lib qolardi).
+  useEffect(() => {
+    submitRef.current = handleSubmitTest;
+  });
 
   // Loading state
   if (loading) {
@@ -530,7 +600,7 @@ export const CertificateTestRoomPage: React.FC = () => {
                 <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
                   currentItem.sectionType === 'reading'
                     ? 'bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300'
-                    : 'bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300'
+                    : 'bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-brand-300'
                 }`}>
                   {currentItem.sectionType === 'reading' ? '📖 TEIL 1: LESEN' : '🎧 TEIL 2: HÖREN'}
                 </span>
