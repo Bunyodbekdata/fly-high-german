@@ -62,8 +62,18 @@ const saveLocalVault = (vault: Record<string, LocalAccountRecord>) => {
   }
 };
 
-// Simple consistent hash for local offline demo password verification
-const simpleHash = (s: string): string => {
+/**
+ * Mahalliy (offline) hisob tizimi — faqat demo uchun. Production buildda u
+ * `VITE_ENABLE_LOCAL_AUTH=true` bo'lmaguncha O'CHIQ: aks holda ilova
+ * Supabase autentifikatsiyasiga tayanadi.
+ */
+export const LOCAL_DEMO_AUTH_ENABLED =
+  import.meta.env.DEV || import.meta.env.VITE_ENABLE_LOCAL_AUTH === 'true';
+
+const SALTED_PREFIX = 's256';
+
+/** Eski (zaif, 32-bitli) xesh — faqat mavjud hisoblarni ko'chirish uchun. */
+const legacySimpleHash = (s: string): string => {
   let hash = 0;
   for (let i = 0; i < s.length; i++) {
     hash = (hash << 5) - hash + s.charCodeAt(i);
@@ -72,8 +82,50 @@ const simpleHash = (s: string): string => {
   return 'h_' + Math.abs(hash).toString(36);
 };
 
-// Seed default offline demo credentials if not already present
-const initLocalVault = () => {
+const randomSalt = (): string => {
+  const bytes = new Uint8Array(16);
+  if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
+    crypto.getRandomValues(bytes);
+  } else {
+    for (let i = 0; i < bytes.length; i++) bytes[i] = Math.floor(Math.random() * 256);
+  }
+  return Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+};
+
+const sha256Hex = async (value: string): Promise<string | null> => {
+  try {
+    if (typeof crypto === 'undefined' || !crypto.subtle) return null;
+    const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value));
+    return Array.from(new Uint8Array(digest), b => b.toString(16).padStart(2, '0')).join('');
+  } catch {
+    return null;
+  }
+};
+
+/** Parolni tuzli SHA-256 bilan saqlaydi: `s256$<salt>$<hash>`. */
+const hashPassword = async (password: string): Promise<string> => {
+  const salt = randomSalt();
+  const digest = await sha256Hex(`${salt}:${password}`);
+  // WebCrypto mavjud bo'lmasa zaif xeshga qaytamiz (juda eski brauzerlar).
+  return digest ? `${SALTED_PREFIX}$${salt}$${digest}` : legacySimpleHash(password);
+};
+
+const verifyPassword = async (stored: string, password: string): Promise<boolean> => {
+  if (!stored) return false;
+  if (stored.startsWith(`${SALTED_PREFIX}$`)) {
+    const [, salt, digest] = stored.split('$');
+    const candidate = await sha256Hex(`${salt}:${password}`);
+    return Boolean(candidate) && candidate === digest;
+  }
+  return stored === legacySimpleHash(password);
+};
+
+const needsRehash = (stored: string): boolean => !stored.startsWith(`${SALTED_PREFIX}$`);
+
+/** Demo hisoblarni faqat lokal rejim yoqilganda yaratamiz. */
+const initLocalVault = async () => {
+  if (!LOCAL_DEMO_AUTH_ENABLED) return;
+
   const vault = getLocalVault();
   let modified = false;
 
@@ -81,7 +133,7 @@ const initLocalVault = () => {
     vault['talaba@greatnation.uz'] = {
       name: 'Talaba',
       email: 'talaba@greatnation.uz',
-      passwordHash: simpleHash('demo123'),
+      passwordHash: await hashPassword('demo123'),
       role: 'student',
       createdAt: new Date().toISOString(),
     };
@@ -92,7 +144,7 @@ const initLocalVault = () => {
     vault['admin@greatnation.uz'] = {
       name: 'Admin Ustoz',
       email: 'admin@greatnation.uz',
-      passwordHash: simpleHash('admin123'),
+      passwordHash: await hashPassword('admin123'),
       role: 'admin',
       createdAt: new Date().toISOString(),
     };
@@ -110,7 +162,12 @@ const mapDbRowToUserProfile = (row: any, fallbackEmail = ''): UserProfile => {
     email: row.email || fallbackEmail,
     name: row.full_name || 'Talaba',
     avatarUrl: row.avatar_url,
-    role: row.role || (isEmailAdmin(row.email || fallbackEmail) ? 'admin' : 'student'),
+    // Bulut rejimida rol ma'lumotlar bazasidan olinadi; env'dagi admin email
+    // faqat zaxira (UI) signali.
+    role:
+      row.role === 'admin' || (!row.role && isEmailAdmin(row.email || fallbackEmail))
+        ? 'admin'
+        : 'student',
     currentLevel: (row.current_level as CEFRLevelCode) || 'a1-1',
     dailyGoalMinutes: row.daily_goal_minutes ?? 20,
     streakDays: row.streak_days ?? 0,
@@ -128,7 +185,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Synchronize with Supabase Auth state if configured
   useEffect(() => {
-    initLocalVault();
+    void initLocalVault();
 
     const client = supabase;
     if (!isSupabaseConfigured || !client) {
@@ -182,27 +239,40 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
 
     // 2. Subscribe to auth changes (login, logout, token refresh)
-    const { data: { subscription } } = client.auth.onAuthStateChange(async (event, session) => {
+    // Diqqat: callback ICHIDA to'g'ridan-to'g'ri Supabase so'rovi yuborish
+    // tavsiya etilmaydi (auth lock tufayli osilib qolish xavfi bor).
+    // Shu sababli profil sinxronizatsiyasini keyingi tick'ka suramiz.
+    const { data: { subscription } } = client.auth.onAuthStateChange((event, session) => {
       if (!isMounted) return;
 
       if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') {
-        if (session?.user) {
-          try {
-            const { data: profile } = await client
-              .from('profiles')
-              .select('*')
-              .eq('id', session.user.id)
-              .maybeSingle();
+        const sessionUser = session?.user;
+        if (!sessionUser) return;
 
-            if (profile && isMounted) {
-              const mapped = mapDbRowToUserProfile(profile, session.user.email || '');
-              setUser(mapped);
-              storageService.saveUserProfile(mapped);
+        setTimeout(() => {
+          if (!isMounted) return;
+          void (async () => {
+            try {
+              const { data: profile, error } = await client
+                .from('profiles')
+                .select('*')
+                .eq('id', sessionUser.id)
+                .maybeSingle();
+
+              if (error) {
+                console.warn('[Auth] Profilni o‘qishda xatolik:', error.message);
+              }
+
+              if (profile && isMounted) {
+                const mapped = mapDbRowToUserProfile(profile, sessionUser.email || '');
+                setUser(mapped);
+                storageService.saveUserProfile(mapped);
+              }
+            } catch (err) {
+              console.error('Error handling auth state change:', err);
             }
-          } catch (err) {
-            console.error('Error handling auth state change:', err);
-          }
-        }
+          })();
+        }, 0);
       } else if (event === 'SIGNED_OUT') {
         const guestUser: UserProfile = {
           id: 'usr-guest',
@@ -301,64 +371,49 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     }
 
-    // 2. Safe Local / Offline / Demo Mode
+    // 2. Local / Offline rejim (faqat demo uchun yoqilgan bo'lsa)
+    if (!LOCAL_DEMO_AUTH_ENABLED) {
+      return {
+        success: false,
+        error:
+          'Bulut autentifikatsiyasi sozlanmagan (VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY). Iltimos, administrator bilan bog‘laning.',
+      };
+    }
+
     const vault = getLocalVault();
     const account = vault[trimmedEmail];
 
-    if (account) {
-      if (account.passwordHash !== simpleHash(trimmedPass)) {
-        return { success: false, error: 'Parol noto‘g‘ri kiritildi.' };
-      }
-      const existing = storageService.getUserProfile();
-      const role = isEmailAdmin(trimmedEmail) ? 'admin' : account.role;
-      const loggedInUser: UserProfile = {
-        id: 'usr-' + trimmedEmail.replace(/[^a-z0-9]/gi, '_'),
-        email: trimmedEmail,
-        name: account.name,
-        role,
-        currentLevel: existing?.currentLevel || 'a1-1',
-        dailyGoalMinutes: existing?.dailyGoalMinutes || 20,
-        streakDays: existing?.streakDays ?? 0,
-        xpPoints: existing?.xpPoints ?? 0,
-        lastActiveDate: existing?.lastActiveDate,
-        createdAt: account.createdAt,
-      };
-      storageService.saveUserProfile(loggedInUser);
-      setUser(loggedInUser);
-      return { success: true };
+    // Xavfsizlik: ilgari har qanday email+parol bilan hisob AVTOMATIK yaratilardi.
+    if (!account) {
+      return { success: false, error: 'Bunday hisob topilmadi. Iltimos, avval ro‘yxatdan o‘ting.' };
     }
 
-    // New local account creation on the fly if not in vault
-    const role = isEmailAdmin(trimmedEmail) ? 'admin' : 'student';
-    if (role === 'admin' && trimmedPass !== 'admin123') {
-      return { success: false, error: 'Admin hisobi paroli noto‘g‘ri!' };
+    if (!(await verifyPassword(account.passwordHash, trimmedPass))) {
+      return { success: false, error: 'Parol noto‘g‘ri kiritildi.' };
     }
 
-    vault[trimmedEmail] = {
-      name: role === 'admin' ? 'Admin Ustoz' : 'Talaba',
-      email: trimmedEmail,
-      passwordHash: simpleHash(trimmedPass),
-      role,
-      createdAt: new Date().toISOString(),
-    };
-    saveLocalVault(vault);
+    // Eski zaif xeshni birinchi muvaffaqiyatli kirishda tuzli SHA-256 ga o'tkazamiz.
+    if (needsRehash(account.passwordHash)) {
+      vault[trimmedEmail] = { ...account, passwordHash: await hashPassword(trimmedPass) };
+      saveLocalVault(vault);
+    }
 
     const existing = storageService.getUserProfile();
-    const newUser: UserProfile = {
-      id: 'usr-' + Date.now(),
+    const role = isEmailAdmin(trimmedEmail) ? 'admin' : account.role;
+    const loggedInUser: UserProfile = {
+      id: 'usr-' + trimmedEmail.replace(/[^a-z0-9]/gi, '_'),
       email: trimmedEmail,
-      name: role === 'admin' ? 'Admin Ustoz' : (existing?.name || 'Talaba'),
+      name: account.name,
       role,
       currentLevel: existing?.currentLevel || 'a1-1',
       dailyGoalMinutes: existing?.dailyGoalMinutes || 20,
       streakDays: existing?.streakDays ?? 0,
       xpPoints: existing?.xpPoints ?? 0,
       lastActiveDate: existing?.lastActiveDate,
-      createdAt: new Date().toISOString(),
+      createdAt: account.createdAt,
     };
-
-    storageService.saveUserProfile(newUser);
-    setUser(newUser);
+    storageService.saveUserProfile(loggedInUser);
+    setUser(loggedInUser);
     return { success: true };
   }, []);
 
@@ -400,17 +455,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (data.user) {
           const role = isEmailAdmin(trimmedEmail) ? 'admin' : 'student';
 
-          // Create row in public.profiles table
-          await client.from('profiles').upsert({
+          // Profil qatorini yaratamiz. Rol HAR DOIM 'student': admin huquqi faqat
+          // ma'lumotlar bazasida (service_role orqali) beriladi, klientdan emas.
+          const { error: profileError } = await client.from('profiles').upsert({
             id: data.user.id,
             email: trimmedEmail,
             full_name: trimmedName,
-            role,
+            role: 'student',
             current_level: 'a1-1',
             daily_goal_minutes: 20,
             streak_days: 0,
             xp_points: 0,
           });
+
+          if (profileError) {
+            console.warn('[Auth] Profil qatorini yozib bo‘lmadi:', profileError.message);
+          }
 
           const existing = storageService.getUserProfile();
           const newUser: UserProfile = {
@@ -443,14 +503,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     }
 
-    // 2. Safe Local / Offline / Demo Mode
+    // 2. Local / Offline rejim (faqat demo uchun yoqilgan bo'lsa)
+    if (!LOCAL_DEMO_AUTH_ENABLED) {
+      return {
+        success: false,
+        error:
+          'Bulut autentifikatsiyasi sozlanmagan — ro‘yxatdan o‘tish vaqtincha mavjud emas.',
+      };
+    }
+
     const vault = getLocalVault();
     const role = isEmailAdmin(trimmedEmail) ? 'admin' : 'student';
+
+    if (vault[trimmedEmail]) {
+      return { success: false, error: 'Bu elektron pochta allaqachon ro‘yxatdan o‘tgan.' };
+    }
 
     vault[trimmedEmail] = {
       name: trimmedName,
       email: trimmedEmail,
-      passwordHash: simpleHash(trimmedPass),
+      passwordHash: await hashPassword(trimmedPass),
       role,
       createdAt: new Date().toISOString(),
     };
@@ -550,7 +622,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const client = supabase;
     if (isSupabaseConfigured && client && user.id && !user.id.startsWith('usr-guest')) {
-      client.from('profiles').update({ current_level: level }).eq('id', user.id).then();
+      void (async () => {
+        const { error } = await client
+          .from('profiles')
+          .update({ current_level: level })
+          .eq('id', user.id);
+        if (error) console.warn('[Auth] Darajani serverga yozib bo‘lmadi:', error.message);
+      })();
     }
   }, [user]);
 

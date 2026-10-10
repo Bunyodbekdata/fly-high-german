@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { LOCAL_DEMO_AUTH_ENABLED, useAuth } from '../context/AuthContext';
 import { LogIn, UserPlus, Sparkles, Shield, ArrowRight, Loader2, Database, CheckCircle2 } from 'lucide-react';
 
 export const AuthPage: React.FC = () => {
@@ -206,32 +206,34 @@ export const AuthPage: React.FC = () => {
           </button>
         </form>
 
-        {/* Quick Demo Switchers */}
-        <div className="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-2">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 block text-center">
-            Tezkor kirish (Sinov profillari):
-          </span>
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              type="button"
-              disabled={isSubmitting}
-              onClick={handleDemoStudent}
-              className="py-2 px-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-750 text-slate-800 dark:text-slate-200 text-xs font-bold transition flex items-center justify-center space-x-1 disabled:opacity-50 cursor-pointer"
-            >
-              <Sparkles size={14} className="text-brand-600 dark:text-brand-400" />
-              <span>Talaba profili</span>
-            </button>
-            <button
-              type="button"
-              disabled={isSubmitting}
-              onClick={handleDemoAdmin}
-              className="py-2 px-3 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-indigo-800 dark:text-indigo-200 text-xs font-bold transition flex items-center justify-center space-x-1 disabled:opacity-50 cursor-pointer"
-            >
-              <Shield size={14} className="text-indigo-600 dark:text-indigo-400" />
-              <span>Admin profili</span>
-            </button>
+        {/* Quick Demo Switchers — production buildda ko'rinmaydi (xavfsizlik) */}
+        {LOCAL_DEMO_AUTH_ENABLED && (
+          <div className="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-2">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block text-center">
+              Tezkor kirish (faqat demo muhitda):
+            </span>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                disabled={isSubmitting}
+                onClick={handleDemoStudent}
+                className="py-2 px-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-750 text-slate-800 dark:text-slate-200 text-xs font-bold transition flex items-center justify-center space-x-1 disabled:opacity-50 cursor-pointer"
+              >
+                <Sparkles size={14} className="text-brand-600 dark:text-brand-400" />
+                <span>Talaba profili</span>
+              </button>
+              <button
+                type="button"
+                disabled={isSubmitting}
+                onClick={handleDemoAdmin}
+                className="py-2 px-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-750 text-slate-800 dark:text-slate-200 text-xs font-bold transition flex items-center justify-center space-x-1 disabled:opacity-50 cursor-pointer"
+              >
+                <Shield size={14} className="text-brand-600 dark:text-brand-400" />
+                <span>Admin profili</span>
+              </button>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Toggle between login and register */}
         <div className="text-center pt-2">

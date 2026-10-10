@@ -22,28 +22,30 @@ import {
 } from 'lucide-react';
 import { AdminCertificateTestsTab } from '../../components/admin/AdminCertificateTestsTab';
 
-export const AdminDashboardPage: React.FC = () => {
-  const { user, isAdmin } = useAuth();
+/**
+ * Huquq yo‘q ekrani — alohida komponent, chunki hooklardan OLDIN qaytish
+ * React'ning "Rules of Hooks" qoidasini buzadi va rol o‘zgarganda yiqiladi.
+ */
+const AdminAccessDenied: React.FC = () => (
+  <div className="max-w-md mx-auto py-24 px-4 text-center space-y-4">
+    <div className="w-16 h-16 mx-auto rounded-3xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 flex items-center justify-center text-rose-600 dark:text-rose-400">
+      <ShieldAlert size={32} />
+    </div>
+    <h2 className="text-xl font-bold text-slate-900 dark:text-white">Kirish cheklangan</h2>
+    <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+      Ushbu sahifa faqat platforma ma'murlari (admin) uchun mo‘ljallangan. Agar siz admin bo‘lsangiz, tegishli hisob bilan tizimga kiring.
+    </p>
+    <Link
+      to="/"
+      className="inline-block px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold transition shadow-sm"
+    >
+      Bosh sahifaga qaytish
+    </Link>
+  </div>
+);
 
-  if (!isAdmin) {
-    return (
-      <div className="max-w-md mx-auto py-24 px-4 text-center space-y-4">
-        <div className="w-16 h-16 mx-auto rounded-3xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 flex items-center justify-center text-rose-600 dark:text-rose-400">
-          <ShieldAlert size={32} />
-        </div>
-        <h2 className="text-xl font-bold text-slate-900 dark:text-white">Kirish cheklangan</h2>
-        <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-          Ushbu sahifa faqat platforma ma'murlari (admin) uchun mo‘ljallangan. Agar siz admin bo‘lsangiz, tegishli hisob bilan tizimga kiring.
-        </p>
-        <Link
-          to="/"
-          className="inline-block px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold transition shadow-sm"
-        >
-          Bosh sahifaga qaytish
-        </Link>
-      </div>
-    );
-  }
+const AdminDashboardContent: React.FC = () => {
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<'lessons' | 'vocabulary' | 'grammar' | 'certificate_tests'>('lessons');
   const [lessons, setLessons] = useState<Lesson[]>(() => storageService.getLessons());
   const [vocabulary, setVocabulary] = useState<VocabularyItem[]>(() => storageService.getAllVocabulary());
@@ -164,10 +166,10 @@ export const AdminDashboardPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center space-x-2">
-            <span className="p-1 rounded-lg bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-400">
+            <span className="p-1 rounded-lg bg-brand-100 dark:bg-brand-950/60 text-brand-700 dark:text-brand-400">
               <ShieldCheck size={18} />
             </span>
-            <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+            <span className="text-xs font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400">
               Boshqaruv Paneli (Admin Portal)
             </span>
           </div>
@@ -604,4 +606,13 @@ export const AdminDashboardPage: React.FC = () => {
       )}
     </div>
   );
+};
+
+/**
+ * Marshrut darvozasi: hooklarsiz wrapper, shu sababli rol o‘zgarganda
+ * hook tartibi buzilmaydi.
+ */
+export const AdminDashboardPage: React.FC = () => {
+  const { isAdmin } = useAuth();
+  return isAdmin ? <AdminDashboardContent /> : <AdminAccessDenied />;
 };
