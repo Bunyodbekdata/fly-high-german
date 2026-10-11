@@ -68,7 +68,7 @@ export const LevelPage: React.FC = () => {
             {level.title}
           </h1>
           <p className="text-sm text-slate-600 dark:text-slate-300 max-w-xl mx-auto mt-2 leading-relaxed">
-            Biz "Sifat sonidan ustun" tamoyiliga amal qilamiz. Hozirda platforma <strong>A1.1</strong>, <strong>A1.2</strong>, <strong>A2.1</strong> va <strong>A2.2</strong> bosqichlarini to‘liq Goethe-Institut va xalqaro CEFR darsliklari (Menschen) metodikasi asosida taqdim etmoqda. Keyingi B1 bosqichlari tez kunda qo‘shiladi.
+            Biz "Sifat sonidan ustun" tamoyiliga amal qilamiz. Hozirda platforma <strong>A1.1</strong>, <strong>A1.2</strong>, <strong>A2.1</strong>, <strong>A2.2</strong>, <strong>B1.1</strong> va <strong>B1.2</strong> bosqichlarini to‘liq Goethe-Institut va xalqaro CEFR darsliklari (Menschen) metodikasi asosida taqdim etmoqda.
           </p>
         </div>
 

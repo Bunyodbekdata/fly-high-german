@@ -45,7 +45,7 @@ export const CoursesPage: React.FC = () => {
           Nemis tili ta‘lim bosqichlari
         </h1>
         <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 mt-2">
-          Sifat va chuqur amaliyotga qaratilgan CEFR bosqichlari. Hozirda <strong>A1.1</strong>, <strong>A1.2</strong>, <strong>A2.1</strong> va <strong>A2.2</strong> bosqichlari to‘liq faol.
+          Sifat va chuqur amaliyotga qaratilgan CEFR bosqichlari. Hozirda <strong>A1.1</strong>, <strong>A1.2</strong>, <strong>A2.1</strong>, <strong>A2.2</strong>, <strong>B1.1</strong> va <strong>B1.2</strong> bosqichlari to‘liq faol.
         </p>
       </div>
 

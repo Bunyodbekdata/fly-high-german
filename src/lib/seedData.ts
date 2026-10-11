@@ -6,6 +6,8 @@ import { MODULE_4_LESSONS } from './seedLessons/module4Lessons';
 import { ALL_A12_LESSONS } from './seedLessonsA12';
 import { ALL_A21_LESSONS } from './seedLessonsA21';
 import { ALL_A22_LESSONS } from './seedLessonsA22';
+import { ALL_B11_LESSONS } from './seedLessonsB11';
+import { ALL_B12_LESSONS } from './seedLessonsB12';
 import { Lesson, VocabularyItem, GrammarTopic, ShadowingExercise, ListeningExercise, ReadingMaterial } from '../types/database';
 
 export const INITIAL_LESSONS: Lesson[] = [
@@ -16,6 +18,8 @@ export const INITIAL_LESSONS: Lesson[] = [
   ...ALL_A12_LESSONS,
   ...ALL_A21_LESSONS,
   ...ALL_A22_LESSONS,
+  ...ALL_B11_LESSONS,
+  ...ALL_B12_LESSONS,
 ];
 
 // Additional higher-level grammar topics to enrich the Grammar Library for A2 and B1

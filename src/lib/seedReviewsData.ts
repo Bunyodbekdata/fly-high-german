@@ -915,5 +915,385 @@ export const MODULE_REVIEWS: Record<string, ModuleReviewData> = {
         mistakeTipUz: '❌ "zu" dan keyin doimo fe‘lning noaniq shakli (infinitiv) keladi.'
       }
     ]
+  },
+
+  // ==========================================
+  // B1.1 MODUL 17: Zeit & Erinnerungen (Lektion 49, 50, 51)
+  // ==========================================
+  'mod-b1-1-1': {
+    moduleId: 'mod-b1-1-1',
+    levelCode: 'b1-1',
+    titleDe: 'Wiederholung: Zeit, Erinnerungen und Lebensgeschichten',
+    titleUz: '17-Modul Takrori: Vaqt, xotiralar va hayotiy voqealar',
+    summaryUz: 'Ushbu modulda o‘tmishdagi voqealar ketma-ketligi (Plusquamperfekt va nachdem), o‘tmishdagi bir martalik va takroriy voqealar (als va wenn), davomiylik va bir paytda sodir bo‘lish (während va solange) mustahkamlandi.',
+    checklistUz: [
+      'Plusquamperfekt zamonini (hatte / war + Partizip II) to‘g‘ri yasash',
+      '"nachdem" bog‘lovchisi bilan o‘tmishdagi oldingi harakatni ifodalash',
+      '"als" (o‘tmishdagi bir martalik) va "wenn" (takroriy/hozirgi) farqini bilish',
+      '"während" va "solange" vaqt bog‘lovchilarini qo‘llash'
+    ],
+    keyVocab: [
+      { german: 'die Erinnerung', article: 'die', plural: 'die Erinnerungen', uzbek: 'xotira' },
+      { german: 'das Zeitgefühl', article: 'das', uzbek: 'vaqt hissi' },
+      { german: 'sich erinnern', uzbek: 'eslamoq' },
+      { german: 'vergehen', uzbek: 'o‘tib ketmoq (vaqt)' },
+      { german: 'damals', uzbek: 'o‘sha paytlarda' }
+    ],
+    grammarNotesUz: [
+      {
+        title: 'Plusquamperfekt & nachdem',
+        explanation: 'Nachdem er gefrühstückt hatte (Plusquamperfekt), ging er zur Arbeit (Präteritum). "nachdem" oldingi ish-harakatni bildiradi.'
+      },
+      {
+        title: 'als vs. wenn',
+        explanation: '"als" faqat o‘tgan zamonda bir marta sodir bo‘lgan voqealar uchun. "wenn" esa har doim takrorlanadigan yoki hozirgi/kelasi zamondagi voqealar uchun.'
+      }
+    ],
+    miniTest: [
+      {
+        id: 'rev-m17-q1',
+        type: 'multiple-choice',
+        questionUz: '"Nachdem" bilan to‘g‘ri gapni tanlang:',
+        options: [
+          'Nachdem wir den Film gesehen hatten, gingen wir schlafen.',
+          'Nachdem wir den Film sahen, hatten wir geschlafen.',
+          'Nachdem wir sehen den Film, gehen wir schlafen.'
+        ],
+        correctAnswer: 'Nachdem wir den Film gesehen hatten, gingen wir schlafen.',
+        explanationUz: 'nachdem + Plusquamperfekt (hatten gesehen), asosiy gap esa Präteritum (gingen).'
+      }
+    ]
+  },
+
+  // ==========================================
+  // B1.1 MODUL 18: Technik & Passiv (Lektion 52, 53, 54)
+  // ==========================================
+  'mod-b1-1-2': {
+    moduleId: 'mod-b1-1-2',
+    levelCode: 'b1-1',
+    titleDe: 'Wiederholung: Technik, Konsum und Passiv',
+    titleUz: '18-Modul Takrori: Texnologiya va majhul nisbat (Passiv)',
+    summaryUz: 'Ushbu modulda Passiv Präsens (werden + Partizip II), Passiv mit Modalverben (muss/kann ... werden) va Passiv Präteritum (wurde + Partizip II) o‘zlashtirildi.',
+    checklistUz: [
+      'Passiv Präsens shaklini yasash va qo‘llash (wird repariert)',
+      'Modal fe‘lli Passivni to‘g‘ri qo‘llash (muss bezahlt werden)',
+      'Passiv Präteritum shaklini qo‘llash (wurde gebaut)',
+      'Ish-harakat ijrochisi (von + Dativ) va vositasini (durch + Akk.) ajratish'
+    ],
+    keyVocab: [
+      { german: 'das Smartphone', article: 'das', uzbek: 'smartfon' },
+      { german: 'die Reparatur', article: 'die', plural: 'die Reparaturen', uzbek: 'ta‘mirlash' },
+      { german: 'die Produktion', article: 'die', uzbek: 'ishlab chiqarish' },
+      { german: 'herstellen', uzbek: 'ishlab chiqarmoq' },
+      { german: 'entwickeln', uzbek: 'rivojlantirmoq / yaratmoq' }
+    ],
+    grammarNotesUz: [
+      {
+        title: 'Passiv Präsens & Präteritum',
+        explanation: 'Präsens: wird + Partizip II (Das Auto wird gewaschen). Präteritum: wurde + Partizip II (Das Auto wurde gewaschen).'
+      },
+      {
+        title: 'Passiv mit Modalverben',
+        explanation: 'Modalverb (2. Position) + ... + Partizip II + werden (am Ende): "Der Brief muss heute noch abgeschickt werden."'
+      }
+    ],
+    miniTest: [
+      {
+        id: 'rev-m18-q1',
+        type: 'multiple-choice',
+        questionUz: 'Passiv Präteritum: "Bino 1990-yilda qurilgan"',
+        options: [
+          'Das Gebäude wurde 1990 gebaut.',
+          'Das Gebäude wird 1990 gebaut.',
+          'Das Gebäude ist 1990 gebaut.'
+        ],
+        correctAnswer: 'Das Gebäude wurde 1990 gebaut.',
+        explanationUz: 'Passiv Präteritum: wurde + Partizip II (gebaut).'
+      }
+    ]
+  },
+
+  // ==========================================
+  // B1.1 MODUL 19: Beruf, Beziehungen & Genitiv (Lektion 55, 56, 57)
+  // ==========================================
+  'mod-b1-1-3': {
+    moduleId: 'mod-b1-1-3',
+    levelCode: 'b1-1',
+    titleDe: 'Wiederholung: Beruf, Beziehungen und Genitiv',
+    titleUz: '19-Modul Takrori: Kasb, munosabatlar va Genitiv',
+    summaryUz: 'Ushbu modulda Genitiv kelishigi va predloglari (wegen, trotz, während, statt), predlogli nisbiy gaplar hamda qaratqich nisbiy olmoshlari (dessen / deren / denen) mustahkamlandi.',
+    checklistUz: [
+      'Genitiv qo‘shimchalarini to‘g‘ri qo‘llash (des Vaters, der Mutter)',
+      'wegen, trotz, während, statt predloglarini Genitiv bilan ishlatish',
+      'Predlogli Relativsätze (mit dem, an die, über das) tuza olish',
+      'Genitiv nisbiy olmoshlarini (dessen, deren) tushunish va qo‘llash'
+    ],
+    keyVocab: [
+      { german: 'das Vorstellungsgespräch', article: 'das', uzbek: 'ish suhbati' },
+      { german: 'die Teamarbeit', article: 'die', uzbek: 'jamoada ishlash' },
+      { german: 'der Erfolg', article: 'der', plural: 'die Erfolge', uzbek: 'muvaffaqiyat' },
+      { german: 'überzeugen', uzbek: 'ishontirmoq' },
+      { german: 'verlässlich', uzbek: 'ishonchli' }
+    ],
+    grammarNotesUz: [
+      {
+        title: 'Genitivpräpositionen',
+        explanation: 'wegen (tufayli), trotz (qaramasdan), während (davomida), statt (o‘rniga) + Genitiv: "wegen des Regens", "trotz der Müdigkeit".'
+      },
+      {
+        title: 'Relativpronomen im Genitiv',
+        explanation: 'Maskulin/Neutrum: dessen (Das ist der Mann, dessen Auto kaputt ist). Feminin/Plural: deren (Das ist die Frau, deren Tochter hier lernt).'
+      }
+    ],
+    miniTest: [
+      {
+        id: 'rev-m19-q1',
+        type: 'multiple-choice',
+        questionUz: '"Trotz" predlogi bilan to‘g‘ri jumla qaysi?',
+        options: [
+          'Trotz der Kälte ging er joggen.',
+          'Trotz die Kälte ging er joggen.',
+          'Trotz dem Kälte ging er joggen.'
+        ],
+        correctAnswer: 'Trotz der Kälte ging er joggen.',
+        explanationUz: '"trotz" + Genitiv: die Kälte -> der Kälte.'
+      }
+    ]
+  },
+
+  // ==========================================
+  // B1.1 MODUL 20: Kultur, Wünsche & Stadtleben (Lektion 58, 59, 60)
+  // ==========================================
+  'mod-b1-1-4': {
+    moduleId: 'mod-b1-1-4',
+    levelCode: 'b1-1',
+    titleDe: 'Wiederholung: Kultur, Wünsche und Stadtleben',
+    titleUz: '20-Modul Takrori: Madaniyat, orzular va sifatdoshlar',
+    summaryUz: 'Ushbu modulda Konjunktiv II der Gegenwart (wäre, hätte, würde), juft bog‘lovchilar (zwar...aber, entweder...oder) va Partizip I als Adjektiv egallandi.',
+    checklistUz: [
+      'Konjunktiv II bilan xushmuomala iltimos va orzularni aytish',
+      'zwar...aber va entweder...oder juft bog‘lovchilarini qo‘llash',
+      'Partizip I ni (Infinitiv + d) sifat sifatida turlash (spielende Kinder)'
+    ],
+    keyVocab: [
+      { german: 'die Sehenswürdigkeit', article: 'die', plural: 'die Sehenswürdigkeiten', uzbek: 'diqqatga sazovor joy' },
+      { german: 'die Veranstaltung', article: 'die', plural: 'die Veranstaltungen', uzbek: 'tadbir' },
+      { german: 'das Theaterstück', article: 'das', uzbek: 'teatr spektakli' },
+      { german: 'faszinierend', uzbek: 'maftunkor' },
+      { german: 'empfehlen', uzbek: 'tavsiya qilmoq' }
+    ],
+    grammarNotesUz: [
+      {
+        title: 'Konjunktiv II der Gegenwart',
+        explanation: 'wäre (bo‘lsa edi), hätte (ega bo‘lsa edi), würde + Infinitiv (qilar edi): "Wenn ich Zeit hätte, würde ich ins Theater gehen."'
+      },
+      {
+        title: 'Partizip I als Adjektiv',
+        explanation: 'Harakat davomiyligi: spielen -> spielend -> das spielende Kind (o‘ynayotgan bola).'
+      }
+    ],
+    miniTest: [
+      {
+        id: 'rev-m20-q1',
+        type: 'multiple-choice',
+        questionUz: 'Partizip I bilan to‘g‘ri jumla qaysi?',
+        options: [
+          'Der singende Vogel sitzt auf dem Baum.',
+          'Der gesungene Vogel sitzt auf dem Baum.',
+          'Der singen Vogel sitzt auf dem Baum.'
+        ],
+        correctAnswer: 'Der singende Vogel sitzt auf dem Baum.',
+        explanationUz: 'singend + sifat qo‘shimchasi (der singende Vogel).'
+      }
+    ]
+  },
+
+  // ==========================================
+  // B1.2 MODUL 21: Nachhaltigkeit & Mobilität (Lektion 61, 62, 63)
+  // ==========================================
+  'mod-b1-2-1': {
+    moduleId: 'mod-b1-2-1',
+    levelCode: 'b1-2',
+    titleDe: 'Wiederholung: Nachhaltigkeit, Medien und Mobilität',
+    titleUz: '21-Modul Takrori: Barqaror hayot va infinitiv birikmalar',
+    summaryUz: 'Ushbu modulda Partizip II als Adjektiv (das gebuchte Hotel), juft bog‘lovchilar (weder...noch, je...desto) va infinitivli qo‘shimchalar (ohne...zu, anstatt...zu) mustahkamlandi.',
+    checklistUz: [
+      'Partizip II ni sifat sifatida qo‘llash (die reservierten Plätze)',
+      'je...desto va weder...noch juft bog‘lovchilarini to‘g‘ri ishlatish',
+      'ohne...zu va anstatt...zu infinitivli tuzilmalarini qo‘llash'
+    ],
+    keyVocab: [
+      { german: 'der Ökotourismus', article: 'der', uzbek: 'ekoturizm' },
+      { german: 'die Nachhaltigkeit', article: 'die', uzbek: 'barqarorlik' },
+      { german: 'das Elektrofahrzeug', article: 'das', uzbek: 'elektromobil' },
+      { german: 'buchen', uzbek: 'bron qilmoq' },
+      { german: 'entspannt', uzbek: 'xotirjam' }
+    ],
+    grammarNotesUz: [
+      {
+        title: 'Partizip II als Adjektiv',
+        explanation: 'Tugallangan harakat: buchen -> gebucht -> das gebuchte Hotel (band qilingan mehmonxona).'
+      },
+      {
+        title: 'ohne ... zu vs. anstatt ... zu',
+        explanation: 'ohne ... zu: harakatsiz/qilmasdan (ohne zu fragen). anstatt ... zu: o‘rniga (anstatt zu lernen).'
+      }
+    ],
+    miniTest: [
+      {
+        id: 'rev-m21-q1',
+        type: 'multiple-choice',
+        questionUz: '"je ... desto" bog‘lovchisi bilan to‘g‘ri gap:',
+        options: [
+          'Je mehr du lernst, desto besser sprichst du.',
+          'Je mehr du lernst, desto du sprichst besser.',
+          'Je du mehr lernst, desto besser sprichst du.'
+        ],
+        correctAnswer: 'Je mehr du lernst, desto besser sprichst du.',
+        explanationUz: '"je" ergash gap (fe‘l oxirda), "desto" + qiyosiy sifat + fe‘l.'
+      }
+    ]
+  },
+
+  // ==========================================
+  // B1.2 MODUL 22: Gesundheit & Notfälle (Lektion 64, 65, 66)
+  // ==========================================
+  'mod-b1-2-2': {
+    moduleId: 'mod-b1-2-2',
+    levelCode: 'b1-2',
+    titleDe: 'Wiederholung: Gesundheit, Ernährung und Notfälle',
+    titleUz: '22-Modul Takrori: Salomatlik, ong va o‘zgalar nutqi',
+    summaryUz: 'Ushbu modulda Konjunktiv II der Vergangenheit (hätte/wäre + Partizip II), Verben mit festen Präpositionen & Pronominaladverbien (worauf/darauf) hamda Konjunktiv I (sei, habe, müsse) o‘zlashtirildi.',
+    checklistUz: [
+      'O‘tmishdagi afsus va orzularni (Konjunktiv II Vergangenheit) ifodalash',
+      'Predlogli fe‘llar uchun worauf/darauf vs. auf wen/auf ihn farqini bilish',
+      'Konjunktiv I orqali xolis bilvosita nutqni tushunish'
+    ],
+    keyVocab: [
+      { german: 'die mentale Gesundheit', article: 'die', uzbek: 'ruhiy salomatlik' },
+      { german: 'die Notaufnahme', article: 'die', uzbek: 'tez yordam qabul bo‘limi' },
+      { german: 'die Ernährung', article: 'die', uzbek: 'ovqatlanish' },
+      { german: 'verzichten', uzbek: 'voz kechmoq (auf + Akk.)' },
+      { german: 'achten auf', uzbek: 'e‘tibor bermoq' }
+    ],
+    grammarNotesUz: [
+      {
+        title: 'Konjunktiv II der Vergangenheit',
+        explanation: 'hätte / wäre + Partizip II: "Wenn ich früher losgegangen wäre, hätte ich den Zug nicht verpasst."'
+      },
+      {
+        title: 'Pronominaladverbien',
+        explanation: 'Sache: Worauf achtest du? – Darauf. Person: Auf wen wartest du? – Auf meinen Freund.'
+      }
+    ],
+    miniTest: [
+      {
+        id: 'rev-m22-q1',
+        type: 'multiple-choice',
+        questionUz: 'Konjunktiv II o‘tgan zamon afsus gapi qaysi?',
+        options: [
+          'Hätte ich doch bloß früher geschlafen!',
+          'Habe ich doch bloß früher geschlafen!',
+          'Würde ich doch bloß früher geschlafen haben!'
+        ],
+        correctAnswer: 'Hätte ich doch bloß früher geschlafen!',
+        explanationUz: 'hätte + doch/bloß + Partizip II (o‘tmishdagi afsus).'
+      }
+    ]
+  },
+
+  // ==========================================
+  // B1.2 MODUL 23: Gesellschaft, Recht & Identität (Lektion 67, 68, 69)
+  // ==========================================
+  'mod-b1-2-3': {
+    moduleId: 'mod-b1-2-3',
+    levelCode: 'b1-2',
+    titleDe: 'Wiederholung: Gesellschaft, Recht und Identität',
+    titleUz: '23-Modul Takrori: Jamiyat, huquq va sifatlarning otlashishi',
+    summaryUz: 'Ushbu modulda N-Deklination (der Student, der Kollege, der Herr), Passiv-Ersatzformen (sein + zu, sich lassen) va Adjektive als Nomen (der Jugendliche, etwas Gutes) o‘rganildi.',
+    checklistUz: [
+      'N-Deklination otlarini Akkusativ, Dativ va Genitivda to‘g‘ri turlash',
+      '"sein + zu + Infinitiv" va "sich lassen + Infinitiv" passiv muqobillarini qo‘llash',
+      'Otlashgan sifatlarni to‘g‘ri yozish va turlash (ein Jugendlicher, etwas Schönes)'
+    ],
+    keyVocab: [
+      { german: 'das Ehrenamt', article: 'das', uzbek: 'ko‘ngillilar xizmati' },
+      { german: 'das Grundgesetz', article: 'das', uzbek: 'konstitutsiya' },
+      { german: 'der Jugendliche', article: 'der', plural: 'die Jugendlichen', uzbek: 'o‘smir' },
+      { german: 'die Mehrsprachigkeit', article: 'die', uzbek: 'ko‘p tillilik' },
+      { german: 'lösen', uzbek: 'hal qilmoq' }
+    ],
+    grammarNotesUz: [
+      {
+        title: 'N-Deklination',
+        explanation: 'Faqat erkak jinsidagi ba‘zi otlar: Nom: der Kunde, Akk: den Kunden, Dat: dem Kunden, Gen: des Kunden.'
+      },
+      {
+        title: 'Passiv-Ersatzformen',
+        explanation: 'sein + zu = muss/kann gemacht werden. sich lassen = kann gemacht werden (Das Problem lässt sich leicht lösen).'
+      }
+    ],
+    miniTest: [
+      {
+        id: 'rev-m23-q1',
+        type: 'multiple-choice',
+        questionUz: '"sich lassen" bilan to‘g‘ri gap qaysi?',
+        options: [
+          'Das Fenster lässt sich öffnen.',
+          'Das Fenster lässt sich zu öffnen.',
+          'Das Fenster ist sich öffnen.'
+        ],
+        correctAnswer: 'Das Fenster lässt sich öffnen.',
+        explanationUz: '"sich lassen" dan keyin sof infinitiv keladi (zu yo‘q).'
+      }
+    ]
+  },
+
+  // ==========================================
+  // B1.2 MODUL 24: Zukunft, Karriere & B1 Abschluss (Lektion 70, 71, 72)
+  // ==========================================
+  'mod-b1-2-4': {
+    moduleId: 'mod-b1-2-4',
+    levelCode: 'b1-2',
+    titleDe: 'Wiederholung: Zukunft, Karriere und Goethe B1 Prüfung',
+    titleUz: '24-Modul Takrori: Kelajak, karyera va B1 yakuniy imtihoni',
+    summaryUz: 'Ushbu modulda usul-vosita ergash gaplari (indem, dadurch dass), bog‘lovchi ravishlar (deshalb, trotzdem, folglich, stattdessen, allerdings) va Goethe/telc B1 xalqaro imtihoniga kompleks 4 modulli tayyorgarlik yakunlandi.',
+    checklistUz: [
+      '"indem" va "dadurch, dass" bilan maqsadga qanday erishishni ifodalash',
+      'deshalb, trotzdem, folglich, allerdings dan keyin fe‘lni 2-o‘rinda ishlatish',
+      'Goethe B1 Lesen, Hören, Schreiben, Sprechen imtihon strategiyalarini egallash'
+    ],
+    keyVocab: [
+      { german: 'die Künstliche Intelligenz', article: 'die', uzbek: 'sun‘iy intellekt' },
+      { german: 'die Weiterbildung', article: 'die', uzbek: 'malaka oshirish' },
+      { german: 'das Zertifikat', article: 'das', uzbek: 'sertifikat' },
+      { german: 'trotzdem', uzbek: 'shunga qaramay' },
+      { german: 'bestehen', uzbek: 'muvaffaqiyatli topshirmoq' }
+    ],
+    grammarNotesUz: [
+      {
+        title: 'indem & dadurch, dass',
+        explanation: 'Qanday qilib? Vosita/usul ergash gapi: "Man lernt schneller, indem man täglich spricht."'
+      },
+      {
+        title: 'Konjunktionaladverbien',
+        explanation: 'deshalb, trotzdem, folglich, allerdings: gap boshida kelsa darhol fe‘l keladi: "Es war schwer; trotzdem hat er bestanden."'
+      }
+    ],
+    miniTest: [
+      {
+        id: 'rev-m24-q1',
+        type: 'multiple-choice',
+        questionUz: 'Bog‘lovchi ravish bilan to‘g‘ri so‘z tartibi qaysi?',
+        options: [
+          'Es regnete; trotzdem gingen wir spazieren.',
+          'Es regnete; trotzdem wir gingen spazieren.',
+          'Es regnete; trotzdem spazieren gingen wir.'
+        ],
+        correctAnswer: 'Es regnete; trotzdem gingen wir spazieren.',
+        explanationUz: '"trotzdem" dan keyin fe‘l (gingen) ikkinchi o‘rinda turadi.'
+      }
+    ]
   }
 };
+

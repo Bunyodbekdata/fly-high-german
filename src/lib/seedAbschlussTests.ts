@@ -471,5 +471,246 @@ export const ABSCHLUSS_TESTS: Record<string, AbschlussTestData> = {
         mistakeTipUz: '❌ Ega bir xil bo‘lsa "um...zu", subyektlar turli xil bo‘lsa "damit" qo‘llaniladi.'
       }
     ]
+  },
+
+  // ==========================================
+  // --- B1.1 ABSCHLUSS-TEST (12 LEKTIONEN) ---
+  // ==========================================
+  'b1-1': {
+    levelCode: 'b1-1',
+    titleDe: 'B1.1 Abschluss-Test (Niveauprüfung B1.1)',
+    titleUz: 'B1.1 Bosqich Yakuniy Imtihoni',
+    descriptionUz: 'B1.1 darajasidagi barcha 4 ta modul (12 ta dars: Plusquamperfekt, als/wenn, während, Passiv, Genitiv, Relativsätze, Konjunktiv II) bo‘yicha keng qamrovli yakuniy bilim tekshiruvi. O‘tish bali: kamida 80%.',
+    totalQuestions: 8,
+    passingScore: 80,
+    exercises: [
+      {
+        id: 'ab-b1-1-q1',
+        type: 'multiple-choice',
+        questionUz: 'Plusquamperfekt va nachdem: to‘g‘ri gapni tanlang:',
+        options: [
+          'Nachdem er die Arbeit beendet hatte, ging er nach Hause.',
+          'Nachdem er die Arbeit beendet hat, ging er nach Hause.',
+          'Nachdem er beendet die Arbeit, ging er nach Hause.',
+          'Nachdem er die Arbeit beendete, war er nach Hause gegangen.'
+        ],
+        correctAnswer: 'Nachdem er die Arbeit beendet hatte, ging er nach Hause.',
+        explanationUz: '"nachdem" o‘tgan zamonda Plusquamperfekt (hatte beendet) talab qiladi, asosiy gap esa Präteritumda (ging) bo‘ladi.',
+        mistakeTipUz: '❌ O‘tmishdagi oldingi harakat: nachdem + Plusquamperfekt (hatte/war + Partizip II).'
+      },
+      {
+        id: 'ab-b1-1-q2',
+        type: 'fill-blank',
+        questionUz: 'To‘g‘ri vaqt bog‘lovchisini tanlang (o‘tmishdagi bir martalik voqea): "_____ ich ein Kind war, lebte ich auf dem Land."',
+        blankSentence: '[blank] ich ein Kind war, lebte ich auf dem Land.',
+        options: ['Als', 'Wenn', 'Wann', 'Während'],
+        correctAnswer: 'Als',
+        explanationUz: 'O‘tmishdagi bir martalik yoki davriy yakunlangan holat uchun faqat "Als" ishlatiladi.',
+        mistakeTipUz: '❌ O‘tgan zamondagi bir martalik holat: Als ich ein Kind war.'
+      },
+      {
+        id: 'ab-b1-1-q3',
+        type: 'multiple-choice',
+        questionUz: 'Passiv Präsens: "Ushbu bino ta‘mirlanmoqda" qaysi jumla?',
+        options: [
+          'Dieses Gebäude wird renoviert.',
+          'Dieses Gebäude wurde renoviert.',
+          'Dieses Gebäude hat renoviert.',
+          'Dieses Gebäude ist renoviert werden.'
+        ],
+        correctAnswer: 'Dieses Gebäude wird renoviert.',
+        explanationUz: 'Passiv Präsens formulasi: werden (wird) + Partizip II (renoviert).',
+        mistakeTipUz: '❌ Passiv Präsens: wird + Partizip II.'
+      },
+      {
+        id: 'ab-b1-1-q4',
+        type: 'multiple-choice',
+        questionUz: 'Modal fe‘lli Passiv: to‘g‘ri gapni toping:',
+        options: [
+          'Die Rechnung muss bis morgen bezahlt werden.',
+          'Die Rechnung wird bis morgen bezahlt müssen.',
+          'Die Rechnung muss bis morgen bezahlen werden.',
+          'Die Rechnung hat bis morgen bezahlt gemusst.'
+        ],
+        correctAnswer: 'Die Rechnung muss bis morgen bezahlt werden.',
+        explanationUz: 'Passiv mit Modalverben: Modalverb (muss) + Partizip II (bezahlt) + werden.',
+        mistakeTipUz: '❌ Formulaga qarang: Modalverb + Partizip II + werden.'
+      },
+      {
+        id: 'ab-b1-1-q5',
+        type: 'fill-blank',
+        questionUz: 'Genitiv predlogi bilan to‘ldiring: "_____ des schlechten Wetters machten wir einen Spaziergang."',
+        blankSentence: '[blank] des schlechten Wetters machten wir einen Spaziergang.',
+        options: ['Trotz', 'Wegen', 'Während', 'Statt'],
+        correctAnswer: 'Trotz',
+        explanationUz: '"Trotz" (qaramasdan) zidlikni bildiradi: yomon ob-havoga qaramasdan sayr qildik.',
+        mistakeTipUz: '❌ Zid holatda "Trotz" (+ Genitiv) ishlatiladi.'
+      },
+      {
+        id: 'ab-b1-1-q6',
+        type: 'multiple-choice',
+        questionUz: 'Predlogli nisbiy gap: "Bu men birga ishlayotgan hamkasbdir"',
+        options: [
+          'Das ist der Kollege, mit dem ich zusammenarbeite.',
+          'Das ist der Kollege, mit den ich zusammenarbeite.',
+          'Das ist der Kollege, wer ich zusammenarbeite.',
+          'Das ist der Kollege, mit dessen ich zusammenarbeite.'
+        ],
+        correctAnswer: 'Das ist der Kollege, mit dem ich zusammenarbeite.',
+        explanationUz: '"mit" Dativ talab qiladi, "der Kollege" (maskulin) Dativda "dem" bo‘ladi: mit dem.',
+        mistakeTipUz: '❌ mit + Dativ Maskulin = mit dem.'
+      },
+      {
+        id: 'ab-b1-1-q7',
+        type: 'multiple-choice',
+        questionUz: 'Konjunktiv II der Gegenwart: "Agar ko‘proq pulim bo‘lsa edi, dunyo bo‘ylab sayohat qilardim"',
+        options: [
+          'Wenn ich mehr Geld hätte, würde ich um die Welt reisen.',
+          'Wenn ich mehr Geld habe, werde ich um die Welt reisen.',
+          'Wenn ich mehr Geld hatte, reiste ich um die Welt.',
+          'Hätte ich mehr Geld, reise ich um die Welt.'
+        ],
+        correctAnswer: 'Wenn ich mehr Geld hätte, würde ich um die Welt reisen.',
+        explanationUz: 'Hozirgi faraz: hätte (agar bo‘lsa edi) ... würde reisen (sayohat qilardim).',
+        mistakeTipUz: '❌ Konjunktiv II: Wenn ich ... hätte, würde ich ... reisen.'
+      },
+      {
+        id: 'ab-b1-1-q8',
+        type: 'multiple-choice',
+        questionUz: 'Partizip I als Adjektiv: "Kulayotgan bola juda yoqimtoy"',
+        options: [
+          'Das lachende Kind ist sehr süß.',
+          'Das gelachte Kind ist sehr süß.',
+          'Das lachen Kind ist sehr süß.',
+          'Das lachendes Kind ist sehr süß.'
+        ],
+        correctAnswer: 'Das lachende Kind ist sehr süß.',
+        explanationUz: 'Partizip I: Infinitiv + -d (lachend) + sifat qo‘shimchasi (das lachende Kind).',
+        mistakeTipUz: '❌ Partizip I = fe‘l + d + sifat qo‘shimchasi: lachende.'
+      }
+    ]
+  },
+
+  // ==========================================
+  // --- B1.2 ABSCHLUSS-TEST (12 LEKTIONEN) ---
+  // ==========================================
+  'b1-2': {
+    levelCode: 'b1-2',
+    titleDe: 'B1.2 Abschluss-Test (Goethe/telc B1 Prüfungssimulation)',
+    titleUz: 'B1.2 Bosqich Yakuniy Imtihoni (Goethe B1 darajasi)',
+    descriptionUz: 'B1.2 darajasidagi barcha 4 ta modul (12 ta dars: Partizip II, ohne/anstatt zu, Konjunktiv II o‘tgan zamon, Pronominaladverbien, Konjunktiv I, N-Deklination, Passiv muqobillari, indem) bo‘yicha to‘liq xalqaro imtihon sinovi. O‘tish bali: kamida 80%.',
+    totalQuestions: 8,
+    passingScore: 80,
+    exercises: [
+      {
+        id: 'ab-b1-2-q1',
+        type: 'multiple-choice',
+        questionUz: 'Partizip II als Adjektiv: to‘g‘ri shaklni tanlang: "Biz _____ mehmonxonada qoldik"',
+        options: [
+          'Wir blieben in dem gebuchten Hotel.',
+          'Wir blieben in dem buchenden Hotel.',
+          'Wir blieben in dem gebucht Hotel.',
+          'Wir blieben in dem buchtes Hotel.'
+        ],
+        correctAnswer: 'Wir blieben in dem gebuchten Hotel.',
+        explanationUz: 'Tugallangan harakat sifati: Partizip II (gebucht) + sifat qo‘shimchasi Dativda (gebuchten Hotel).',
+        mistakeTipUz: '❌ Partizip II sifat bo‘lib kelganda odatiy sifat kabi turlanadi: in dem gebuchten Hotel.'
+      },
+      {
+        id: 'ab-b1-2-q2',
+        type: 'multiple-choice',
+        questionUz: '"ohne ... zu" va "anstatt ... zu": to‘g‘ri gap qaysi?',
+        options: [
+          'Er ging zur Arbeit, ohne zu frühstücken.',
+          'Er ging zur Arbeit, ohne frühstücken zu.',
+          'Er ging zur Arbeit, anstatt gefrühstückt.',
+          'Er ging zur Arbeit, ohne dass frühstücken.'
+        ],
+        correctAnswer: 'Er ging zur Arbeit, ohne zu frühstücken.',
+        explanationUz: '"ohne ... zu + Infinitiv" (nonushta qilmasdan ketdi). "zu" fe‘ldan oldin turadi.',
+        mistakeTipUz: '❌ ohne ... zu + Infinitiv: ohne zu frühstücken.'
+      },
+      {
+        id: 'ab-b1-2-q3',
+        type: 'multiple-choice',
+        questionUz: 'Konjunktiv II der Vergangenheit (o‘tmishdagi afsus): "Agar vaqtida chiqqanimda edi, poyezdni o‘tkazib yubormasdim"',
+        options: [
+          'Wenn ich pünktlich losgefahren wäre, hätte ich den Zug nicht verpasst.',
+          'Wenn ich pünktlich losgefahren hätte, wäre ich den Zug nicht verpasst.',
+          'Wenn ich pünktlich losfuhr, verpasste ich den Zug nicht.',
+          'Wenn ich pünktlich losfahren würde, würde ich den Zug nicht verpassen.'
+        ],
+        correctAnswer: 'Wenn ich pünktlich losgefahren wäre, hätte ich den Zug nicht verpasst.',
+        explanationUz: 'losfahren + sein -> wäre losgefahren; verpassen + haben -> hätte verpasst.',
+        mistakeTipUz: '❌ Harakat fe‘li uchun "wäre", boshqasi uchun "hätte": wäre losgefahren ... hätte verpasst.'
+      },
+      {
+        id: 'ab-b1-2-q4',
+        type: 'fill-blank',
+        questionUz: 'Pronominaladverb bilan to‘ldiring: "Ich interessiere mich sehr _____, wie man erneuerbare Energien nutzt."',
+        blankSentence: 'Ich interessiere mich sehr [blank], wie man erneuerbare Energien nutzt.',
+        options: ['dafür', 'woran', 'daran', 'damit'],
+        correctAnswer: 'dafür',
+        explanationUz: '"sich interessieren für + Akk." -> da + für = dafür.',
+        mistakeTipUz: '❌ interessieren für -> dafür.'
+      },
+      {
+        id: 'ab-b1-2-q5',
+        type: 'multiple-choice',
+        questionUz: 'Indirekte Rede (Konjunktiv I): "Matbuot xabar berishicha, shifokor operatsiyani yakunlagan emish"',
+        options: [
+          'Die Presse meldet, der Arzt habe die Operation beendet.',
+          'Die Presse meldet, der Arzt hat die Operation beendet.',
+          'Die Presse meldet, der Arzt hätte die Operation beendet.',
+          'Die Presse meldet, der Arzt ist die Operation beendet.'
+        ],
+        correctAnswer: 'Die Presse meldet, der Arzt habe die Operation beendet.',
+        explanationUz: 'Konjunktiv I uchinchi shaxs birlikda (haben): habe beendet.',
+        mistakeTipUz: '❌ Xabarlar tilidagi bilvosita nutq: er habe beendet.'
+      },
+      {
+        id: 'ab-b1-2-q6',
+        type: 'multiple-choice',
+        questionUz: 'N-Deklination: to‘g‘ri gapni tanlang:',
+        options: [
+          'Ich habe gestern mit dem netten Studenten und seinem Kollegen gesprochen.',
+          'Ich habe gestern mit dem netten Student und seinem Kolleg gesprochen.',
+          'Ich habe gestern mit dem netten Studenten und seinem Kolleges gesprochen.',
+          'Ich habe gestern mit des Studenten und des Kollegen gesprochen.'
+        ],
+        correctAnswer: 'Ich habe gestern mit dem netten Studenten und seinem Kollegen gesprochen.',
+        explanationUz: 'der Student va der Kollege zaif otlar (N-Deklination) bo‘lib, Dativda -en oladi: dem Studenten, seinem Kollegen.',
+        mistakeTipUz: '❌ N-Deklination: dem Studenten / dem Kollegen.'
+      },
+      {
+        id: 'ab-b1-2-q7',
+        type: 'multiple-choice',
+        questionUz: 'Passiv-Ersatzform: "Dieses Problem lässt sich leicht lösen" gapi qaysi gap bilan bir xil ma‘noda?',
+        options: [
+          'Dieses Problem kann leicht gelöst werden.',
+          'Dieses Problem muss leicht gelöst werden.',
+          'Dieses Problem soll nicht gelöst werden.',
+          'Dieses Problem wird gelöst worden sein.'
+        ],
+        correctAnswer: 'Dieses Problem kann leicht gelöst werden.',
+        explanationUz: '"sich lassen + Infinitiv" = "können ... Passiv" (yechilsa bo‘ladi / yechilishi mumkin).',
+        mistakeTipUz: '❌ lässt sich lösen = kann gelöst werden.'
+      },
+      {
+        id: 'ab-b1-2-q8',
+        type: 'multiple-choice',
+        questionUz: 'Modal bog‘lovchi "indem": to‘g‘ri gap tartibini aniqlang:',
+        options: [
+          'Man schützt die Natur, indem man weniger Plastik verbraucht.',
+          'Man schützt die Natur, indem verbraucht man weniger Plastik.',
+          'Man schützt die Natur, indem man verbraucht weniger Plastik.',
+          'Indem man verbraucht weniger Plastik, man schützt die Natur.'
+        ],
+        correctAnswer: 'Man schützt die Natur, indem man weniger Plastik verbraucht.',
+        explanationUz: '"indem" ergash gapida fe‘l eng oxirida turadi: indem man ... verbraucht.',
+        mistakeTipUz: '❌ indem ergash gapida fe‘l oxirida keladi: indem man ... verbraucht.'
+      }
+    ]
   }
 };
+
