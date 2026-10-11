@@ -5,7 +5,7 @@ import { AudioButton } from '../common/AudioButton';
 
 interface WritingTabProps {
   scaffold?: ScaffoldedWriting;
-  writing?: WritingTask[];
+  writing?: any;
   onNext: () => void;
 }
 
@@ -14,7 +14,8 @@ export const WritingTab: React.FC<WritingTabProps> = ({ scaffold, writing, onNex
   const [showModelAnswer, setShowModelAnswer] = useState(false);
 
   const activeScaffold = scaffold;
-  const legacyTask = (!activeScaffold && writing && writing.length > 0) ? writing[0] : null;
+  const rawWriting = Array.isArray(writing) ? writing[0] : writing;
+  const legacyTask = (!activeScaffold && rawWriting) ? rawWriting : null;
 
   if (!activeScaffold && !legacyTask) {
     return (
@@ -203,6 +204,14 @@ export const WritingTab: React.FC<WritingTabProps> = ({ scaffold, writing, onNex
   }
 
   // Legacy fallback
+  const taskTitle = legacyTask?.titleUz || legacyTask?.taskUz || legacyTask?.taskDe || 'Amaliy yozma nutq';
+  const taskPrompt = legacyTask?.promptUz || legacyTask?.taskDe || '';
+  const taskInstructions = legacyTask?.taskInstructionsUz || legacyTask?.instructionUz || '';
+  const modelDe = legacyTask?.modelAnswerDe || legacyTask?.sampleSolutionDe || '';
+  const modelUz = legacyTask?.modelAnswerUz || legacyTask?.translationUz || '';
+  const hints = legacyTask?.hints || [];
+  const usefulPhrases = legacyTask?.scaffold?.usefulPhrasesDe || [];
+
   return (
     <div className="max-w-4xl mx-auto py-8 px-4 space-y-8">
       <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-10 shadow-card">
@@ -212,7 +221,7 @@ export const WritingTab: React.FC<WritingTabProps> = ({ scaffold, writing, onNex
           </div>
           <div>
             <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
-              {legacyTask?.titleUz}
+              {taskTitle}
             </h2>
             <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
               Amaliy yozma nutqni shakllantirish
@@ -222,12 +231,37 @@ export const WritingTab: React.FC<WritingTabProps> = ({ scaffold, writing, onNex
 
         <div className="p-6 rounded-2xl bg-brand-50/50 dark:bg-brand-950/30 border border-brand-100 dark:border-brand-900/40 mb-6">
           <h3 className="font-bold text-brand-950 dark:text-brand-200 text-base mb-2">
-            {legacyTask?.promptUz}
+            {taskPrompt}
           </h3>
-          <p className="text-sm text-brand-900 dark:text-brand-300 leading-relaxed">
-            {legacyTask?.taskInstructionsUz}
-          </p>
+          {taskInstructions && (
+            <p className="text-sm text-brand-900 dark:text-brand-300 leading-relaxed">
+              {taskInstructions}
+            </p>
+          )}
         </div>
+
+        {/* Helpful phrases/hints chips */}
+        {(usefulPhrases.length > 0 || hints.length > 0) && (
+          <div className="mb-6 p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+            <div className="flex items-center space-x-2 text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+              <Sparkles size={14} className="text-brand-600 dark:text-brand-400" />
+              <span>Yordamchi iboralar (bosing va matnga qo‘shing):</span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {[...usefulPhrases, ...hints].map((phrase, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => handleInsertStarter(phrase)}
+                  className="inline-flex items-center text-xs px-2.5 py-1 rounded-lg bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-800 dark:text-slate-200 hover:border-brand-500 hover:text-brand-600 transition shadow-2xs"
+                >
+                  <PlusCircle size={12} className="mr-1 text-brand-500" />
+                  <span>{phrase}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="mb-6">
           <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-2">
@@ -255,20 +289,22 @@ export const WritingTab: React.FC<WritingTabProps> = ({ scaffold, writing, onNex
             {showModelAnswer ? 'Namunaviy javobni yashirish' : 'Namunaviy javobni ko‘rish (Model Answer)'}
           </button>
 
-          {showModelAnswer && legacyTask && (
+          {showModelAnswer && modelDe && (
             <div className="mt-4 p-5 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 animate-in fade-in">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-bold text-emerald-800 dark:text-emerald-400 uppercase tracking-wider">
                   Namunaviy javob (Nemischa):
                 </span>
-                <AudioButton text={legacyTask.modelAnswerDe} size="sm" />
+                <AudioButton text={modelDe} size="sm" />
               </div>
               <p className="text-sm font-semibold text-emerald-950 dark:text-emerald-200 mb-3 font-serif">
-                "{legacyTask.modelAnswerDe}"
+                "{modelDe}"
               </p>
-              <div className="pt-2 border-t border-emerald-200/60 dark:border-emerald-800/60 text-xs text-emerald-800 dark:text-emerald-300 italic">
-                <span className="font-semibold not-italic">O‘zbekcha tarjimasi:</span> {legacyTask.modelAnswerUz}
-              </div>
+              {modelUz && (
+                <div className="pt-2 border-t border-emerald-200/60 dark:border-emerald-800/60 text-xs text-emerald-800 dark:text-emerald-300 italic">
+                  <span className="font-semibold not-italic">O‘zbekcha tarjimasi:</span> {modelUz}
+                </div>
+              )}
             </div>
           )}
         </div>

@@ -96,7 +96,7 @@ export const HomePage: React.FC = () => {
           <h1 className="text-3xl sm:text-5xl font-black text-slate-950 dark:text-white tracking-tight max-w-4xl mx-auto leading-[1.14]">
             Nemis tilini{' '}
             <span className="text-brand-600 dark:text-brand-500">
-              noldan A1 darajagacha
+              noldan A2 darajasigacha
             </span>{' '}
             mustaqil o‘rganing.
           </h1>

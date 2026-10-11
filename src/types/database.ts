@@ -135,7 +135,7 @@ export interface Lesson {
 
   // Legacy fallback support
   listening?: ListeningExercise[];
-  writing?: WritingTask[];
+  writing?: WritingTask[] | any;
 }
 
 export interface VocabularyItem {
@@ -187,8 +187,9 @@ export interface ReadingMaterial {
   titleDe: string;
   titleUz: string;
   textDe: string;
-  translationUz: string;
-  vocabularyHints: { german: string; uzbek: string }[];
+  translationUz?: string;
+  textUz?: string;
+  vocabularyHints?: { german: string; uzbek: string }[];
   questions: {
     id: string;
     questionUz: string;

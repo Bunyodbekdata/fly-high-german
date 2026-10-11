@@ -38,7 +38,7 @@ const STORAGE_KEYS = {
   CERTIFICATES: 'fgn_certificates',
 };
 
-const CURRENT_CURRICULUM_VERSION = 'v5_separated_skills_certificate_tests';
+const CURRENT_CURRICULUM_VERSION = 'v6_complete_a2_curriculum_release';
 
 export const PROFILE_UPDATED_EVENT = 'fgn-profile-updated';
 

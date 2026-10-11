@@ -41,7 +41,6 @@ export const LevelPage: React.FC = () => {
 
   const code = (levelCode || 'a1-1') as CEFRLevelCode;
   const level = storageService.getLevelByCode(code);
-  const isA1 = code === 'a1-1' || code === 'a1-2';
 
   if (!level) {
     return (
@@ -54,8 +53,8 @@ export const LevelPage: React.FC = () => {
     );
   }
 
-  // If level is not A1.1 or A1.2, show the "Tez orada" locked page
-  if (!isA1 || level.isComingSoon) {
+  // If level is marked as coming soon, show the locked notice
+  if (level.isComingSoon) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-16 text-center space-y-6">
         <div className="w-20 h-20 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto shadow-soft">
@@ -69,7 +68,7 @@ export const LevelPage: React.FC = () => {
             {level.title}
           </h1>
           <p className="text-sm text-slate-600 dark:text-slate-300 max-w-xl mx-auto mt-2 leading-relaxed">
-            Biz "Sifat sonidan ustun" tamoyiliga amal qilamiz. Hozirda platforma <strong>A1.1</strong> va <strong>A1.2</strong> boshlang‘ich bosqichlarini Goethe-Institut va xalqaro CEFR darsliklari metodikasi asosida taqdim etmoqda.
+            Biz "Sifat sonidan ustun" tamoyiliga amal qilamiz. Hozirda platforma <strong>A1.1</strong>, <strong>A1.2</strong>, <strong>A2.1</strong> va <strong>A2.2</strong> bosqichlarini to‘liq Goethe-Institut va xalqaro CEFR darsliklari (Menschen) metodikasi asosida taqdim etmoqda. Keyingi B1 bosqichlari tez kunda qo‘shiladi.
           </p>
         </div>
 

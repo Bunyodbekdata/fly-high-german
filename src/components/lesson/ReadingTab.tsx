@@ -93,7 +93,7 @@ export const ReadingTab: React.FC<ReadingTabProps> = ({ reading, onNext }) => {
 
           {showTranslation && (
             <div className="mt-3 p-4 rounded-2xl bg-amber-50/70 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-sm text-amber-950 dark:text-amber-200 leading-relaxed animate-in fade-in">
-              {material.translationUz}
+              {material.translationUz || material.textUz}
             </div>
           )}
         </div>

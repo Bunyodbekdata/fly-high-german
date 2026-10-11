@@ -538,5 +538,382 @@ export const MODULE_REVIEWS: Record<string, ModuleReviewData> = {
         mistakeTipUz: '❌ Partizip II "gemacht" gapning eng oxirida turishi shart.'
       }
     ]
+  },
+
+  // ==========================================
+  // A2.1 MODUL 9: Beruf, Arbeit und Bewerbung (Lektion 25, 26, 27)
+  // ==========================================
+  'mod-a2-1-1': {
+    moduleId: 'mod-a2-1-1',
+    levelCode: 'a2-1',
+    titleDe: 'Wiederholung & Mini-Test: Beruf & Arbeit',
+    titleUz: '9-Modul Takrori: Kasb, ish va rezyume',
+    summaryUz: 'Ushbu modulda siz kasblar, ish intervyulari, modal fe‘llarning Präteritum shakli, weil va dass ergash gaplari hamda o‘zlik fe‘llarini o‘rgandingiz.',
+    checklistUz: [
+      'Kasbiy rezyume va tajribani tasvirlash (die Bewerbung, der Lebenslauf)',
+      'Modal fe‘llarning o‘tgan zamonini ishlatish (musste, wollte, konnte)',
+      '"weil" va "dass" ergash gaplarida fe‘lni gap oxiriga surish',
+      'O‘zlik fe‘llarini Akkusativ olmoshlari bilan qo‘llash (sich freuen, sich interessieren)'
+    ],
+    keyVocab: [
+      { german: 'die Bewerbung', article: 'die', plural: 'die Bewerbungen', uzbek: 'ish arizasi / rezyume' },
+      { german: 'das Vorstellungsgespräch', article: 'das', plural: 'die Vorstellungsgespräche', uzbek: 'ish suhbati' },
+      { german: 'die Erfahrung', article: 'die', plural: 'die Erfahrungen', uzbek: 'tajriba' },
+      { german: 'sich bewerben', uzbek: 'ariza topshirmoq' },
+      { german: 'sich freuen', uzbek: 'xursand bo‘lmoq' }
+    ],
+    grammarNotesUz: [
+      {
+        title: 'Modalverben im Präteritum',
+        explanation: 'müssen -> musste, wollen -> wollte, können -> konnte. 1- va 3-shaxsda qo‘shimcha bo‘lmaydi: ich musste, er musste.'
+      },
+      {
+        title: 'dass va weil ergash gaplari',
+        explanation: 'Ikkala bog‘lovchidan keyin ham tuslanuvchi fe‘l gapning eng oxiriga suriladi: "... dass ich Deutsch lernen will."'
+      }
+    ],
+    miniTest: [
+      {
+        id: 'rev-m9-q1',
+        type: 'fill-blank',
+        questionUz: '"können" fe‘lining Präteritum "ich" shaklini qo‘ying: "Gestern _____ ich nicht kommen."',
+        blankSentence: 'Gestern [blank] ich nicht kommen.',
+        options: ['konnte', 'kann', 'konntest', 'gekonnt'],
+        correctAnswer: 'konnte',
+        explanationUz: 'ich konnte - o‘tgan zamonda modal fe‘llar umlautsiz bo‘ladi.',
+        mistakeTipUz: '❌ "ich konnte" to‘g‘ri shakl.'
+      },
+      {
+        id: 'rev-m9-q2',
+        type: 'multiple-choice',
+        questionUz: '"sich interessieren" fe‘lining "ich" shaxsidagi o‘zlik olmoshi qaysi?',
+        options: ['mich (Ich interessiere mich)', 'mir', 'sich', 'dich'],
+        correctAnswer: 'mich (Ich interessiere mich)',
+        explanationUz: 'sich interessieren fe‘li Akkusativ oladi: ich interessiere mich.',
+        mistakeTipUz: '❌ "ich" uchun Akkusativ o‘zlik olmoshi "mich".'
+      }
+    ]
+  },
+
+  // ==========================================
+  // A2.1 MODUL 10: Unterwegs, Reisen und Orientierung (Lektion 28, 29, 30)
+  // ==========================================
+  'mod-a2-1-2': {
+    moduleId: 'mod-a2-1-2',
+    levelCode: 'a2-1',
+    titleDe: 'Wiederholung & Mini-Test: Reisen & Orientierung',
+    titleUz: '10-Modul Takrori: Sayohat va yo‘nalish',
+    summaryUz: 'Ushbu modulda sayohat, mehmonxona, bilvosita so‘roq gaplar, noaniq artikldan keyingi sifat qo‘shimchalari va vaqt predloglari mustahkamlandi.',
+    checklistUz: [
+      'Chipta va mehmonxona bron qilish iboralari',
+      'Bilvosita savol berish (Wissen Sie, ob... / Wann...?)',
+      'Noaniq artikldan keyin sifat turlanishi (ein schöner Tag, eine gute Reise)',
+      'Vaqt predloglari bilan Dativ (vor dem Essen, nach der Arbeit, beim Kochen)'
+    ],
+    keyVocab: [
+      { german: 'die Reise', article: 'die', plural: 'die Reisen', uzbek: 'sayohat' },
+      { german: 'die Fahrkarte', article: 'die', plural: 'die Fahrkarten', uzbek: 'yo‘l chiptasi' },
+      { german: 'das Gleis', article: 'das', plural: 'die Gleise', uzbek: 'poyezd yo‘li / platforma' },
+      { german: 'pünktlich', uzbek: 'o‘z vaqtida' },
+      { german: 'buchen', uzbek: 'bron qilmoq' }
+    ],
+    grammarNotesUz: [
+      {
+        title: 'Indirekte Fragen mit ob',
+        explanation: 'Ha/yo‘q savolini bilvosita berishda "ob" ishlatiladi va fe‘l gap oxiriga suriladi: "Können Sie mir sagen, ob der Zug kommt?"'
+      },
+      {
+        title: 'Temporale Präpositionen (vor, nach, bei, in)',
+        explanation: 'Bu predloglar vaqt ma‘nosida doimo Dativ talab qiladi: vor dem Essen, nach der Pause.'
+      }
+    ],
+    miniTest: [
+      {
+        id: 'rev-m10-q1',
+        type: 'multiple-choice',
+        questionUz: '"vor" predlogi bilan to‘g‘ri Dativ birikmasini toping (der Abflug):',
+        options: ['vor dem Abflug', 'vor den Abflug', 'vor der Abflug', 'vor das Abflug'],
+        correctAnswer: 'vor dem Abflug',
+        explanationUz: 'der Abflug Dativda dem Abflug bo‘ladi: vor dem Abflug.',
+        mistakeTipUz: '❌ Erkak jinsi Dativda "dem" bo‘ladi.'
+      }
+    ]
+  },
+
+  // ==========================================
+  // A2.1 MODUL 11: Medien, Freizeit und Konsum (Lektion 31, 32, 33)
+  // ==========================================
+  'mod-a2-1-3': {
+    moduleId: 'mod-a2-1-3',
+    levelCode: 'a2-1',
+    titleDe: 'Wiederholung & Mini-Test: Medien & Konsum',
+    titleUz: '11-Modul Takrori: Media va qiyoslash',
+    summaryUz: 'Ushbu modulda media, texnologiya, sifat darajalari (Komparativ/Superlativ), aniq artikldan keyin sifat turlanishi va wenn ergash gaplari o‘rganildi.',
+    checklistUz: [
+      'Smartfon, kompyuter va internet leksikasi',
+      'Sifatlarni qiyoslash (schnell -> schneller als -> am schnellsten)',
+      'Aniq artikldan keyin sifat qo‘shimchalari (der neue Computer, das alte Auto)',
+      '"wenn" (agar / qachonki) shart ergash gaplarini tuza olish'
+    ],
+    keyVocab: [
+      { german: 'die Nachricht', article: 'die', plural: 'die Nachrichten', uzbek: 'xabar / yangiliklar' },
+      { german: 'das Smartphone', article: 'das', plural: 'die Smartphones', uzbek: 'smartfon' },
+      { german: 'der Bildschirm', article: 'der', plural: 'die Bildschirme', uzbek: 'ekran' },
+      { german: 'besser', uzbek: 'yaxshiroq' },
+      { german: 'nutzen', uzbek: 'foydalanmoq' }
+    ],
+    grammarNotesUz: [
+      {
+        title: 'Komparativ und Superlativ',
+        explanation: 'Qiyosiy darajada sifatga "-er" qo‘shiladi (als bilan: schneller als). Orttirma darajada "am ...-sten" bo‘ladi: am schnellsten.'
+      },
+      {
+        title: 'Konditionalsätze mit "wenn"',
+        explanation: '"wenn" ergash gapida fe‘l oxirga boradi: "Wenn ich Zeit habe, lese ich ein Buch."'
+      }
+    ],
+    miniTest: [
+      {
+        id: 'rev-m11-q1',
+        type: 'multiple-choice',
+        questionUz: '"gut" sifatining orttirma darajasi (superlativ) qaysi?',
+        options: ['am besten', 'am gutesten', 'am meisten gut', 'am liebesten'],
+        correctAnswer: 'am besten',
+        explanationUz: 'gut -> besser -> am besten.',
+        mistakeTipUz: '❌ "gut" ning eng yuqori darajasi "am besten".'
+      }
+    ]
+  },
+
+  // ==========================================
+  // A2.1 MODUL 12: Feste, Einladungen und Beziehungen (Lektion 34, 35, 36)
+  // ==========================================
+  'mod-a2-1-4': {
+    moduleId: 'mod-a2-1-4',
+    levelCode: 'a2-1',
+    titleDe: 'Wiederholung & Mini-Test: Feste & Beziehungen',
+    titleUz: '12-Modul Takrori: Bayramlar va nisbiy gaplar',
+    summaryUz: 'Ushbu modulda bayramlar, sovg‘alar, ikki to‘ldiruvchili fe‘llar (Dativ + Akkusativ), olmoshlar tartibi va nisbiy gaplar (Relativsätze) mustahkamlandi.',
+    checklistUz: [
+      'Nemis bayramlari va tabriklari (Frohe Ostern, Frohe Weihnachten, Herzlichen Glückwunsch)',
+      'Dativ va Akkusativ obyektlar tartibi (Ich schenke dem Freund ein Buch / Ich schenke es ihm)',
+      'Nisbiy gaplarni Nominativ va Akkusativda to‘g‘ri bog‘lash (der Mann, der... / die Frau, die...)'
+    ],
+    keyVocab: [
+      { german: 'das Geschenk', article: 'das', plural: 'die Geschenke', uzbek: 'sovg‘a' },
+      { german: 'die Hochzeit', article: 'die', plural: 'die Hochzeiten', uzbek: 'to‘y' },
+      { german: 'die Einladung', article: 'die', plural: 'die Einladungen', uzbek: 'taklifnoma' },
+      { german: 'schenken', uzbek: 'sovg‘a qilmoq' },
+      { german: 'feiern', uzbek: 'bayram qilmoq' }
+    ],
+    grammarNotesUz: [
+      {
+        title: 'Verben mit Dativ und Akkusativ',
+        explanation: 'Agar ikkala to‘ldiruvchi ot bo‘lsa: Dativ (shaxs) oldin, Akkusativ (buyum) keyin: "Ich schenke meiner Mutter Blumen". Agar olmosh bo‘lsa: olmosh oldinga o‘tadi: "Ich schenke es ihr".'
+      },
+      {
+        title: 'Relativsätze im Nominativ und Akkusativ',
+        explanation: 'Nisbiy olmoshlar: der/das/die/die (Nom), den/das/die/die (Akk). Fe‘l doimo nisbiy gap oxirida turadi!'
+      }
+    ],
+    miniTest: [
+      {
+        id: 'rev-m12-q1',
+        type: 'multiple-choice',
+        questionUz: 'Nisbiy gapni to‘ldiring: "Das ist das Auto, _____ mein Vater gekauft hat."',
+        options: ['das', 'der', 'die', 'dem'],
+        correctAnswer: 'das',
+        explanationUz: 'das Auto neytral jinsda bo‘lib, ergash gapda Akkusativda "das" saqlanadi.',
+        mistakeTipUz: '❌ das Auto uchun nisbiy olmosh "das" bo‘ladi.'
+      }
+    ]
+  },
+
+  // ==========================================
+  // A2.2 MODUL 13: Wohnen, Zusammenleben und Nachbarschaft (Lektion 37, 38, 39)
+  // ==========================================
+  'mod-a2-2-1': {
+    moduleId: 'mod-a2-2-1',
+    levelCode: 'a2-2',
+    titleDe: 'Wiederholung & Mini-Test: Wohnen & Zusammenleben',
+    titleUz: '13-Modul Takrori: Yashash joyi va iltimoslar',
+    summaryUz: 'Ushbu modulda uy-joy ijarasi, Wechselverben (stellen/stehen, legen/liegen), Konjunktiv II madaniy iltimoslari va artiklsiz sifatlar o‘rganildi.',
+    checklistUz: [
+      'Uy-joy e‘lonlarini tushunish va ijara so‘rash',
+      'Harakat (stellen/legen + Akk) va holat (stehen/liegen + Dat) farqini bilish',
+      'Konjunktiv II orqali iltimos bildirish (Könntest du..., Würdest du...)',
+      'Artiklsiz sifat qo‘shimchalarini to‘g‘ri qo‘llash'
+    ],
+    keyVocab: [
+      { german: 'die Miete', article: 'die', plural: 'die Mieten', uzbek: 'ijara haqi' },
+      { german: 'die Kaution', article: 'die', plural: 'die Kautionen', uzbek: 'garov puli' },
+      { german: 'die Nachbarschaft', article: 'die', plural: 'die Nachbarschaften', uzbek: 'qo‘shnichilik' },
+      { german: 'stellen', uzbek: 'tik qo‘ymoq' },
+      { german: 'liegen', uzbek: 'yotmoq / joylashmoq' }
+    ],
+    grammarNotesUz: [
+      {
+        title: 'stellen vs. stehen & legen vs. liegen',
+        explanation: 'stellen / legen: harakat, Akkusativ (Wohin? - Ich stelle die Lampe auf den Tisch). stehen / liegen: tinch holat, Dativ (Wo? - Die Lampe steht auf dem Tisch).'
+      },
+      {
+        title: 'Höfliche Bitten mit Konjunktiv II',
+        explanation: 'Könntest du / Könnten Sie bitte... yoki Würdest du / Würden Sie bitte... + Infinitiv gap oxirida.'
+      }
+    ],
+    miniTest: [
+      {
+        id: 'rev-m13-q1',
+        type: 'multiple-choice',
+        questionUz: '"Men gilamni polga yoymoqdaman (Akkusativ)" jumlasi qaysi?',
+        options: [
+          'Ich lege den Teppich auf den Boden.',
+          'Ich liege den Teppich auf dem Boden.',
+          'Ich stelle den Teppich auf dem Boden.',
+          'Ich lege den Teppich auf dem Boden.'
+        ],
+        correctAnswer: 'Ich lege den Teppich auf den Boden.',
+        explanationUz: 'Yotqizib qo‘yish "legen" + Wohin? Akkusativ (auf den Boden).',
+        mistakeTipUz: '❌ Harakat uchun "legen" + Akkusativ: auf den Boden.'
+      }
+    ]
+  },
+
+  // ==========================================
+  // A2.2 MODUL 14: Gesundheit, Ernährung und Lebensstil (Lektion 40, 41, 42)
+  // ==========================================
+  'mod-a2-2-2': {
+    moduleId: 'mod-a2-2-2',
+    levelCode: 'a2-2',
+    titleDe: 'Wiederholung & Mini-Test: Gesundheit & Lebensstil',
+    titleUz: '14-Modul Takrori: Salomatlik va tavsiyalar',
+    summaryUz: 'Ushbu modulda sog‘liq, shifokor suhbati, Infinitiv mit "zu" birikmalari va "nicht brauchen ... zu" qoidasi o‘rganildi.',
+    checklistUz: [
+      'Alomatlar va kasalliklarni bayon qilish',
+      'Infinitiv mit "zu" birikmalarini to‘g‘ri tuzish (Es ist wichtig, Sport zu treiben)',
+      '"nicht brauchen ... zu" konstruksiyasini majburiyat yo‘qligida qo‘llash'
+    ],
+    keyVocab: [
+      { german: 'die Gesundheit', article: 'die', uzbek: 'salomatlik' },
+      { german: 'das Medikament', article: 'das', plural: 'die Medikamente', uzbek: 'dori vositasi' },
+      { german: 'das Rezept', article: 'das', plural: 'die Rezepte', uzbek: 'retsept' },
+      { german: 'untersuchen', uzbek: 'tibbiy ko‘rikdan o‘tkazmoq' },
+      { german: 'empfehlen', uzbek: 'tavsiya qilmoq' }
+    ],
+    grammarNotesUz: [
+      {
+        title: 'Infinitiv mit "zu"',
+        explanation: 'Es ist schön/wichtig... yoki Ich habe Lust/Zeit... birikmalaridan keyin fe‘l infinitivi oldidan "zu" qo‘yiladi: "... regelmäßig Sport zu treiben."'
+      },
+      {
+        title: 'nicht brauchen ... zu = nicht müssen',
+        explanation: '"Du brauchst heute nicht zur Arbeit zu gehen" = "Du musst heute nicht arbeiten".'
+      }
+    ],
+    miniTest: [
+      {
+        id: 'rev-m14-q1',
+        type: 'multiple-choice',
+        questionUz: 'Ajraladigan fe‘llarda "zu" qayerga joylashadi?',
+        options: [
+          'Old qo‘shimcha va o‘zak o‘rtasiga (auf-zu-stehen)',
+          'Fe‘lning eng boshiga (zu aufstehen)',
+          'Fe‘lning oxiriga (aufstehen zu)',
+          'Umuman ishlatilmaydi'
+        ],
+        correctAnswer: 'Old qo‘shimcha va o‘zak o‘rtasiga (auf-zu-stehen)',
+        explanationUz: 'Ajraladigan fe‘llarda "zu" o‘rtaga kiradi: aufstehen -> aufzustehen.',
+        mistakeTipUz: '❌ Ajraladigan fe‘llarda "zu" o‘rtada keladi: aufzustehen.'
+      }
+    ]
+  },
+
+  // ==========================================
+  // A2.2 MODUL 15: Umwelt, Natur und Gesellschaft (Lektion 43, 44, 45)
+  // ==========================================
+  'mod-a2-2-3': {
+    moduleId: 'mod-a2-2-3',
+    levelCode: 'a2-2',
+    titleDe: 'Wiederholung & Mini-Test: Umwelt & Natur',
+    titleUz: '15-Modul Takrori: Ekologiya va o‘tmish tarixi',
+    summaryUz: 'Ushbu modulda tabiatni asrash, obwohl to‘siqsiz ergash gapi, muntazam va nomuntazam fe‘llarning Präteritumi va juft bog‘lovchilar o‘rganildi.',
+    checklistUz: [
+      'Ekologik muammolar va energiyani tejash leksikasi',
+      '"obwohl" bilan ergash gap tuzish va fe‘llarni to‘g‘ri joylashtirish',
+      'Matnlardagi Präteritum fe‘llarini tushunish (ging, kam, sagte, lebte)',
+      '"nicht nur ... sondern auch" juft bog‘lovchisi bilan murakkab fikr bildirish'
+    ],
+    keyVocab: [
+      { german: 'die Umwelt', article: 'die', uzbek: 'atrof-muhit' },
+      { german: 'der Müll', article: 'der', uzbek: 'chiqindi' },
+      { german: 'die Energie', article: 'die', plural: 'die Energien', uzbek: 'energiya' },
+      { german: 'schützen', uzbek: 'himoya qilmoq / asramoq' },
+      { german: 'sparen', uzbek: 'tejamoq' }
+    ],
+    grammarNotesUz: [
+      {
+        title: 'Konzessivsätze mit "obwohl"',
+        explanation: '"obwohl" (garchi, qaramasdan) ergash gapida tuslangan fe‘l oxirga boradi: "Obwohl es regnet, gehe ich spazieren."'
+      },
+      {
+        title: 'Zweiteilige Konnektoren',
+        explanation: '"nicht nur ... sondern auch" (nafaqat ..., balki ... ham): "Er spricht nicht nur Deutsch, sondern auch Spanisch."'
+      }
+    ],
+    miniTest: [
+      {
+        id: 'rev-m15-q1',
+        type: 'multiple-choice',
+        questionUz: '"gehen" fe‘lining Präteritum shakli qaysi?',
+        options: ['ging', 'gehte', 'gegangen', 'geht'],
+        correctAnswer: 'ging',
+        explanationUz: 'gehen -> ging -> ist gegangen.',
+        mistakeTipUz: '❌ gehen ning Präteritum shakli "ging".'
+      }
+    ]
+  },
+
+  // ==========================================
+  // A2.2 MODUL 16: Zukunft, Lebenspläne und A2-Abschluss (Lektion 46, 47, 48)
+  // ==========================================
+  'mod-a2-2-4': {
+    moduleId: 'mod-a2-2-4',
+    levelCode: 'a2-2',
+    titleDe: 'Wiederholung & Mini-Test: Zukunft & Abschluss',
+    titleUz: '16-Modul Takrori: Kelajak va A2 yakuni',
+    summaryUz: 'Ushbu modulda kelajak rejalari, Futur I (werden + Infinitiv), um ... zu va damit farqi hamda A2 darajasidagi to‘liq kompleks tayyorgarlik yakunlandi.',
+    checklistUz: [
+      'Kelajakdagi orzu va rejalarni aytish (Futur I)',
+      'Maqsad bildirishda "um ... zu" va "damit" ni to‘g‘ri ajratish',
+      'Goethe-Zertifikat A2 imtihoni formatidagi test va topshiriqlarni yechish'
+    ],
+    keyVocab: [
+      { german: 'die Zukunft', article: 'die', uzbek: 'kelajak' },
+      { german: 'der Plan', article: 'der', plural: 'die Pläne', uzbek: 'reja' },
+      { german: 'der Erfolg', article: 'der', plural: 'die Erfolge', uzbek: 'muvaffaqiyat' },
+      { german: 'werden', uzbek: 'bo‘lmoq / aylanmoq' },
+      { german: 'erreichen', uzbek: 'erishmoq' }
+    ],
+    grammarNotesUz: [
+      {
+        title: 'Futur I: werden + Infinitiv',
+        explanation: 'Kelasi zamon formulasi: werden hozirgi zamonda tuslanadi, asosiy fe‘l esa infinitivda gap oxirida keladi: "Ich werde nächstes Jahr studieren."'
+      },
+      {
+        title: 'Finalsätze: um ... zu vs. damit',
+        explanation: 'Ega bitta bo‘lsa: "um ... zu + Infinitiv" (Ich lerne Deutsch, um in Deutschland zu arbeiten). Egalari har xil bo‘lsa: "damit + fe‘l" (Ich lerne Deutsch, damit mein Vater stolz auf mich ist).'
+      }
+    ],
+    miniTest: [
+      {
+        id: 'rev-m16-q1',
+        type: 'multiple-choice',
+        questionUz: '"um ... zu" konstruktsiyasida fe‘l qanday shaklda bo‘ladi?',
+        options: ['Infinitiv (asl shakli)', 'Partizip II', 'Präteritum', 'Tuslangan shakl'],
+        correctAnswer: 'Infinitiv (asl shakli)',
+        explanationUz: '"um ... zu" doimo fe‘lning asl infinitiv shakli bilan keladi: um Deutsch zu lernen.',
+        mistakeTipUz: '❌ "zu" dan keyin doimo fe‘lning noaniq shakli (infinitiv) keladi.'
+      }
+    ]
   }
 };
