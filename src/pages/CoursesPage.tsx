@@ -41,7 +41,7 @@ export const CoursesPage: React.FC = () => {
         <span className="text-xs font-bold text-brand-600 dark:text-brand-400 uppercase tracking-widest block mb-1">
           O‘quv Dasturi (CEFR Kurslari)
         </span>
-        <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+        <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight font-display">
           Nemis tili ta‘lim bosqichlari
         </h1>
         <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 mt-2">

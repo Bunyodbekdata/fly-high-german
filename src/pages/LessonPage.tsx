@@ -143,7 +143,7 @@ export const LessonPage: React.FC = () => {
       />
 
       {/* Main Tab Content */}
-      <div className="flex-1 pb-24 lg:pb-16">
+      <div key={activeTab} className="flex-1 pb-24 lg:pb-16 animate-tab-fade">
         {activeTab === 'warmup' && (
           <WarmUpTab
             warmUp={lesson.warmUp}

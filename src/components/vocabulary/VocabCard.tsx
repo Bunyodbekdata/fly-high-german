@@ -41,7 +41,7 @@ export const VocabCard: React.FC<VocabCardProps> = ({ item }) => {
 
   return (
     <div
-      className={`p-4 rounded-2xl bg-white dark:bg-slate-900 border transition-all duration-200 group relative ${
+      className={`p-4 rounded-2xl bg-white dark:bg-slate-900 border transition-all duration-200 group relative shadow-card hover:shadow-card-hover hover:-translate-y-0.5 ${
         articleStyles.glow
       } ${
         isMastered
@@ -61,7 +61,7 @@ export const VocabCard: React.FC<VocabCardProps> = ({ item }) => {
           <button
             onClick={() => markWordMastered(item.id, !isMastered)}
             title={isMastered ? "Yodlangan so‘z" : "Yodlangan deb belgilash"}
-            className={`p-1.5 rounded-lg transition ${
+            className={`p-1.5 rounded-lg transition active:scale-90 ${
               isMastered
                 ? 'text-emerald-600 dark:text-emerald-400 bg-emerald-100/70 dark:bg-emerald-950/60'
                 : 'text-slate-300 dark:text-slate-600 hover:text-emerald-500 hover:bg-slate-100 dark:hover:bg-slate-800'
@@ -73,7 +73,7 @@ export const VocabCard: React.FC<VocabCardProps> = ({ item }) => {
           <button
             onClick={() => toggleFavoriteWord(item.id)}
             title={isFavorite ? "Sevimlilardan o‘chirish" : "Sevimlilarga qo‘shish"}
-            className={`p-1.5 rounded-lg transition ${
+            className={`p-1.5 rounded-lg transition active:scale-90 ${
               isFavorite
                 ? 'text-amber-500 bg-amber-50 dark:bg-amber-950/60'
                 : 'text-slate-300 dark:text-slate-600 hover:text-amber-500 hover:bg-slate-100 dark:hover:bg-slate-800'

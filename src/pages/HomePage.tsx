@@ -83,11 +83,11 @@ export const HomePage: React.FC = () => {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           {/* German Flag Badge */}
-          <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-white/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 shadow-xs text-xs font-bold text-slate-700 dark:text-slate-200 mb-6 backdrop-blur-md">
-            <span className="flex space-x-0.5">
-              <span className="w-2.5 h-3 bg-slate-950 rounded-xs" />
-              <span className="w-2.5 h-3 bg-red-600 rounded-xs" />
-              <span className="w-2.5 h-3 bg-amber-400 rounded-xs" />
+          <div className="inline-flex items-center space-x-2.5 px-4 py-1.5 rounded-full bg-white/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 shadow-xs text-xs font-semibold text-slate-700 dark:text-slate-200 mb-6 backdrop-blur-md">
+            <span className="inline-flex overflow-hidden rounded-[3px] shadow-2xs border border-black/10">
+              <span className="w-2.5 h-3.5 bg-slate-950" />
+              <span className="w-2.5 h-3.5 bg-red-600" />
+              <span className="w-2.5 h-3.5 bg-amber-400" />
             </span>
             <span>Hueber Menschen & CEFR Xalqaro Standartida</span>
           </div>
@@ -111,7 +111,7 @@ export const HomePage: React.FC = () => {
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               to={`/courses/${nextLesson?.levelCode || 'a1-1'}/lesson/${nextLesson?.id || 'les-1'}`}
-              className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-base shadow-soft transition-colors inline-flex items-center justify-center space-x-2"
+              className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-base shadow-soft transition-all duration-200 hover:shadow-card hover:-translate-y-0.5 active:translate-y-0 inline-flex items-center justify-center space-x-2"
             >
               <span>
                 {isReturningLearner
@@ -123,7 +123,7 @@ export const HomePage: React.FC = () => {
 
             <Link
               to="/courses"
-              className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 font-bold text-base border border-slate-300 dark:border-slate-700 shadow-sm transition inline-flex items-center justify-center"
+              className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 text-slate-800 dark:text-slate-100 font-bold text-base border border-slate-300 dark:border-slate-700 shadow-sm transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 inline-flex items-center justify-center"
             >
               O‘quv xaritasini ko‘rish
             </Link>
@@ -132,11 +132,11 @@ export const HomePage: React.FC = () => {
           {/* Interactive Live Audio Preview Card */}
           <div className="mt-12 max-w-lg mx-auto p-5 rounded-3xl bg-white/95 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 shadow-card backdrop-blur-md text-left flex items-center justify-between gap-4">
             <div className="space-y-1">
-              <span className="text-[11px] font-extrabold uppercase tracking-wider text-brand-600 dark:text-brand-400 flex items-center gap-1">
-                <Sparkles size={12} />
+              <span className="text-xs font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400 flex items-center gap-1.5">
+                <Sparkles size={13} />
                 Jonli Nemischa Ovozni Sinab Ko‘ring
               </span>
-              <p className="text-base sm:text-lg font-bold text-slate-900 dark:text-white font-serif">
+              <p className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white font-display tracking-tight">
                 "Guten Tag! Ich lerne Deutsch."
               </p>
               <p className="text-xs text-slate-500 dark:text-slate-400">

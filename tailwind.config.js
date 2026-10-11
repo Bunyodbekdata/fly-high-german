@@ -42,11 +42,10 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['"Outfit"', '"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
-        display: ['"Plus Jakarta Sans"', '"Outfit"', 'sans-serif'],
+        sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
+        display: ['"Outfit"', '"Plus Jakarta Sans"', 'sans-serif'],
       },
-      // Editorial type scale for a calmer, more readable rhythm. The app had drifted
-      // into ad-hoc 10/11px text; these pair a defined size with a matching line-height.
+      // Editorial type scale for a calmer, more readable rhythm.
       fontSize: {
         '2xs': ['0.6875rem', { lineHeight: '1rem' }],
         'caption': ['0.75rem', { lineHeight: '1.125rem' }],
@@ -74,6 +73,7 @@ export default {
         'soundwave': 'soundwave 0.8s ease-in-out infinite alternate',
         'fadeIn': 'fadeIn 0.25s ease-out forwards',
         'scaleUp': 'scaleUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+        'tab-fade': 'tabFade 0.22s ease-out forwards',
       },
       keyframes: {
         float: {
@@ -91,6 +91,10 @@ export default {
         scaleUp: {
           '0%': { opacity: '0', transform: 'scale(0.94)' },
           '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        tabFade: {
+          '0%': { opacity: '0', transform: 'translateY(4px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
         }
       }
     },

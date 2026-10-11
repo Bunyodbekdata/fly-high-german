@@ -139,7 +139,7 @@ export const DashboardPage: React.FC = () => {
 
       {/* Continue Learning Prominent Card */}
       {nextLesson && (
-        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-brand-200 dark:border-brand-800/80 p-6 sm:p-8 shadow-soft flex flex-col md:flex-row md:items-center justify-between gap-6 ring-1 ring-brand-100 dark:ring-brand-900/30">
+        <div className="bg-white dark:bg-slate-900 rounded-3xl border border-brand-200 dark:border-brand-800/80 p-6 sm:p-8 shadow-card flex flex-col md:flex-row md:items-center justify-between gap-6 ring-1 ring-brand-100 dark:ring-brand-900/30">
           <div className="space-y-2">
             <div className="flex items-center space-x-2">
               <span className="text-xs font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950/60 px-2.5 py-0.5 rounded-full border border-brand-200/60 dark:border-brand-800/60">
@@ -147,7 +147,7 @@ export const DashboardPage: React.FC = () => {
               </span>
               <LevelBadge code={nextLesson.levelCode} />
             </div>
-            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white font-display">
               {nextLesson.titleDe} — {nextLesson.titleUz}
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
@@ -165,16 +165,58 @@ export const DashboardPage: React.FC = () => {
         </div>
       )}
 
+      {/* Onboarding Quest for New Learners */}
+      {!hasStarted && (
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-brand-600 via-brand-700 to-indigo-800 text-white p-6 sm:p-8 shadow-card border border-brand-500/30">
+          <div className="absolute right-0 top-0 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            <div className="space-y-3 max-w-2xl">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 text-white text-xs font-bold backdrop-blur-md">
+                <Sparkles size={14} className="text-amber-300" />
+                <span>Boshlang‘ich kvest: Ilk qadamlar (+50 XP)</span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight font-display">
+                O‘rganishni bugun boshlang va ilk 50 XP ballga ega bo‘ling!
+              </h2>
+              <p className="text-xs sm:text-sm text-brand-100 leading-relaxed">
+                Platforma sizga qulay va qiziqarli ta’lim berish uchun tayyorlangan. Quyidagi uchta oddiy qadam bilan boshlang:
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                <div className="p-3 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10 text-xs">
+                  <span className="font-bold text-amber-300 block mb-0.5">1-qadam • +20 XP</span>
+                  <span className="text-white/90">1-darsni ochib, salomlashish qoidalarini ko‘rish</span>
+                </div>
+                <div className="p-3 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10 text-xs">
+                  <span className="font-bold text-amber-300 block mb-0.5">2-qadam • +15 XP</span>
+                  <span className="text-white/90">Lug‘at bo‘limida 5 ta so‘zni flashcard bilan yodlash</span>
+                </div>
+                <div className="p-3 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10 text-xs">
+                  <span className="font-bold text-amber-300 block mb-0.5">3-qadam • +15 XP</span>
+                  <span className="text-white/90">Hörverstehen bo‘limida audio dialogini tinglash</span>
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={() => navigate(nextLesson ? `/courses/${nextLesson.levelCode}/lesson/${nextLesson.id}` : '/courses')}
+              className="px-6 py-4 rounded-2xl bg-white text-brand-800 hover:bg-brand-50 font-extrabold text-sm shadow-card transition-all active:scale-95 flex items-center justify-center gap-2 flex-shrink-0"
+            >
+              <Play size={18} className="fill-current text-brand-700" />
+              <span>Kvestni boshlash</span>
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Progress & Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Level Progress */}
-        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-soft space-y-4">
+        <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-card hover:border-brand-300 dark:hover:border-brand-700 transition-all space-y-4">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Hozirgi Bosqich</span>
             <LevelBadge code={currentLevelCode} />
           </div>
           <div>
-            <h3 className="text-xl font-bold text-slate-900 dark:text-white">A1.1 Boshlang‘ich</h3>
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white font-display">A1.1 Boshlang‘ich</h3>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Umumiy o‘zlashtirish ko‘rsatkichi</p>
           </div>
           <ProgressBar progress={levelProgress} size="md" />
@@ -185,13 +227,13 @@ export const DashboardPage: React.FC = () => {
         </div>
 
         {/* Vocabulary Progress */}
-        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-soft space-y-4">
+        <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-card hover:border-emerald-300 dark:hover:border-emerald-700 transition-all space-y-4">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Lug‘at Boyligi</span>
             <Bookmark size={18} className="text-brand-600 dark:text-brand-400" />
           </div>
           <div>
-            <div className="text-2xl font-extrabold text-slate-900 dark:text-white">
+            <div className="text-2xl font-extrabold text-slate-900 dark:text-white font-display">
               {masteredVocabCount} <span className="text-sm font-normal text-slate-500 dark:text-slate-400">/ {allVocab.length} ta</span>
             </div>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">To‘liq yodlangan so‘zlar</p>
@@ -204,13 +246,13 @@ export const DashboardPage: React.FC = () => {
         </div>
 
         {/* Completed Lessons */}
-        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-soft space-y-4">
+        <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-card hover:border-blue-300 dark:hover:border-blue-700 transition-all space-y-4">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Tugatilgan Darslar</span>
             <CheckCircle2 size={18} className="text-blue-600 dark:text-blue-400" />
           </div>
           <div>
-            <div className="text-2xl font-extrabold text-slate-900 dark:text-white">
+            <div className="text-2xl font-extrabold text-slate-900 dark:text-white font-display">
               {completedLessonsCount} <span className="text-sm font-normal text-slate-500 dark:text-slate-400">/ {allLessons.length} ta faol dars</span>
             </div>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Topshirilgan mashqlar va testlar</p>

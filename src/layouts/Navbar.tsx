@@ -4,7 +4,6 @@ import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { SearchModal } from '../components/common/SearchModal';
 import { AccountDropdown } from '../components/navigation/AccountDropdown';
-import { MobileAccountSheet } from '../components/navigation/MobileAccountSheet';
 import { 
   Search, 
   BookOpen, 
@@ -16,8 +15,7 @@ import {
   X,
   Sun,
   Moon,
-  Award,
-  User
+  Award
 } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
@@ -26,7 +24,6 @@ export const Navbar: React.FC = () => {
   const location = useLocation();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isAccountSheetOpen, setIsAccountSheetOpen] = useState(false);
 
   const primaryLinks = [
     { to: '/courses', label: 'Kurslar', icon: BookOpen },
@@ -166,24 +163,13 @@ export const Navbar: React.FC = () => {
                 <AccountDropdown />
               </div>
 
-              {/* Mobile Account Button (Triggers Mobile Sheet) */}
-              <button
-                onClick={() => setIsAccountSheetOpen(true)}
-                className="lg:hidden flex items-center space-x-1.5 p-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700"
-                aria-label="Profil va hisob"
-              >
-                <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-brand-500 to-brand-700 text-white flex items-center justify-center text-xs font-bold">
-                  {user ? (user.name || 'T').charAt(0).toUpperCase() : <User size={13} />}
-                </div>
-              </button>
-
               {/* Mobile Menu Toggle Button */}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="lg:hidden p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition"
-                aria-label="Menyu"
+                className="lg:hidden p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 transition"
+                aria-label="Qo‘shimcha menyu"
               >
-                {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+                {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
               </button>
             </div>
           </div>
@@ -191,7 +177,10 @@ export const Navbar: React.FC = () => {
 
         {/* Mobile Dropdown Menu for Navigation Links */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 pt-3 pb-6 space-y-1 animate-in slide-in-from-top-2">
+          <div className="lg:hidden border-t border-slate-200 dark:border-slate-800 bg-white/98 dark:bg-slate-900/98 backdrop-blur-xl px-4 pt-3 pb-6 space-y-1 animate-in slide-in-from-top-2 shadow-xl">
+            <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 px-3 py-1">
+              Barcha o‘quv bo‘limlari
+            </div>
             {allNavLinks.map((link) => {
               const Icon = link.icon;
               const active = isActive(link.to);
@@ -225,19 +214,17 @@ export const Navbar: React.FC = () => {
 
             {/* Quick account action inside mobile nav menu */}
             <div className="pt-3 border-t border-slate-100 dark:border-slate-800">
-              <button
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  setIsAccountSheetOpen(true);
-                }}
+              <Link
+                to={user ? "/profile" : "/login"}
+                onClick={() => setIsMobileMenuOpen(false)}
                 className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-bold bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100"
               >
                 <div className="flex items-center space-x-2.5">
-                  <User size={18} className="text-brand-600 dark:text-brand-400" />
-                  <span>👤 Mening hisobim (Account)</span>
+                  <span className="text-base">👤</span>
+                  <span>{user ? (user.name || 'Profilim') : 'Kirish / Ro‘yxatdan o‘tish'}</span>
                 </div>
                 <span className="text-xs text-slate-400">Ochish →</span>
-              </button>
+              </Link>
             </div>
           </div>
         )}
@@ -245,12 +232,6 @@ export const Navbar: React.FC = () => {
 
       {/* Global Search Dialog Modal */}
       <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
-
-      {/* Mobile Account Bottom Sheet */}
-      <MobileAccountSheet 
-        isOpen={isAccountSheetOpen} 
-        onClose={() => setIsAccountSheetOpen(false)} 
-      />
     </>
   );
 };
