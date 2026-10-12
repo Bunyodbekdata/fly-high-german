@@ -37,9 +37,10 @@ export const DashboardPage: React.FC = () => {
   const allLessons = storageService.getLessons();
   const allVocab = storageService.getAllVocabulary();
 
-  const currentLevelCode: CEFRLevelCode = 'a1-1';
+  const currentLevelCode: CEFRLevelCode = user?.currentLevel || 'a1-1';
+  const currentLevel = storageService.getLevelByCode(currentLevelCode);
   const levelProgress = getLevelProgress(currentLevelCode);
-  const nextLesson = getNextIncompleteLesson() || storageService.getLessonById('les-1');
+  const nextLesson = getNextIncompleteLesson(currentLevelCode) || storageService.getLessonById('les-1');
 
   const xp = user?.xpPoints ?? 0;
   const streak = user?.streakDays ?? 0;
@@ -55,8 +56,15 @@ export const DashboardPage: React.FC = () => {
   });
 
   const dailyGoalMinutes = user?.dailyGoalMinutes || 20;
-  // Compute approximate minutes completed today based on completed steps or 15 mins per completed lesson
-  const estimatedTodayMinutes = Math.min(dailyGoalMinutes, (hasStarted ? 15 : 0) + (streak > 0 ? 5 : 0));
+  // Calculate today's study minutes dynamically from active session and completed lessons today
+  const todayDateStr = new Date().toISOString().slice(0, 10);
+  const lessonsStudiedToday = Object.values(lessonProgress).filter(
+    (p) => p && (p.completedAt?.startsWith(todayDateStr) || p.lastAccessedAt?.startsWith(todayDateStr))
+  ).length;
+  const estimatedTodayMinutes = Math.min(
+    dailyGoalMinutes,
+    lessonsStudiedToday > 0 ? lessonsStudiedToday * 15 : (hasStarted && streak > 0 ? 5 : 0)
+  );
   const dailyProgressPercent = Math.min(100, Math.round((estimatedTodayMinutes / dailyGoalMinutes) * 100));
 
   return (
@@ -216,7 +224,9 @@ export const DashboardPage: React.FC = () => {
             <LevelBadge code={currentLevelCode} />
           </div>
           <div>
-            <h3 className="text-xl font-bold text-slate-900 dark:text-white font-display">A1.1 Boshlang‘ich</h3>
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white font-display">
+              {currentLevel?.title || `${currentLevelCode.toUpperCase()} Bosqich`}
+            </h3>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Umumiy o‘zlashtirish ko‘rsatkichi</p>
           </div>
           <ProgressBar progress={levelProgress} size="md" />

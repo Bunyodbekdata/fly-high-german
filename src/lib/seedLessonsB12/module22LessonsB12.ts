@@ -48,10 +48,10 @@ export const MODULE_22_B12_LESSONS: Lesson[] = [
     },
     vocabulary: [
       {
-        id: 'voc-b1-14-1',
+        id: 'voc-b1-64-1',
         lessonId: 'les-64',
         levelCode: 'b1-2',
-        german: 'die mentale Gesundheit',
+        german: 'mentale Gesundheit',
         article: 'die',
         uzbek: 'ruhiy salomatlik',
         exampleDe: 'Mentale Gesundheit ist genauso wichtig wie körperliche Fitness.',
@@ -59,7 +59,7 @@ export const MODULE_22_B12_LESSONS: Lesson[] = [
         wordType: 'noun'
       },
       {
-        id: 'voc-b1-14-2',
+        id: 'voc-b1-64-2',
         lessonId: 'les-64',
         levelCode: 'b1-2',
         german: 'das Wohlbefinden',
@@ -70,7 +70,7 @@ export const MODULE_22_B12_LESSONS: Lesson[] = [
         wordType: 'noun'
       },
       {
-        id: 'voc-b1-14-3',
+        id: 'voc-b1-64-3',
         lessonId: 'les-64',
         levelCode: 'b1-2',
         german: 'die Überlastung',
@@ -82,7 +82,7 @@ export const MODULE_22_B12_LESSONS: Lesson[] = [
         wordType: 'noun'
       },
       {
-        id: 'voc-b1-14-4',
+        id: 'voc-b1-64-4',
         lessonId: 'les-64',
         levelCode: 'b1-2',
         german: 'die Achtsamkeit',
@@ -93,7 +93,7 @@ export const MODULE_22_B12_LESSONS: Lesson[] = [
         wordType: 'noun'
       },
       {
-        id: 'voc-b1-14-5',
+        id: 'voc-b1-64-5',
         lessonId: 'les-64',
         levelCode: 'b1-2',
         german: 'bewältigen',
@@ -104,7 +104,7 @@ export const MODULE_22_B12_LESSONS: Lesson[] = [
         wordType: 'verb'
       },
       {
-        id: 'voc-b1-14-6',
+        id: 'voc-b1-64-6',
         lessonId: 'les-64',
         levelCode: 'b1-2',
         german: 'erschöpft',
@@ -115,7 +115,7 @@ export const MODULE_22_B12_LESSONS: Lesson[] = [
         wordType: 'adjective'
       },
       {
-        id: 'voc-b1-14-7',
+        id: 'voc-b1-64-7',
         lessonId: 'les-64',
         levelCode: 'b1-2',
         german: 'das Bedauern',
@@ -126,7 +126,7 @@ export const MODULE_22_B12_LESSONS: Lesson[] = [
         wordType: 'noun'
       },
       {
-        id: 'voc-b1-14-8',
+        id: 'voc-b1-64-8',
         lessonId: 'les-64',
         levelCode: 'b1-2',
         german: 'abschalten',
@@ -367,7 +367,7 @@ export const MODULE_22_B12_LESSONS: Lesson[] = [
     },
     vocabulary: [
       {
-        id: 'voc-b1-15-1',
+        id: 'voc-b1-65-1',
         lessonId: 'les-65',
         levelCode: 'b1-2',
         german: 'die Ernährung',
@@ -378,7 +378,7 @@ export const MODULE_22_B12_LESSONS: Lesson[] = [
         wordType: 'noun'
       },
       {
-        id: 'voc-b1-15-2',
+        id: 'voc-b1-65-2',
         lessonId: 'les-65',
         levelCode: 'b1-2',
         german: 'der Konsum',
@@ -389,7 +389,7 @@ export const MODULE_22_B12_LESSONS: Lesson[] = [
         wordType: 'noun'
       },
       {
-        id: 'voc-b1-15-3',
+        id: 'voc-b1-65-3',
         lessonId: 'les-65',
         levelCode: 'b1-2',
         german: 'die Zutat',
@@ -401,7 +401,7 @@ export const MODULE_22_B12_LESSONS: Lesson[] = [
         wordType: 'noun'
       },
       {
-        id: 'voc-b1-15-4',
+        id: 'voc-b1-65-4',
         lessonId: 'les-65',
         levelCode: 'b1-2',
         german: 'verzichten',
@@ -412,7 +412,7 @@ export const MODULE_22_B12_LESSONS: Lesson[] = [
         wordType: 'verb'
       },
       {
-        id: 'voc-b1-15-5',
+        id: 'voc-b1-65-5',
         lessonId: 'les-65',
         levelCode: 'b1-2',
         german: 'nachhaltig',
@@ -423,7 +423,7 @@ export const MODULE_22_B12_LESSONS: Lesson[] = [
         wordType: 'adjective'
       },
       {
-        id: 'voc-b1-15-6',
+        id: 'voc-b1-65-6',
         lessonId: 'les-65',
         levelCode: 'b1-2',
         german: 'der Nährstoff',
@@ -435,7 +435,7 @@ export const MODULE_22_B12_LESSONS: Lesson[] = [
         wordType: 'noun'
       },
       {
-        id: 'voc-b1-15-7',
+        id: 'voc-b1-65-7',
         lessonId: 'les-65',
         levelCode: 'b1-2',
         german: 'pflanzlich',
@@ -446,7 +446,7 @@ export const MODULE_22_B12_LESSONS: Lesson[] = [
         wordType: 'adjective'
       },
       {
-        id: 'voc-b1-15-8',
+        id: 'voc-b1-65-8',
         lessonId: 'les-65',
         levelCode: 'b1-2',
         german: 'beitragen',

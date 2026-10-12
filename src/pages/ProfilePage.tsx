@@ -176,118 +176,62 @@ export const ProfilePage: React.FC = () => {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {/* A1.1 Box */}
-          {(() => {
-            const a11 = storageService.getCertificateLevelStats('a1-1');
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {levels.map((lvl) => {
+            const stats = storageService.getCertificateLevelStats(lvl.code, user?.id);
+            const levelLabel = lvl.code.toUpperCase().replace('-', '.');
             return (
-              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-3">
+              <div key={lvl.id} className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
                     <span className="px-2.5 py-1 rounded-lg text-xs font-black bg-brand-600 text-white">
-                      A1.1
+                      {levelLabel}
                     </span>
                     <span className="text-xs font-bold text-slate-900 dark:text-white">
-                      Goethe A1.1 Test
+                      {levelLabel} Testi
                     </span>
                   </div>
                   <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-                    a11.isPassed 
+                    stats.isPassed 
                       ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300' 
-                      : a11.attemptsCount > 0 
+                      : stats.attemptsCount > 0 
                         ? 'bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300' 
                         : 'bg-slate-200 dark:bg-slate-800 text-slate-600'
                   }`}>
-                    {a11.isPassed ? '✅ Passed' : a11.attemptsCount > 0 ? '❌ Not passed' : 'Kutilmoqda'}
+                    {stats.isPassed ? '✅ O‘tildi' : stats.attemptsCount > 0 ? '❌ O‘tilmadi' : 'Kutilmoqda'}
                   </span>
                 </div>
 
                 <div className="space-y-1 text-xs text-slate-600 dark:text-slate-300">
                   <div className="flex justify-between">
-                    <span>Best score:</span>
+                    <span>Eng yuqori:</span>
                     <strong className="font-bold text-slate-900 dark:text-white">
-                      {a11.bestPercentage !== null ? `${a11.bestPercentage}%` : '—'}
+                      {stats.bestPercentage !== null ? `${stats.bestPercentage}%` : '—'}
                     </strong>
                   </div>
                   <div className="flex justify-between">
-                    <span>Attempts:</span>
+                    <span>Urinishlar:</span>
                     <strong className="font-bold text-slate-900 dark:text-white">
-                      {a11.attemptsCount}
+                      {stats.attemptsCount}
                     </strong>
                   </div>
                   <div className="flex justify-between">
-                    <span>Last attempt:</span>
+                    <span>Oxirgi natija:</span>
                     <strong className="font-bold text-slate-900 dark:text-white">
-                      {a11.lastPercentage !== null ? `${a11.lastPercentage}%` : '—'}
+                      {stats.lastPercentage !== null ? `${stats.lastPercentage}%` : '—'}
                     </strong>
                   </div>
                 </div>
 
-                {a11.certificateId && (
+                {stats.certificateId && (
                   <div className="pt-1 text-[11px] text-amber-700 dark:text-amber-400 font-semibold flex items-center gap-1">
                     <Sparkles size={12} />
-                    <span>Sertifikat ID: {a11.certificateId}</span>
+                    <span>Sertifikat ID: {stats.certificateId}</span>
                   </div>
                 )}
               </div>
             );
-          })()}
-
-          {/* A1.2 Box */}
-          {(() => {
-            const a12 = storageService.getCertificateLevelStats('a1-2');
-            return (
-              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <span className="px-2.5 py-1 rounded-lg text-xs font-black bg-brand-600 text-white">
-                      A1.2
-                    </span>
-                    <span className="text-xs font-bold text-slate-900 dark:text-white">
-                      Goethe A1.2 Test
-                    </span>
-                  </div>
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-                    a12.isPassed 
-                      ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300' 
-                      : a12.attemptsCount > 0 
-                        ? 'bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300' 
-                        : 'bg-slate-200 dark:bg-slate-800 text-slate-600'
-                  }`}>
-                    {a12.isPassed ? '✅ Passed' : a12.attemptsCount > 0 ? '❌ Not passed' : 'Kutilmoqda'}
-                  </span>
-                </div>
-
-                <div className="space-y-1 text-xs text-slate-600 dark:text-slate-300">
-                  <div className="flex justify-between">
-                    <span>Best score:</span>
-                    <strong className="font-bold text-slate-900 dark:text-white">
-                      {a12.bestPercentage !== null ? `${a12.bestPercentage}%` : '—'}
-                    </strong>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Attempts:</span>
-                    <strong className="font-bold text-slate-900 dark:text-white">
-                      {a12.attemptsCount}
-                    </strong>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Last attempt:</span>
-                    <strong className="font-bold text-slate-900 dark:text-white">
-                      {a12.lastPercentage !== null ? `${a12.lastPercentage}%` : '—'}
-                    </strong>
-                  </div>
-                </div>
-
-                {a12.certificateId && (
-                  <div className="pt-1 text-[11px] text-amber-700 dark:text-amber-400 font-semibold flex items-center gap-1">
-                    <Sparkles size={12} />
-                    <span>Sertifikat ID: {a12.certificateId}</span>
-                  </div>
-                )}
-              </div>
-            );
-          })()}
+          })}
         </div>
       </div>
 

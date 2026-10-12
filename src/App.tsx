@@ -5,6 +5,7 @@ import { AuthProvider } from './context/AuthContext';
 import { ProgressProvider } from './context/ProgressContext';
 import { MainLayout } from './layouts/MainLayout';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
+import { ProtectedRoute } from './components/common/ProtectedRoute';
 
 const HomePage = lazy(() => import('./pages/HomePage').then((m) => ({ default: m.HomePage })));
 const CoursesPage = lazy(() => import('./pages/CoursesPage').then((m) => ({ default: m.CoursesPage })));
@@ -33,6 +34,7 @@ const CertificateResultPage = lazy(() =>
 );
 const PrivacyPage = lazy(() => import('./pages/PrivacyPage').then((m) => ({ default: m.PrivacyPage })));
 const TermsPage = lazy(() => import('./pages/TermsPage').then((m) => ({ default: m.TermsPage })));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage').then((m) => ({ default: m.NotFoundPage })));
 
 export const App: React.FC = () => {
   return (
@@ -57,12 +59,12 @@ export const App: React.FC = () => {
                   <Route path="certificate-tests/:testId" element={<CertificateTestRoomPage />} />
                   <Route path="certificate-tests/results/:attemptId" element={<CertificateResultPage />} />
                   <Route path="dashboard" element={<DashboardPage />} />
-                  <Route path="profile" element={<ProfilePage />} />
+                  <Route path="profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
                   <Route path="auth" element={<AuthPage />} />
-                  <Route path="admin" element={<AdminDashboardPage />} />
+                  <Route path="admin" element={<ProtectedRoute requireAdmin={true}><AdminDashboardPage /></ProtectedRoute>} />
                   <Route path="privacy" element={<PrivacyPage />} />
                   <Route path="terms" element={<TermsPage />} />
-                  <Route path="*" element={<Navigate to="/" replace />} />
+                  <Route path="*" element={<NotFoundPage />} />
                 </Route>
               </Routes>
             </ProgressProvider>

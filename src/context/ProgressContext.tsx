@@ -15,7 +15,7 @@ interface ProgressContextType {
   recordTabProgress: (lessonId: string, tab: string) => void;
   toggleFavoriteWord: (vocabId: string) => boolean;
   markWordMastered: (vocabId: string, mastered: boolean) => void;
-  getNextIncompleteLesson: () => Lesson | undefined;
+  getNextIncompleteLesson: (levelCode?: CEFRLevelCode) => Lesson | undefined;
 }
 
 const ProgressContext = createContext<ProgressContextType | undefined>(undefined);
@@ -32,6 +32,14 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     setLessonProgress({ ...storageService.getLessonProgress() });
     setVocabProgress({ ...storageService.getVocabularyProgress() });
   };
+
+  useEffect(() => {
+    const handleProfileChange = () => {
+      refreshProgress();
+    };
+    window.addEventListener('fgn-profile-updated', handleProfileChange);
+    return () => window.removeEventListener('fgn-profile-updated', handleProfileChange);
+  }, []);
 
   const isLessonCompleted = (lessonId: string): boolean => {
     return lessonProgress[lessonId]?.completed === true;
@@ -83,7 +91,12 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     refreshProgress();
   };
 
-  const getNextIncompleteLesson = (): Lesson | undefined => {
+  const getNextIncompleteLesson = (levelCode?: CEFRLevelCode): Lesson | undefined => {
+    if (levelCode) {
+      const levelLessons = storageService.getLessons(undefined, levelCode);
+      const nextInLevel = levelLessons.find(l => !lessonProgress[l.id]?.completed);
+      if (nextInLevel) return nextInLevel;
+    }
     const allLessons = storageService.getLessons();
     const next = allLessons.find(l => !lessonProgress[l.id]?.completed);
     return next || allLessons[0];

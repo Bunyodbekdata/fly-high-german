@@ -88,13 +88,61 @@ class StorageService {
       localStorage.setItem(STORAGE_KEYS.MODULES, JSON.stringify(INITIAL_MODULES));
     }
     if (needsCurriculumSync || !localStorage.getItem(STORAGE_KEYS.LESSONS)) {
-      localStorage.setItem(STORAGE_KEYS.LESSONS, JSON.stringify(INITIAL_LESSONS));
+      let lessonsToStore = INITIAL_LESSONS;
+      const existingRaw = localStorage.getItem(STORAGE_KEYS.LESSONS);
+      if (existingRaw) {
+        try {
+          const existingLessons = JSON.parse(existingRaw);
+          if (Array.isArray(existingLessons)) {
+            const initialIds = new Set(INITIAL_LESSONS.map(l => l.id));
+            const customLessons = existingLessons.filter(l => l && !initialIds.has(l.id));
+            if (customLessons.length > 0) {
+              lessonsToStore = [...INITIAL_LESSONS, ...customLessons];
+            }
+          }
+        } catch {
+          // ignore corrupted existing
+        }
+      }
+      localStorage.setItem(STORAGE_KEYS.LESSONS, JSON.stringify(lessonsToStore));
     }
     if (needsCurriculumSync || !localStorage.getItem(STORAGE_KEYS.VOCABULARY)) {
-      localStorage.setItem(STORAGE_KEYS.VOCABULARY, JSON.stringify(ALL_INITIAL_VOCABULARY));
+      let vocabToStore = ALL_INITIAL_VOCABULARY;
+      const existingRaw = localStorage.getItem(STORAGE_KEYS.VOCABULARY);
+      if (existingRaw) {
+        try {
+          const existingVocab = JSON.parse(existingRaw);
+          if (Array.isArray(existingVocab)) {
+            const initialIds = new Set(ALL_INITIAL_VOCABULARY.map(v => v.id));
+            const customVocab = existingVocab.filter(v => v && !initialIds.has(v.id));
+            if (customVocab.length > 0) {
+              vocabToStore = [...ALL_INITIAL_VOCABULARY, ...customVocab];
+            }
+          }
+        } catch {
+          // ignore
+        }
+      }
+      localStorage.setItem(STORAGE_KEYS.VOCABULARY, JSON.stringify(vocabToStore));
     }
     if (needsCurriculumSync || !localStorage.getItem(STORAGE_KEYS.GRAMMAR)) {
-      localStorage.setItem(STORAGE_KEYS.GRAMMAR, JSON.stringify(ALL_INITIAL_GRAMMAR));
+      let grammarToStore = ALL_INITIAL_GRAMMAR;
+      const existingRaw = localStorage.getItem(STORAGE_KEYS.GRAMMAR);
+      if (existingRaw) {
+        try {
+          const existingGrammar = JSON.parse(existingRaw);
+          if (Array.isArray(existingGrammar)) {
+            const initialIds = new Set(ALL_INITIAL_GRAMMAR.map(g => g.id));
+            const customGrammar = existingGrammar.filter(g => g && !initialIds.has(g.id));
+            if (customGrammar.length > 0) {
+              grammarToStore = [...ALL_INITIAL_GRAMMAR, ...customGrammar];
+            }
+          }
+        } catch {
+          // ignore
+        }
+      }
+      localStorage.setItem(STORAGE_KEYS.GRAMMAR, JSON.stringify(grammarToStore));
     }
     if (needsCurriculumSync || !localStorage.getItem(STORAGE_KEYS.SHADOWING)) {
       localStorage.setItem(STORAGE_KEYS.SHADOWING, JSON.stringify(ALL_INITIAL_SHADOWING));
@@ -379,23 +427,57 @@ class StorageService {
     }, 0);
   }
 
+  /**
+   * Foydalanuvchi rivojlanish ma'lumotlarini har bir hisob uchun alohida
+   * kalitda (fgn_lesson_progress_{userId}) saqlash. Bu tizimdan chiqqanda yoki
+   * boshqa foydalanuvchi kirganda ma'lumotlar aralashib ketmasligini ta'minlaydi.
+   */
+  private getScopedProgressKey(baseKey: string, explicitUserId?: string): string {
+    const userId = explicitUserId || this.getUserProfile()?.id;
+    if (userId) {
+      return `${baseKey}_${userId}`;
+    }
+    return baseKey;
+  }
+
   // --- Progress Tracking (Section 13) ---
 
-  public getLessonProgress(): Record<string, LessonProgress> {
-    const raw = this.safeReadJSON<Record<string, LessonProgress>>(
-      STORAGE_KEYS.LESSON_PROGRESS,
-      {},
+  public getLessonProgress(userId?: string): Record<string, LessonProgress> {
+    const scopedKey = this.getScopedProgressKey(STORAGE_KEYS.LESSON_PROGRESS, userId);
+    let raw = this.safeReadJSON<Record<string, LessonProgress> | null>(
+      scopedKey,
+      null,
       isPlainObject
     );
-    return this.filterValidRecords<LessonProgress>(raw, STORAGE_KEYS.LESSON_PROGRESS);
+
+    // Eski umumiy kalitdan ko'chirish (avvalgi foydalanuvchilar ma'lumotini yo'qotmaslik uchun)
+    if (!raw && scopedKey !== STORAGE_KEYS.LESSON_PROGRESS) {
+      const legacy = this.safeReadJSON<Record<string, LessonProgress>>(
+        STORAGE_KEYS.LESSON_PROGRESS,
+        {},
+        isPlainObject
+      );
+      if (Object.keys(legacy).length > 0) {
+        raw = legacy;
+        try {
+          localStorage.setItem(scopedKey, JSON.stringify(legacy));
+        } catch {
+          // ignore storage error
+        }
+      }
+    }
+
+    return this.filterValidRecords<LessonProgress>(raw || {}, scopedKey);
   }
 
   public updateLessonProgress(
     lessonId: string, 
-    data: { completed?: boolean; score?: number; tab?: string }
+    data: { completed?: boolean; score?: number; tab?: string },
+    userId?: string
   ): void {
     if (!this.isBrowser) return;
-    const allProgress = this.getLessonProgress();
+    const scopedKey = this.getScopedProgressKey(STORAGE_KEYS.LESSON_PROGRESS, userId);
+    const allProgress = this.getLessonProgress(userId);
     const existing = allProgress[lessonId] || {
       lessonId,
       completed: false,
@@ -424,7 +506,7 @@ class StorageService {
     existing.lastAccessedAt = new Date().toISOString();
     allProgress[lessonId] = existing;
 
-    localStorage.setItem(STORAGE_KEYS.LESSON_PROGRESS, JSON.stringify(allProgress));
+    localStorage.setItem(scopedKey, JSON.stringify(allProgress));
 
     // XP is awarded only the first time a lesson is completed (re-doing a lesson doesn't farm XP)
     const profile = this.getUserProfile();
@@ -436,18 +518,37 @@ class StorageService {
     this.recordActivity();
   }
 
-  public getVocabularyProgress(): Record<string, VocabularyProgress> {
-    const raw = this.safeReadJSON<Record<string, VocabularyProgress>>(
-      STORAGE_KEYS.VOCAB_PROGRESS,
-      {},
+  public getVocabularyProgress(userId?: string): Record<string, VocabularyProgress> {
+    const scopedKey = this.getScopedProgressKey(STORAGE_KEYS.VOCAB_PROGRESS, userId);
+    let raw = this.safeReadJSON<Record<string, VocabularyProgress> | null>(
+      scopedKey,
+      null,
       isPlainObject
     );
-    return this.filterValidRecords<VocabularyProgress>(raw, STORAGE_KEYS.VOCAB_PROGRESS);
+
+    if (!raw && scopedKey !== STORAGE_KEYS.VOCAB_PROGRESS) {
+      const legacy = this.safeReadJSON<Record<string, VocabularyProgress>>(
+        STORAGE_KEYS.VOCAB_PROGRESS,
+        {},
+        isPlainObject
+      );
+      if (Object.keys(legacy).length > 0) {
+        raw = legacy;
+        try {
+          localStorage.setItem(scopedKey, JSON.stringify(legacy));
+        } catch {
+          // ignore
+        }
+      }
+    }
+
+    return this.filterValidRecords<VocabularyProgress>(raw || {}, scopedKey);
   }
 
-  public toggleFavoriteVocab(vocabId: string): boolean {
+  public toggleFavoriteVocab(vocabId: string, userId?: string): boolean {
     if (!this.isBrowser) return false;
-    const all = this.getVocabularyProgress();
+    const scopedKey = this.getScopedProgressKey(STORAGE_KEYS.VOCAB_PROGRESS, userId);
+    const all = this.getVocabularyProgress(userId);
     const existing = all[vocabId] || {
       vocabId,
       status: 'learning',
@@ -456,13 +557,14 @@ class StorageService {
     };
     existing.isFavorite = !existing.isFavorite;
     all[vocabId] = existing;
-    localStorage.setItem(STORAGE_KEYS.VOCAB_PROGRESS, JSON.stringify(all));
+    localStorage.setItem(scopedKey, JSON.stringify(all));
     return existing.isFavorite;
   }
 
-  public markVocabLearned(vocabId: string, mastered: boolean): void {
+  public markVocabLearned(vocabId: string, mastered: boolean, userId?: string): void {
     if (!this.isBrowser) return;
-    const all = this.getVocabularyProgress();
+    const scopedKey = this.getScopedProgressKey(STORAGE_KEYS.VOCAB_PROGRESS, userId);
+    const all = this.getVocabularyProgress(userId);
     const existing = all[vocabId] || {
       vocabId,
       status: 'learning',
@@ -472,7 +574,7 @@ class StorageService {
     existing.status = mastered ? 'mastered' : 'learning';
     existing.lastReviewedAt = new Date().toISOString();
     all[vocabId] = existing;
-    localStorage.setItem(STORAGE_KEYS.VOCAB_PROGRESS, JSON.stringify(all));
+    localStorage.setItem(scopedKey, JSON.stringify(all));
     if (mastered) {
       this.recordActivity();
     }
@@ -640,7 +742,8 @@ class StorageService {
   }
 
   public getCertificateLevelStats(levelCode: string, userId?: string) {
-    const attempts = this.getCertificateAttempts(userId).filter(a => a.levelCode === levelCode && a.status === 'submitted');
+    const targetUserId = userId || this.getUserProfile()?.id;
+    const attempts = this.getCertificateAttempts(targetUserId).filter(a => a.levelCode === levelCode && a.status === 'submitted');
     const attemptsCount = attempts.length;
     if (attemptsCount === 0) {
       return {
@@ -686,6 +789,12 @@ class StorageService {
     localStorage.removeItem(STORAGE_KEYS.VOCAB_PROGRESS);
     localStorage.removeItem(STORAGE_KEYS.CERTIFICATE_ATTEMPTS);
     localStorage.removeItem(STORAGE_KEYS.CERTIFICATES);
+    for (let i = localStorage.length - 1; i >= 0; i--) {
+      const key = localStorage.key(i);
+      if (key && (key.startsWith('fgn_lesson_progress_') || key.startsWith('fgn_vocab_progress_'))) {
+        localStorage.removeItem(key);
+      }
+    }
   }
 }
 

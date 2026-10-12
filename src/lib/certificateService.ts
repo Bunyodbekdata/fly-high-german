@@ -273,7 +273,7 @@ export const certificateService = {
         userName,
         attemptId,
         levelCode,
-        title: `Goethe / Start Deutsch Zertifikat ${levelCode.toUpperCase()}`,
+        title: `For Great Nation Zertifikat — ${levelCode.toUpperCase()}`,
         score: totalScore,
         percentage,
         readingPercentage,

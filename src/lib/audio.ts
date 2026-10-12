@@ -173,17 +173,17 @@ class AudioService {
   private cleanGermanText(rawText: string): string {
     if (!rawText) return '';
     return rawText
-      // Remove speaker name prefix: e.g. "Anna: Hallo" -> "Hallo"
-      .replace(/^[A-Za-zÄÖÜäöüß\s]+:\s*/, '')
+      // Remove speaker name prefix on any line: e.g. "Anna: Hallo" -> "Hallo", "Sprecher 1: ..."
+      .replace(/^[A-Za-zÄÖÜäöüß0-9\s.-]+:\s*/gm, '')
+      // Replace fill-in blank indicators with natural pauses FIRST (before markdown and bracket removal)
+      .replace(/_{2,}/g, ' ... ')
+      .replace(/\[blank\]/gi, ' ... ')
       // Remove bracketed pronunciation guides: e.g. "[Vel-çe...]"
       .replace(/\[.*?\]/g, '')
       // Remove markdown bold/italics
       .replace(/[*_~`]/g, '')
       // Remove special quotes
       .replace(/[„“”«»"]/g, '')
-      // Replace fill-in blank indicators with natural pauses
-      .replace(/_{2,}/g, ' ... ')
-      .replace(/\[blank\]/gi, ' ... ')
       // Clean duplicate whitespace
       .replace(/\s+/g, ' ')
       .trim();
@@ -194,6 +194,7 @@ class AudioService {
    * natural sentence chunks that fit within audio stream limits.
    */
   private splitIntoSentenceChunks(text: string, maxChunkLength = 150): string[] {
+    if (!text) return [];
     // Split text by sentence ending punctuation or newlines
     const rawSentences = text.match(/[^.!?\n]+[.!?\n]*/g) || [text];
     const chunks: string[] = [];
@@ -218,7 +219,22 @@ class AudioService {
               subChunk += part;
             } else {
               if (subChunk) chunks.push(subChunk.trim());
-              subChunk = part;
+              // If a subpart is still larger than maxChunkLength, break by whitespace
+              if (part.length > maxChunkLength) {
+                const words = part.split(/\s+/);
+                let wordChunk = '';
+                for (const w of words) {
+                  if ((wordChunk + ' ' + w).trim().length <= maxChunkLength) {
+                    wordChunk = wordChunk ? `${wordChunk} ${w}` : w;
+                  } else {
+                    if (wordChunk) chunks.push(wordChunk.trim());
+                    wordChunk = w;
+                  }
+                }
+                subChunk = wordChunk;
+              } else {
+                subChunk = part;
+              }
             }
           }
           if (subChunk) chunks.push(subChunk.trim());

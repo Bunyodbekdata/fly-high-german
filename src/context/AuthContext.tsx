@@ -653,7 +653,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       value={{
         user,
         isAuthenticated: !!user && user.id !== 'usr-guest',
-        isAdmin: user?.role === 'admin',
+        isAdmin: Boolean(user && user.role === 'admin' && isEmailAdmin(user.email)),
         isLoading,
         isCloudConnected: isSupabaseConfigured,
         login,
