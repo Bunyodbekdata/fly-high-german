@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="uz" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="FLY HIGH · FOR GREAT NATION - Nemis tilini o'zbekcha interaktiv metodika bilan o'rganish platformasi. A1-B2 darajalar, 9 bosqichli darslar, talaffuz va testlar.">
+  <title>FLY HIGH · Nemis Tili Ta'lim Platformasi</title>
+
+  <!-- Google Fonts: Outfit (Display), Plus Jakarta Sans (Body), JetBrains Mono (Phonetics) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+  <!-- Canvas Confetti for celebrations -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-light">
+  <div class="app-wrapper">
+    <!-- Top Decorative Glows -->
+    <div class="ambient-glow ambient-glow-1"></div>
+    <div class="ambient-glow ambient-glow-2"></div>
+
+    <!-- MAIN HEADER -->
+    <header class="glass-header" id="main-header">
+      <div class="header-container">
+        <!-- Brand Logo -->
+        <a href="#home" class="brand-link" data-view="home" aria-label="Fly High Bosh Sahifa">
+          <div class="flag-shield">
+            <span class="flag-stripe black"></span>
+            <span class="flag-stripe red"></span>
+            <span class="flag-stripe gold"></span>
+            <div class="shield-badge">FH</div>
+          </div>
+          <div class="brand-info">
+            <span class="brand-name">FLY HIGH</span>
+            <span class="brand-tagline">FOR GREAT NATION · DEUTSCH</span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="nav-desktop" aria-label="Asosiy menyu">
+          <button type="button" class="nav-tab active" data-view="home">
+            <i data-lucide="layout-grid"></i>
+            <span>Bosh sahifa</span>
+          </button>
+          <button type="button" class="nav-tab" data-view="courses">
+            <i data-lucide="map"></i>
+            <span>Kurslar xaritasi</span>
+          </button>
+          <button type="button" class="nav-tab" data-view="lesson">
+            <i data-lucide="sparkles"></i>
+            <span>Interaktiv Dars</span>
+            <span class="badge-pulse">9 qadam</span>
+          </button>
+          <button type="button" class="nav-tab" data-view="vocabulary">
+            <i data-lucide="book-marked"></i>
+            <span>Lug‘at & Flashcard</span>
+          </button>
+          <button type="button" class="nav-tab" data-view="certificate">
+            <i data-lucide="award"></i>
+            <span>Demo Test & Sertifikat</span>
+          </button>
+          <button type="button" class="nav-tab" data-view="dashboard">
+            <i data-lucide="trending-up"></i>
+            <span>Natijalar</span>
+          </button>
+        </nav>
+
+        <!-- Right Header Stats & Actions -->
+        <div class="header-actions">
+          <!-- Streak Pill -->
+          <div class="stat-badge flame-pill" title="Uzluksiz kunlik silsila">
+            <span class="flame-icon">🔥</span>
+            <span class="stat-number" id="header-streak">1</span>
+            <span class="stat-sub">kun</span>
+          </div>
+
+          <!-- Energy Hearts -->
+          <div class="stat-badge energy-pill" title="Diqqat energiyasi">
+            <span class="heart-icon">💖</span>
+            <span class="stat-number">5/5</span>
+          </div>
+
+          <!-- XP Trophy -->
+          <div class="stat-badge xp-pill" title="Jamg'arilgan tajriba ballari">
+            <i data-lucide="zap" class="zap-icon"></i>
+            <span class="stat-number" id="header-xp">45</span>
+            <span class="stat-sub">XP</span>
+          </div>
+
+          <!-- Quick Search Button -->
+          <button type="button" class="icon-circle-btn" id="search-btn" aria-label="Tezkor qidiruv" title="Qidiruv (Ctrl+K)">
+            <i data-lucide="search"></i>
+          </button>
+
+          <!-- Theme Toggle -->
+          <button type="button" class="icon-circle-btn" id="theme-btn" aria-label="Rejimni o'zgartirish" title="Tungi/Kunduzgi rejim">
+            <i data-lucide="moon" id="theme-icon"></i>
+          </button>
+
+          <!-- Mobile Hamburger -->
+          <button type="button" class="icon-circle-btn mobile-menu-toggle" id="mobile-menu-btn" aria-label="Menyu">
+            <i data-lucide="menu"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN APP CONTENT AREA -->
+    <main class="main-content">
+      
+      <!-- ================= 1. HOME VIEW ================= -->
+      <section id="view-home" class="page-view active">
+        <div class="view-container">
+          
+          <!-- Hero Banner Section -->
+          <div class="hero-card">
+            <div class="hero-content">
+              <div class="pill-chip gradient-chip">
+                <span class="chip-dot"></span>
+                <span>🇩🇪 Nemis tili o'zbek tilida · Noldan B1 gacha</span>
+              </div>
+              <h1 class="hero-title">
+                Nemis tilini <span class="gradient-text">eng zamonaviy</span> va zavqli usulda o‘rganing.
+              </h1>
+              <p class="hero-desc">
+                Har kuni 20 daqiqa: hayotiy suhbatlar, sun'iy talaffuz yordamchisi, vizual artikllar (der, die, das) hamda rasmiy Goethe/telc formatidagi interaktiv mashqlar.
+              </p>
+              
+              <div class="hero-cta-group">
+                <button type="button" class="btn btn-primary btn-glow" data-view="lesson">
+                  <span>Bugungi darsni boshlash (A1.1)</span>
+                  <i data-lucide="arrow-right"></i>
+                </button>
+                <button type="button" class="btn btn-secondary" data-view="courses">
+                  <i data-lucide="compass"></i>
+                  <span>O‘quv xaritasi</span>
+                </button>
+              </div>
+
+              <!-- Mini Stats Inside Hero -->
+              <div class="hero-badges-row">
+                <div class="hero-stat-item">
+                  <strong>6 ta</strong>
+                  <span>CEFR bosqichlari</span>
+                </div>
+                <div class="hero-stat-sep"></div>
+                <div class="hero-stat-item">
+                  <strong>9 qadam</strong>
+                  <span>Noyob metodika</span>
+                </div>
+                <div class="hero-stat-sep"></div>
+                <div class="hero-stat-item">
+                  <strong>100%</strong>
+                  <span>Bepul & Ochiq</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hero Visual Interactive Card -->
+            <div class="hero-visual">
+              <div class="floating-widget glass-card sound-card">
+                <div class="widget-header">
+                  <span class="widget-label">KUNLIK NEMISCHA IBORA</span>
+                  <span class="level-tag">A1.1 Boshlang'ich</span>
+                </div>
+                <div class="phrase-display">
+                  <h3 class="phrase-de" id="hero-phrase">Guten Tag! Ich lerne Deutsch.</h3>
+                  <p class="phrase-uz">Xayrli kun! Men nemis tilini o‘rganyapman.</p>
+                </div>
+                
+                <div class="audio-control-bar">
+                  <div class="audio-wave" id="hero-wave">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                  </div>
+                  <button type="button" class="btn-play-hero" id="hero-audio-btn" aria-label="Talaffuzni tinglash">
+                    <i data-lucide="volume-2" id="hero-play-icon"></i>
+                    <span>Tinglash</span>
+                  </button>
+                </div>
+
+                <div class="widget-footer">
+                  <div class="user-progress-snippet">
+                    <i data-lucide="check-circle-2" class="text-emerald"></i>
+                    <span>Kunlik maqsad: <strong id="hero-goal-text">12/20 daqiqa</strong></span>
+                  </div>
+                  <span class="badge-xp">+10 XP</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Metrics Bar -->
+          <div class="metrics-grid">
+            <div class="metric-card glass-card">
+              <div class="metric-icon-box orange">
+                <i data-lucide="flame"></i>
+              </div>
+              <div class="metric-data">
+                <span class="metric-val" id="dash-streak-count">1 kun</span>
+                <span class="metric-title">O‘quv silsilasi</span>
+              </div>
+            </div>
+
+            <div class="metric-card glass-card">
+              <div class="metric-icon-box purple">
+                <i data-lucide="sparkles"></i>
+              </div>
+              <div class="metric-data">
+                <span class="metric-val" id="dash-xp-count">45 XP</span>
+                <span class="metric-title">To‘plangan tajriba</span>
+              </div>
+            </div>
+
+            <div class="metric-card glass-card">
+              <div class="metric-icon-box emerald">
+                <i data-lucide="book-open-check"></i>
+              </div>
+              <div class="metric-data">
+                <span class="metric-val" id="dash-words-count">6 ta</span>
+                <span class="metric-title">Yodlangan so‘zlar</span>
+              </div>
+            </div>
+
+            <div class="metric-card glass-card">
+              <div class="metric-icon-box blue">
+                <i data-lucide="target"></i>
+              </div>
+              <div class="metric-data">
+                <span class="metric-val" id="dash-goal-percent">60%</span>
+                <span class="metric-title">Kunlik maqsad</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- CEFR LEVEL ADVENTURE TRAIL -->
+          <div class="section-container">
+            <div class="section-header">
+              <div>
+                <span class="section-kicker">SIZNING NEMIS TILI SAYOHATINGIZ</span>
+                <h2 class="section-title">A1.1 dan B1.2 gacha to‘liq yo‘l xaritasi</h2>
+              </div>
+              <button type="button" class="btn btn-outline" data-view="courses">
+                <span>To‘liq xaritani ko‘rish</span>
+                <i data-lucide="arrow-up-right"></i>
+              </button>
+            </div>
+
+            <div class="roadmap-trail" id="home-roadmap-container">
+              <!-- Dynamically populated via JS -->
+            </div>
+          </div>
+
+          <!-- 9-STEP METHODOLOGY HIGHLIGHT -->
+          <div class="section-container">
+            <div class="section-header text-center center-block">
+              <span class="section-kicker">FLY HIGH EKSKLUZIV METODIKASI</span>
+              <h2 class="section-title">Har bir dars: 9 ta mukammal qadam</h2>
+              <p class="section-subtitle">Nemis tilini zerikarli qoidalarsiz, har tomonlama (gapirish, eshitish, o'qish, yozish) o'zlashtirish uchun ishlab chiqilgan tizim.</p>
+            </div>
+
+            <div class="method-steps-grid">
+              <div class="method-step-card glass-card" data-step="0">
+                <div class="step-num">01</div>
+                <div class="step-icon-wrap bg-blue-subtle">
+                  <i data-lucide="compass"></i>
+                </div>
+                <h3 class="step-name">Kirish</h3>
+                <p class="step-desc">Mavzuga qiziqarli vizual va amaliy kirish, asosiy maqsadlar.</p>
+              </div>
+
+              <div class="method-step-card glass-card" data-step="1">
+                <div class="step-num">02</div>
+                <div class="step-icon-wrap bg-amber-subtle">
+                  <i data-lucide="message-square"></i>
+                </div>
+                <h3 class="step-name">Muloqot</h3>
+                <p class="step-desc">Haqiqiy nemislar suhbati, audio yozuvlar va o'zbekcha tarjimalar.</p>
+              </div>
+
+              <div class="method-step-card glass-card" data-step="2">
+                <div class="step-num">03</div>
+                <div class="step-icon-wrap bg-rose-subtle">
+                  <i data-lucide="layers"></i>
+                </div>
+                <h3 class="step-name">Lug‘at & Artikl</h3>
+                <p class="step-desc">der (ko‘k), die (qizil), das (yashil) ranglarida so‘z yodlash.</p>
+              </div>
+
+              <div class="method-step-card glass-card" data-step="3">
+                <div class="step-num">04</div>
+                <div class="step-icon-wrap bg-indigo-subtle">
+                  <i data-lucide="code-2"></i>
+                </div>
+                <h3 class="step-name">Grammatika</h3>
+                <p class="step-desc">V2 so'z tartibi va fe'l tuslanishini interaktiv konstruktorda ko'rish.</p>
+              </div>
+
+              <div class="method-step-card glass-card" data-step="4">
+                <div class="step-num">05</div>
+                <div class="step-icon-wrap bg-emerald-subtle">
+                  <i data-lucide="headphones"></i>
+                </div>
+                <h3 class="step-name">Tinglash (Hören)</h3>
+                <p class="step-desc">Nemischa nutqni tushunish bo'yicha audio topshiriqlar.</p>
+              </div>
+
+              <div class="method-step-card glass-card" data-step="5">
+                <div class="step-num">06</div>
+                <div class="step-icon-wrap bg-cyan-subtle">
+                  <i data-lucide="book-open"></i>
+                </div>
+                <h3 class="step-name">O‘qish (Lesen)</h3>
+                <p class="step-desc">Qisqa qiziqarli matnlar va savol-javob mashqlari.</p>
+              </div>
+
+              <div class="method-step-card glass-card" data-step="6">
+                <div class="step-num">07</div>
+                <div class="step-icon-wrap bg-violet-subtle">
+                  <i data-lucide="pen-tool"></i>
+                </div>
+                <h3 class="step-name">Yozish (Schreiben)</h3>
+                <p class="step-desc">O'rganilgan so'zlardan to'g'ri grammatik gap tuzish mashqi.</p>
+              </div>
+
+              <div class="method-step-card glass-card" data-step="7">
+                <div class="step-num">08</div>
+                <div class="step-icon-wrap bg-orange-subtle">
+                  <i data-lucide="mic"></i>
+                </div>
+                <h3 class="step-name">Shadowing</h3>
+                <p class="step-desc">Nemischa jarangdorlikni his qilish, talaffuzni taqlid qilib takrorlash.</p>
+              </div>
+
+              <div class="method-step-card glass-card" data-step="8">
+                <div class="step-num">09</div>
+                <div class="step-icon-wrap bg-yellow-subtle">
+                  <i data-lucide="trophy"></i>
+                </div>
+                <h3 class="step-name">Imtihon & XP</h3>
+                <p class="step-desc">Dars yakuni bo'yicha test va natijani mustahkamlash.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Accordion -->
+          <div class="section-container faq-section">
+            <div class="section-header text-center center-block">
+              <span class="section-kicker">SAVOLLAR VA JAVOBLAR</span>
+              <h2 class="section-title">Ko‘p beriladigan savollar</h2>
+            </div>
+
+            <div class="faq-list">
+              <details class="faq-card glass-card" open>
+                <summary class="faq-question">
+                  <span>Nemis tilini mutlaqo noldan o‘rgansam bo‘ladimi?</span>
+                  <i data-lucide="chevron-down" class="faq-arrow"></i>
+                </summary>
+                <div class="faq-answer">
+                  <p>Albatta! FLY HIGH aynan nemis tilini hech qachon o'rganmagan yurtdoshlarimiz uchun sodda va qiziqarli o'zbek tilidagi tushuntirishlar bilan tuzilgan. Har bir so'z va qoida bosqichma-bosqich o'rgatiladi.</p>
+                </div>
+              </details>
+
+              <details class="faq-card glass-card">
+                <summary class="faq-question">
+                  <span>Darslar davomiyligi qancha vaqt oladi?</span>
+                  <i data-lucide="chevron-down" class="faq-arrow"></i>
+                </summary>
+                <div class="faq-answer">
+                  <p>Har bir dars taxminan 20-25 daqiqaga mo'ljallangan. 9 ta qadam tez va samarali tarzda zerikmasdan o'tish imkonini beradi.</p>
+                </div>
+              </details>
+
+              <details class="faq-card glass-card">
+                <summary class="faq-question">
+                  <span>Platformadagi sertifikat rasmiymi?</span>
+                  <i data-lucide="chevron-down" class="faq-arrow"></i>
+                </summary>
+                <div class="faq-answer">
+                  <p>Bu ichki baholash sertifikati bo'lib, bilimingizni tekshirish va o'zingizga ishonch hosil qilish uchun beriladi. U rasmiy Goethe-Zertifikat, telc yoki ÖSD o'rnini bosmaydi, ammo ularga tayyorgarlik uchun ajoyib sinovdir.</p>
+                </div>
+              </details>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= 2. COURSES / ROADMAP VIEW ================= -->
+      <section id="view-courses" class="page-view">
+        <div class="view-container">
+          <div class="page-title-banner">
+            <div>
+              <span class="section-kicker">A1.1 · BOSHLANG'ICH DARAJA</span>
+              <h1 class="page-main-title">Darslar va O‘quv Xaritasi</h1>
+              <p class="page-subtitle">Har bir darsni muvaffaqiyatli yakunlab, yangi bosqichlarni oching va reytingda ko‘tariling.</p>
+            </div>
+            <div class="course-stats-pill glass-card">
+              <span class="course-stat-val" id="courses-completed-label">1/6 Bajarildi</span>
+              <div class="tiny-bar">
+                <div class="tiny-bar-fill" id="courses-bar-fill" style="width: 16%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Phonetics Interactive Lab Banner -->
+          <div class="phonetics-hero glass-card">
+            <div class="phonetics-content">
+              <div class="badge-accent">
+                <i data-lucide="sparkles"></i>
+                <span>Maxsus Fonetika Laboratoriyasi</span>
+              </div>
+              <h2>Nemischa jarangdor harflar va diftonglar</h2>
+              <p>ä, ö, ü umlautlari, 'ch', 'sch' va 'ei', 'ie' tovushlarini to'g'ri talaffuz qilishni o'rganing.</p>
+              
+              <div class="phonetics-chips">
+                <button type="button" class="phonetic-chip" data-speak="ä">ä [e:]</button>
+                <button type="button" class="phonetic-chip" data-speak="ö">ö [ø:]</button>
+                <button type="button" class="phonetic-chip" data-speak="ü">ü [y:]</button>
+                <button type="button" class="phonetic-chip" data-speak="ß">ß [s]</button>
+                <button type="button" class="phonetic-chip" data-speak="ei">ei [ay]</button>
+                <button type="button" class="phonetic-chip" data-speak="ie">ie [i:]</button>
+                <button type="button" class="phonetic-chip" data-speak="eu">eu [oy]</button>
+                <button type="button" class="phonetic-chip" data-speak="ch">ch [x/ç]</button>
+              </div>
+
+              <div class="mt-4">
+                <button type="button" class="btn btn-primary btn-sm" id="phonetics-full-listen">
+                  <i data-lucide="volume-2"></i>
+                  <span>Barchasini ketma-ket tinglash</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Vertical Interactive Roadmap Tree -->
+          <div class="roadmap-interactive-wrapper">
+            <div class="roadmap-vertical-track" id="courses-roadmap-list">
+              <!-- Dynamically populated via JS -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 3. INTERACTIVE 9-STEP LESSON VIEW ================= -->
+      <section id="view-lesson" class="page-view">
+        <div class="view-container narrow-view">
+          
+          <!-- Lesson Top Controller Bar -->
+          <div class="lesson-header-bar glass-card">
+            <div class="lesson-header-left">
+              <button type="button" class="btn-back" data-view="courses">
+                <i data-lucide="arrow-left"></i>
+                <span>Xarita</span>
+              </button>
+              <div class="lesson-header-meta">
+                <span class="lesson-crumb">A1.1 · 1-DARS</span>
+                <h2 class="lesson-active-title">Hallo! Tanishuvni boshlaymiz</h2>
+              </div>
+            </div>
+
+            <div class="lesson-header-right">
+              <!-- Speed Selector -->
+              <div class="speed-control">
+                <i data-lucide="gauge"></i>
+                <select id="audio-speed-select" aria-label="Ovoz tezligi">
+                  <option value="0.75">0.75x (Sekin)</option>
+                  <option value="1" selected>1.0x (Normal)</option>
+                  <option value="1.25">1.25x (Tez)</option>
+                </select>
+              </div>
+
+              <!-- XP indicator -->
+              <div class="lesson-xp-tag">
+                <i data-lucide="zap"></i>
+                <span id="lesson-current-xp">+25 XP</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Horizontal Stepper (9 Steps) -->
+          <div class="stepper-track-wrapper">
+            <div class="stepper-horizontal" id="lesson-stepper">
+              <!-- JS will inject 9 steps here -->
+            </div>
+          </div>
+
+          <!-- Active Step Main Interactive Box -->
+          <div class="lesson-active-card glass-card">
+            <div class="step-card-header">
+              <span class="step-badge" id="step-badge-indicator">Qadam 01 / 09</span>
+              <h2 class="step-main-heading" id="step-main-title">Mavzuga kirish</h2>
+            </div>
+
+            <!-- Dynamic step contents injected here -->
+            <div class="step-content-body" id="lesson-body-content">
+              <!-- Populated by JS -->
+            </div>
+
+            <!-- Lesson Navigation Footer -->
+            <div class="step-nav-footer">
+              <button type="button" class="btn btn-secondary" id="step-btn-prev">
+                <i data-lucide="arrow-left"></i>
+                <span>Oldingi qadam</span>
+              </button>
+
+              <div class="step-counter-status" id="step-counter-label">
+                1 / 9
+              </div>
+
+              <button type="button" class="btn btn-primary" id="step-btn-next">
+                <span>Keyingi qadam</span>
+                <i data-lucide="arrow-right"></i>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= 4. VOCABULARY & FLASHCARDS VIEW ================= -->
+      <section id="view-vocabulary" class="page-view">
+        <div class="view-container">
+          <div class="page-title-banner">
+            <div>
+              <span class="section-kicker">LUG‘AT ZAXIRANGIZ</span>
+              <h1 class="page-main-title">Nemis tili so‘zlar xazinasi</h1>
+              <p class="page-subtitle">Nemis tilida har bir otning jinsi va artikli muhim. Ranglar orqali xotirangizga o‘yib muhrlang!</p>
+            </div>
+            
+            <div class="vocab-legend">
+              <span class="legend-chip der">der (erkak jins)</span>
+              <span class="legend-chip die">die (ayol jins)</span>
+              <span class="legend-chip das">das (o‘rta jins)</span>
+              <span class="legend-chip plural">die Pl. (ko‘plik)</span>
+            </div>
+          </div>
+
+          <!-- Vocabulary Controls Toolbar -->
+          <div class="vocab-toolbar glass-card">
+            <div class="vocab-search-wrap">
+              <i data-lucide="search" class="search-icon"></i>
+              <input type="search" id="vocab-search-input" placeholder="Nemischa yoki o‘zbekcha so‘z qidiring...">
+            </div>
+
+            <!-- Mode Switcher (Grid List vs Flashcards) -->
+            <div class="mode-switcher-group">
+              <button type="button" class="mode-btn active" id="mode-table-btn">
+                <i data-lucide="grid"></i>
+                <span>Ro‘yxat</span>
+              </button>
+              <button type="button" class="mode-btn" id="mode-flash-btn">
+                <i data-lucide="flip-horizontal"></i>
+                <span>3D Flashcards</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Filter tags -->
+          <div class="vocab-filters-row">
+            <div class="filter-group-wrap" id="vocab-level-filters">
+              <!-- Dynamically populated -->
+            </div>
+            <div class="filter-group-wrap" id="vocab-type-filters">
+              <!-- Dynamically populated -->
+            </div>
+            <div class="vocab-count-indicator" id="vocab-count-indicator">
+              Yuklanmoqda...
+            </div>
+          </div>
+
+          <!-- Vocabulary Content Container -->
+          <div id="vocab-render-container" class="vocab-render-area">
+            <!-- Table cards or 3D Flashcard injected here -->
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= 5. DEMO EXAM & CERTIFICATE VIEW ================= -->
+      <section id="view-certificate" class="page-view">
+        <div class="view-container">
+          <div class="page-title-banner">
+            <div>
+              <span class="section-kicker">ICHKI DEMO IMTIHON VA SERTIFIKAT</span>
+              <h1 class="page-main-title">Bilimingizni sinovdan o‘tkazing</h1>
+              <p class="page-subtitle">Goethe-Zertifikat A1 va telc A1 andozasidagi interaktiv test. 60% dan yuqori to‘plab, o‘z nomingizga sertifikat oling!</p>
+            </div>
+          </div>
+
+          <!-- Exam Mode Selector Tabs -->
+          <div class="exam-type-tabs">
+            <button type="button" class="exam-tab-btn active" data-exam-type="Hören">
+              <i data-lucide="headphones"></i>
+              <span>🎧 Hören (Tinglash testi)</span>
+            </button>
+            <button type="button" class="exam-tab-btn" data-exam-type="Lesen">
+              <i data-lucide="book-open"></i>
+              <span>📖 Lesen (O‘qish va tushunish)</span>
+            </button>
+            <button type="button" class="exam-tab-btn" data-exam-type="Kompleks">
+              <i data-lucide="award"></i>
+              <span>🏆 Kompleks A1 Imtihoni</span>
+            </button>
+          </div>
+
+          <!-- Exam Selection Grid -->
+          <div class="exam-cards-grid" id="exam-catalog-grid">
+            <!-- Populated via JS -->
+          </div>
+
+          <!-- Interactive Active Exam Area -->
+          <div class="exam-simulation-panel glass-card" id="exam-simulation-box">
+            <!-- Will show Ready screen, or Timer Questions, or Certificate -->
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= 6. USER DASHBOARD VIEW ================= -->
+      <section id="view-dashboard" class="page-view">
+        <div class="view-container">
+          <div class="page-title-banner">
+            <div>
+              <span class="section-kicker">SHAXSIY NATIJALAR MARKAZI</span>
+              <h1 class="page-main-title">Sizning o‘quv statistikangiz</h1>
+              <p class="page-subtitle">Qadam-baqadam nemis tili cho‘qqisi sari. Har bir daqiqa va har bir so‘z sizni orzuingizga yaqinlashtiradi.</p>
+            </div>
+          </div>
+
+          <!-- Dashboard Overview Top Cards -->
+          <div class="dashboard-stats-grid">
+            <div class="dash-stat-card glass-card">
+              <div class="dash-stat-top">
+                <span class="stat-card-title">UZLUKSIZ SILSLILA</span>
+                <span class="flame-bubble">🔥 Faol</span>
+              </div>
+              <div class="dash-big-num" id="dash-full-streak">1 kun</div>
+              <p class="stat-card-desc">Ertaga ham dars o'tib, silsilangizni saqlab qoling!</p>
+              <div class="streak-days-track">
+                <span class="day-dot active">Du</span>
+                <span class="day-dot">Se</span>
+                <span class="day-dot">Ch</span>
+                <span class="day-dot">Pa</span>
+                <span class="day-dot">Ju</span>
+                <span class="day-dot">Sh</span>
+                <span class="day-dot">Ya</span>
+              </div>
+            </div>
+
+            <div class="dash-stat-card glass-card">
+              <div class="dash-stat-top">
+                <span class="stat-card-title">UMUMIY TAJRIBA (XP)</span>
+                <span class="xp-bubble">✦ Rutba: Sayyoh</span>
+              </div>
+              <div class="dash-big-num" id="dash-full-xp">45 XP</div>
+              <p class="stat-card-desc">Keyingi rutbagacha: yana <strong>55 XP</strong> zarur.</p>
+              <div class="progress-bar-wrap">
+                <div class="progress-bar-fill" style="width: 45%;"></div>
+              </div>
+            </div>
+
+            <div class="dash-stat-card glass-card center-stat">
+              <div class="dash-stat-top">
+                <span class="stat-card-title">BUGUNGI VAQT MAQSADI</span>
+              </div>
+              <div class="radial-goal-wrap">
+                <svg viewBox="0 0 100 100" class="radial-svg">
+                  <circle cx="50" cy="50" r="42" class="radial-bg"></circle>
+                  <circle cx="50" cy="50" r="42" class="radial-progress" id="dash-radial-circle" style="stroke-dashoffset: 105;"></circle>
+                </svg>
+                <div class="radial-inner-content">
+                  <span class="radial-time" id="dash-goal-text">12/20</span>
+                  <span class="radial-sub">daqiqa</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Achievements Badges Grid -->
+          <div class="section-container">
+            <div class="section-header">
+              <div>
+                <span class="section-kicker">MAXSUS MUKOFOTLAR</span>
+                <h2 class="section-title">Yutuqlar va Nishonlar</h2>
+              </div>
+            </div>
+
+            <div class="badges-showcase-grid" id="dashboard-badges-list">
+              <!-- Dynamically populated via JS -->
+            </div>
+          </div>
+
+          <!-- Completed Tests History -->
+          <div class="section-container">
+            <div class="section-header">
+              <div>
+                <span class="section-kicker">TEST TARIXI</span>
+                <h2 class="section-title">Oxirgi topshirilgan sinovlar</h2>
+              </div>
+            </div>
+
+            <div class="exam-history-list glass-card" id="dashboard-exam-history">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- MOBILE BOTTOM NAVIGATION DOCK -->
+    <nav class="mobile-bottom-dock" aria-label="Mobil navigatsiya paneli">
+      <button type="button" class="dock-btn active" data-view="home">
+        <i data-lucide="layout-grid"></i>
+        <span>Bosh sahifa</span>
+      </button>
+      <button type="button" class="dock-btn" data-view="courses">
+        <i data-lucide="map"></i>
+        <span>Kurslar</span>
+      </button>
+      <button type="button" class="dock-btn" data-view="lesson">
+        <i data-lucide="sparkles"></i>
+        <span>Dars</span>
+      </button>
+      <button type="button" class="dock-btn" data-view="vocabulary">
+        <i data-lucide="book-marked"></i>
+        <span>Lug‘at</span>
+      </button>
+      <button type="button" class="dock-btn" data-view="certificate">
+        <i data-lucide="award"></i>
+        <span>Testlar</span>
+      </button>
+      <button type="button" class="dock-btn" data-view="dashboard">
+        <i data-lucide="user"></i>
+        <span>Kabinet</span>
+      </button>
+    </nav>
+
+    <!-- FOOTER -->
+    <footer class="app-footer">
+      <div class="footer-container">
+        <div class="footer-col brand-col">
+          <div class="flag-shield small">
+            <span class="flag-stripe black"></span>
+            <span class="flag-stripe red"></span>
+            <span class="flag-stripe gold"></span>
+          </div>
+          <strong class="footer-brand-title">FLY HIGH · FOR GREAT NATION</strong>
+          <p class="footer-brand-desc">Nemis tilini har qanday bosqichda erkin va zavq bilan o'rganish uchun mo'ljallangan milliy ta'lim platformasi.</p>
+          <span class="copyright">© 2026 Fly High. Barcha huquqlar himoyalangan.</span>
+        </div>
+
+        <div class="footer-col">
+          <h4>Bo‘limlar</h4>
+          <button type="button" class="footer-link" data-view="home">Bosh sahifa</button>
+          <button type="button" class="footer-link" data-view="courses">O‘quv xaritasi</button>
+          <button type="button" class="footer-link" data-view="lesson">9 bosqichli dars</button>
+          <button type="button" class="footer-link" data-view="vocabulary">Interaktiv lug‘at</button>
+        </div>
+
+        <div class="footer-col">
+          <h4>Sinov & Sertifikat</h4>
+          <button type="button" class="footer-link" data-view="certificate">Hören Mashqlari</button>
+          <button type="button" class="footer-link" data-view="certificate">Lesen Mashqlari</button>
+          <button type="button" class="footer-link" data-view="certificate">Kompleks Test</button>
+          <button type="button" class="footer-link" data-view="dashboard">Yutuqlarim</button>
+        </div>
+      </div>
+    </footer>
+
+    <!-- GLOBAL SEARCH MODAL OVERLAY -->
+    <div id="search-modal" class="modal-overlay" hidden>
+      <div class="modal-box glass-card search-modal-box" role="dialog" aria-modal="true" aria-labelledby="search-modal-title">
+        <div class="modal-header">
+          <div class="search-input-wrapper">
+            <i data-lucide="search" class="search-modal-icon"></i>
+            <input type="text" id="global-search-input" placeholder="Mavzular, so‘zlar, qoidalar qidiring..." autocomplete="off">
+          </div>
+          <button type="button" class="btn-close-modal" id="search-close-btn" aria-label="Yopish">✕</button>
+        </div>
+        <div class="search-results-list" id="global-search-results">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- LESSON DETAIL MODAL -->
+    <div id="lesson-detail-modal" class="modal-overlay" hidden>
+      <div class="modal-box glass-card" role="dialog" aria-modal="true">
+        <div class="modal-header">
+          <span class="section-kicker" id="modal-lesson-kicker">DARS TAFSILOTLARI</span>
+          <button type="button" class="btn-close-modal close-detail-modal" aria-label="Yopish">✕</button>
+        </div>
+        <h2 id="modal-lesson-title" class="modal-title">1-Dars: Hallo!</h2>
+        <p id="modal-lesson-desc" class="modal-desc">Salomlashuv va tanishuv iboralari.</p>
+        <div class="modal-meta-row">
+          <div class="meta-item"><i data-lucide="clock"></i> <span>25 daqiqa</span></div>
+          <div class="meta-item"><i data-lucide="layers"></i> <span>9 bosqich</span></div>
+          <div class="meta-item"><i data-lucide="zap"></i> <span>+25 XP</span></div>
+        </div>
+        <div class="modal-actions mt-4">
+          <button type="button" class="btn btn-primary w-full" id="modal-start-lesson-btn">
+            <span>Darsni boshlash</span>
+            <i data-lucide="arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CERTIFICATE VIEW MODAL -->
+    <div id="certificate-modal" class="modal-overlay" hidden>
+      <div class="modal-box glass-card cert-modal-box" role="dialog" aria-modal="true">
+        <div class="cert-modal-header no-print">
+          <span class="section-kicker">RASMIY FOR GREAT NATION SERTIFIKATI</span>
+          <button type="button" class="btn-close-modal" id="cert-modal-close" aria-label="Yopish">✕</button>
+        </div>
+
+        <!-- Printable Certificate Canvas/Paper -->
+        <div class="official-certificate-paper" id="printable-cert">
+          <div class="cert-border-outer">
+            <div class="cert-border-inner">
+              
+              <div class="cert-header">
+                <div class="cert-flag-icon">
+                  <span class="stripe-b"></span>
+                  <span class="stripe-r"></span>
+                  <span class="stripe-g"></span>
+                </div>
+                <h4 class="cert-org">FOR GREAT NATION · FLY HIGH</h4>
+                <h2 class="cert-title">SERTIFIKAT</h2>
+                <span class="cert-subtitle">NEMIS TILI O‘ZLASHTIRISH NATIJASI</span>
+              </div>
+
+              <div class="cert-body">
+                <p class="cert-text">Ushbu sertifikat tasdiqlaydiki,</p>
+                <h3 class="cert-student-name" id="cert-student-name-display">Shaxzod Alimov</h3>
+                <p class="cert-details-text">
+                  Fly High o‘quv platformasining nemis tili bo‘yicha <strong id="cert-level-name">Hören · A1.1</strong> demo imtihonini muvaffaqiyatli topshirdi va quyidagi natijani qayd etdi:
+                </p>
+                
+                <div class="cert-score-box">
+                  <span class="cert-score-label">To‘plangan ball:</span>
+                  <span class="cert-score-val" id="cert-score-val">100 / 100</span>
+                </div>
+              </div>
+
+              <div class="cert-footer">
+                <div class="cert-sign-col">
+                  <div class="cert-signature-line">Fly High Team</div>
+                  <span class="cert-sign-title">O‘quv Metodikasi</span>
+                </div>
+
+                <div class="cert-seal">
+                  <div class="gold-seal-circle">
+                    <span>SEAL OF</span>
+                    <strong>EXCELLENCE</strong>
+                    <span>★ 2026 ★</span>
+                  </div>
+                </div>
+
+                <div class="cert-date-col">
+                  <span class="cert-date-val" id="cert-date-val">19.10.2026</span>
+                  <span class="cert-sign-title">Topshirilgan sana</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Certificate Buttons -->
+        <div class="cert-actions-bar no-print">
+          <button type="button" class="btn btn-primary" id="btn-print-cert">
+            <i data-lucide="printer"></i>
+            <span>Chop etish (Print)</span>
+          </button>
+          <button type="button" class="btn btn-secondary" id="btn-download-cert">
+            <i data-lucide="download"></i>
+            <span>Natijani yuklab olish</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- FLOATING TOAST MESSAGE -->
+    <div id="toast-notification" class="toast-bubble" hidden role="status" aria-live="polite">
+      <i data-lucide="check-circle" id="toast-icon"></i>
+      <span id="toast-message">Muvaffaqiyatli saqlandi!</span>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
