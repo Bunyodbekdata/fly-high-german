@@ -16,10 +16,10 @@ export const CertificateCard: React.FC<CertificateCardProps> = ({ certificate })
   const readingPct = certificate.readingPercentage;
   const listeningPct = certificate.listeningPercentage;
 
-  const isListeningOnly = certificate.title.includes('Hören') && !certificate.title.includes('Start Deutsch');
-  const isReadingOnly = certificate.title.includes('Lesen') && !certificate.title.includes('Start Deutsch');
-  const hasReading = !isListeningOnly && (certificate.readingScore !== undefined || !isReadingOnly);
-  const hasListening = !isReadingOnly && (certificate.listeningScore !== undefined || !isListeningOnly);
+  const isListeningOnly = certificate.title.includes('Hören') || (certificate.listeningPercentage > 0 && certificate.readingPercentage === 0);
+  const isReadingOnly = certificate.title.includes('Lesen') || (certificate.readingPercentage > 0 && certificate.listeningPercentage === 0);
+  const hasReading = !isListeningOnly;
+  const hasListening = !isReadingOnly;
 
   const formattedDate = new Date(certificate.issuedAt).toLocaleDateString('uz-UZ', {
     year: 'numeric',

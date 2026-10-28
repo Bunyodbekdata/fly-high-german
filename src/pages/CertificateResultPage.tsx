@@ -21,6 +21,9 @@ import {
   Volume2
 } from 'lucide-react';
 
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
+import { certificateService } from '../lib/certificateService';
+
 export const CertificateResultPage: React.FC = () => {
   const { attemptId } = useParams<{ attemptId: string }>();
   const navigate = useNavigate();
@@ -37,18 +40,109 @@ export const CertificateResultPage: React.FC = () => {
       return;
     }
 
-    const att = storageService.getCertificateAttemptById(attemptId);
-    if (att) {
-      setAttempt(att);
-      const t = storageService.getCertificateTestById(att.testId);
-      if (t) setTest(t);
+    let isCancelled = false;
 
-      if (att.certificateId) {
-        const cert = storageService.getCertificateById(att.certificateId);
-        if (cert) setCertificate(cert);
+    const loadAttemptData = async () => {
+      // 1. Check local storage first
+      let att = storageService.getCertificateAttemptById(attemptId);
+
+      // 2. Fallback to Supabase Cloud if not found in local storage
+      if (!att && isSupabaseConfigured && supabase) {
+        try {
+          const { data: dbAttempt } = await supabase
+            .from('certificate_attempts')
+            .select('*')
+            .eq('id', attemptId)
+            .maybeSingle();
+
+          if (dbAttempt) {
+            att = {
+              id: dbAttempt.id,
+              userId: dbAttempt.user_id || 'guest',
+              userName: dbAttempt.user_name || 'Talaba',
+              testId: dbAttempt.test_id,
+              levelCode: dbAttempt.level_code,
+              startedAt: dbAttempt.started_at,
+              submittedAt: dbAttempt.submitted_at || new Date().toISOString(),
+              durationSecondsUsed: dbAttempt.duration_seconds_used || 0,
+              score: dbAttempt.score,
+              maxScore: dbAttempt.max_score,
+              percentage: dbAttempt.percentage,
+              passed: dbAttempt.passed,
+              readingScore: dbAttempt.reading_score,
+              readingMaxScore: dbAttempt.reading_max_score,
+              readingPercentage: dbAttempt.reading_percentage,
+              listeningScore: dbAttempt.listening_score,
+              listeningMaxScore: dbAttempt.listening_max_score,
+              listeningPercentage: dbAttempt.listening_percentage,
+              certificateId: dbAttempt.certificate_id || undefined,
+              status: dbAttempt.status || 'submitted',
+              answers: {},
+            };
+            storageService.saveCertificateAttempt(att);
+          }
+        } catch (err) {
+          console.warn('Failed to fetch attempt from cloud:', err);
+        }
       }
-    }
-    setLoading(false);
+
+      if (isCancelled) return;
+
+      if (att) {
+        setAttempt(att);
+
+        // Fetch test data
+        let t = storageService.getCertificateTestById(att.testId);
+        if (!t) {
+          t = await certificateService.getTestById(att.testId) || undefined;
+        }
+        if (!isCancelled && t) setTest(t);
+
+        // Fetch certificate
+        if (att.certificateId) {
+          let cert = storageService.getCertificateById(att.certificateId);
+          if (!cert && isSupabaseConfigured && supabase) {
+            try {
+              const { data: dbCert } = await supabase
+                .from('certificates')
+                .select('*')
+                .eq('certificate_id', att.certificateId)
+                .maybeSingle();
+
+              if (dbCert) {
+                cert = {
+                  id: dbCert.id,
+                  certificateId: dbCert.certificate_id,
+                  userId: dbCert.user_id,
+                  userName: dbCert.user_name,
+                  attemptId: dbCert.attempt_id,
+                  levelCode: dbCert.level_code,
+                  title: dbCert.title,
+                  score: dbCert.score,
+                  percentage: dbCert.percentage,
+                  readingPercentage: dbCert.reading_percentage,
+                  listeningPercentage: dbCert.listening_percentage,
+                  issuedAt: dbCert.issued_at,
+                  status: dbCert.status,
+                };
+                storageService.saveCertificate(cert);
+              }
+            } catch (certErr) {
+              console.warn('Failed to fetch certificate from cloud:', certErr);
+            }
+          }
+          if (!isCancelled && cert) setCertificate(cert);
+        }
+      }
+
+      if (!isCancelled) setLoading(false);
+    };
+
+    void loadAttemptData();
+
+    return () => {
+      isCancelled = true;
+    };
   }, [attemptId]);
 
   if (loading) {

@@ -17,14 +17,13 @@ import { AudioButton } from '../components/common/AudioButton';
 import { LevelBadge } from '../components/common/Badge';
 import { SoundWaveVisualizer } from '../components/common/SoundWaveVisualizer';
 import { audioService } from '../lib/audio';
-import { ListeningExercise } from '../types/database';
+import { ListeningExercise, CEFRLevelCode } from '../types/database';
 
 export const ListeningPage: React.FC = () => {
   const lessons = storageService.getLessons();
-  const allListening = lessons.flatMap(l => 
-    (l.listening || []).map((lis: ListeningExercise) => ({ ...lis, levelCode: l.levelCode, lessonTitle: l.titleDe }))
-  );
+  const levels = storageService.getLevels();
 
+  const [selectedLevel, setSelectedLevel] = useState<string>('all');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isPlayingFull, setIsPlayingFull] = useState(false);
   const [playbackRate, setPlaybackRate] = useState<number>(1.0);
@@ -33,7 +32,62 @@ export const ListeningPage: React.FC = () => {
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [checked, setChecked] = useState(false);
 
-  const current = allListening[selectedIndex] || allListening[0];
+  // Extract from both 3-stage coursebook lessons (A1.1, A1.2) and standard lessons (A2, B1)
+  const allListening = React.useMemo(() => {
+    const list: Array<ListeningExercise & { levelCode: CEFRLevelCode; lessonTitle: string }> = [];
+
+    lessons.forEach(l => {
+      // 1. If 3-stage listening is present (A1.1 and A1.2)
+      if (l.listening3Stage) {
+        const stage1Q = {
+          id: `q-s1-${l.id}`,
+          questionUz: l.listening3Stage.stage1Global.questionUz,
+          options: l.listening3Stage.stage1Global.options,
+          correctIndex: l.listening3Stage.stage1Global.correctIndex,
+          explanationUz: l.listening3Stage.stage1Global.explanationUz || 'To‘g‘ri javob audio muloqotga asoslangan.',
+        };
+        const stage2Qs = (l.listening3Stage.stage2Detail?.questions || []).map(q => ({
+          id: q.id || `q-s2-${l.id}`,
+          questionUz: q.questionUz,
+          options: q.options,
+          correctIndex: q.correctIndex,
+          explanationUz: q.explanationUz || 'To‘g‘ri javob audio muloqotga asoslangan.',
+        }));
+
+        list.push({
+          id: `lis-3stage-${l.id}`,
+          lessonId: l.id,
+          titleDe: l.listening3Stage.titleDe || l.titleDe,
+          titleUz: l.listening3Stage.titleUz || l.titleUz,
+          transcriptDe: l.listening3Stage.audioTranscriptDe,
+          translationUz: l.listening3Stage.translationUz || l.listening3Stage.situationUz,
+          questions: [stage1Q, ...stage2Qs],
+          levelCode: l.levelCode,
+          lessonTitle: l.titleDe,
+        });
+      }
+
+      // 2. If legacy/standard listening array is present (A2, B1)
+      if (Array.isArray(l.listening) && l.listening.length > 0) {
+        l.listening.forEach(lis => {
+          list.push({
+            ...lis,
+            levelCode: l.levelCode,
+            lessonTitle: l.titleDe,
+          });
+        });
+      }
+    });
+
+    return list;
+  }, [lessons]);
+
+  const filteredListening = React.useMemo(() => {
+    if (selectedLevel === 'all') return allListening;
+    return allListening.filter(item => item.levelCode === selectedLevel);
+  }, [allListening, selectedLevel]);
+
+  const current = filteredListening[selectedIndex] || filteredListening[0];
 
   useEffect(() => {
     // Listen to audioService status
@@ -97,17 +151,58 @@ export const ListeningPage: React.FC = () => {
         </p>
       </div>
 
+      {/* Filter by Level */}
+      <div className="flex items-center space-x-1.5 overflow-x-auto pb-1">
+        <button
+          onClick={() => {
+            setSelectedLevel('all');
+            setSelectedIndex(0);
+          }}
+          className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 ${
+            selectedLevel === 'all'
+              ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900'
+              : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+          }`}
+        >
+          Barchasi ({allListening.length})
+        </button>
+        {levels.map((lvl) => {
+          const count = allListening.filter(item => item.levelCode === lvl.code).length;
+          return (
+            <button
+              key={lvl.code}
+              onClick={() => {
+                setSelectedLevel(lvl.code);
+                setSelectedIndex(0);
+              }}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 ${
+                selectedLevel === lvl.code
+                  ? 'bg-brand-600 text-white shadow-2xs'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+              }`}
+            >
+              {lvl.code.toUpperCase()} ({count})
+            </button>
+          );
+        })}
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Side: Listening Sessions List */}
         <div className="lg:col-span-4 space-y-2.5 max-h-[75vh] overflow-y-auto pr-1">
           <div className="px-1 pb-1">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
-              Audio mashg‘ulotlar ({allListening.length})
+              Audio mashg‘ulotlar ({filteredListening.length})
             </span>
           </div>
 
-          {allListening.map((item, idx) => {
-            const isSelected = selectedIndex === idx;
+          {filteredListening.length === 0 ? (
+            <div className="p-8 text-center rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500 text-xs">
+              Ushbu bosqich uchun audio dialoglar topilmadi.
+            </div>
+          ) : (
+            filteredListening.map((item, idx) => {
+              const isSelected = selectedIndex === idx;
 
             return (
               <div
@@ -141,7 +236,8 @@ export const ListeningPage: React.FC = () => {
                 </p>
               </div>
             );
-          })}
+          })
+          )}
         </div>
 
         {/* Right Side: Listening Player & Test Area */}

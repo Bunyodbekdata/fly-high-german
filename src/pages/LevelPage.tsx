@@ -158,35 +158,35 @@ export const LevelPage: React.FC = () => {
 
         {/* Level Skill Metrics Counters */}
         <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 pt-6 text-center">
-          <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800">
+          <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800">
             <Bookmark size={18} className="mx-auto text-brand-600 dark:text-brand-400 mb-1" />
-            <div className="text-base font-extrabold text-slate-900 dark:text-white">{totalVocabulary || 60}+</div>
-            <div className="text-[11px] text-slate-500 dark:text-slate-400">So‘zlar</div>
+            <div className="text-base font-extrabold text-slate-900 dark:text-white tabular-nums">{totalVocabulary || 60}+</div>
+            <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">So‘zlar</div>
           </div>
-          <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800">
+          <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800">
             <FileText size={18} className="mx-auto text-emerald-600 dark:text-emerald-400 mb-1" />
-            <div className="text-base font-extrabold text-slate-900 dark:text-white">{totalGrammar || 15}</div>
-            <div className="text-[11px] text-slate-500 dark:text-slate-400">Grammatika</div>
+            <div className="text-base font-extrabold text-slate-900 dark:text-white tabular-nums">{totalGrammar || 15}</div>
+            <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Grammatika</div>
           </div>
-          <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800">
+          <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800">
             <Headphones size={18} className="mx-auto text-blue-600 dark:text-blue-400 mb-1" />
-            <div className="text-base font-extrabold text-slate-900 dark:text-white">{totalListening || 15}</div>
-            <div className="text-[11px] text-slate-500 dark:text-slate-400">Listening</div>
+            <div className="text-base font-extrabold text-slate-900 dark:text-white tabular-nums">{totalListening || 15}</div>
+            <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Listening</div>
           </div>
-          <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800">
+          <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800">
             <BookOpen size={18} className="mx-auto text-amber-600 dark:text-amber-400 mb-1" />
-            <div className="text-base font-extrabold text-slate-900 dark:text-white">{totalReading || 15}</div>
-            <div className="text-[11px] text-slate-500 dark:text-slate-400">Reading</div>
+            <div className="text-base font-extrabold text-slate-900 dark:text-white tabular-nums">{totalReading || 15}</div>
+            <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Reading</div>
           </div>
-          <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800">
+          <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800">
             <PenTool size={18} className="mx-auto text-brand-600 dark:text-brand-400 mb-1" />
-            <div className="text-base font-extrabold text-slate-900 dark:text-white">{totalWriting || 15}</div>
-            <div className="text-[11px] text-slate-500 dark:text-slate-400">Writing</div>
+            <div className="text-base font-extrabold text-slate-900 dark:text-white tabular-nums">{totalWriting || 15}</div>
+            <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Writing</div>
           </div>
-          <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800">
+          <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800">
             <Mic size={18} className="mx-auto text-rose-600 dark:text-rose-400 mb-1" />
-            <div className="text-base font-extrabold text-slate-900 dark:text-white">{totalShadowing || 35}+</div>
-            <div className="text-[11px] text-slate-500 dark:text-slate-400">Shadowing</div>
+            <div className="text-base font-extrabold text-slate-900 dark:text-white tabular-nums">{totalShadowing || 35}+</div>
+            <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Shadowing</div>
           </div>
         </div>
       </div>
@@ -203,12 +203,12 @@ export const LevelPage: React.FC = () => {
         </div>
 
         {/* Mode Toggle: Interactive Roadmap vs Classic List */}
-        <div className="flex items-center space-x-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-2xl border border-slate-200 dark:border-slate-700 self-start sm:self-auto">
+        <div className="flex items-center space-x-1 bg-slate-100/90 dark:bg-slate-800/90 p-1 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 self-start sm:self-auto shadow-2xs">
           <button
             onClick={() => setViewMode('roadmap')}
-            className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${
+            className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all active:scale-95 ${
               viewMode === 'roadmap'
-                ? 'bg-brand-600 text-white shadow-sm'
+                ? 'bg-brand-600 text-white shadow-soft'
                 : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
@@ -217,9 +217,9 @@ export const LevelPage: React.FC = () => {
           </button>
           <button
             onClick={() => setViewMode('grid')}
-            className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${
+            className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all active:scale-95 ${
               viewMode === 'grid'
-                ? 'bg-brand-600 text-white shadow-sm'
+                ? 'bg-brand-600 text-white shadow-soft'
                 : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
@@ -375,31 +375,6 @@ export const LevelPage: React.FC = () => {
               </div>
             );
           })}
-
-          {/* Level Final Exam Trophy Checkpoint */}
-          <div className="p-8 rounded-2xl bg-slate-900 dark:bg-slate-900/80 border border-slate-800 text-white shadow-soft text-center relative overflow-hidden">
-            <div className="w-16 h-16 rounded-2xl bg-brand-500 text-white flex items-center justify-center mx-auto mb-4 shadow-lg">
-              <Award size={36} />
-            </div>
-            <span className="text-2xs font-mono font-extrabold uppercase tracking-widest text-brand-400 block mb-1.5">
-              Rasmiy Formatdagi Yakuniy Sinov
-            </span>
-            <h3 className="text-2xl sm:text-3xl font-black">
-              {level.title}: Goethe-Zertifikat A1 Abschluss-Test
-            </h3>
-            <p className="text-caption text-slate-400 max-w-xl mx-auto mt-2 leading-relaxed">
-              Barcha 4 ta modul va 12 ta darsni tugatgach, Gyote Instituti rasmiy formatidagi 20 savolli yakuniy imtihonni topshiring va bilimingizni tasdiqlang.
-            </p>
-            <div className="pt-6">
-              <button
-                onClick={() => setIsAbschlussTestOpen(true)}
-                className="px-8 py-4 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm sm:text-base shadow-soft transition inline-flex items-center space-x-2"
-              >
-                <Award size={18} />
-                <span>Yakuniy Imtihonni Topshirish</span>
-              </button>
-            </div>
-          </div>
         </div>
       )}
 

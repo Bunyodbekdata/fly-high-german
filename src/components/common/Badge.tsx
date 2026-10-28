@@ -9,16 +9,18 @@ interface ArticleBadgeProps {
 export const ArticleBadge: React.FC<ArticleBadgeProps> = ({ article, className = '' }) => {
   if (!article) return null;
 
-  const key = article.toLowerCase();
+  const key = article.toLowerCase().trim();
   const config = 
     key === 'der' ? { label: 'der', class: 'article-badge-der' } :
     key === 'die' ? { label: 'die', class: 'article-badge-die' } :
     key === 'das' ? { label: 'das', class: 'article-badge-das' } :
-    { label: article, class: 'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700' };
+    (key === 'plural' || key.includes('plural') || key === 'die (pl.)')
+      ? { label: 'die (pl.)', class: 'article-badge-plural' }
+      : { label: article, class: 'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700' };
 
   return (
     <span
-      className={`inline-block font-mono text-xs font-bold px-2 py-0.5 rounded border uppercase tracking-wider ${config.class} ${className}`}
+      className={`inline-block font-mono text-xs font-bold px-2 py-0.5 rounded-lg border uppercase tracking-wider ${config.class} ${className}`}
     >
       {config.label}
     </span>

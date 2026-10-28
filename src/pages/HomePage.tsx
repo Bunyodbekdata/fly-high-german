@@ -93,25 +93,25 @@ export const HomePage: React.FC = () => {
           </div>
 
           {/* Main Headline */}
-          <h1 className="text-3xl sm:text-5xl font-black text-slate-950 dark:text-white tracking-tight max-w-4xl mx-auto leading-[1.14]">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-950 dark:text-white tracking-tight max-w-4xl mx-auto leading-[1.12]">
             Nemis tilini{' '}
-            <span className="text-brand-600 dark:text-brand-500">
-              noldan A2 darajasigacha
+            <span className="text-brand-600 dark:text-brand-400">
+              noldan B1 darajasigacha
             </span>{' '}
             mustaqil o‘rganing.
           </h1>
 
           {/* Subtitle */}
           <p className="mt-6 text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed font-normal">
-            FOR GREAT NATION — shunchaki so‘zlar to‘plami emas, balki nemis tilini o‘qituvchisiz, 
-            mukammal audio talaffuz va o‘zbek tilidagi tushuntirishlar bilan o‘rganish uchun yaratilgan raqamli darslik.
+            FLY HIGH — shunchaki so‘zlar to‘plami emas, balki nemis tilini o‘qituvchisiz, 
+            mukammal audio talaffuz va o‘zbek tilidagi tushuntirishlar bilan o‘rganish uchun yaratilgan zamonaviy raqamli akademiya.
           </p>
 
           {/* Action Buttons */}
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               to={`/courses/${nextLesson?.levelCode || 'a1-1'}/lesson/${nextLesson?.id || 'les-1'}`}
-              className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-base shadow-soft transition-all duration-200 hover:shadow-card hover:-translate-y-0.5 active:translate-y-0 inline-flex items-center justify-center space-x-2"
+              className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-base shadow-soft hover:shadow-card hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 inline-flex items-center justify-center space-x-2"
             >
               <span>
                 {isReturningLearner
@@ -123,14 +123,14 @@ export const HomePage: React.FC = () => {
 
             <Link
               to="/courses"
-              className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 text-slate-800 dark:text-slate-100 font-bold text-base border border-slate-300 dark:border-slate-700 shadow-sm transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 inline-flex items-center justify-center"
+              className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white dark:bg-slate-800/90 hover:bg-slate-50 dark:hover:bg-slate-750 text-slate-800 dark:text-slate-100 font-bold text-base border border-slate-300 dark:border-slate-700 shadow-xs hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 inline-flex items-center justify-center"
             >
               O‘quv xaritasini ko‘rish
             </Link>
           </div>
 
           {/* Interactive Live Audio Preview Card */}
-          <div className="mt-12 max-w-lg mx-auto p-5 rounded-3xl bg-white/95 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 shadow-card backdrop-blur-md text-left flex items-center justify-between gap-4">
+          <div className="mt-12 max-w-lg mx-auto p-5 rounded-3xl bg-white/95 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800 shadow-card backdrop-blur-md text-left flex items-center justify-between gap-4">
             <div className="space-y-1">
               <span className="text-xs font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400 flex items-center gap-1.5">
                 <Sparkles size={13} />
@@ -144,24 +144,24 @@ export const HomePage: React.FC = () => {
               </p>
             </div>
             <div className="flex-shrink-0">
-              <AudioButton text="Guten Tag! Ich lerne Deutsch mit For Great Nation." size="lg" />
+              <AudioButton text="Guten Tag! Ich lerne Deutsch mit Fly High." size="lg" />
             </div>
           </div>
 
           {/* Feature Highlights Metrics */}
           <div className="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-4xl mx-auto">
             {[
-              { value: '24 ta', label: 'A1.1 & A1.2 Darslari' },
-              { value: '300+', label: 'Nemischa So‘zlar' },
+              { value: '72 ta', label: 'A1.1–B1.2 Darslari' },
+              { value: '1,400+', label: 'Nemischa So‘zlar' },
               { value: '9', label: 'Bosqichli Metodika' },
               { value: '100%', label: 'O‘zbekcha Tushuntirish' },
             ].map((stat) => (
               <div
                 key={stat.label}
-                className="p-5 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800 text-center"
+                className="p-5 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800 text-center shadow-2xs hover:shadow-soft transition-all duration-200 transform-gpu"
               >
-                <span className="block text-2xl font-black text-slate-900 dark:text-white">{stat.value}</span>
-                <span className="text-caption font-medium text-slate-500 dark:text-slate-400">{stat.label}</span>
+                <span className="block text-2xl font-black text-slate-900 dark:text-white font-display tabular-nums tracking-tight">{stat.value}</span>
+                <span className="text-caption font-semibold text-slate-500 dark:text-slate-400">{stat.label}</span>
               </div>
             ))}
           </div>
@@ -183,18 +183,22 @@ export const HomePage: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {courseSteps.map((step) => {
+          {courseSteps.map((step, idx) => {
             const Icon = step.icon;
+            // 9th card spans 2 columns on 2-col tablet layouts to maintain symmetry
+            const isLastOdd = idx === courseSteps.length - 1;
             return (
               <div
                 key={step.num}
-                className="p-5 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 shadow-2xs hover:shadow-soft hover:border-brand-300 dark:hover:border-brand-700 transition group flex items-start space-x-4"
+                className={`p-5 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800 shadow-2xs hover:shadow-soft hover:border-brand-300 dark:hover:border-brand-700 transition-all duration-200 transform-gpu group flex items-start space-x-4 ${
+                  isLastOdd ? 'sm:col-span-2 lg:col-span-1' : ''
+                }`}
               >
-                <div className={`w-12 h-12 rounded-2xl border flex items-center justify-center flex-shrink-0 font-extrabold ${step.color}`}>
+                <div className={`w-12 h-12 rounded-2xl border flex items-center justify-center flex-shrink-0 font-extrabold transition-transform group-hover:scale-105 ${step.color}`}>
                   <Icon size={20} />
                 </div>
-                <div>
-                  <span className="text-[11px] font-mono font-bold text-slate-400 block mb-0.5">
+                <div className="min-w-0 flex-1">
+                  <span className="text-[11px] font-mono font-bold text-slate-400 dark:text-slate-500 block mb-0.5 tabular-nums">
                     {step.num}-BOSQICH
                   </span>
                   <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">

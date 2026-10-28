@@ -265,6 +265,11 @@ export const certificateService = {
       const randomSuffix = Math.random().toString(36).substring(2, 8).toUpperCase();
       certId = `FGN-${cleanLevel}-${new Date().getFullYear()}-${randomSuffix}`;
 
+      const isListeningTest = testId.includes('listening');
+      const isReadingTest = testId.includes('reading');
+      const skillSuffix = isListeningTest ? ' (Hören)' : isReadingTest ? ' (Lesen)' : '';
+      const formattedLevel = levelCode.toUpperCase().replace('-', '.');
+
       // Save local certificate record
       storageService.saveCertificate({
         id: 'cert-' + Date.now(),
@@ -273,7 +278,7 @@ export const certificateService = {
         userName,
         attemptId,
         levelCode,
-        title: `For Great Nation Zertifikat — ${levelCode.toUpperCase()}`,
+        title: `For Great Nation Zertifikat — ${formattedLevel}${skillSuffix}`,
         score: totalScore,
         percentage,
         readingPercentage,

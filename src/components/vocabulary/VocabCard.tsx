@@ -41,7 +41,7 @@ export const VocabCard: React.FC<VocabCardProps> = ({ item }) => {
 
   return (
     <div
-      className={`p-4 rounded-2xl bg-white dark:bg-slate-900 border transition-all duration-200 group relative shadow-card hover:shadow-card-hover hover:-translate-y-0.5 ${
+      className={`p-4 rounded-2xl bg-white dark:bg-slate-900 border transition-all duration-200 group relative shadow-card hover:shadow-card-hover hover:-translate-y-0.5 transform-gpu ${
         articleStyles.glow
       } ${
         isMastered

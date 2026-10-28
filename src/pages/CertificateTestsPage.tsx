@@ -33,16 +33,18 @@ export const CertificateTestsPage: React.FC = () => {
   });
 
   const [attempts] = useState<CertificateAttempt[]>(() => {
-    return storageService.getCertificateAttempts();
+    return storageService.getCertificateAttempts(user?.id);
   });
 
   const [certificates] = useState<Certificate[]>(() => {
-    return storageService.getCertificates();
+    return storageService.getCertificates(user?.id);
   });
 
   // Calculate stats for each test
   const getTestStats = (testId: string) => {
-    const testAttempts = attempts.filter(a => a.testId === testId && a.status === 'submitted');
+    const testAttempts = attempts.filter(
+      a => a.testId === testId && (a.status === 'submitted' || a.status === 'expired')
+    );
     if (testAttempts.length === 0) {
       return {
         attemptsCount: 0,

@@ -41,7 +41,7 @@
   /* Accessible, consistent focus ring for keyboard users only. */
   :focus-visible {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.35);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.35);
     border-radius: 0.75rem;
   }
 
@@ -51,18 +51,18 @@
   }
 }
 
-/* Custom German Article Badges */
+/* Custom German Article Badges — Refined pedagogical styling */
 .article-badge-der {
-  @apply bg-blue-100 text-blue-700 border border-blue-200 dark:bg-blue-950/60 dark:text-blue-300 dark:border-blue-800;
+  @apply bg-blue-50 text-blue-700 border border-blue-200/90 dark:bg-blue-950/50 dark:text-blue-300 dark:border-blue-800/80 font-bold tracking-tight;
 }
 .article-badge-die {
-  @apply bg-rose-100 text-rose-700 border border-rose-200 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-800;
+  @apply bg-rose-50 text-rose-700 border border-rose-200/90 dark:bg-rose-950/50 dark:text-rose-300 dark:border-rose-800/80 font-bold tracking-tight;
 }
 .article-badge-das {
-  @apply bg-emerald-100 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800;
+  @apply bg-emerald-50 text-emerald-700 border border-emerald-200/90 dark:bg-emerald-950/50 dark:text-emerald-300 dark:border-emerald-800/80 font-bold tracking-tight;
 }
 .article-badge-plural {
-  @apply bg-violet-100 text-violet-700 border border-violet-200 dark:bg-violet-950/60 dark:text-violet-300 dark:border-violet-800;
+  @apply bg-violet-50 text-violet-700 border border-violet-200/90 dark:bg-violet-950/50 dark:text-violet-300 dark:border-violet-800/80 font-bold tracking-tight;
 }
 
 /* German Article Accent Text (matches badge hues, dark-mode safe) */
@@ -150,9 +150,31 @@
   background: #334155;
 }
 
-/* Smooth Interactive Transitions */
+/* Smooth Interactive Transitions & Micro-interactions */
 .transition-smooth {
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transform-gpu {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+/* Tabular numerals for stats, timers, and progress counters */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Horizontal scroll fade masks */
+.scroll-fade-right {
+  mask-image: linear-gradient(to right, black 85%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
+}
+
+.scroll-fade-x {
+  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
 }
 
 /* Hide scrollbar for horizontally scrollable segmented controls */
@@ -163,3 +185,12 @@
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+/* Tactile button bounce */
+.btn-tactile {
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.15s ease;
+}
+.btn-tactile:active {
+  transform: scale(0.97);
+}
+

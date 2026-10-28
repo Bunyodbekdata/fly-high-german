@@ -92,19 +92,19 @@ export const DashboardPage: React.FC = () => {
 
           {/* Quick Streak & XP Badges */}
           <div className="flex items-center space-x-3 sm:space-x-4">
-            <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 text-center min-w-[95px]">
+            <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 text-center min-w-[95px] shadow-sm">
               <Flame size={24} className="mx-auto text-amber-400 fill-amber-400 animate-pulse mb-1" />
-              <div className="text-xl font-black">{streak} kun</div>
+              <div className="text-xl font-black tabular-nums">{streak} kun</div>
               <div className="text-[11px] text-slate-300 font-medium">Silsila</div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 text-center min-w-[95px]">
+            <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 text-center min-w-[95px] shadow-sm">
               <Award size={24} className="mx-auto text-emerald-400 mb-1" />
-              <div className="text-xl font-black">{xp} XP</div>
+              <div className="text-xl font-black tabular-nums">{xp} XP</div>
               <div className="text-[11px] text-slate-300 font-medium">Tajriba</div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 text-center min-w-[95px] hidden sm:block">
+            <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 text-center min-w-[95px] hidden sm:block shadow-sm">
               <span className="text-2xl block mb-1">{currentRank.badge}</span>
               <div className="text-xs font-bold truncate max-w-[85px]">{currentRank.titleDe}</div>
               <div className="text-[11px] text-slate-300 font-medium">{currentRank.tier}-Rutba</div>
@@ -131,7 +131,7 @@ export const DashboardPage: React.FC = () => {
           </div>
 
           {nextRank && (
-            <div className="text-xs text-slate-500 dark:text-slate-400 sm:text-right">
+            <div className="text-xs text-slate-500 dark:text-slate-400 sm:text-right tabular-nums">
               Keyingi darajagacha: <strong className="text-brand-600 dark:text-brand-400">+{xpToNext} XP</strong> kerak ({nextRank.badge} {nextRank.titleUz})
             </div>
           )}
@@ -147,7 +147,7 @@ export const DashboardPage: React.FC = () => {
 
       {/* Continue Learning Prominent Card */}
       {nextLesson && (
-        <div className="bg-white dark:bg-slate-900 rounded-3xl border border-brand-200 dark:border-brand-800/80 p-6 sm:p-8 shadow-card flex flex-col md:flex-row md:items-center justify-between gap-6 ring-1 ring-brand-100 dark:ring-brand-900/30">
+        <div className="bg-white dark:bg-slate-900 rounded-3xl border border-brand-200 dark:border-brand-800/80 p-6 sm:p-8 shadow-card flex flex-col md:flex-row md:items-center justify-between gap-6 ring-1 ring-brand-100 dark:ring-brand-900/30 transform-gpu">
           <div className="space-y-2">
             <div className="flex items-center space-x-2">
               <span className="text-xs font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950/60 px-2.5 py-0.5 rounded-full border border-brand-200/60 dark:border-brand-800/60">
@@ -165,7 +165,7 @@ export const DashboardPage: React.FC = () => {
 
           <button
             onClick={() => navigate(`/courses/${nextLesson.levelCode}/lesson/${nextLesson.id}`)}
-            className="px-8 py-4 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm sm:text-base shadow-soft transition flex items-center justify-center space-x-2 flex-shrink-0 active:scale-95"
+            className="px-8 py-4 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm sm:text-base shadow-soft hover:shadow-card transition-all flex items-center justify-center space-x-2 flex-shrink-0 active:scale-95 btn-tactile"
           >
             <Play size={18} className="fill-current" />
             <span>{hasStarted ? 'Darsni davom ettirish' : 'Darsni boshlash'}</span>

@@ -14,10 +14,14 @@ export const MainLayout: React.FC = () => {
   const location = useLocation();
   const isLessonPage = location.pathname.includes('/lesson/');
 
+  React.useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [location.pathname]);
+
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-200 w-full max-w-full overflow-x-hidden">
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-200 w-full max-w-full overflow-x-hidden selection:bg-brand-500 selection:text-white">
       <Navbar />
-      <main className={`flex-1 w-full max-w-full overflow-x-hidden ${isLessonPage ? 'pb-0' : 'pb-16 lg:pb-0'}`}>
+      <main className={`flex-1 w-full max-w-full overflow-x-hidden ${isLessonPage ? 'pb-12 lg:pb-0' : 'pb-28 lg:pb-0'}`}>
         <Suspense fallback={<PageFallback />}>
           <Outlet />
         </Suspense>

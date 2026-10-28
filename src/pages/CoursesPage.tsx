@@ -78,11 +78,11 @@ export const CoursesPage: React.FC = () => {
                     ) : (
                       <span className="text-[11px] font-bold text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/50 px-2.5 py-0.5 rounded-full border border-amber-200 dark:border-amber-800 flex items-center">
                         <Lock size={11} className="mr-1 text-amber-600 dark:text-amber-400" />
-                        Tez orada (A1 to‘liq sinovdan o‘tgach qo‘shiladi)
+                        Tez orada taqdim etiladi
                       </span>
                     )}
 
-                    <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 flex items-center">
+                    <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 flex items-center tabular-nums">
                       <Clock size={13} className="mr-1" />
                       {lvl.estimatedHours} soat ta‘lim
                     </span>
@@ -105,7 +105,7 @@ export const CoursesPage: React.FC = () => {
                 </div>
 
                 {/* Level Action / Progress Area */}
-                <div className="w-full lg:w-72 flex flex-col justify-center space-y-4 pt-4 lg:pt-0 lg:border-l lg:border-slate-100 dark:lg:border-slate-700 lg:pl-6">
+                <div className="w-full lg:w-72 flex flex-col justify-center space-y-4 pt-4 lg:pt-0 lg:border-l lg:border-slate-100 dark:lg:border-slate-800 lg:pl-6">
                   {!isComingSoon ? (
                     <>
                       <div>
@@ -118,7 +118,7 @@ export const CoursesPage: React.FC = () => {
 
                       <Link
                         to={`/levels/${lvl.code}`}
-                        className="w-full py-3.5 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs sm:text-sm shadow-sm transition text-center flex items-center justify-center space-x-2"
+                        className="w-full py-3.5 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs sm:text-sm shadow-soft hover:shadow-card transition-all active:scale-95 text-center flex items-center justify-center space-x-2 btn-tactile"
                       >
                         <span>Darslar yo‘lagiga kirish</span>
                         <ArrowRight size={16} />

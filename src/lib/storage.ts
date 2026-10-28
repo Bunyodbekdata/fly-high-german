@@ -743,7 +743,9 @@ class StorageService {
 
   public getCertificateLevelStats(levelCode: string, userId?: string) {
     const targetUserId = userId || this.getUserProfile()?.id;
-    const attempts = this.getCertificateAttempts(targetUserId).filter(a => a.levelCode === levelCode && a.status === 'submitted');
+    const attempts = this.getCertificateAttempts(targetUserId).filter(
+      a => a.levelCode === levelCode && (a.status === 'submitted' || a.status === 'expired')
+    );
     const attemptsCount = attempts.length;
     if (attemptsCount === 0) {
       return {

@@ -120,15 +120,19 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({ items, onClose }) 
       </div>
 
       {/* 3D Flip Card Container */}
-      <div className="perspective-1000 w-full min-h-[300px]">
+      <div className="perspective-1000 w-full min-h-[340px] relative">
         <div
           onClick={() => setIsFlipped(!isFlipped)}
-          className={`cursor-pointer min-h-[300px] p-7 rounded-3xl border-2 transition-transform duration-500 transform-style-3d shadow-card flex flex-col justify-between relative bg-gradient-to-br ${
-            articleStyle.bg
-          } ${articleStyle.border} ${articleStyle.glow} ${isFlipped ? 'rotate-y-180' : ''}`}
+          className={`cursor-pointer w-full min-h-[340px] relative transition-transform duration-500 transform-style-3d ${
+            isFlipped ? 'rotate-y-180' : ''
+          }`}
         >
-          {/* FRONT */}
-          <div className={`backface-hidden w-full h-full flex flex-col justify-between ${isFlipped ? 'hidden' : 'flex'}`}>
+          {/* FRONT FACE */}
+          <div
+            className={`absolute inset-0 p-7 rounded-3xl border-2 backface-hidden shadow-card flex flex-col justify-between bg-gradient-to-br ${
+              articleStyle.bg
+            } ${articleStyle.border} ${articleStyle.glow}`}
+          >
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <LevelBadge code={current.levelCode} />
@@ -161,12 +165,16 @@ export const FlashcardDeck: React.FC<FlashcardDeckProps> = ({ items, onClose }) 
             </div>
 
             <div className="text-center text-[11px] font-semibold text-slate-400 dark:text-slate-500">
-              Old tomon (Nemischa)
+              Old tomon (Nemischa) • Aylantirish uchun bosing
             </div>
           </div>
 
-          {/* BACK */}
-          <div className={`backface-hidden rotate-y-180 w-full h-full flex flex-col justify-between ${!isFlipped ? 'hidden' : 'flex'}`}>
+          {/* BACK FACE */}
+          <div
+            className={`absolute inset-0 p-7 rounded-3xl border-2 backface-hidden rotate-y-180 shadow-card flex flex-col justify-between bg-gradient-to-br ${
+              articleStyle.bg
+            } ${articleStyle.border} ${articleStyle.glow}`}
+          >
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400">
                 O‘zbekcha Ma‘nosi

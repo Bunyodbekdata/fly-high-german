@@ -10,14 +10,26 @@ export const Footer: React.FC = () => {
           {/* Brand */}
           <div className="md:col-span-1 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl flex flex-col overflow-hidden border border-slate-700 flex-shrink-0">
-                <div className="h-3 bg-slate-950 w-full" />
-                <div className="h-3 bg-red-600 w-full" />
-                <div className="h-3 bg-amber-400 w-full" />
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-slate-900 to-slate-950 p-[1.5px] shadow-soft border border-slate-700/80 flex-shrink-0">
+                <div className="w-full h-full rounded-[14px] bg-slate-900 flex flex-col justify-between p-1">
+                  <div className="h-1.5 w-full rounded-full flex overflow-hidden">
+                    <span className="w-1/3 bg-slate-950" />
+                    <span className="w-1/3 bg-red-600" />
+                    <span className="w-1/3 bg-amber-400" />
+                  </div>
+                  <div className="flex items-center justify-center flex-1">
+                    <span className="text-[10px] font-black tracking-tight text-white font-display">FGN</span>
+                  </div>
+                </div>
               </div>
-              <span className="font-display font-extrabold text-white text-base tracking-tight">
-                FOR GREAT NATION
-              </span>
+              <div className="flex flex-col">
+                <span className="font-display font-extrabold text-white text-base tracking-tight">
+                  FLY HIGH
+                </span>
+                <span className="text-[10px] text-slate-400 font-medium tracking-wide -mt-0.5">
+                  For Great Nation
+                </span>
+              </div>
             </div>
             <p className="text-caption text-slate-400 leading-relaxed">
               O‘zbek tilida nemis tilini noldan B1 darajagacha mustaqil o‘rganish bo‘yicha xalqaro CEFR

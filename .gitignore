@@ -27,3 +27,10 @@ dist-ssr
 .env
 .env.local
 .env.*.local
+
+# Large PDF exports
+*.pdf
+
+# Local IDE and agent configurations
+.agents/
+

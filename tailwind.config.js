@@ -7,29 +7,27 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Signature brand palette — warm orange (Babbel-clean direction).
-        // Every `brand-*` utility across the platform resolves from here, so the
-        // whole UI re-skins from a single source of truth.
+        // Signature brand palette — European Academic Indigo (Prussian Blue / Indigo direction).
+        // Every `brand-*` utility across the platform resolves from here.
         brand: {
-          50: '#fff7ed',
-          100: '#ffedd5',
-          200: '#fed7aa',
-          300: '#fdba74',
-          400: '#fb923c',
-          500: '#f97316',
-          600: '#ea580c',
-          700: '#c2410c',
-          800: '#9a3412',
-          900: '#7c2d12',
-          950: '#431407',
+          50: '#eef2ff',
+          100: '#e0e7ff',
+          200: '#c7d2fe',
+          300: '#a5b4fc',
+          400: '#818cf8',
+          500: '#4f46e5',
+          600: '#4338ca',
+          700: '#3730a3',
+          800: '#312e81',
+          900: '#1e1b4b',
+          950: '#0f0d2b',
         },
         german: {
-          black: '#111827',
+          black: '#0f172a',
           red: '#dc2626',
           gold: '#f59e0b',
         },
-        // Pedagogical article colors — kept deliberately distinct from the orange
-        // signature so grammar cues never read as brand chrome.
+        // Pedagogical article colors — kept deliberately distinct from the brand signature
         article: {
           der: '#2563eb',
           die: '#e11d48',
@@ -43,7 +41,7 @@ export default {
       },
       fontFamily: {
         sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
-        display: ['"Outfit"', '"Plus Jakarta Sans"', 'sans-serif'],
+        display: ['"Plus Jakarta Sans"', '"Outfit"', 'sans-serif'],
       },
       // Editorial type scale for a calmer, more readable rhythm.
       fontSize: {
@@ -53,16 +51,17 @@ export default {
       },
       boxShadow: {
         '2xs': '0 1px 1px 0 rgba(15, 23, 42, 0.03)',
-        'xs': '0 1px 2px 0 rgba(15, 23, 42, 0.05)',
-        'soft': '0 2px 12px -3px rgba(15, 23, 42, 0.06)',
-        'card': '0 6px 24px -8px rgba(15, 23, 42, 0.10)',
-        'elevated': '0 16px 40px -12px rgba(15, 23, 42, 0.16)',
-        'glow': '0 0 25px -5px rgba(249, 115, 22, 0.30)',
+        'xs': '0 1px 2px 0 rgba(15, 23, 42, 0.04)',
+        'soft': '0 2px 14px -3px rgba(15, 23, 42, 0.05), 0 1px 3px 0 rgba(15, 23, 42, 0.03)',
+        'card': '0 8px 30px -8px rgba(15, 23, 42, 0.08), 0 2px 6px -2px rgba(15, 23, 42, 0.04)',
+        'card-hover': '0 14px 34px -8px rgba(15, 23, 42, 0.12), 0 4px 8px -2px rgba(15, 23, 42, 0.06)',
+        'elevated': '0 20px 48px -12px rgba(15, 23, 42, 0.14)',
+        'glow': '0 0 25px -4px rgba(79, 70, 229, 0.28)',
         'glow-der': '0 0 25px -3px rgba(37, 99, 235, 0.30)',
         'glow-die': '0 0 25px -3px rgba(225, 29, 72, 0.30)',
         'glow-das': '0 0 25px -3px rgba(5, 150, 105, 0.30)',
         'glow-plural': '0 0 25px -3px rgba(124, 58, 237, 0.30)',
-        'focus': '0 0 0 3px rgba(249, 115, 22, 0.35)',
+        'focus': '0 0 0 3px rgba(79, 70, 229, 0.35)',
       },
       borderRadius: {
         'xs': '0.125rem',
