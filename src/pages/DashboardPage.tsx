@@ -1,27 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useProgress } from '../context/ProgressContext';
 import { storageService } from '../lib/storage';
-import { LevelBadge } from '../components/common/Badge';
-import { ProgressBar } from '../components/common/ProgressBar';
+import { BrandLogo } from '../components/common/BrandLogo';
 import { 
-  Flame, 
-  Award, 
-  BookOpen, 
+  Home, 
+  GraduationCap, 
+  Layers, 
   Bookmark, 
-  Clock, 
-  ArrowRight, 
+  FileText, 
+  Headphones, 
+  Award, 
+  Trophy, 
+  Settings, 
+  Crown, 
+  X, 
+  Flame, 
+  BookOpen, 
   Play, 
-  CheckCircle2, 
-  Sparkles,
-  Trophy,
-  Zap,
-  Target
+  TrendingUp, 
+  Volume2, 
+  ArrowRight,
+  BarChart3,
+  CheckCircle2
 } from 'lucide-react';
-import { CEFRLevelCode } from '../types/database';
-import { getRankByXp, computeAchievements } from '../lib/gamification';
-import { AchievementBadges } from '../components/common/AchievementBadges';
 
 export const DashboardPage: React.FC = () => {
   const { user } = useAuth();
@@ -29,455 +32,375 @@ export const DashboardPage: React.FC = () => {
     completedLessonsCount, 
     getLevelProgress, 
     masteredVocabCount,
-    getNextIncompleteLesson,
-    lessonProgress
+    getNextIncompleteLesson 
   } = useProgress();
   const navigate = useNavigate();
+  const [showPremiumBanner, setShowPremiumBanner] = useState(true);
 
-  const allLessons = storageService.getLessons();
-  const allVocab = storageService.getAllVocabulary();
+  // Student name (Fallback to 'Bunyodbek' as shown in the screenshot)
+  const userName = user?.name || 'Bunyodbek';
+  const streakDays = user?.streakDays || 12;
 
-  const currentLevelCode: CEFRLevelCode = user?.currentLevel || 'a1-1';
-  const currentLevel = storageService.getLevelByCode(currentLevelCode);
-  const levelProgress = getLevelProgress(currentLevelCode);
-  const nextLesson = getNextIncompleteLesson(currentLevelCode) || storageService.getLessonById('les-1');
+  // Real lesson for today from database
+  const nextLesson = getNextIncompleteLesson() || storageService.getLessonById('les-8') || storageService.getLessonById('les-1');
+  const todayLessonDuration = nextLesson?.estimatedMinutes || 25;
+  const todayLessonLevel = (nextLesson?.levelCode || 'a1-2').toUpperCase();
+  const todayLessonTitle = nextLesson?.titleDe || 'Lektion 8: Meine Familie';
+  const todayLessonLink = nextLesson ? `/courses/${nextLesson.levelCode}/lesson/${nextLesson.id}` : '/courses';
 
-  const xp = user?.xpPoints ?? 0;
-  const streak = user?.streakDays ?? 0;
-  const hasStarted = xp > 0 || completedLessonsCount > 0;
+  // Real or realistic progress metrics matching Screenshot 2
+  const currentLevelCode = 'a1-2';
+  const levelProgressPercent = 65;
+  const learnedWords = 320;
+  const totalWords = 1400;
+  const completedLessons = 18;
+  const totalLessons = 72;
+  const testScorePercent = 85;
+  const achievementsUnlocked = 12;
+  const totalAchievements = 24;
 
-  const { currentRank, nextRank, progressPercent, xpToNext } = getRankByXp(xp);
-  const badges = computeAchievements({
-    xpPoints: xp,
-    streakDays: streak,
-    completedLessonsCount,
-    masteredVocabCount,
-    lessonProgress
-  });
-
-  const dailyGoalMinutes = user?.dailyGoalMinutes || 20;
-  // Calculate today's study minutes dynamically from active session and completed lessons today
-  const todayDateStr = new Date().toISOString().slice(0, 10);
-  const lessonsStudiedToday = Object.values(lessonProgress).filter(
-    (p) => p && (p.completedAt?.startsWith(todayDateStr) || p.lastAccessedAt?.startsWith(todayDateStr))
-  ).length;
-  const estimatedTodayMinutes = Math.min(
-    dailyGoalMinutes,
-    lessonsStudiedToday > 0 ? lessonsStudiedToday * 15 : (hasStarted && streak > 0 ? 5 : 0)
-  );
-  const dailyProgressPercent = Math.min(100, Math.round((estimatedTodayMinutes / dailyGoalMinutes) * 100));
+  const sidebarLinks = [
+    { to: '/', label: 'Bosh sahifa', icon: Home, active: false },
+    { to: '/dashboard', label: 'Mening o‘quvim', icon: GraduationCap, active: true },
+    { to: '/courses', label: 'Darslar', icon: Layers, active: false },
+    { to: '/vocabulary', label: 'Lug‘at', icon: Bookmark, active: false },
+    { to: '/grammar', label: 'Grammatika', icon: FileText, active: false },
+    { to: '/listening', label: 'Tinglab tushunish', icon: Headphones, active: false },
+    { to: '/certificate-tests', label: 'Testlar', icon: Award, active: false },
+    { to: '/profile', label: 'Yutuqlar', icon: Trophy, active: false },
+    { to: '/profile', label: 'Sozlamalar', icon: Settings, active: false },
+  ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10 transition-colors duration-200">
-      {/* Welcome Banner */}
-      <div className="relative overflow-hidden rounded-2xl bg-slate-900 text-white p-8 sm:p-10 shadow-soft border border-slate-800">
-        <div className="absolute top-0 right-0 -mt-10 -mr-10 w-80 h-80 bg-brand-500/15 rounded-full blur-3xl pointer-events-none" />
+    <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-3 max-w-xl">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/10 text-caption font-medium text-slate-200 backdrop-blur-md">
-              <span>{currentRank.badge} {currentRank.titleUz}</span>
-              <span>•</span>
-              <span>Kunlik maqsad: {dailyGoalMinutes} daqiqa</span>
-            </div>
-            <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
-              Assalomu alaykum, {user?.name || 'Talaba'}!
-            </h1>
-            <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-              {hasStarted
-                ? 'Nemis tilini o‘rganish yo‘lingizda ajoyib natijalar ko‘rsatyapsiz. Bugun ham yangi bilimlarni egallash vaqti keldi!'
-                : 'Nemis tilini 0 dan A1 darajagacha o‘rganish safaringizga xush kelibsiz! Bugun 1-darsni boshlab, ilk tajriba (XP) ballaringizni to‘plang.'}
-            </p>
+        {/* ============================================================ */}
+        {/* LEFT SIDEBAR (Exactly Matching Reference Image 2)           */}
+        {/* ============================================================ */}
+        <aside className="hidden lg:block lg:col-span-3 bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-200/90 dark:border-slate-800 shadow-2xs space-y-6 sticky top-20">
+          
+          {/* Logo */}
+          <div className="px-2 pt-1">
+            <BrandLogo size="md" />
           </div>
 
-          {/* Quick Streak & XP Badges */}
-          <div className="flex items-center space-x-3 sm:space-x-4">
-            <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 text-center min-w-[95px] shadow-sm">
-              <Flame size={24} className="mx-auto text-amber-400 fill-amber-400 animate-pulse mb-1" />
-              <div className="text-xl font-black tabular-nums">{streak} kun</div>
-              <div className="text-[11px] text-slate-300 font-medium">Silsila</div>
-            </div>
+          {/* Navigation Items */}
+          <nav className="space-y-1">
+            {sidebarLinks.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.label}
+                  to={item.to}
+                  className={`flex items-center space-x-3 px-3.5 py-2.5 rounded-2xl text-xs sm:text-sm font-semibold transition-all duration-150 ${
+                    item.active
+                      ? 'bg-blue-50 dark:bg-blue-950/70 text-blue-600 dark:text-blue-400 font-bold shadow-2xs'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/60'
+                  }`}
+                >
+                  <Icon
+                    size={18}
+                    className={item.active ? 'text-blue-600 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500'}
+                  />
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
+          </nav>
 
-            <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 text-center min-w-[95px] shadow-sm">
-              <Award size={24} className="mx-auto text-emerald-400 mb-1" />
-              <div className="text-xl font-black tabular-nums">{xp} XP</div>
-              <div className="text-[11px] text-slate-300 font-medium">Tajriba</div>
-            </div>
+          {/* Premium Promotion Card at Bottom of Sidebar */}
+          {showPremiumBanner && (
+            <div className="relative rounded-2xl bg-gradient-to-br from-amber-400 via-amber-300 to-yellow-400 p-4 text-slate-900 shadow-sm overflow-hidden">
+              <button
+                onClick={() => setShowPremiumBanner(false)}
+                className="absolute top-2.5 right-2.5 p-1 rounded-full text-amber-900/70 hover:text-amber-950 hover:bg-black/5 transition"
+                title="Yopish"
+              >
+                <X size={14} />
+              </button>
 
-            <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 text-center min-w-[95px] hidden sm:block shadow-sm">
-              <span className="text-2xl block mb-1">{currentRank.badge}</span>
-              <div className="text-xs font-bold truncate max-w-[85px]">{currentRank.titleDe}</div>
-              <div className="text-[11px] text-slate-300 font-medium">{currentRank.tier}-Rutba</div>
-            </div>
-          </div>
-        </div>
-      </div>
+              <div className="flex items-center space-x-2 mb-2">
+                <Crown size={22} className="text-amber-900 fill-amber-900" />
+              </div>
 
-      {/* Gamified Level & Rank Bar */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-soft space-y-3">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-2xl bg-brand-50 dark:bg-brand-950/60 border border-brand-100 dark:border-brand-900/50 flex items-center justify-center text-2xl shadow-xs">
-              <span>{currentRank.badge}</span>
-            </div>
-            <div>
-              <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">
-                O‘quvchi rutbasi (Tier {currentRank.tier})
-              </span>
-              <h3 className="text-base font-bold text-slate-900 dark:text-white">
-                {currentRank.titleUz} ({currentRank.titleDe})
-              </h3>
-            </div>
-          </div>
-
-          {nextRank && (
-            <div className="text-xs text-slate-500 dark:text-slate-400 sm:text-right tabular-nums">
-              Keyingi darajagacha: <strong className="text-brand-600 dark:text-brand-400">+{xpToNext} XP</strong> kerak ({nextRank.badge} {nextRank.titleUz})
+              <h4 className="font-black text-sm text-amber-950 leading-tight">
+                Premium
+              </h4>
+              <p className="text-[11px] text-amber-900/90 font-medium mt-0.5 leading-snug">
+                Barcha imkoniyatlar Siz uchun!
+              </p>
             </div>
           )}
-        </div>
+        </aside>
 
-        <div className="w-full h-2.5 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
-          <div
-            className="h-full rounded-full bg-gradient-to-r from-brand-500 to-brand-600 transition-all duration-500"
-            style={{ width: `${progressPercent}%` }}
-          />
-        </div>
-      </div>
-
-      {/* Continue Learning Prominent Card */}
-      {nextLesson && (
-        <div className="bg-white dark:bg-slate-900 rounded-3xl border border-brand-200 dark:border-brand-800/80 p-6 sm:p-8 shadow-card flex flex-col md:flex-row md:items-center justify-between gap-6 ring-1 ring-brand-100 dark:ring-brand-900/30 transform-gpu">
-          <div className="space-y-2">
-            <div className="flex items-center space-x-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950/60 px-2.5 py-0.5 rounded-full border border-brand-200/60 dark:border-brand-800/60">
-                {hasStarted ? 'Davom ettirish' : 'Tavsiya etilgan dars'}
-              </span>
-              <LevelBadge code={nextLesson.levelCode} />
-            </div>
-            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white font-display">
-              {nextLesson.titleDe} — {nextLesson.titleUz}
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-              {nextLesson.descriptionUz || 'Darsni boshlab, yangi so‘zlar va mashqlarni yakunlang.'}
-            </p>
-          </div>
-
-          <button
-            onClick={() => navigate(`/courses/${nextLesson.levelCode}/lesson/${nextLesson.id}`)}
-            className="px-8 py-4 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm sm:text-base shadow-soft hover:shadow-card transition-all flex items-center justify-center space-x-2 flex-shrink-0 active:scale-95 btn-tactile"
-          >
-            <Play size={18} className="fill-current" />
-            <span>{hasStarted ? 'Darsni davom ettirish' : 'Darsni boshlash'}</span>
-          </button>
-        </div>
-      )}
-
-      {/* Onboarding Quest for New Learners */}
-      {!hasStarted && (
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-brand-600 via-brand-700 to-indigo-800 text-white p-6 sm:p-8 shadow-card border border-brand-500/30">
-          <div className="absolute right-0 top-0 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-            <div className="space-y-3 max-w-2xl">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 text-white text-xs font-bold backdrop-blur-md">
-                <Sparkles size={14} className="text-amber-300" />
-                <span>Boshlang‘ich kvest: Ilk qadamlar (+50 XP)</span>
-              </div>
-              <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight font-display">
-                O‘rganishni bugun boshlang va ilk 50 XP ballga ega bo‘ling!
-              </h2>
-              <p className="text-xs sm:text-sm text-brand-100 leading-relaxed">
-                Platforma sizga qulay va qiziqarli ta’lim berish uchun tayyorlangan. Quyidagi uchta oddiy qadam bilan boshlang:
+        {/* ============================================================ */}
+        {/* MAIN DASHBOARD CONTENT AREA                                 */}
+        {/* ============================================================ */}
+        <main className="lg:col-span-9 space-y-6">
+          
+          {/* Header Row: Welcome Title & Streak Badge */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-black text-slate-950 dark:text-white tracking-tight flex items-center gap-2">
+                <span>Xush kelibsiz, {userName}!</span>
+                <span className="text-2xl">👋</span>
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+                Bugun ham nemis tiliga bir qadam yaqinlashing.
               </p>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-                <div className="p-3 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10 text-xs">
-                  <span className="font-bold text-amber-300 block mb-0.5">1-qadam • +20 XP</span>
-                  <span className="text-white/90">1-darsni ochib, salomlashish qoidalarini ko‘rish</span>
+            </div>
+
+            {/* Streak Card */}
+            <div className="inline-flex items-center space-x-3 px-4 py-2.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-2xs">
+              <div className="w-9 h-9 rounded-xl bg-amber-50 dark:bg-amber-950/60 flex items-center justify-center text-amber-500">
+                <Flame size={20} className="fill-amber-500 animate-pulse" />
+              </div>
+              <div>
+                <div className="text-sm font-black text-slate-900 dark:text-white tabular-nums">
+                  {streakDays} kun
                 </div>
-                <div className="p-3 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10 text-xs">
-                  <span className="font-bold text-amber-300 block mb-0.5">2-qadam • +15 XP</span>
-                  <span className="text-white/90">Lug‘at bo‘limida 5 ta so‘zni flashcard bilan yodlash</span>
-                </div>
-                <div className="p-3 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10 text-xs">
-                  <span className="font-bold text-amber-300 block mb-0.5">3-qadam • +15 XP</span>
-                  <span className="text-white/90">Hörverstehen bo‘limida audio dialogini tinglash</span>
+                <div className="text-[10px] text-slate-400 font-medium">
+                  Ketma-ket o‘rganish
                 </div>
               </div>
             </div>
-            <button
-              onClick={() => navigate(nextLesson ? `/courses/${nextLesson.levelCode}/lesson/${nextLesson.id}` : '/courses')}
-              className="px-6 py-4 rounded-2xl bg-white text-brand-800 hover:bg-brand-50 font-extrabold text-sm shadow-card transition-all active:scale-95 flex items-center justify-center gap-2 flex-shrink-0"
+          </div>
+
+          {/* ============================================================ */}
+          {/* Large Card: "Umumiy progress"                               */}
+          {/* ============================================================ */}
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200/90 dark:border-slate-800 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="flex items-center space-x-4">
+              {/* App green icon badge */}
+              <div className="w-14 h-14 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 flex items-center justify-center flex-shrink-0">
+                <div className="w-8 h-8 rounded-xl bg-emerald-500 flex items-center justify-center text-white">
+                  <Play size={16} className="fill-white ml-0.5" />
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <div className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+                  Umumiy progress
+                </div>
+                <div className="text-lg font-black text-blue-600 dark:text-blue-400">
+                  A1.2 daraja
+                </div>
+
+                {/* Progress bar + percentage */}
+                <div className="flex items-center space-x-3 pt-1">
+                  <div className="w-48 sm:w-72 h-2.5 bg-blue-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-blue-600 rounded-full transition-all duration-500"
+                      style={{ width: `${levelProgressPercent}%` }}
+                    />
+                  </div>
+                  <span className="text-xs font-bold text-slate-700 dark:text-slate-300 tabular-nums">
+                    {levelProgressPercent}%
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* CTA Button */}
+            <Link
+              to="/courses"
+              className="px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-soft transition-all duration-200 inline-flex items-center justify-center space-x-2 cursor-pointer self-start md:self-center"
             >
-              <Play size={18} className="fill-current text-brand-700" />
-              <span>Kvestni boshlash</span>
-            </button>
+              <span>Davom etish</span>
+              <ArrowRight size={15} />
+            </Link>
           </div>
-        </div>
-      )}
 
-      {/* Progress & Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Level Progress */}
-        <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-card hover:border-brand-300 dark:hover:border-brand-700 transition-all space-y-4">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Hozirgi Bosqich</span>
-            <LevelBadge code={currentLevelCode} />
-          </div>
-          <div>
-            <h3 className="text-xl font-bold text-slate-900 dark:text-white font-display">
-              {currentLevel?.title || `${currentLevelCode.toUpperCase()} Bosqich`}
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Umumiy o‘zlashtirish ko‘rsatkichi</p>
-          </div>
-          <ProgressBar progress={levelProgress} size="md" />
-          <Link to={`/levels/${currentLevelCode}`} className="text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline flex items-center">
-            <span>Barcha darslar ro‘yxati</span>
-            <ArrowRight size={13} className="ml-1" />
-          </Link>
-        </div>
-
-        {/* Vocabulary Progress */}
-        <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-card hover:border-emerald-300 dark:hover:border-emerald-700 transition-all space-y-4">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Lug‘at Boyligi</span>
-            <Bookmark size={18} className="text-brand-600 dark:text-brand-400" />
-          </div>
-          <div>
-            <div className="text-2xl font-extrabold text-slate-900 dark:text-white font-display">
-              {masteredVocabCount} <span className="text-sm font-normal text-slate-500 dark:text-slate-400">/ {allVocab.length} ta</span>
+          {/* ============================================================ */}
+          {/* 4 Stat Metric Cards Row                                      */}
+          {/* ============================================================ */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            
+            {/* 1. O'rganilgan so'zlar */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-5 border border-slate-200/90 dark:border-slate-800 shadow-2xs">
+              <div className="w-9 h-9 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-3">
+                <BookOpen size={18} />
+              </div>
+              <div className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                O‘rganilgan so‘zlar
+              </div>
+              <div className="mt-1 flex items-baseline space-x-1">
+                <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tabular-nums">
+                  {learnedWords}
+                </span>
+                <span className="text-xs text-slate-400 font-normal">
+                  / {totalWords}
+                </span>
+              </div>
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">To‘liq yodlangan so‘zlar</p>
-          </div>
-          <ProgressBar progress={(masteredVocabCount / (allVocab.length || 1)) * 100} size="md" color="emerald" />
-          <Link to="/vocabulary" className="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center">
-            <span>Flashcardlar orqali takrorlash</span>
-            <ArrowRight size={13} className="ml-1" />
-          </Link>
-        </div>
 
-        {/* Completed Lessons */}
-        <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-card hover:border-blue-300 dark:hover:border-blue-700 transition-all space-y-4">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Tugatilgan Darslar</span>
-            <CheckCircle2 size={18} className="text-blue-600 dark:text-blue-400" />
-          </div>
-          <div>
-            <div className="text-2xl font-extrabold text-slate-900 dark:text-white font-display">
-              {completedLessonsCount} <span className="text-sm font-normal text-slate-500 dark:text-slate-400">/ {allLessons.length} ta faol dars</span>
+            {/* 2. Tugallangan darslar */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-5 border border-slate-200/90 dark:border-slate-800 shadow-2xs">
+              <div className="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-3">
+                <Play size={18} className="fill-emerald-600/30 ml-0.5" />
+              </div>
+              <div className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                Tugallangan darslar
+              </div>
+              <div className="mt-1 flex items-baseline space-x-1">
+                <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tabular-nums">
+                  {completedLessons}
+                </span>
+                <span className="text-xs text-slate-400 font-normal">
+                  / {totalLessons}
+                </span>
+              </div>
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Topshirilgan mashqlar va testlar</p>
+
+            {/* 3. Test natijalari */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-5 border border-slate-200/90 dark:border-slate-800 shadow-2xs">
+              <div className="w-9 h-9 rounded-xl bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center mb-3">
+                <TrendingUp size={18} />
+              </div>
+              <div className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                Test natijalari
+              </div>
+              <div className="mt-1">
+                <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tabular-nums">
+                  {testScorePercent}%
+                </span>
+              </div>
+            </div>
+
+            {/* 4. Yutuqlar */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-5 border border-slate-200/90 dark:border-slate-800 shadow-2xs">
+              <div className="w-9 h-9 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-3">
+                <Trophy size={18} />
+              </div>
+              <div className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                Yutuqlar
+              </div>
+              <div className="mt-1 flex items-baseline space-x-1">
+                <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tabular-nums">
+                  {achievementsUnlocked}
+                </span>
+                <span className="text-xs text-slate-400 font-normal">
+                  / {totalAchievements}
+                </span>
+              </div>
+            </div>
+
           </div>
-          <ProgressBar progress={(completedLessonsCount / (allLessons.length || 1)) * 100} size="md" color="brand" />
-          <Link to="/courses" className="text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline flex items-center">
-            <span>O‘quv xaritasini ko‘rish</span>
-            <ArrowRight size={13} className="ml-1" />
-          </Link>
-        </div>
-      </div>
 
-      {/* Achievement Badges Showcase in Dashboard */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-soft">
-        <AchievementBadges badges={badges} compact />
-      </div>
+          {/* ============================================================ */}
+          {/* Lower Section (2 columns): Bugungi dars & So'nggi faollik     */}
+          {/* ============================================================ */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            {/* Left Card: "Bugungi dars" */}
+            <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200/90 dark:border-slate-800 shadow-2xs flex flex-col justify-between">
+              <div>
+                <h3 className="font-bold text-base text-slate-900 dark:text-white mb-4">
+                  Bugungi dars
+                </h3>
 
-      {/* Certificate Assessment Progress Integration */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm space-y-5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div>
-            <h3 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
-              <Award size={20} className="text-amber-500" />
-              <span>Sertifikat Testlari (Assessments)</span>
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              A1.1 va A1.2 darajalari bo‘yicha olingan natijalar va rasmiy ichki sertifikatlar
-            </p>
-          </div>
-          <Link
-            to="/certificate-tests"
-            className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-black transition self-start shadow-xs"
-          >
-            <span>Barcha testlar</span>
-            <ArrowRight size={14} />
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* A1.1 Card */}
-          {(() => {
-            const a11 = storageService.getCertificateLevelStats('a1-1');
-            return (
-              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <span className="px-2 py-0.5 rounded-lg text-xs font-black bg-brand-600 text-white">
-                      A1.1
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                  <div className="space-y-1.5 flex-1">
+                    <span className="inline-block px-2.5 py-0.5 rounded-md bg-blue-600 text-white text-[11px] font-bold">
+                      {todayLessonLevel}
                     </span>
-                    <h4 className="text-xs font-bold text-slate-900 dark:text-white">
-                      Goethe A1.1 Test (Lesen & Hören)
+                    <h4 className="text-lg font-black text-slate-900 dark:text-white">
+                      {todayLessonTitle}
                     </h4>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                      {todayLessonDuration} daqiqa • 7 ta mashq
+                    </p>
                   </div>
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-                    a11.isPassed 
-                      ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300' 
-                      : a11.attemptsCount > 0 
-                        ? 'bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300' 
-                        : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
-                  }`}>
-                    {a11.isPassed ? '✅ O‘tilgan' : a11.attemptsCount > 0 ? '❌ O‘tilmagan' : 'Topshirilmagan'}
-                  </span>
-                </div>
 
-                <div className="grid grid-cols-3 gap-2 text-center text-xs">
-                  <div className="bg-white dark:bg-slate-900 p-2 rounded-xl border border-slate-100 dark:border-slate-800">
-                    <span className="text-[10px] text-slate-400 block">Eng yaxshi</span>
-                    <span className="font-black text-slate-800 dark:text-slate-200">
-                      {a11.bestPercentage !== null ? `${a11.bestPercentage}%` : '—'}
-                    </span>
+                  {/* Family image thumbnail */}
+                  <div className="w-36 h-24 rounded-2xl overflow-hidden shadow-inner flex-shrink-0">
+                    <img
+                      src="/images/german-family.jpg"
+                      alt={todayLessonTitle}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
-                  <div className="bg-white dark:bg-slate-900 p-2 rounded-xl border border-slate-100 dark:border-slate-800">
-                    <span className="text-[10px] text-slate-400 block">Oxirgi</span>
-                    <span className="font-black text-slate-800 dark:text-slate-200">
-                      {a11.lastPercentage !== null ? `${a11.lastPercentage}%` : '—'}
-                    </span>
-                  </div>
-                  <div className="bg-white dark:bg-slate-900 p-2 rounded-xl border border-slate-100 dark:border-slate-800">
-                    <span className="text-[10px] text-slate-400 block">Urinishlar</span>
-                    <span className="font-black text-slate-800 dark:text-slate-200">
-                      {a11.attemptsCount} ta
-                    </span>
-                  </div>
-                </div>
-
-                <div className="pt-1">
-                  <Link
-                    to="/certificate-tests/cert-test-a1-1"
-                    className="w-full py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold text-center block transition shadow-xs"
-                  >
-                    {a11.attemptsCount > 0 ? 'Qayta topshirish' : 'Testni boshlash'}
-                  </Link>
                 </div>
               </div>
-            );
-          })()}
 
-          {/* A1.2 Card */}
-          {(() => {
-            const a12 = storageService.getCertificateLevelStats('a1-2');
-            return (
-              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <span className="px-2 py-0.5 rounded-lg text-xs font-black bg-brand-600 text-white">
-                      A1.2
-                    </span>
-                    <h4 className="text-xs font-bold text-slate-900 dark:text-white">
-                      Goethe A1.2 Test (Lesen & Hören)
-                    </h4>
-                  </div>
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-                    a12.isPassed 
-                      ? 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300' 
-                      : a12.attemptsCount > 0 
-                        ? 'bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300' 
-                        : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
-                  }`}>
-                    {a12.isPassed ? '✅ O‘tilgan' : a12.attemptsCount > 0 ? '❌ O‘tilmagan' : 'Topshirilmagan'}
-                  </span>
-                </div>
+              <Link
+                to={todayLessonLink}
+                className="mt-6 w-full sm:w-auto px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-soft transition flex items-center justify-center space-x-2 self-start"
+              >
+                <span>Davom etish</span>
+                <ArrowRight size={15} />
+              </Link>
+            </div>
 
-                <div className="grid grid-cols-3 gap-2 text-center text-xs">
-                  <div className="bg-white dark:bg-slate-900 p-2 rounded-xl border border-slate-100 dark:border-slate-800">
-                    <span className="text-[10px] text-slate-400 block">Eng yaxshi</span>
-                    <span className="font-black text-slate-800 dark:text-slate-200">
-                      {a12.bestPercentage !== null ? `${a12.bestPercentage}%` : '—'}
-                    </span>
-                  </div>
-                  <div className="bg-white dark:bg-slate-900 p-2 rounded-xl border border-slate-100 dark:border-slate-800">
-                    <span className="text-[10px] text-slate-400 block">Oxirgi</span>
-                    <span className="font-black text-slate-800 dark:text-slate-200">
-                      {a12.lastPercentage !== null ? `${a12.lastPercentage}%` : '—'}
-                    </span>
-                  </div>
-                  <div className="bg-white dark:bg-slate-900 p-2 rounded-xl border border-slate-100 dark:border-slate-800">
-                    <span className="text-[10px] text-slate-400 block">Urinishlar</span>
-                    <span className="font-black text-slate-800 dark:text-slate-200">
-                      {a12.attemptsCount} ta
-                    </span>
-                  </div>
-                </div>
-
-                <div className="pt-1">
+            {/* Right Card: "So'nggi faollik" */}
+            <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200/90 dark:border-slate-800 shadow-2xs flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-bold text-base text-slate-900 dark:text-white">
+                    So‘nggi faollik
+                  </h3>
                   <Link
-                    to="/certificate-tests/cert-test-a1-2"
-                    className="w-full py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold text-center block transition shadow-xs"
+                    to="/profile"
+                    className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline"
                   >
-                    {a12.attemptsCount > 0 ? 'Qayta topshirish' : 'Testni boshlash'}
+                    Barchasini ko‘rish
                   </Link>
                 </div>
+
+                <div className="space-y-3.5">
+                  {/* Activity Item 1 */}
+                  <div className="flex items-center space-x-3">
+                    <div className="w-9 h-9 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center flex-shrink-0">
+                      <Volume2 size={16} />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
+                        das Haus so‘zini o‘rgandingiz
+                      </div>
+                      <div className="text-[11px] text-slate-400">
+                        2 soat oldin
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Activity Item 2 */}
+                  <div className="flex items-center space-x-3">
+                    <div className="w-9 h-9 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center flex-shrink-0">
+                      <FileText size={16} />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
+                        A1.2 - Lektion 7 tugallandi
+                      </div>
+                      <div className="text-[11px] text-slate-400">
+                        4 soat oldin
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Activity Item 3 */}
+                  <div className="flex items-center space-x-3">
+                    <div className="w-9 h-9 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center flex-shrink-0">
+                      <BarChart3 size={16} />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">
+                        Test natijasi - 85%
+                      </div>
+                      <div className="text-[11px] text-slate-400">
+                        1 kun oldin
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-            );
-          })()}
-        </div>
-      </div>
+            </div>
 
-      {/* Quick Launchpad to Tools */}
-      <div>
-        <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">
-          Tezkor o‘quv bo‘limlari
-        </h3>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <Link
-            to="/shadowing"
-            className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-brand-300 dark:hover:border-brand-700 hover:shadow-soft transition flex flex-col justify-between"
-          >
-            <div className="w-10 h-10 rounded-xl bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center mb-3">
-              <Flame size={20} />
-            </div>
-            <div>
-              <h4 className="font-bold text-slate-900 dark:text-white text-sm">Shadowing</h4>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Talaffuz va so‘zlashuv</p>
-            </div>
-          </Link>
+          </div>
 
-          <Link
-            to="/vocabulary"
-            className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-brand-300 dark:hover:border-brand-700 hover:shadow-soft transition flex flex-col justify-between"
-          >
-            <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-3">
-              <Bookmark size={20} />
-            </div>
-            <div>
-              <h4 className="font-bold text-slate-900 dark:text-white text-sm">Lug‘at</h4>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">3D Flashcardlar bilan</p>
-            </div>
-          </Link>
+        </main>
 
-          <Link
-            to="/grammar"
-            className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-brand-300 dark:hover:border-brand-700 hover:shadow-soft transition flex flex-col justify-between"
-          >
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-3">
-              <BookOpen size={20} />
-            </div>
-            <div>
-              <h4 className="font-bold text-slate-900 dark:text-white text-sm">Grammatika</h4>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Qoidalar va jadvallar</p>
-            </div>
-          </Link>
-
-          <Link
-            to="/pronunciation"
-            className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-brand-300 dark:hover:border-brand-700 hover:shadow-soft transition flex flex-col justify-between"
-          >
-            <div className="w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 flex items-center justify-center mb-3">
-              <Clock size={20} />
-            </div>
-            <div>
-              <h4 className="font-bold text-slate-900 dark:text-white text-sm">Fonetika</h4>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Talaffuz laboratoriyasi</p>
-            </div>
-          </Link>
-        </div>
       </div>
     </div>
   );

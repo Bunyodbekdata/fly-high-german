@@ -447,16 +447,12 @@ export const VocabularyTab: React.FC<VocabularyTabProps> = ({ vocabulary, onNext
       )}
 
       {/* Bottom Next Step Button */}
-      <div className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-800 flex justify-between items-center">
-        <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
-          Lug‘at o‘rganib bo‘lingach, grammatik qoidaga o‘ting
-        </span>
-
+      <div className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-800 flex justify-end">
         <button
           onClick={onNext}
           className="inline-flex items-center px-6 py-3 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm transition shadow-sm"
         >
-          <span>4-Qadam: Grammatikaga o‘tish</span>
+          <span>Keyingi: Grammatika</span>
           <ArrowRight size={16} className="ml-2" />
         </button>
       </div>

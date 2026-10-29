@@ -63,7 +63,7 @@ export const ListeningTab: React.FC<ListeningTabProps> = ({ listening3Stage, lis
             <div>
               <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-xs font-bold text-blue-700 dark:text-blue-300 mb-2">
                 <Headphones size={14} />
-                <span>3-Bosqichli Tinglash Tizimi (3-Stufen-Hörverstehen)</span>
+                <span>Tinglab tushunish</span>
               </div>
               <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                 {active3Stage.titleDe}
@@ -74,23 +74,22 @@ export const ListeningTab: React.FC<ListeningTabProps> = ({ listening3Stage, lis
             </div>
 
             {/* Audio speed controls */}
-            <div className="flex items-center space-x-2 bg-slate-100 dark:bg-slate-800 p-1.5 rounded-2xl border border-slate-200/70 dark:border-slate-700">
-              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 px-2">Tezlik:</span>
+            <div className="flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl border border-slate-200/70 dark:border-slate-700">
               <button
                 onClick={() => setPlaybackSpeed(0.85)}
-                className={`text-xs px-3 py-1 rounded-xl font-bold transition ${
-                  playbackSpeed === 0.85 ? 'bg-white dark:bg-slate-900 text-brand-700 dark:text-brand-300 shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                className={`text-xs px-2.5 py-1 rounded-lg font-bold transition ${
+                  playbackSpeed === 0.85 ? 'bg-white dark:bg-slate-900 text-brand-700 dark:text-brand-300 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
-                0.85x (Sekinroq)
+                0.85x
               </button>
               <button
                 onClick={() => setPlaybackSpeed(1.0)}
-                className={`text-xs px-3 py-1 rounded-xl font-bold transition ${
-                  playbackSpeed === 1.0 ? 'bg-white dark:bg-slate-900 text-brand-700 dark:text-brand-300 shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                className={`text-xs px-2.5 py-1 rounded-lg font-bold transition ${
+                  playbackSpeed === 1.0 ? 'bg-white dark:bg-slate-900 text-brand-700 dark:text-brand-300 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
-                1.0x (Oddiy)
+                1.0x
               </button>
             </div>
           </div>
@@ -145,7 +144,7 @@ export const ListeningTab: React.FC<ListeningTabProps> = ({ listening3Stage, lis
               }`}
             >
               <Sparkles size={15} />
-              <span>1. Umumiy ma‘no (Global)</span>
+              <span>1. Umumiy ma‘no</span>
               {stage1Checked && isStage1Correct && <CheckCircle2 size={14} className="text-white ml-1" />}
             </button>
 
@@ -158,7 +157,7 @@ export const ListeningTab: React.FC<ListeningTabProps> = ({ listening3Stage, lis
               }`}
             >
               <ListFilter size={15} />
-              <span>2. Aniq faktlar (Selektiv)</span>
+              <span>2. Aniq faktlar</span>
               {stage2Checked && <CheckCircle2 size={14} className="text-emerald-500 ml-1" />}
             </button>
 
@@ -171,7 +170,7 @@ export const ListeningTab: React.FC<ListeningTabProps> = ({ listening3Stage, lis
               }`}
             >
               <FileText size={15} />
-              <span>3. Transkript & Lug‘at</span>
+              <span>3. Transkript</span>
             </button>
           </div>
 
@@ -181,7 +180,7 @@ export const ListeningTab: React.FC<ListeningTabProps> = ({ listening3Stage, lis
               <div className="p-4 rounded-2xl bg-amber-50/80 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-xs sm:text-sm text-amber-950 dark:text-amber-200 flex items-start space-x-3">
                 <HelpCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
                 <div>
-                  <span className="font-bold block mb-1">Metodik ko‘rsatma:</span>
+                  <span className="font-bold block mb-1">Ko‘rsatma:</span>
                   <p className="leading-relaxed">{active3Stage.stage1Global.instructionUz}</p>
                 </div>
               </div>
@@ -394,7 +393,7 @@ export const ListeningTab: React.FC<ListeningTabProps> = ({ listening3Stage, lis
               {active3Stage.stage3Transcript.keyVocabulary.length > 0 && (
                 <div className="pt-4 border-t border-slate-200 dark:border-slate-800">
                   <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3">
-                    Ushbu audiodan muhim so‘zlar:
+                    Muhim so‘zlar:
                   </h4>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     {active3Stage.stage3Transcript.keyVocabulary.map((item) => (
@@ -419,7 +418,7 @@ export const ListeningTab: React.FC<ListeningTabProps> = ({ listening3Stage, lis
                   onClick={onNext}
                   className="px-6 py-3 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm transition inline-flex items-center shadow-sm active:scale-95"
                 >
-                  <span>6-Qadam: O‘qish bo‘limiga o‘tish (Lesen)</span>
+                  <span>Keyingi: O‘qish bo‘limi</span>
                   <ArrowRight size={16} className="ml-2" />
                 </button>
               </div>
@@ -547,7 +546,7 @@ export const ListeningTab: React.FC<ListeningTabProps> = ({ listening3Stage, lis
                   onClick={onNext}
                   className="px-6 py-2.5 rounded-xl bg-slate-900 dark:bg-brand-600 hover:bg-black dark:hover:bg-brand-700 text-white font-semibold text-sm transition shadow-sm inline-flex items-center"
                 >
-                  <span>6-Qadam: O‘qish bo‘limiga o‘tish (Reading)</span>
+                  <span>Keyingi: O‘qish bo‘limi</span>
                   <ArrowRight size={16} className="ml-1.5" />
                 </button>
               )}

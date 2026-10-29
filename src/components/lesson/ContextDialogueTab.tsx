@@ -48,7 +48,7 @@ export const ContextDialogueTab: React.FC<ContextDialogueTabProps> = ({ dialogue
           <div>
             <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-xs font-bold text-blue-700 dark:text-blue-300 mb-2">
               <MessageSquare size={14} />
-              <span>2-Qadam: Jonli Nemischa Muloqot (Dialog im Kontext)</span>
+              <span>Jonli muloqot</span>
             </div>
             <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               {dialogue.titleDe}

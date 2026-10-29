@@ -174,7 +174,7 @@ export const ShadowingTab: React.FC<ShadowingTabProps> = ({ shadowing, onNext })
             }`}
           >
             {isRecording ? <MicOff size={18} /> : <Mic size={18} />}
-            <span>{isRecording ? 'Ovozni to‘xtatish' : '🎙 Takrorlash (Yozib olish)'}</span>
+            <span>{isRecording ? 'To‘xtatish' : '🎙 Yozib olish'}</span>
           </button>
         </div>
 
@@ -183,7 +183,7 @@ export const ShadowingTab: React.FC<ShadowingTabProps> = ({ shadowing, onNext })
           <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 inline-flex items-center space-x-3 mb-6 animate-in fade-in">
             <CheckCircle2 size={20} className="text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
             <span className="text-xs sm:text-sm font-medium text-emerald-950 dark:text-emerald-200">
-              Ovozingiz yozildi! O‘z talaffuzingizni tinglab ko‘ring:
+              Ovozingiz yozildi. Tinglab ko‘ring:
             </span>
             <button
               onClick={handlePlayMyRecording}
@@ -217,7 +217,7 @@ export const ShadowingTab: React.FC<ShadowingTabProps> = ({ shadowing, onNext })
               onClick={onNext}
               className="px-6 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold transition inline-flex items-center"
             >
-              <span>Yakuniy mashqlarga o‘tish (Practice)</span>
+              <span>Keyingi: Yakuniy mashqlar</span>
               <ArrowRight size={14} className="ml-1.5" />
             </button>
           )}
@@ -229,7 +229,7 @@ export const ShadowingTab: React.FC<ShadowingTabProps> = ({ shadowing, onNext })
           onClick={onNext}
           className="inline-flex items-center px-6 py-3 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm transition shadow-sm"
         >
-          <span>Yakuniy mashqlarga o‘tish (Practice)</span>
+          <span>Keyingi: Yakuniy mashqlar</span>
           <ArrowRight size={16} className="ml-2" />
         </button>
       </div>

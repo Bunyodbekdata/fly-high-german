@@ -58,12 +58,12 @@ export const Footer: React.FC = () => {
               Kutubxona va Mashqlar
             </h4>
             <ul className="space-y-2.5 text-caption">
-              <li><Link to="/courses" className="hover:text-white transition-colors">O‘quv yo‘nalishi (Roadmap)</Link></li>
+              <li><Link to="/courses" className="hover:text-white transition-colors">O‘quv yo‘nalishi</Link></li>
               <li><Link to="/vocabulary" className="hover:text-white transition-colors">Lug‘at kutubxonasi (A1–B1)</Link></li>
               <li><Link to="/grammar" className="hover:text-white transition-colors">Grammatika darsligi</Link></li>
-              <li><Link to="/shadowing" className="hover:text-white transition-colors">Shadowing (Takrorlash)</Link></li>
-              <li><Link to="/listening" className="hover:text-white transition-colors">Tinglab tushunish (Listening)</Link></li>
-              <li><Link to="/reading" className="hover:text-white transition-colors">O‘qib tushunish (Reading)</Link></li>
+              <li><Link to="/shadowing" className="hover:text-white transition-colors">Shadowing mashqi</Link></li>
+              <li><Link to="/listening" className="hover:text-white transition-colors">Tinglab tushunish</Link></li>
+              <li><Link to="/reading" className="hover:text-white transition-colors">O‘qib tushunish</Link></li>
             </ul>
           </div>
 
@@ -80,9 +80,6 @@ export const Footer: React.FC = () => {
               <div className="flex items-start gap-2.5">
                 <ShieldCheck size={16} className="text-emerald-400 flex-shrink-0 mt-0.5" />
                 <span>Jonli nemis nutqi va tabiiy o‘zbekcha tushuntirishlar</span>
-              </div>
-              <div className="p-3.5 bg-slate-900/80 rounded-2xl border border-slate-800 text-2xs text-slate-300 leading-relaxed">
-                Goethe-Zertifikat va telc A1–B1 imtihonlariga tayyorlovchi metodologiya.
               </div>
             </div>
           </div>

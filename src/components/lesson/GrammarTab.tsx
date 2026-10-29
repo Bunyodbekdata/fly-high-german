@@ -26,7 +26,7 @@ export const GrammarTab: React.FC<GrammarTabProps> = ({ grammar, grammarDiscover
         <div className="bg-white dark:bg-slate-900/60 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-soft space-y-4">
           <div className="flex items-center space-x-2 text-brand-600 dark:text-brand-400 font-bold text-caption uppercase tracking-wider">
             <Compass size={16} />
-            <span>Grammatik qoidani kashf qilish (Grammatik entdecken)</span>
+            <span>Qoidani kashf qilish</span>
           </div>
 
           <h3 className="text-lg font-bold text-slate-900 dark:text-white">
@@ -52,7 +52,7 @@ export const GrammarTab: React.FC<GrammarTabProps> = ({ grammar, grammarDiscover
           {/* Pattern Explanation & Formula */}
           <div className="p-4 rounded-2xl bg-brand-950 dark:bg-slate-900 text-white space-y-2 shadow-sm border border-brand-800 dark:border-slate-800">
             <span className="text-xs font-bold text-brand-300 uppercase tracking-wider block">
-              Xulosa va qoida formulasi:
+              Qoida formulasi:
             </span>
             <p className="text-xs sm:text-sm text-brand-100 leading-relaxed font-medium">
               {grammarDiscovery.patternExplanationUz}
@@ -92,7 +92,7 @@ export const GrammarTab: React.FC<GrammarTabProps> = ({ grammar, grammarDiscover
             <div className="p-4 rounded-2xl bg-amber-50/70 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/80 text-xs sm:text-sm text-amber-950 dark:text-amber-200 space-y-1.5">
               <div className="flex items-center space-x-2 font-bold text-amber-900 dark:text-amber-300">
                 <GitCommit size={16} />
-                <span>Nemis tilida so‘z tartibi qoidasi:</span>
+                <span>So‘z tartibi qoidasi:</span>
               </div>
               <p className="leading-relaxed">
                 {topic.wordOrderRuleUz}
@@ -141,7 +141,7 @@ export const GrammarTab: React.FC<GrammarTabProps> = ({ grammar, grammarDiscover
           {topic.examples && topic.examples.length > 0 && (
             <div>
               <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-3">
-                Misollar va foydalanish:
+                Misollar:
               </h4>
               <div className="space-y-2.5">
                 {topic.examples.map((ex, exIdx) => (
@@ -174,7 +174,7 @@ export const GrammarTab: React.FC<GrammarTabProps> = ({ grammar, grammarDiscover
             <div className="p-5 rounded-2xl bg-amber-50/70 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/80">
               <div className="flex items-center space-x-2 text-amber-800 dark:text-amber-300 font-bold text-sm mb-3">
                 <AlertTriangle size={18} />
-                <span>Tez-tez uchraydigan xatolar va ulardan saqlanish:</span>
+                <span>Keng tarqalgan xatolar:</span>
               </div>
               <div className="space-y-3">
                 {topic.commonMistakes.map((mistake, mIdx) => (
@@ -203,7 +203,7 @@ export const GrammarTab: React.FC<GrammarTabProps> = ({ grammar, grammarDiscover
           onClick={onNext}
           className="inline-flex items-center px-6 py-3 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm transition shadow-sm active:scale-95"
         >
-          <span>5-Qadam: Tinglash mashqiga o‘tish (Hören)</span>
+          <span>Keyingi: Tinglash mashqi</span>
           <ArrowRight size={16} className="ml-2" />
         </button>
       </div>

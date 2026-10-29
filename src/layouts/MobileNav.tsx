@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, BookOpen, Bookmark, Mic, Award, User } from 'lucide-react';
+import { Home, BookOpen, Bookmark, Award, User } from 'lucide-react';
 import { MobileAccountSheet } from '../components/navigation/MobileAccountSheet';
+import { useAuth } from '../context/AuthContext';
 
 export const MobileNav: React.FC = () => {
   const location = useLocation();
+  const { user } = useAuth();
   const [isAccountOpen, setIsAccountOpen] = useState(false);
 
+  // Exact 5 items matching Reference Image 5:
+  // Bosh sahifa | Darslar | Lug'at | Testlar | Profil
   const links = [
     { to: '/', label: 'Bosh sahifa', icon: Home },
-    { to: '/courses', label: 'Kurslar', icon: BookOpen },
+    { to: '/courses', label: 'Darslar', icon: BookOpen },
     { to: '/vocabulary', label: 'Lug‘at', icon: Bookmark },
-    { to: '/shadowing', label: 'Shadowing', icon: Mic },
-    { to: '/certificate-tests', label: 'Sertifikat', icon: Award },
+    { to: '/certificate-tests', label: 'Testlar', icon: Award },
   ];
 
   return (
@@ -30,17 +33,14 @@ export const MobileNav: React.FC = () => {
               <Link
                 key={link.to}
                 to={link.to}
-                className={`relative flex flex-col items-center justify-center gap-1 py-1.5 px-2 rounded-xl transition-all duration-150 active:scale-95 ${
+                className={`relative flex flex-col items-center justify-center gap-1 py-1 px-2.5 rounded-2xl transition-all duration-150 active:scale-95 ${
                   isActive
-                    ? 'text-brand-600 dark:text-brand-400 font-bold'
+                    ? 'text-blue-600 dark:text-blue-400 font-bold'
                     : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 font-medium'
                 }`}
               >
-                <div className={`relative p-1 rounded-xl transition-colors ${isActive ? 'bg-brand-50 dark:bg-brand-950/80' : ''}`}>
-                  <Icon size={20} className={isActive ? 'stroke-[2.2]' : 'stroke-[1.8]'} />
-                  {isActive && (
-                    <span className="absolute top-0 right-0 w-1.5 h-1.5 rounded-full bg-brand-600 dark:bg-brand-400" />
-                  )}
+                <div className={`p-1 rounded-xl transition-colors ${isActive ? 'bg-blue-50 dark:bg-blue-950/80 text-blue-600 dark:text-blue-400' : ''}`}>
+                  <Icon size={20} className={isActive ? 'stroke-[2.4]' : 'stroke-[1.8]'} />
                 </div>
                 <span className="text-[11px] leading-tight tracking-tight">
                   {link.label}
@@ -49,24 +49,24 @@ export const MobileNav: React.FC = () => {
             );
           })}
 
-          {/* Account Button */}
+          {/* Profil Button matching Image 5 */}
           <button
             onClick={() => setIsAccountOpen(true)}
-            className={`relative flex flex-col items-center justify-center gap-1 py-1.5 px-2 rounded-xl transition-all duration-150 active:scale-95 ${
+            className={`relative flex flex-col items-center justify-center gap-1 py-1 px-2.5 rounded-2xl transition-all duration-150 active:scale-95 ${
               location.pathname === '/profile' || location.pathname === '/dashboard' || location.pathname === '/admin'
-                ? 'text-brand-600 dark:text-brand-400 font-bold'
+                ? 'text-blue-600 dark:text-blue-400 font-bold'
                 : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 font-medium'
             }`}
-            aria-label="Hisob"
+            aria-label="Profil"
           >
             <div className={`p-1 rounded-xl transition-colors ${
               location.pathname === '/profile' || location.pathname === '/dashboard' || location.pathname === '/admin'
-                ? 'bg-brand-50 dark:bg-brand-950/80'
+                ? 'bg-blue-50 dark:bg-blue-950/80 text-blue-600 dark:text-blue-400'
                 : ''
             }`}>
               <User size={20} className="stroke-[1.8]" />
             </div>
-            <span className="text-[11px] leading-tight tracking-tight">Hisob</span>
+            <span className="text-[11px] leading-tight tracking-tight">Profil</span>
           </button>
         </div>
       </div>

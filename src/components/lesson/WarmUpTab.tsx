@@ -22,14 +22,14 @@ export const WarmUpTab: React.FC<WarmUpTabProps> = ({
       <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-10 shadow-card">
         <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-brand-50 dark:bg-brand-950/60 border border-brand-200 dark:border-brand-800 text-xs font-bold text-brand-700 dark:text-brand-300 mb-4">
           <Sparkles size={14} />
-          <span>1-Qadam: Darsga kirish (Warm-Up & Einstieg)</span>
+          <span>Darsga kirish</span>
         </div>
 
         {warmUp ? (
           <div className="space-y-6">
             <div>
               <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                Haqiqiy hayotiy vaziyat:
+                Hayotiy vaziyat
               </h2>
               <p className="text-slate-700 dark:text-slate-200 text-sm sm:text-base leading-relaxed mt-2 bg-slate-50 dark:bg-slate-800/60 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 font-medium">
                 {warmUp.situationUz}
@@ -53,7 +53,7 @@ export const WarmUpTab: React.FC<WarmUpTabProps> = ({
             {warmUp.miniDialogue && warmUp.miniDialogue.length > 0 && (
               <div className="space-y-2.5">
                 <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 block">
-                  Namuna mini-vaziyat:
+                  Namuna muloqot:
                 </span>
                 <div className="space-y-2">
                   {warmUp.miniDialogue.map((line, idx) => (
@@ -79,10 +79,10 @@ export const WarmUpTab: React.FC<WarmUpTabProps> = ({
           </div>
         )}
 
-        {/* 2. Clear Learning Objectives (Bugun siz...) */}
+        {/* 2. Clear Learning Objectives */}
         <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
           <h3 className="text-xs font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400 mb-3">
-            🎯 Ushbu darsdan keyin siz nimalarni qila olasiz:
+            🎯 Dars maqsadlari:
           </h3>
           <ul className="space-y-2.5">
             {objectives.map((obj, idx) => (

@@ -48,7 +48,7 @@ export const WritingTab: React.FC<WritingTabProps> = ({ scaffold, writing, onNex
             </div>
             <div>
               <span className="text-xs uppercase font-bold text-brand-700 dark:text-brand-400 tracking-wider">
-                Bosqichma-bosqich yozma nutq (Schreiben mit Gerüst)
+                Yozma amaliyot
               </span>
               <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
                 {activeScaffold.taskTitleUz}
@@ -59,7 +59,7 @@ export const WritingTab: React.FC<WritingTabProps> = ({ scaffold, writing, onNex
           {/* Prompt & Instructions */}
           <div className="p-6 rounded-2xl bg-brand-50/60 dark:bg-brand-950/30 border border-brand-100 dark:border-brand-900/40 mb-6">
             <h3 className="font-bold text-brand-950 dark:text-brand-200 text-base mb-2">
-              📝 Vazifa mavzusi: {activeScaffold.promptUz}
+              📝 {activeScaffold.promptUz}
             </h3>
             <p className="text-sm text-brand-900 dark:text-brand-300 leading-relaxed">
               {activeScaffold.taskInstructionsUz}
@@ -72,7 +72,7 @@ export const WritingTab: React.FC<WritingTabProps> = ({ scaffold, writing, onNex
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 flex items-center">
                   <Sparkles size={14} className="text-amber-500 mr-1.5" />
-                  Gap boshlovchi namunalar (Bosing va matningizga qo‘shing):
+                  Gap boshlovchi namunalar:
                 </span>
                 <span className="text-xs text-slate-400 dark:text-slate-500">Yordamchi andoza</span>
               </div>
@@ -98,7 +98,7 @@ export const WritingTab: React.FC<WritingTabProps> = ({ scaffold, writing, onNex
             <div className="mb-6">
               <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-3 flex items-center">
                 <Lightbulb size={14} className="mr-1 text-amber-500" />
-                Vazifa uchun foydali lug‘at:
+                Foydali lug‘at:
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {activeScaffold.usefulVocabulary.map((vocab, idx) => (
@@ -120,7 +120,7 @@ export const WritingTab: React.FC<WritingTabProps> = ({ scaffold, writing, onNex
           {/* Student Writing Box */}
           <div className="mb-6">
             <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
-              Sizning nemischa matningiz:
+              Matningiz:
             </label>
             <textarea
               rows={6}
@@ -130,8 +130,8 @@ export const WritingTab: React.FC<WritingTabProps> = ({ scaffold, writing, onNex
               className="w-full p-4 rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800/90 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none text-sm leading-relaxed font-sans shadow-2xs"
             />
             <div className="flex justify-between items-center text-xs mt-2">
-              <span className={`font-semibold ${isAttemptSufficient ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-500 dark:text-slate-400'}`}>
-                So‘zlar soni: {wordCount} ta {isAttemptSufficient ? '✓ (Yaxshi harakat!)' : '(Kamida 6-10 ta so‘z yozing)'}
+              <span className={`font-semibold tabular-nums ${isAttemptSufficient ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-500 dark:text-slate-400'}`}>
+                So‘zlar soni: {wordCount} ta {isAttemptSufficient ? '✓' : '(Kamida 6 ta)'}
               </span>
               <span className="text-slate-400 dark:text-slate-500 hidden sm:inline">
                 A1 darajada 3-5 ta sodda gap tuzish tavsiya etiladi
@@ -149,10 +149,10 @@ export const WritingTab: React.FC<WritingTabProps> = ({ scaffold, writing, onNex
                   </div>
                   <div>
                     <span className="text-xs font-bold text-slate-700 dark:text-slate-300 block">
-                      Namunaviy javob (Model Answer) hozircha yopiq
+                      Namunaviy javob hozircha yopiq
                     </span>
                     <p className="text-xs text-slate-500 dark:text-slate-400">
-                      Pedagogik qoida: Avval o‘zingiz yozib ko‘ring (kamida 6 ta so‘z). Shunda javob ochiladi!
+                      Avval o‘zingiz yozib ko‘ring (kamida 6 ta so‘z). Shunda namuna ochiladi.
                     </p>
                   </div>
                 </div>
@@ -195,7 +195,7 @@ export const WritingTab: React.FC<WritingTabProps> = ({ scaffold, writing, onNex
             onClick={onNext}
             className="inline-flex items-center px-6 py-3 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm transition shadow-sm"
           >
-            <span>Shadowing (Talaffuz va takrorlash) mashqiga o‘tish</span>
+            <span>Keyingi: Gapirish (Shadowing)</span>
             <ArrowRight size={16} className="ml-2" />
           </button>
         </div>
@@ -245,7 +245,7 @@ export const WritingTab: React.FC<WritingTabProps> = ({ scaffold, writing, onNex
           <div className="mb-6 p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
             <div className="flex items-center space-x-2 text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
               <Sparkles size={14} className="text-brand-600 dark:text-brand-400" />
-              <span>Yordamchi iboralar (bosing va matnga qo‘shing):</span>
+              <span>Yordamchi iboralar:</span>
             </div>
             <div className="flex flex-wrap gap-2">
               {[...usefulPhrases, ...hints].map((phrase, idx) => (
@@ -265,7 +265,7 @@ export const WritingTab: React.FC<WritingTabProps> = ({ scaffold, writing, onNex
 
         <div className="mb-6">
           <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-2">
-            Sizning javobingiz (Nemis tilida yozing):
+            Matningiz:
           </label>
           <textarea
             rows={5}
@@ -286,14 +286,14 @@ export const WritingTab: React.FC<WritingTabProps> = ({ scaffold, writing, onNex
             className="inline-flex items-center text-xs font-semibold px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition"
           >
             {showModelAnswer ? <EyeOff size={14} className="mr-1.5" /> : <Eye size={14} className="mr-1.5" />}
-            {showModelAnswer ? 'Namunaviy javobni yashirish' : 'Namunaviy javobni ko‘rish (Model Answer)'}
+            {showModelAnswer ? 'Namunani yashirish' : 'Namunani ko‘rish'}
           </button>
 
           {showModelAnswer && modelDe && (
             <div className="mt-4 p-5 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 animate-in fade-in">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-bold text-emerald-800 dark:text-emerald-400 uppercase tracking-wider">
-                  Namunaviy javob (Nemischa):
+                  Namunaviy javob:
                 </span>
                 <AudioButton text={modelDe} size="sm" />
               </div>
@@ -302,7 +302,7 @@ export const WritingTab: React.FC<WritingTabProps> = ({ scaffold, writing, onNex
               </p>
               {modelUz && (
                 <div className="pt-2 border-t border-emerald-200/60 dark:border-emerald-800/60 text-xs text-emerald-800 dark:text-emerald-300 italic">
-                  <span className="font-semibold not-italic">O‘zbekcha tarjimasi:</span> {modelUz}
+                  <span className="font-semibold not-italic">Tarjimasi:</span> {modelUz}
                 </div>
               )}
             </div>
@@ -315,7 +315,7 @@ export const WritingTab: React.FC<WritingTabProps> = ({ scaffold, writing, onNex
           onClick={onNext}
           className="inline-flex items-center px-6 py-3 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm transition shadow-sm"
         >
-          <span>Shadowing (Takrorlash) mashqiga o‘tish</span>
+          <span>Keyingi: Gapirish (Shadowing)</span>
           <ArrowRight size={16} className="ml-2" />
         </button>
       </div>

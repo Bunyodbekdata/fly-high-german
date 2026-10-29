@@ -1,143 +1,323 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { storageService } from '../lib/storage';
 import { useProgress } from '../context/ProgressContext';
-import { LevelBadge } from '../components/common/Badge';
-import { ProgressBar } from '../components/common/ProgressBar';
-import { ArrowRight, Clock, Lock, Sparkles, Volume2, CheckCircle2, Award, BookOpen } from 'lucide-react';
+import { 
+  Play, 
+  Lock, 
+  ArrowRight, 
+  CheckCircle2, 
+  Clock, 
+  Sparkles,
+  Volume2
+} from 'lucide-react';
+import { CEFRLevelCode, Lesson, Level } from '../types/database';
 
 export const CoursesPage: React.FC = () => {
-  const levels = storageService.getLevels();
-  const { getLevelProgress } = useProgress();
+  const { getLevelProgress, isLessonCompleted } = useProgress();
+  const [selectedFilter, setSelectedFilter] = useState<'all' | 'a1' | 'a2' | 'b1'>('all');
+  const [activeLevelCode, setActiveLevelCode] = useState<CEFRLevelCode>('a1-2');
+
+  const rawLevels = storageService.getLevels();
+
+  // Style configurations per level code matching screenshot aesthetics
+  const levelStyleMap: Record<string, {
+    color: string;
+    bgColor: string;
+    progressBarColor: string;
+    range: string;
+    category: 'a1' | 'a2' | 'b1';
+  }> = {
+    'a1-1': {
+      color: 'text-emerald-600 dark:text-emerald-400',
+      bgColor: 'bg-emerald-50/70 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800',
+      progressBarColor: 'bg-emerald-500',
+      range: '1–8 darslar',
+      category: 'a1',
+    },
+    'a1-2': {
+      color: 'text-blue-600 dark:text-blue-400',
+      bgColor: 'bg-blue-50/80 dark:bg-blue-950/60 border-blue-400 dark:border-blue-600 ring-2 ring-blue-500/20',
+      progressBarColor: 'bg-blue-600',
+      range: '9–16 darslar',
+      category: 'a1',
+    },
+    'a2-1': {
+      color: 'text-amber-600 dark:text-amber-400',
+      bgColor: 'bg-amber-50/70 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800',
+      progressBarColor: 'bg-amber-500',
+      range: '17–32 darslar',
+      category: 'a2',
+    },
+    'a2-2': {
+      color: 'text-purple-600 dark:text-purple-400',
+      bgColor: 'bg-purple-50/70 dark:bg-purple-950/40 border-purple-200 dark:border-purple-800',
+      progressBarColor: 'bg-purple-500',
+      range: '33–48 darslar',
+      category: 'a2',
+    },
+    'b1-1': {
+      color: 'text-rose-600 dark:text-rose-400',
+      bgColor: 'bg-rose-50/70 dark:bg-rose-950/40 border-rose-200 dark:border-rose-800',
+      progressBarColor: 'bg-rose-500',
+      range: '49–72 darslar',
+      category: 'b1',
+    },
+    'b1-2': {
+      color: 'text-indigo-600 dark:text-indigo-400',
+      bgColor: 'bg-indigo-50/70 dark:bg-indigo-950/40 border-indigo-200 dark:border-indigo-800',
+      progressBarColor: 'bg-indigo-500',
+      range: '73–90 darslar',
+      category: 'b1',
+    },
+  };
+
+  // Build dynamic levels with real database lessons
+  const levels = rawLevels.map((lvl) => {
+    const lessons = storageService.getLessons(undefined, lvl.code);
+    const completedCount = lessons.filter(l => isLessonCompleted(l.id)).length;
+    const progressPercent = getLevelProgress(lvl.code);
+    const meta = levelStyleMap[lvl.code] || {
+      color: 'text-blue-600 dark:text-blue-400',
+      bgColor: 'bg-blue-50 dark:bg-blue-950/40 border-blue-200',
+      progressBarColor: 'bg-blue-600',
+      range: `${lessons.length} ta dars`,
+      category: lvl.code.startsWith('a1') ? 'a1' : lvl.code.startsWith('a2') ? 'a2' : 'b1',
+    };
+
+    return {
+      ...lvl,
+      totalLessons: lessons.length || 8,
+      completedLessons: completedCount,
+      progressPercent,
+      ...meta,
+    };
+  });
+
+  const filteredLevels = levels.filter(lvl => {
+    if (selectedFilter === 'all') return true;
+    return lvl.category === selectedFilter;
+  });
+
+  const activeLevel = levels.find(l => l.code === activeLevelCode) || levels[1] || levels[0];
+  const activeLessons = storageService.getLessons(undefined, activeLevelCode);
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10 transition-colors duration-200">
-      {/* Banner to Pronunciation Lab */}
-      <div className="bg-slate-900 rounded-2xl p-6 sm:p-8 text-white shadow-soft flex flex-col md:flex-row items-start md:items-center justify-between gap-6 border border-slate-800 relative overflow-hidden">
-        <div className="absolute -top-16 -right-16 w-64 h-64 bg-brand-500/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="space-y-2 relative z-10">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-caption font-bold text-slate-200">
-            <Sparkles size={14} />
-            <span>Yangi o‘rganuvchilar uchun tavsiya</span>
-          </div>
-          <h2 className="text-xl sm:text-2xl font-black">
-            Nemis tili talaffuz va fonetika laboratoriyasi
-          </h2>
-          <p className="text-caption sm:text-body text-slate-300 max-w-xl leading-relaxed">
-            Nemis alifbosi, umlautlar (ä, ö, ü, ß), diftonglar (ei, ie, eu) va maxsus birikmalar (sch, sp, st, ch) ni audiolari va o‘zbekcha qoidalari bilan o‘rganing.
-          </p>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      
+      {/* ============================================================ */}
+      {/* 1. Header with Neuschwanstein Castle Scenery Backdrop        */}
+      {/* ============================================================ */}
+      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-white via-white/95 to-transparent dark:from-slate-900 dark:via-slate-900/90 p-6 sm:p-10 border border-slate-200/80 dark:border-slate-800 shadow-2xs">
+        
+        {/* Castle Scenery Photo at Top Right */}
+        <div className="absolute top-0 right-0 w-[420px] h-full overflow-hidden pointer-events-none opacity-40 dark:opacity-30">
+          <img
+            src="/images/neuschwanstein.jpg"
+            alt="Neuschwanstein Castle Germany"
+            className="w-full h-full object-cover object-center filter blur-[0.5px]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/50 to-transparent dark:from-slate-900 dark:via-slate-900/50" />
         </div>
-        <Link
-          to="/pronunciation"
-          className="px-6 py-3 rounded-xl bg-brand-600 text-white font-bold text-sm shadow-soft hover:bg-brand-700 transition flex items-center space-x-2 flex-shrink-0 relative z-10"
-        >
-          <Volume2 size={16} />
-          <span>Fonetika xonasiga o‘tish</span>
-        </Link>
+
+        <div className="relative z-10 space-y-4 max-w-xl">
+          <div>
+            <h1 className="text-3xl sm:text-4xl font-black text-slate-950 dark:text-white tracking-tight font-display">
+              Nemis tili darslari
+            </h1>
+            <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 mt-1.5">
+              A1 dan B1 gacha bo‘lgan barcha bosqichlarda tizimli o‘rganing.
+            </p>
+          </div>
+
+          {/* Filter Pills */}
+          <div className="flex flex-wrap items-center gap-2 pt-2">
+            {[
+              { id: 'all', label: 'Barcha' },
+              { id: 'a1', label: 'A1 (Boshlang‘ich)' },
+              { id: 'a2', label: 'A2 (Asosiy)' },
+              { id: 'b1', label: 'B1 (O‘rta)' },
+            ].map((f) => (
+              <button
+                key={f.id}
+                onClick={() => setSelectedFilter(f.id as any)}
+                className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-150 cursor-pointer ${
+                  selectedFilter === f.id
+                    ? 'bg-blue-600 text-white shadow-soft'
+                    : 'bg-white dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50'
+                }`}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
-      {/* Page Title */}
-      <div>
-        <span className="text-xs font-bold text-brand-600 dark:text-brand-400 uppercase tracking-widest block mb-1">
-          O‘quv Dasturi (CEFR Kurslari)
-        </span>
-        <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight font-display">
-          Nemis tili ta‘lim bosqichlari
-        </h1>
-        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 mt-2">
-          Sifat va chuqur amaliyotga qaratilgan CEFR bosqichlari. Hozirda <strong>A1.1</strong>, <strong>A1.2</strong>, <strong>A2.1</strong>, <strong>A2.2</strong>, <strong>B1.1</strong> va <strong>B1.2</strong> bosqichlari to‘liq faol.
-        </p>
-      </div>
-
-      {/* Levels Timeline / Vertical Roadmap */}
-      <div className="space-y-6 relative">
-        {levels.map((lvl, index) => {
-          const isComingSoon = Boolean(lvl.isComingSoon);
-          const progress = isComingSoon ? 0 : getLevelProgress(lvl.code);
-          const lessons = isComingSoon ? [] : storageService.getLessons(undefined, lvl.code);
+      {/* ============================================================ */}
+      {/* 2. Level Selector Cards Row (A1.1 | A1.2 | A2.1 | A2.2 | B1.1) */}
+      {/* ============================================================ */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
+        {filteredLevels.map((lvl) => {
+          const isSelected = activeLevelCode === lvl.code;
 
           return (
-            <div
-              key={lvl.id}
-              className={`rounded-3xl border p-6 sm:p-8 transition-all duration-200 relative ${
-                !isComingSoon
-                  ? 'bg-white dark:bg-slate-800/90 border-brand-200 dark:border-brand-800 shadow-card ring-1 ring-brand-100/50 dark:ring-brand-900/30'
-                  : 'bg-white/60 dark:bg-slate-900/40 border-slate-200/80 dark:border-slate-800/80 opacity-80'
+            <button
+              key={lvl.code}
+              onClick={() => setActiveLevelCode(lvl.code)}
+              className={`p-4 rounded-2xl border text-left transition-all duration-200 cursor-pointer flex flex-col justify-between ${
+                isSelected
+                  ? 'bg-blue-50/80 dark:bg-blue-950/70 border-blue-500 dark:border-blue-500 ring-2 ring-blue-500/20 shadow-soft scale-[1.02]'
+                  : 'bg-white dark:bg-slate-900 border-slate-200/90 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 shadow-2xs'
               }`}
             >
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-                {/* Level Details */}
-                <div className="space-y-3 flex-1">
-                  <div className="flex items-center space-x-3">
-                    <LevelBadge code={lvl.code} />
-
-                    {!isComingSoon ? (
-                      <span className="text-[11px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/50 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
-                        Faol kurs ({lessons.length} ta dars)
-                      </span>
-                    ) : (
-                      <span className="text-[11px] font-bold text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/50 px-2.5 py-0.5 rounded-full border border-amber-200 dark:border-amber-800 flex items-center">
-                        <Lock size={11} className="mr-1 text-amber-600 dark:text-amber-400" />
-                        Tez orada taqdim etiladi
-                      </span>
-                    )}
-
-                    <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 flex items-center tabular-nums">
-                      <Clock size={13} className="mr-1" />
-                      {lvl.estimatedHours} soat ta‘lim
-                    </span>
-                  </div>
-
-                  <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
-                    {lvl.title}
-                  </h3>
-
-                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl">
-                    {lvl.descriptionUz}
-                  </p>
-
-                  <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500 dark:text-slate-400 pt-1">
-                    <span>
-                      <strong className="text-slate-700 dark:text-slate-200 font-semibold">Mo‘ljallangan:</strong>{' '}
-                      {lvl.targetAudience}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Level Action / Progress Area */}
-                <div className="w-full lg:w-72 flex flex-col justify-center space-y-4 pt-4 lg:pt-0 lg:border-l lg:border-slate-100 dark:lg:border-slate-800 lg:pl-6">
-                  {!isComingSoon ? (
-                    <>
-                      <div>
-                        <ProgressBar
-                          progress={progress}
-                          label="O‘zlashtirish"
-                          size="md"
-                        />
-                      </div>
-
-                      <Link
-                        to={`/levels/${lvl.code}`}
-                        className="w-full py-3.5 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs sm:text-sm shadow-soft hover:shadow-card transition-all active:scale-95 text-center flex items-center justify-center space-x-2 btn-tactile"
-                      >
-                        <span>Darslar yo‘lagiga kirish</span>
-                        <ArrowRight size={16} />
-                      </Link>
-                    </>
-                  ) : (
-                    <div className="text-center py-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-200/60 dark:border-slate-700/60">
-                      <Lock size={20} className="mx-auto text-slate-400 mb-1" />
-                      <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block">
-                        Bosqich tayyorlanmoqda
-                      </span>
-                    </div>
-                  )}
+              <div>
+                <span className={`text-xl font-black font-display ${lvl.color}`}>
+                  {lvl.title}
+                </span>
+                <div className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+                  {lvl.range}
                 </div>
               </div>
-            </div>
+
+              {/* Progress bar */}
+              <div className="mt-4 pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
+                <div className="flex-1 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full ${lvl.progressBarColor} rounded-full transition-all duration-300`}
+                    style={{ width: `${lvl.progressPercent}%` }}
+                  />
+                </div>
+                <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 tabular-nums">
+                  {lvl.completedLessons}/{lvl.totalLessons}
+                </span>
+              </div>
+            </button>
           );
         })}
       </div>
+
+      {/* ============================================================ */}
+      {/* 3. Selected Level Content Section                            */}
+      {/* ============================================================ */}
+      <div className="space-y-4">
+        
+        {/* Section Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
+          <div>
+            <h2 className="text-xl font-black text-slate-900 dark:text-white">
+              {activeLevel.title} — {activeLevel.range}
+            </h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              {activeLevel.descriptionUz || 'Asosiy mavzular, kundalik hayot va muloqot.'}
+            </p>
+          </div>
+
+          <div className="flex items-center space-x-3">
+            <span className="text-xs font-bold text-slate-600 dark:text-slate-300">
+              {activeLevel.completedLessons}/{activeLevel.totalLessons} darslar tugallangan
+            </span>
+            <div className="w-28 h-2 bg-blue-100 dark:bg-slate-800 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-blue-600 rounded-full transition-all duration-300"
+                style={{ width: `${activeLevel.progressPercent}%` }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* 2-Columns Layout: Lessons List & Motivational Castle Quote Card */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          
+          {/* Left Column: Real Database Lessons */}
+          <div className="lg:col-span-7 space-y-3">
+            {activeLessons.map((les, index) => {
+              const isCompleted = isLessonCompleted(les.id);
+              // First lesson or previous completed lesson unlocks next lesson
+              const isUnlocked = index === 0 || isCompleted || (index > 0 && isLessonCompleted(activeLessons[index - 1].id));
+              const durationMinutes = les.estimatedMinutes || 25;
+
+              return (
+                <div
+                  key={les.id}
+                  className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-2xs flex items-center justify-between gap-4 hover:border-blue-200 dark:hover:border-blue-900 transition-all"
+                >
+                  <div className="flex items-center space-x-3.5 min-w-0">
+                    {/* Order Circle */}
+                    <div
+                      className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0 ${
+                        isCompleted
+                          ? 'bg-emerald-600 text-white shadow-soft'
+                          : isUnlocked
+                            ? 'bg-blue-600 text-white shadow-soft'
+                            : 'bg-slate-100 dark:bg-slate-800 text-slate-400'
+                      }`}
+                    >
+                      {isCompleted ? <CheckCircle2 size={16} /> : les.orderIndex}
+                    </div>
+
+                    <div className="min-w-0">
+                      <h4 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white truncate">
+                        {les.titleDe}
+                      </h4>
+                      <p className="text-xs text-slate-400 dark:text-slate-500 truncate">
+                        {les.titleUz}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Right Action & Duration (Exact from database: estimatedMinutes) */}
+                  <div className="flex items-center space-x-3 flex-shrink-0">
+                    <div className="hidden sm:flex items-center space-x-1 text-xs text-slate-500 dark:text-slate-400 font-medium">
+                      <Play size={12} className="text-blue-500 fill-blue-500" />
+                      <span>{durationMinutes} daqiqa</span>
+                    </div>
+
+                    {isUnlocked ? (
+                      <Link
+                        to={`/courses/${les.levelCode}/lesson/${les.id}`}
+                        className="px-4 py-2 rounded-xl border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white dark:border-blue-500 dark:text-blue-400 dark:hover:bg-blue-600 dark:hover:text-white text-xs font-bold transition flex items-center space-x-1.5"
+                      >
+                        <span>{isCompleted ? 'Takrorlash' : 'Davom etish'}</span>
+                        <ArrowRight size={13} />
+                      </Link>
+                    ) : (
+                      <div className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400">
+                        <Lock size={15} />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Right Column: Motivational Quote with Neuschwanstein Castle */}
+          <div className="lg:col-span-5 sticky top-20">
+            <div className="relative rounded-3xl overflow-hidden min-h-[380px] sm:min-h-[440px] shadow-card border border-slate-200/90 dark:border-slate-800 flex flex-col justify-end p-6 text-white group">
+              <img
+                src="/images/neuschwanstein.jpg"
+                alt="German Castle Alpine View"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/40 to-transparent" />
+
+              {/* Quote Card Box */}
+              <div className="relative z-10 bg-white/15 dark:bg-slate-900/60 backdrop-blur-md p-6 rounded-2xl border border-white/20 shadow-xl space-y-3">
+                <p className="text-base sm:text-lg font-bold leading-relaxed tracking-tight text-white font-serif italic">
+                  “Har bir katta maqsad kichik qadamlar bilan boshlanadi.”
+                </p>
+                <div className="text-xs font-semibold text-amber-300">
+                  — Fly High German
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
   );
 };

@@ -64,7 +64,7 @@ export const ReadingTab: React.FC<ReadingTabProps> = ({ reading, onNext }) => {
           <div className="mb-6 p-4 rounded-2xl bg-brand-50/50 dark:bg-brand-950/40 border border-brand-100 dark:border-brand-800/80">
             <div className="flex items-center space-x-2 text-brand-800 dark:text-brand-300 font-bold text-xs uppercase tracking-wider mb-2">
               <Lightbulb size={16} />
-              <span>Matndagi yangi so‘zlar:</span>
+              <span>Yangi so‘zlar:</span>
             </div>
             <div className="flex flex-wrap gap-2">
               {material.vocabularyHints.map((hint, idx) => (
@@ -88,7 +88,7 @@ export const ReadingTab: React.FC<ReadingTabProps> = ({ reading, onNext }) => {
             className="inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition"
           >
             {showTranslation ? <EyeOff size={14} className="mr-1.5" /> : <Eye size={14} className="mr-1.5" />}
-            {showTranslation ? 'O‘zbekcha tarjimani yashirish' : 'O‘zbekcha tarjimani ko‘rish'}
+            {showTranslation ? 'Tarjimani yashirish' : 'Tarjimani ko‘rish'}
           </button>
 
           {showTranslation && (
@@ -102,7 +102,7 @@ export const ReadingTab: React.FC<ReadingTabProps> = ({ reading, onNext }) => {
         {material.questions && material.questions.length > 0 && (
           <div className="space-y-6 pt-6 border-t border-slate-200 dark:border-slate-800">
             <h3 className="text-base font-bold text-slate-900 dark:text-white">
-              Matnni tushunish bo‘yicha savollar:
+              Tushunish savollari:
             </h3>
 
             {material.questions.map((q, qIdx) => (
@@ -168,7 +168,7 @@ export const ReadingTab: React.FC<ReadingTabProps> = ({ reading, onNext }) => {
                   onClick={onNext}
                   className="px-6 py-2.5 rounded-xl bg-slate-900 dark:bg-brand-600 hover:bg-black dark:hover:bg-brand-700 text-white font-semibold text-sm transition shadow-sm inline-flex items-center"
                 >
-                  <span>7-Qadam: Yozish bo‘limiga o‘tish (Schreiben)</span>
+                  <span>Keyingi: Yozish amaliyoti</span>
                   <ArrowRight size={16} className="ml-1.5" />
                 </button>
               )}
@@ -182,7 +182,7 @@ export const ReadingTab: React.FC<ReadingTabProps> = ({ reading, onNext }) => {
           onClick={onNext}
           className="inline-flex items-center px-6 py-3 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm transition shadow-sm active:scale-95"
         >
-          <span>7-Qadam: Yozish bo‘limiga o‘tish (Schreiben)</span>
+          <span>Keyingi: Yozish amaliyoti</span>
           <ArrowRight size={16} className="ml-2" />
         </button>
       </div>

@@ -1,29 +1,20 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  BookOpen, 
-  Bookmark,
-  CheckCircle, 
+  Play, 
+  Volume2, 
+  Check, 
   ArrowRight, 
-  Sparkles, 
-  Headphones, 
-  Mic, 
+  Tv, 
+  Layers, 
+  BookOpen, 
   Award, 
-  ChevronDown, 
-  ShieldCheck, 
-  Flame, 
-  Target,
-  GraduationCap,
-  Volume2,
-  Layers,
-  FileText,
-  PenTool,
-  CheckCircle2,
-  Play
+  X,
+  Sparkles,
+  ChevronDown
 } from 'lucide-react';
 import { storageService } from '../lib/storage';
 import { useProgress } from '../context/ProgressContext';
-import { AudioButton } from '../components/common/AudioButton';
 import { LevelBadge } from '../components/common/Badge';
 
 export const HomePage: React.FC = () => {
@@ -31,200 +22,394 @@ export const HomePage: React.FC = () => {
   const sampleLesson = storageService.getLessonById('les-1');
   const { completedLessonsCount, getNextIncompleteLesson } = useProgress();
   const nextLesson = getNextIncompleteLesson() || sampleLesson;
-  const isReturningLearner = completedLessonsCount > 0;
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+
+  // Play natural pronunciation audio for "das Tor"
+  const handlePlayWordAudio = () => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance('das Tor. Das Tor ist groß.');
+      utterance.lang = 'de-DE';
+      utterance.rate = 0.9;
+      utterance.onstart = () => setIsPlayingAudio(true);
+      utterance.onend = () => setIsPlayingAudio(false);
+      utterance.onerror = () => setIsPlayingAudio(false);
+      window.speechSynthesis.speak(utterance);
+    } else {
+      setIsPlayingAudio(true);
+      setTimeout(() => setIsPlayingAudio(false), 1500);
+    }
+  };
 
   const faqs = [
     {
       q: 'Platforma orqali nemis tilini o‘qituvchisiz mustaqil o‘rganish mumkinmi?',
-      a: 'Ha, albatta! "FOR GREAT NATION" aynan o‘qituvchisiz, mustaqil o‘rganuvchi o‘zbek talabalari uchun maxsus ishlab chiqilgan. Har bir dars o‘zbek tilida sodda va ravon tushuntirilgan, talaffuz audiolari va avtomatik tekshiriluvchi mashqlar bilan ta‘minlangan.'
+      a: 'Ha, albatta! "FLY HIGH GERMAN" aynan o‘qituvchisiz, mustaqil o‘rganuvchi talabalar uchun maxsus ishlab chiqilgan. Har bir dars o‘zbek tilida sodda va ravon tushuntirilgan, talaffuz audiolari va avtomatik tekshiriluvchi mashqlar bilan ta‘minlangan.'
     },
     {
       q: 'Darslar xalqaro CEFR va Gyote Instituti standartiga mos keladimi?',
-      a: 'Ha, butun o‘quv rejasi Yevropa til standartlari (CEFR: A1.1 va A1.2) hamda Germaniyaning nufuzli "Hueber Menschen" darsligi talablari asosida tuzilgan bo‘lib, Goethe-Zertifikat A1 va Start Deutsch 1 xalqaro imtihonlariga to‘liq tayyorlaydi.'
+      a: 'Ha, butun o‘quv rejasi Yevropa til standartlari (CEFR: A1.1 dan B1.2 gacha) talablari asosida tuzilgan bo‘lib, Goethe-Zertifikat A1, A2 va B1 xalqaro imtihonlariga to‘liq tayyorlaydi.'
     },
     {
-      q: 'Shadowing (ovoz chiqarib takrorlash) usuli qanday ishlaydi?',
-      a: 'Shadowing — chet tilida erkin va to‘g‘ri aksent bilan so‘zlashishning eng samarali metodidir. Siz nemis diktorining gapini tinglaysiz va darhol mikrofon orqali baland ovozda takrorlab, o‘z talaffuzingizni taqqoslaysiz.'
+      q: 'Flashcard va lug‘at qanday ishlaydi?',
+      a: 'Har bir nemischa so‘z o‘zining grammatik artikli (der - ko‘k, die - qizil, das - yashil) bilan rangli ajratilgan. 3D kartochka aylantirish, talaffuz audiosi va amaliy misol gaplar orqali so‘zlar xotirada mustahkam qoladi.'
     },
     {
-      q: 'Har bir dars qanday tuzilgan?',
-      a: 'Har bir dars xalqaro 9 bosqichli metodikadan iborat: Kirish vaziyati, Jonli muloqot, Rangli lug‘at (der/die/das), Grammatika (V2 qoidasi), 3 bosqichli tinglash, O‘qish matni, Bosqichma-bosqich yozish, Shadowing talaffuz mashqi va Interaktiv testlar.'
-    },
-    {
-      q: 'Boshlash uchun nemis tilidan biror bilim kerakmi?',
-      a: 'Yo‘q, umuman shart emas! Kurs mutlaq noldan — nemis alifbosi, salomlashish va oddiy tanishuv so‘zlaridan boshlanadi. Maxsus "Fonetika laboratoriyasi" esa harflar va tovushlarni to‘g‘ri aytishni o‘rgatadi.'
+      q: 'Sertifikat testlari qanday tartibda topshiriladi?',
+      a: 'Har bir bosqich (A1, A2, B1) yakunida 40-60 ta savoldan iborat rasmiy namunaviy test mavjud. 70% dan yuqori natija ko‘rsatganingizda, profilingizda yuklab olinuvchi xalqaro sertifikat faollashadi.'
     }
   ];
 
-  // A single restrained treatment for all nine steps keeps the grid calm and
-  // on-brand; the step number carries the orange accent instead of nine hues.
-  const stepAccent =
-    'text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950/40 border-brand-200 dark:border-brand-900';
-
-  const courseSteps = [
-    { num: '01', titleDe: 'Einstieg', titleUz: 'Hayotiy vaziyat & Kirish', icon: Sparkles, color: stepAccent },
-    { num: '02', titleDe: 'Dialog', titleUz: 'Jonli nemischa muloqot', icon: Headphones, color: stepAccent },
-    { num: '03', titleDe: 'Wortschatz', titleUz: 'der/die/das rangli lug‘at', icon: Bookmark, color: stepAccent },
-    { num: '04', titleDe: 'Grammatik', titleUz: 'V2 so‘z tartibi & Jadvallar', icon: FileText, color: stepAccent },
-    { num: '05', titleDe: 'Hören', titleUz: '3-Bosqichli tinglab tushunish', icon: Volume2, color: stepAccent },
-    { num: '06', titleDe: 'Lesen', titleUz: 'Matn bilan ishlash & Savollar', icon: BookOpen, color: stepAccent },
-    { num: '07', titleDe: 'Schreiben', titleUz: 'Tayanch iboralar bilan yozish', icon: PenTool, color: stepAccent },
-    { num: '08', titleDe: 'Shadowing', titleUz: 'Mikrofon bilan talaffuz mashqi', icon: Mic, color: stepAccent },
-    { num: '09', titleDe: 'Übungen', titleUz: 'Interaktiv testlar & Tushuntirish', icon: Award, color: stepAccent },
-  ];
-
   return (
-    <div className="space-y-20 pb-20 transition-colors duration-200">
-      {/* 1. HERO SECTION WITH AURORA GLOW & 3D INTERACTIVE CARD */}
-      <section className="relative pt-12 sm:pt-20 pb-16 overflow-hidden bg-gradient-to-b from-brand-50/60 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 border-b border-slate-200/80 dark:border-slate-800">
-        {/* Soft single-hue ambient wash — kept restrained for a calmer, editorial hero */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[640px] h-[320px] bg-brand-500/10 rounded-full blur-3xl pointer-events-none -z-0" />
+    <div className="space-y-16 pb-20 transition-colors duration-200">
+      {/* ============================================================ */}
+      {/* 1. HERO SECTION (Exactly Matching Reference Image 1)        */}
+      {/* ============================================================ */}
+      <section className="relative pt-6 sm:pt-12 pb-16 overflow-hidden bg-gradient-to-b from-blue-50/40 via-white to-slate-50/50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 border-b border-slate-200/80 dark:border-slate-800">
+        {/* Soft background ambient gradient */}
+        <div className="absolute top-0 right-0 w-[55%] h-full bg-gradient-to-l from-blue-100/40 to-transparent pointer-events-none -z-0" />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          {/* German Flag Badge */}
-          <div className="inline-flex items-center space-x-2.5 px-4 py-1.5 rounded-full bg-white/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 shadow-xs text-xs font-semibold text-slate-700 dark:text-slate-200 mb-6 backdrop-blur-md">
-            <span className="inline-flex overflow-hidden rounded-[3px] shadow-2xs border border-black/10">
-              <span className="w-2.5 h-3.5 bg-slate-950" />
-              <span className="w-2.5 h-3.5 bg-red-600" />
-              <span className="w-2.5 h-3.5 bg-amber-400" />
-            </span>
-            <span>Hueber Menschen & CEFR Xalqaro Standartida</span>
-          </div>
-
-          {/* Main Headline */}
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-950 dark:text-white tracking-tight max-w-4xl mx-auto leading-[1.12]">
-            Nemis tilini{' '}
-            <span className="text-brand-600 dark:text-brand-400">
-              noldan B1 darajasigacha
-            </span>{' '}
-            mustaqil o‘rganing.
-          </h1>
-
-          {/* Subtitle */}
-          <p className="mt-6 text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed font-normal">
-            FLY HIGH — shunchaki so‘zlar to‘plami emas, balki nemis tilini o‘qituvchisiz, 
-            mukammal audio talaffuz va o‘zbek tilidagi tushuntirishlar bilan o‘rganish uchun yaratilgan zamonaviy raqamli akademiya.
-          </p>
-
-          {/* Action Buttons */}
-          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              to={`/courses/${nextLesson?.levelCode || 'a1-1'}/lesson/${nextLesson?.id || 'les-1'}`}
-              className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-base shadow-soft hover:shadow-card hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 inline-flex items-center justify-center space-x-2"
-            >
-              <span>
-                {isReturningLearner
-                  ? `Darsni davom ettirish (#${nextLesson?.orderIndex || 1}-dars)`
-                  : '1-Darsni Boshlash (Bepul)'}
-              </span>
-              <ArrowRight size={18} />
-            </Link>
-
-            <Link
-              to="/courses"
-              className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white dark:bg-slate-800/90 hover:bg-slate-50 dark:hover:bg-slate-750 text-slate-800 dark:text-slate-100 font-bold text-base border border-slate-300 dark:border-slate-700 shadow-xs hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 inline-flex items-center justify-center"
-            >
-              O‘quv xaritasini ko‘rish
-            </Link>
-          </div>
-
-          {/* Interactive Live Audio Preview Card */}
-          <div className="mt-12 max-w-lg mx-auto p-5 rounded-3xl bg-white/95 dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800 shadow-card backdrop-blur-md text-left flex items-center justify-between gap-4">
-            <div className="space-y-1">
-              <span className="text-xs font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400 flex items-center gap-1.5">
-                <Sparkles size={13} />
-                Jonli Nemischa Ovozni Sinab Ko‘ring
-              </span>
-              <p className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white font-display tracking-tight">
-                "Guten Tag! Ich lerne Deutsch."
-              </p>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Xayrli kun! Men nemis tilini o‘rganyapman.
-              </p>
-            </div>
-            <div className="flex-shrink-0">
-              <AudioButton text="Guten Tag! Ich lerne Deutsch mit Fly High." size="lg" />
-            </div>
-          </div>
-
-          {/* Feature Highlights Metrics */}
-          <div className="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-4xl mx-auto">
-            {[
-              { value: '72 ta', label: 'A1.1–B1.2 Darslari' },
-              { value: '1,400+', label: 'Nemischa So‘zlar' },
-              { value: '9', label: 'Bosqichli Metodika' },
-              { value: '100%', label: 'O‘zbekcha Tushuntirish' },
-            ].map((stat) => (
-              <div
-                key={stat.label}
-                className="p-5 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800 text-center shadow-2xs hover:shadow-soft transition-all duration-200 transform-gpu"
-              >
-                <span className="block text-2xl font-black text-slate-900 dark:text-white font-display tabular-nums tracking-tight">{stat.value}</span>
-                <span className="text-caption font-semibold text-slate-500 dark:text-slate-400">{stat.label}</span>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+            
+            {/* Left Content (Text & CTAs) */}
+            <div className="lg:col-span-7 space-y-6">
+              
+              {/* Flame Pill Badge */}
+              <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-slate-100/90 dark:bg-slate-800/90 text-slate-700 dark:text-slate-300 text-xs font-semibold shadow-2xs backdrop-blur-md">
+                <span className="text-sm">🔥</span>
+                <span>
+                  <strong className="text-blue-600 dark:text-blue-400 font-bold">A1 → B1</strong> • Tizimli va samarali o‘rganing
+                </span>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* 2. THE 9-STEP PEDAGOGICAL COURSEBOOK ARCHITECTURE */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <span className="text-xs font-bold text-brand-600 dark:text-brand-400 uppercase tracking-widest block mb-2">
-            Pedagogik Struktura
-          </span>
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            Har bir darsda 9 ta chuqur o‘quv bosqichi
-          </h2>
-          <p className="mt-3 text-slate-600 dark:text-slate-400 max-w-xl mx-auto text-sm sm:text-base">
-            Shunchaki quruq so‘z yodlash emas — tilning barcha nutqiy ko‘nikmalari muvozanatli rivojlantiriladi.
-          </p>
-        </div>
+              {/* Main Headline */}
+              <h1 className="text-3xl sm:text-5xl lg:text-[3.5rem] font-black text-slate-950 dark:text-white tracking-tight leading-[1.12] font-display">
+                Nemis tilini <br />
+                <span className="text-blue-600 dark:text-blue-400">noldan</span> ishonch bilan <br />
+                o‘rganing!
+              </h1>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {courseSteps.map((step, idx) => {
-            const Icon = step.icon;
-            // 9th card spans 2 columns on 2-col tablet layouts to maintain symmetry
-            const isLastOdd = idx === courseSteps.length - 1;
-            return (
-              <div
-                key={step.num}
-                className={`p-5 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800 shadow-2xs hover:shadow-soft hover:border-brand-300 dark:hover:border-brand-700 transition-all duration-200 transform-gpu group flex items-start space-x-4 ${
-                  isLastOdd ? 'sm:col-span-2 lg:col-span-1' : ''
-                }`}
-              >
-                <div className={`w-12 h-12 rounded-2xl border flex items-center justify-center flex-shrink-0 font-extrabold transition-transform group-hover:scale-105 ${step.color}`}>
-                  <Icon size={20} />
+              {/* Subtitle */}
+              <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-xl font-normal leading-relaxed">
+                Interaktiv darslar, 1400+ so‘z, gerchek hayotiy mashqlar va sertifikat testlari bilan bir platformada.
+              </p>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-2">
+                <Link
+                  to={`/courses/${nextLesson?.levelCode || 'a1-1'}/lesson/${nextLesson?.id || 'les-1'}`}
+                  className="px-7 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm sm:text-base shadow-soft hover:shadow-card hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 inline-flex items-center justify-center space-x-2 cursor-pointer"
+                >
+                  <span>Bepul boshlash</span>
+                  <ArrowRight size={17} />
+                </Link>
+
+                <button
+                  onClick={() => setIsVideoModalOpen(true)}
+                  className="px-6 py-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-900/70 text-blue-600 dark:text-blue-400 font-bold text-sm sm:text-base hover:bg-blue-50/50 dark:hover:bg-blue-950/40 transition-all duration-200 inline-flex items-center justify-center space-x-2 cursor-pointer shadow-2xs"
+                >
+                  <div className="w-6 h-6 rounded-full border border-blue-600 dark:border-blue-400 flex items-center justify-center text-blue-600 dark:text-blue-400">
+                    <Play size={11} className="fill-blue-600 dark:fill-blue-400 ml-0.5" />
+                  </div>
+                  <span>Dastur haqida videoni ko‘rish</span>
+                </button>
+              </div>
+
+              {/* Metrics Counter Row (72 | 1400+ | 9 | 10 000+) */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-slate-200/80 dark:border-slate-800">
+                <div>
+                  <div className="text-2xl sm:text-3xl font-black text-blue-600 dark:text-blue-400 font-display tabular-nums">
+                    72
+                  </div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+                    ta dars
+                  </div>
                 </div>
-                <div className="min-w-0 flex-1">
-                  <span className="text-[11px] font-mono font-bold text-slate-400 dark:text-slate-500 block mb-0.5 tabular-nums">
-                    {step.num}-BOSQICH
-                  </span>
-                  <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
-                    {step.titleDe}
+
+                <div>
+                  <div className="text-2xl sm:text-3xl font-black text-blue-600 dark:text-blue-400 font-display tabular-nums">
+                    1 400+
+                  </div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+                    ta so‘z
+                  </div>
+                </div>
+
+                <div>
+                  <div className="text-2xl sm:text-3xl font-black text-blue-600 dark:text-blue-400 font-display tabular-nums">
+                    9
+                  </div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+                    o‘quv bosqichi
+                  </div>
+                </div>
+
+                <div>
+                  <div className="text-2xl sm:text-3xl font-black text-blue-600 dark:text-blue-400 font-display tabular-nums">
+                    10 000+
+                  </div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+                    faol foydalanuvchi
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Visual Composition: Scenic German backdrop + Floating Flashcard + Goal Card */}
+            <div className="lg:col-span-5 relative mt-8 lg:mt-0 flex justify-center">
+              
+              {/* Atmospheric German Landmark Image Backdrop */}
+              <div className="absolute -top-12 -right-8 w-[380px] sm:w-[440px] h-[360px] sm:h-[420px] rounded-3xl overflow-hidden opacity-25 dark:opacity-20 pointer-events-none -z-0">
+                <img
+                  src="/images/brandenburg-gate.jpg"
+                  alt="Berlin Brandenburg Gate"
+                  className="w-full h-full object-cover filter blur-[1px]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent dark:from-slate-950 dark:via-slate-950/40" />
+              </div>
+
+              {/* Main Interactive Floating Flashcard ("das Tor") */}
+              <div className="relative z-20 w-[270px] sm:w-[290px] bg-white dark:bg-slate-900 rounded-3xl p-4 shadow-elevated border border-slate-100 dark:border-slate-800 transition-transform duration-300 hover:scale-[1.02]">
+                
+                {/* German Landmark Photo Header */}
+                <div className="relative h-36 rounded-2xl overflow-hidden shadow-inner">
+                  <img
+                    src="/images/brandenburg-gate.jpg"
+                    alt="Brandenburger Tor"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                  
+                  {/* Article Pill Badge "der" */}
+                  <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300 border border-blue-200 dark:border-blue-800 text-xs font-bold shadow-sm">
+                    der
+                  </div>
+                </div>
+
+                {/* German Word & Translation */}
+                <div className="text-center mt-4">
+                  <h3 className="text-2xl font-black text-slate-900 dark:text-white font-display">
+                    das Tor
                   </h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                    {step.titleUz}
+                    darvoza, eshik
                   </p>
                 </div>
+
+                {/* Audio Button with Animated Soundwave Bars */}
+                <div className="mt-3.5 flex items-center justify-center space-x-3 bg-slate-50 dark:bg-slate-800/50 py-2 px-3 rounded-2xl border border-slate-100 dark:border-slate-800">
+                  <button
+                    onClick={handlePlayWordAudio}
+                    className={`w-9 h-9 rounded-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center shadow-soft transition-transform duration-200 ${
+                      isPlayingAudio ? 'scale-110 ring-4 ring-blue-300 dark:ring-blue-900' : 'hover:scale-105'
+                    }`}
+                    title="Talaffuzni tinglash"
+                  >
+                    <Volume2 size={16} />
+                  </button>
+
+                  {/* Soundwave bars graphic */}
+                  <div className="flex items-center space-x-1 h-6">
+                    {[12, 18, 24, 14, 20, 16, 22, 10, 16, 12].map((height, i) => (
+                      <span
+                        key={i}
+                        className={`w-0.5 rounded-full transition-all duration-300 ${
+                          isPlayingAudio
+                            ? 'bg-blue-600 dark:bg-blue-400 animate-pulse'
+                            : 'bg-blue-400/60 dark:bg-blue-500/50'
+                        }`}
+                        style={{
+                          height: isPlayingAudio ? `${Math.max(6, (height + (i % 3) * 5) % 24)}px` : `${height}px`,
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Example Sentence Container */}
+                <div className="mt-3 p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 flex items-start space-x-2">
+                  <span className="text-blue-500 dark:text-blue-400 text-xs mt-0.5">🗣️</span>
+                  <div>
+                    <div className="text-xs font-bold text-slate-900 dark:text-white">
+                      Das Tor ist groß.
+                    </div>
+                    <div className="text-[11px] text-slate-500 dark:text-slate-400">
+                      Darvoza katta.
+                    </div>
+                  </div>
+                </div>
               </div>
-            );
-          })}
+
+              {/* Offset Floating Card: "Bugungi maqsad" */}
+              <div className="absolute -bottom-6 -right-2 sm:-right-6 z-30 w-[200px] sm:w-[220px] bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-2xl p-4 shadow-2xl border border-slate-200/90 dark:border-slate-800 animate-float">
+                <div className="text-xs font-bold text-slate-900 dark:text-white mb-2.5">
+                  Bugungi maqsad
+                </div>
+
+                <div className="flex items-center space-x-3 mb-3">
+                  {/* Circular progress ring (3/5) */}
+                  <div className="relative w-11 h-11 flex-shrink-0 flex items-center justify-center">
+                    <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
+                      <path
+                        className="text-slate-100 dark:text-slate-800"
+                        strokeWidth="3.5"
+                        stroke="currentColor"
+                        fill="none"
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                      <path
+                        className="text-emerald-500"
+                        strokeDasharray="60, 100"
+                        strokeWidth="3.5"
+                        strokeLinecap="round"
+                        stroke="currentColor"
+                        fill="none"
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                    </svg>
+                    <div className="absolute inset-0 flex items-center justify-center text-[11px] font-black text-slate-800 dark:text-slate-200">
+                      3/5
+                    </div>
+                  </div>
+
+                  <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 leading-tight">
+                    3 ta mashq bajarildi
+                  </div>
+                </div>
+
+                {/* Checklist items */}
+                <div className="space-y-1.5 text-[11px]">
+                  <div className="flex items-center space-x-2 text-slate-700 dark:text-slate-200">
+                    <div className="w-4 h-4 rounded-full bg-blue-600 text-white flex items-center justify-center text-[9px] font-bold">
+                      <Check size={10} strokeWidth={3} />
+                    </div>
+                    <span>10 ta yangi so‘z</span>
+                  </div>
+
+                  <div className="flex items-center space-x-2 text-slate-700 dark:text-slate-200">
+                    <div className="w-4 h-4 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[9px] font-bold">
+                      <Check size={10} strokeWidth={3} />
+                    </div>
+                    <span>Grammatika mashqi</span>
+                  </div>
+
+                  <div className="flex items-center space-x-2 text-slate-400 dark:text-slate-500">
+                    <div className="w-4 h-4 rounded-full border border-slate-300 dark:border-slate-700" />
+                    <span>Tinglab tushunish</span>
+                  </div>
+
+                  <div className="flex items-center space-x-2 text-slate-400 dark:text-slate-500">
+                    <div className="w-4 h-4 rounded-full border border-slate-300 dark:border-slate-700" />
+                    <span>Test yechish</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Hand-drawn arrow annotation */}
+              <div className="hidden sm:block absolute -bottom-14 left-4 z-20 text-slate-500 dark:text-slate-400 italic text-xs font-serif">
+                <span>Amaliy misollar bilan har kuni bir qadam oldinga! ↗</span>
+              </div>
+            </div>
+
+          </div>
+
+          {/* ============================================================ */}
+          {/* Bottom 4 Feature Cards (Exact Match to Reference Image 1)   */}
+          {/* ============================================================ */}
+          <div className="mt-16 pt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            
+            {/* 1. Interaktiv darslar */}
+            <Link
+              to="/courses"
+              className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-2xs hover:shadow-card hover:-translate-y-0.5 transition-all duration-200 flex items-center space-x-4 group"
+            >
+              <div className="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800/80 text-emerald-600 dark:text-emerald-400 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+                <Tv size={22} />
+              </div>
+              <div>
+                <h4 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                  Interaktiv darslar
+                </h4>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  Video, matn va mashqlar
+                </p>
+              </div>
+            </Link>
+
+            {/* 2. Flashcard */}
+            <Link
+              to="/vocabulary"
+              className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-2xs hover:shadow-card hover:-translate-y-0.5 transition-all duration-200 flex items-center space-x-4 group"
+            >
+              <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800/80 text-blue-600 dark:text-blue-400 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+                <Layers size={22} />
+              </div>
+              <div>
+                <h4 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                  Flashcard
+                </h4>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  Tez va samarali yodlash
+                </p>
+              </div>
+            </Link>
+
+            {/* 3. Grammatika */}
+            <Link
+              to="/grammar"
+              className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-2xs hover:shadow-card hover:-translate-y-0.5 transition-all duration-200 flex items-center space-x-4 group"
+            >
+              <div className="w-12 h-12 rounded-2xl bg-purple-50 dark:bg-purple-950/60 border border-purple-200 dark:border-purple-800/80 text-purple-600 dark:text-purple-400 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+                <BookOpen size={22} />
+              </div>
+              <div>
+                <h4 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                  Grammatika
+                </h4>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  Tushunarli izohlar va misollar
+                </p>
+              </div>
+            </Link>
+
+            {/* 4. Sertifikat testlari */}
+            <Link
+              to="/certificate-tests"
+              className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-2xs hover:shadow-card hover:-translate-y-0.5 transition-all duration-200 flex items-center space-x-4 group"
+            >
+              <div className="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800/80 text-amber-600 dark:text-amber-400 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+                <Award size={22} />
+              </div>
+              <div>
+                <h4 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                  Sertifikat testlari
+                </h4>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  A1–B1 darajalar uchun
+                </p>
+              </div>
+            </Link>
+
+          </div>
         </div>
       </section>
 
-      {/* 3. CEFR ROADMAP SECTION */}
+      {/* ============================================================ */}
+      {/* 2. LEVEL PROGRESSION OVERVIEW                                */}
+      {/* ============================================================ */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <span className="text-xs font-bold text-brand-600 dark:text-brand-400 uppercase tracking-widest block mb-2">
-            Xalqaro Ta‘lim Tizimi
+        <div className="text-center mb-10">
+          <span className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest block mb-2">
+            Ta‘lim Yo‘li
           </span>
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            A1.1 dan B1.2 gacha bosqichma-bosqich yo‘l
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+            Xalqaro standartdagi bosqichma-bosqich o‘quv rejasi
           </h2>
-          <p className="mt-3 text-slate-600 dark:text-slate-400 max-w-xl mx-auto text-sm sm:text-base">
-            Har bir bosqich o‘zining aniq o‘quv maqsadlariga va Goethe-Zertifikat imtihoni talablariga ega.
+          <p className="mt-2 text-slate-600 dark:text-slate-400 max-w-xl mx-auto text-sm sm:text-base">
+            A1 dan B1 gacha bo‘lgan barcha darslar tizimli tuzilgan va avtomatik tekshiriluvchi mashqlar bilan jihozlangan.
           </p>
         </div>
 
@@ -232,7 +417,7 @@ export const HomePage: React.FC = () => {
           {levels.map((lvl) => (
             <div
               key={lvl.id}
-              className="bg-white dark:bg-slate-900/60 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-2xs hover:shadow-soft hover:border-brand-300 dark:hover:border-brand-700 transition-all duration-300 flex flex-col justify-between group"
+              className="bg-white dark:bg-slate-900/60 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-2xs hover:shadow-soft hover:border-blue-300 dark:hover:border-blue-700 transition-all duration-300 flex flex-col justify-between group"
             >
               <div>
                 <div className="flex items-center justify-between mb-4">
@@ -242,7 +427,7 @@ export const HomePage: React.FC = () => {
                   </span>
                 </div>
 
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors mb-2">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-2">
                   {lvl.title}
                 </h3>
 
@@ -250,17 +435,17 @@ export const HomePage: React.FC = () => {
                   {lvl.descriptionUz}
                 </p>
 
-                <div className="p-3 bg-slate-50 dark:bg-slate-900/60 rounded-2xl text-[11px] text-slate-600 dark:text-slate-400 border border-slate-100 dark:border-slate-800 mb-6">
-                  <span className="font-bold text-slate-800 dark:text-slate-200 block mb-0.5">Mo‘ljallangan:</span>
-                  {lvl.targetAudience}
-                </div>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mb-6 flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
+                  <span>{lvl.targetAudience}</span>
+                </p>
               </div>
 
               <Link
                 to={`/levels/${lvl.code}`}
-                className="w-full py-3 rounded-xl bg-slate-100 dark:bg-slate-700 hover:bg-brand-600 hover:text-white dark:hover:bg-brand-600 text-slate-800 dark:text-slate-200 font-semibold text-xs transition text-center flex items-center justify-center space-x-1.5 group-hover:bg-brand-600 group-hover:text-white"
+                className="w-full py-3 rounded-xl bg-slate-100 hover:bg-blue-600 dark:bg-slate-800 dark:hover:bg-blue-600 text-slate-700 hover:text-white dark:text-slate-200 dark:hover:text-white font-bold text-xs shadow-2xs transition-all duration-200 flex items-center justify-center space-x-1.5"
               >
-                <span>Bosqich darslarini ko‘rish</span>
+                <span>Bosqichga kirish</span>
                 <ArrowRight size={14} />
               </Link>
             </div>
@@ -268,74 +453,41 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 4. FREE SAMPLE LESSON PREVIEW */}
-      {sampleLesson && (
-        <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-slate-900 rounded-2xl border border-slate-800 p-8 sm:p-12 text-white shadow-soft flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
-            <div className="absolute -top-16 -right-16 w-72 h-72 bg-brand-500/20 rounded-full blur-3xl pointer-events-none" />
-            <div className="space-y-4 max-w-xl relative z-10">
-              <span className="px-3 py-1 rounded-full bg-white/10 text-caption font-bold uppercase tracking-wider text-white backdrop-blur-md">
-                Bepul namuna dars
-              </span>
-              <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-                {sampleLesson.titleDe} — {sampleLesson.titleUz}
-              </h3>
-              <p className="text-body text-slate-300 leading-relaxed">
-                Ushbu dars orqali nemis tilida salomlashish, hol-ahvol so‘rash va xayrlashishni o‘rganasiz. 
-                Hech qanday to‘lovlarsiz hoziroq sinab ko‘ring!
-              </p>
-
-              <div className="flex flex-wrap gap-2 pt-2">
-                <span className="text-caption bg-white/10 px-3 py-1 rounded-lg">10 ta lug‘at so‘zi</span>
-                <span className="text-caption bg-white/10 px-3 py-1 rounded-lg">sein / heißen fe‘li</span>
-                <span className="text-caption bg-white/10 px-3 py-1 rounded-lg">Audio & Shadowing</span>
-              </div>
-            </div>
-
-            <Link
-              to="/courses/a1-1/lesson/les-1"
-              className="px-8 py-4 rounded-2xl bg-brand-600 text-white hover:bg-brand-700 font-bold text-sm sm:text-base shadow-soft transition flex-shrink-0 inline-flex items-center space-x-2 relative z-10"
-            >
-              <span>Darsni Boshlash</span>
-              <ArrowRight size={18} />
-            </Link>
-          </div>
-        </section>
-      )}
-
-      {/* 5. FAQ SECTION */}
+      {/* ============================================================ */}
+      {/* 3. FREQUENTLY ASKED QUESTIONS (FAQ)                          */}
+      {/* ============================================================ */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <span className="text-xs font-bold text-brand-600 dark:text-brand-400 uppercase tracking-widest block mb-2">
-            Ko‘p beriladigan savollar
+        <div className="text-center mb-8">
+          <span className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest block mb-1">
+            Savol-Javoblar
           </span>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            Savollaringiz bormi?
+          <h2 className="text-2xl font-black text-slate-900 dark:text-white">
+            Eng ko‘p beriladigan savollar
           </h2>
         </div>
 
         <div className="space-y-3">
-          {faqs.map((faq, idx) => {
-            const isOpen = openFaqIndex === idx;
+          {faqs.map((faq, index) => {
+            const isOpen = openFaqIndex === index;
             return (
               <div
                 key={faq.q}
-                className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/80 overflow-hidden shadow-2xs transition"
+                className="rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900/80 overflow-hidden shadow-2xs transition-all"
               >
                 <button
-                  onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                  className="w-full p-5 text-left font-bold text-slate-900 dark:text-white text-sm sm:text-base flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-700/40 transition"
+                  onClick={() => setOpenFaqIndex(isOpen ? null : index)}
+                  className="w-full text-left px-5 py-4 flex items-center justify-between gap-4 font-bold text-slate-900 dark:text-white text-sm sm:text-base hover:text-blue-600 dark:hover:text-blue-400 transition cursor-pointer"
                 >
                   <span>{faq.q}</span>
                   <ChevronDown
                     size={18}
-                    className={`text-slate-400 transition-transform duration-200 flex-shrink-0 ml-4 ${
-                      isOpen ? 'transform rotate-180 text-brand-600 dark:text-brand-400' : ''
+                    className={`text-slate-400 transition-transform duration-200 flex-shrink-0 ${
+                      isOpen ? 'rotate-180 text-blue-600' : ''
                     }`}
                   />
                 </button>
                 {isOpen && (
-                  <div className="p-5 pt-0 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-800/40">
+                  <div className="px-5 pb-4 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-800/80 pt-3">
                     {faq.a}
                   </div>
                 )}
@@ -345,28 +497,60 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 6. CALL TO ACTION BANNER */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="rounded-3xl bg-slate-950 text-white p-8 sm:p-14 text-center relative overflow-hidden border border-slate-800 shadow-2xl">
-          <div className="relative z-10 max-w-2xl mx-auto space-y-5">
-            <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
-              Nemis tilini o‘rganishni bugunoq boshlang!
-            </h2>
-            <p className="text-sm sm:text-base text-slate-400">
-              Hech qanday murakkab ro‘yxatdan o‘tish shart emas. Darhol 1-darsga o‘ting va birinchi nemischa jumlalaringizni professional talaffuz qiling.
-            </p>
-            <div className="pt-4 flex justify-center">
-              <Link
-                to="/courses/a1-1/lesson/les-1"
-                className="px-8 py-4 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm sm:text-base shadow-glow transition inline-flex items-center space-x-2"
+      {/* ============================================================ */}
+      {/* Video Modal (when clicking "Dastur haqida videoni ko'rish")   */}
+      {/* ============================================================ */}
+      {isVideoModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-md animate-fadeIn">
+          <div className="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800">
+            <div className="flex items-center justify-between p-4 border-b border-slate-100 dark:border-slate-800">
+              <div className="flex items-center space-x-2">
+                <Play size={16} className="text-blue-600 fill-blue-600" />
+                <h3 className="font-bold text-slate-900 dark:text-white text-sm">
+                  Fly High German platformasi haqida video sharh
+                </h3>
+              </div>
+              <button
+                onClick={() => setIsVideoModalOpen(false)}
+                className="p-1.5 rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
               >
-                <span>Hozir Boshlash (Bepul)</span>
-                <ArrowRight size={18} />
-              </Link>
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-4">
+              <div className="relative aspect-video rounded-2xl overflow-hidden bg-slate-950 flex flex-col items-center justify-center text-center p-6 text-white">
+                <img
+                  src="/images/brandenburg-gate.jpg"
+                  alt="Video cover"
+                  className="absolute inset-0 w-full h-full object-cover opacity-40"
+                />
+                <div className="relative z-10 space-y-3">
+                  <div className="w-16 h-16 rounded-full bg-blue-600/90 text-white flex items-center justify-center mx-auto shadow-xl ring-8 ring-blue-500/20 cursor-pointer hover:scale-105 transition">
+                    <Play size={28} className="fill-white ml-1" />
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-black">Platforma bilan 2 daqiqada tanishing</h4>
+                    <p className="text-xs text-slate-300 max-w-md mt-1">
+                      9 bosqichli dars strukturasi, der/die/das rangli lug‘ati va avtomatik sertifikat testlari qanday ishlashini tomosha qiling.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-end">
+                <Link
+                  to="/courses"
+                  onClick={() => setIsVideoModalOpen(false)}
+                  className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition"
+                >
+                  Darslarga o‘tish →
+                </Link>
+              </div>
             </div>
           </div>
         </div>
-      </section>
+      )}
     </div>
   );
 };

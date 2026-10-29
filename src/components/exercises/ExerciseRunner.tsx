@@ -270,6 +270,20 @@ export const ExerciseRunner: React.FC<ExerciseRunnerProps> = ({
   const isArticleType = currentType === 'article_selection';
   const progressPercent = Math.round(((currentIndex + (isAnswerChecked ? 1 : 0)) / exercises.length) * 100);
 
+  const defaultHeading =
+    currentType === 'multiple_choice' ? 'To‘g‘ri javobni tanlang' :
+    currentType === 'article_selection' ? 'To‘g‘ri artiklni tanlang' :
+    currentType === 'fill_blank' ? 'Bo‘sh joyni to‘ldiring' :
+    currentType === 'sentence_ordering' ? 'So‘zlarni to‘g‘ri tartiblang' :
+    currentType === 'matching' ? 'Juftliklarni moslang' :
+    'Nemis tiliga tarjima qiling';
+
+  const headingText = titleUz || defaultHeading;
+  const promptText = (currentExercise.promptUz || currentExercise.questionUz || '').trim();
+  const isDuplicatePrompt = promptText.toLowerCase() === headingText.toLowerCase() ||
+    promptText.toLowerCase() === 'to‘g‘ri javobni tanlang' ||
+    promptText.toLowerCase() === "to'g'ri javobni tanlang";
+
   return (
     <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-soft overflow-hidden max-w-2xl mx-auto my-4">
       {/* Duolingo-style Top Progress Bar */}
@@ -283,18 +297,11 @@ export const ExerciseRunner: React.FC<ExerciseRunnerProps> = ({
       {/* Top Header */}
       <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/70 dark:bg-slate-850/80">
         <div>
-          <span className="text-xs font-semibold text-brand-600 dark:text-brand-400 uppercase tracking-wider">
+          <span className="text-xs font-semibold text-brand-600 dark:text-brand-400 uppercase tracking-wider tabular-nums">
             {currentIndex + 1} / {exercises.length}-mashq
           </span>
           <h4 className="text-sm font-bold text-slate-800 dark:text-slate-100 mt-0.5">
-            {titleUz || (
-              currentType === 'multiple_choice' ? 'To‘g‘ri javobni tanlang' :
-              currentType === 'article_selection' ? 'To‘g‘ri artiklni tanlang (der, die, das)' :
-              currentType === 'fill_blank' ? 'Bo‘sh joyni to‘ldiring' :
-              currentType === 'sentence_ordering' ? 'So‘zlarni to‘g‘ri tartibda joylashtiring' :
-              currentType === 'matching' ? 'O‘zbekcha va nemischa juftliklarni moslang' :
-              'Nemis tiliga tarjima qiling'
-            )}
+            {headingText}
           </h4>
         </div>
 
@@ -309,7 +316,7 @@ export const ExerciseRunner: React.FC<ExerciseRunnerProps> = ({
             {isMuted ? <VolumeX size={15} /> : <Volume2 size={15} className="text-brand-600 dark:text-brand-400" />}
           </button>
 
-          <div className="text-xs font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-800 px-3 py-1 rounded-full border border-slate-200 dark:border-slate-700 shadow-2xs">
+          <div className="text-xs font-medium text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-800 px-3 py-1 rounded-full border border-slate-200 dark:border-slate-700 shadow-2xs tabular-nums">
             To‘g‘ri: {score}
           </div>
         </div>
@@ -318,9 +325,11 @@ export const ExerciseRunner: React.FC<ExerciseRunnerProps> = ({
       {/* Exercise Body */}
       <div className="p-6">
         <div className="mb-6">
-          <p className="text-base font-semibold text-slate-900 dark:text-slate-100 mb-1">
-            {currentExercise.promptUz || currentExercise.questionUz}
-          </p>
+          {!isDuplicatePrompt && promptText && (
+            <p className="text-base font-semibold text-slate-900 dark:text-slate-100 mb-1">
+              {promptText}
+            </p>
+          )}
           {currentExercise.promptDe && (
             <div className="flex items-center space-x-2 mt-2 p-3 bg-brand-50/60 dark:bg-brand-950/40 rounded-xl border border-brand-100 dark:border-brand-900/50">
               <AudioButton text={currentExercise.promptDe} size="sm" />
