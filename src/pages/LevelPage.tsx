@@ -265,7 +265,7 @@ export const LevelPage: React.FC = () => {
                 </div>
 
                 {/* Milestone Nodes Along a Connected Path */}
-                <div className="relative pl-6 sm:pl-10 space-y-6 before:content-[''] before:absolute before:left-12 sm:before:left-16 before:top-4 before:bottom-4 before:w-0.5 before:bg-slate-200 dark:before:bg-slate-800 before:rounded-full">
+                <div className="relative pl-6 sm:pl-10 space-y-6 before:content-[''] before:absolute before:left-12 sm:before:left-[68px] before:-translate-x-1/2 before:top-4 before:bottom-4 before:w-0.5 before:bg-slate-200 dark:before:bg-slate-800 before:rounded-full">
                   {moduleLessons.map((lesson, lessonIdx) => {
                     const completed = isLessonCompleted(lesson.id);
                     const isCurrent = lesson.id === firstUncompletedId;

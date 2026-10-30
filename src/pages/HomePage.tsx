@@ -159,17 +159,11 @@ export const HomePage: React.FC = () => {
             </div>
 
             {/* Right Visual Composition: Scenic German backdrop + Floating Flashcard + Goal Card */}
+            {/* Right Visual Composition: Atmospheric ambient glow + Floating Flashcard + Goal Card */}
             <div className="lg:col-span-5 relative mt-8 lg:mt-0 flex justify-center">
               
-              {/* Atmospheric German Landmark Image Backdrop */}
-              <div className="absolute -top-12 -right-8 w-[380px] sm:w-[440px] h-[360px] sm:h-[420px] rounded-3xl overflow-hidden opacity-25 dark:opacity-20 pointer-events-none -z-0">
-                <img
-                  src="/images/brandenburg-gate.jpg"
-                  alt="Berlin Brandenburg Gate"
-                  className="w-full h-full object-cover filter blur-[1px]"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent dark:from-slate-950 dark:via-slate-950/40" />
-              </div>
+              {/* Atmospheric Ambient Glow Backdrop */}
+              <div className="absolute -top-10 -right-6 w-[360px] sm:w-[420px] h-[360px] sm:h-[420px] rounded-full bg-gradient-to-br from-blue-500/15 via-indigo-500/10 to-amber-500/10 blur-3xl pointer-events-none -z-0" />
 
               {/* Main Interactive Floating Flashcard ("das Tor") */}
               <div className="relative z-20 w-[270px] sm:w-[290px] bg-white dark:bg-slate-900 rounded-3xl p-4 shadow-elevated border border-slate-100 dark:border-slate-800 transition-transform duration-300 hover:scale-[1.02]">
@@ -183,9 +177,9 @@ export const HomePage: React.FC = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                   
-                  {/* Article Pill Badge "der" */}
-                  <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300 border border-blue-200 dark:border-blue-800 text-xs font-bold shadow-sm">
-                    der
+                  {/* Article Pill Badge "das" (Correct neuter article) */}
+                  <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-xs font-bold font-mono tracking-wide shadow-sm">
+                    das
                   </div>
                 </div>
 
@@ -194,8 +188,8 @@ export const HomePage: React.FC = () => {
                   <h3 className="text-2xl font-black text-slate-900 dark:text-white font-display">
                     das Tor
                   </h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                    darvoza, eshik
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-medium">
+                    darvoza, darvoza eshigi
                   </p>
                 </div>
 
@@ -309,7 +303,7 @@ export const HomePage: React.FC = () => {
               </div>
 
               {/* Hand-drawn arrow annotation */}
-              <div className="hidden sm:block absolute -bottom-14 left-4 z-20 text-slate-500 dark:text-slate-400 italic text-xs font-serif">
+              <div className="hidden sm:block absolute -bottom-14 left-4 z-20 text-slate-500 dark:text-slate-400 italic text-xs font-medium">
                 <span>Amaliy misollar bilan har kuni bir qadam oldinga! ↗</span>
               </div>
             </div>
@@ -427,15 +421,15 @@ export const HomePage: React.FC = () => {
                   </span>
                 </div>
 
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-2">
-                  {lvl.title}
+                <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-2 line-clamp-1">
+                  {lvl.cefrLevel ? `${lvl.cefrLevel} — ` : ''}{lvl.title.replace(/^[AB][12]\.[12]\s*—\s*/, '')}
                 </h3>
 
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4 line-clamp-3">
                   {lvl.descriptionUz}
                 </p>
 
-                <p className="text-xs text-slate-500 dark:text-slate-400 mb-6 flex items-center gap-1.5">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mb-6 flex items-center gap-1.5 line-clamp-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
                   <span>{lvl.targetAudience}</span>
                 </p>

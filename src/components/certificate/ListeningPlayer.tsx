@@ -120,7 +120,7 @@ export const ListeningPlayer: React.FC<ListeningPlayerProps> = ({
           {/* Speed Toggle Button */}
           <button
             onClick={toggleSpeed}
-            className="px-2 py-1 rounded-lg text-[10px] font-bold bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:bg-slate-50 transition"
+            className="px-2 py-1 rounded-lg text-[10px] font-bold bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-600 transition"
             title="Ijro tezligini o‘zgartirish"
           >
             {speed === 0.88 ? '0.88x' : '1.0x'}

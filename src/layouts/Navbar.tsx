@@ -22,6 +22,7 @@ export const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isColorGuideOpen, setIsColorGuideOpen] = useState(false);
 
   // Nav links: Bosh sahifa | Darslar | Lug'at | Grammatika | Testlar
   const navLinks = [
@@ -91,25 +92,62 @@ export const Navbar: React.FC = () => {
                 ə:
               </Link>
 
-              {/* Accent / Droplet icon */}
-              <button
-                onClick={() => {
-                  // Subtle visual pulse effect
-                  document.documentElement.classList.add('transition-all');
-                  setTimeout(() => document.documentElement.classList.remove('transition-all'), 300);
-                }}
-                className="w-8 h-8 rounded-xl flex items-center justify-center text-blue-500 dark:text-blue-400 bg-blue-50/80 dark:bg-blue-950/60 hover:bg-blue-100 dark:hover:bg-blue-900/40 border border-blue-200/60 dark:border-blue-800/60 transition shadow-2xs"
-                title="Nemis tili rang tizimi"
-                aria-label="Rang tizimi"
-              >
-                <Droplet size={15} className="fill-blue-500/20" />
-              </button>
+              {/* German Article Color System Guide Dropdown */}
+              <div className="relative">
+                <button
+                  onClick={() => setIsColorGuideOpen(!isColorGuideOpen)}
+                  className={`w-8 h-8 rounded-xl flex items-center justify-center border transition shadow-2xs cursor-pointer ${
+                    isColorGuideOpen
+                      ? 'bg-blue-600 text-white border-blue-600'
+                      : 'text-blue-500 dark:text-blue-400 bg-blue-50/80 dark:bg-blue-950/60 hover:bg-blue-100 dark:hover:bg-blue-900/40 border-blue-200/60 dark:border-blue-800/60'
+                  }`}
+                  title="Nemis tili artikl ranglari qo‘llanmasi (der/die/das)"
+                  aria-label="Artikl ranglari"
+                >
+                  <Droplet size={15} className={isColorGuideOpen ? 'fill-white' : 'fill-blue-500/20'} />
+                </button>
+
+                {/* Color Guide Popover */}
+                {isColorGuideOpen && (
+                  <div className="absolute right-0 top-11 w-64 p-3.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl z-50 animate-fadeIn space-y-2">
+                    <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+                      <span className="text-xs font-bold text-slate-900 dark:text-white">
+                        Nemis tili artikl ranglari
+                      </span>
+                      <button
+                        onClick={() => setIsColorGuideOpen(false)}
+                        className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                    <div className="space-y-1.5 text-xs">
+                      <div className="flex items-center justify-between p-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/50 border border-blue-200/80 dark:border-blue-800/60">
+                        <span className="font-bold font-mono text-blue-700 dark:text-blue-300">der</span>
+                        <span className="text-[11px] text-slate-600 dark:text-slate-300">Erkak jinsi (Maskulin)</span>
+                      </div>
+                      <div className="flex items-center justify-between p-1.5 rounded-lg bg-rose-50 dark:bg-rose-950/50 border border-rose-200/80 dark:border-rose-800/60">
+                        <span className="font-bold font-mono text-rose-700 dark:text-rose-300">die</span>
+                        <span className="text-[11px] text-slate-600 dark:text-slate-300">Ayol jinsi (Feminin)</span>
+                      </div>
+                      <div className="flex items-center justify-between p-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200/80 dark:border-emerald-800/60">
+                        <span className="font-bold font-mono text-emerald-700 dark:text-emerald-300">das</span>
+                        <span className="text-[11px] text-slate-600 dark:text-slate-300">O‘rta jins (Neutral)</span>
+                      </div>
+                      <div className="flex items-center justify-between p-1.5 rounded-lg bg-violet-50 dark:bg-violet-950/50 border border-violet-200/80 dark:border-violet-800/60">
+                        <span className="font-bold font-mono text-violet-700 dark:text-violet-300">die (pl.)</span>
+                        <span className="text-[11px] text-slate-600 dark:text-slate-300">Ko‘plik shakli (Plural)</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
 
               {/* Dark Mode Moon/Sun Toggle */}
               <button
                 onClick={toggleTheme}
                 title={isDark ? "Yorug‘ rejimga o‘tish" : "Tungi rejimga o‘tish"}
-                className="w-8 h-8 rounded-xl flex items-center justify-center bg-slate-100/80 dark:bg-slate-800/80 hover:bg-slate-200/80 dark:hover:bg-slate-700 border border-slate-200/60 dark:border-slate-700/60 text-slate-700 dark:text-amber-400 transition shadow-2xs"
+                className="w-8 h-8 rounded-xl flex items-center justify-center bg-slate-100/80 dark:bg-slate-800/80 hover:bg-slate-200/80 dark:hover:bg-slate-700 border border-slate-200/60 dark:border-slate-700/60 text-slate-700 dark:text-amber-400 transition shadow-2xs cursor-pointer"
                 aria-label="Tungi rejim"
               >
                 {isDark ? (
@@ -165,7 +203,7 @@ export const Navbar: React.FC = () => {
 
         {/* Mobile Dropdown Menu for Navigation Links */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden border-t border-slate-200 dark:border-slate-800 bg-white/98 dark:bg-slate-900/98 backdrop-blur-2xl px-4 pt-3 pb-6 space-y-1 animate-in slide-in-from-top-2 shadow-2xl">
+          <div className="lg:hidden border-t border-slate-200 dark:border-slate-800 bg-white/98 dark:bg-slate-900/98 backdrop-blur-2xl px-4 pt-3 pb-6 space-y-1 animate-fadeIn shadow-2xl">
             <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 px-3 py-1">
               Barcha bo‘limlar
             </div>

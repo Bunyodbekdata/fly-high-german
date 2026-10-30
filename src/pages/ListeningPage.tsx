@@ -483,7 +483,7 @@ export const ListeningPage: React.FC = () => {
                       <div className="space-y-2 pt-1 pl-8">
                         {q.options.map((opt: string, optIdx: number) => {
                           const isSelected = answers[q.id] === optIdx;
-                          let optStyle = 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:border-brand-300 dark:hover:border-brand-500 hover:bg-slate-50/70';
+                          let optStyle = 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:border-brand-300 dark:hover:border-brand-500 hover:bg-slate-50/70 dark:hover:bg-slate-750';
                           if (isSelected) optStyle = 'border-brand-500 dark:border-brand-500 bg-brand-50/80 dark:bg-brand-950/60 text-brand-950 dark:text-brand-100 ring-2 ring-brand-500/20';
                           if (checked) {
                             if (optIdx === q.correctIndex) optStyle = 'border-emerald-500 dark:border-emerald-600 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-950 dark:text-emerald-200 font-bold ring-1 ring-emerald-500';

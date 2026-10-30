@@ -236,7 +236,7 @@ export const VocabularyPage: React.FC = () => {
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 ${
                       selectedLevel === lvl.code
                         ? 'bg-brand-600 text-white shadow-2xs'
-                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
+                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
                     }`}
                   >
                     {lvl.code.toUpperCase()}

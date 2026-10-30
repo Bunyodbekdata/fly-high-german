@@ -107,7 +107,7 @@ export const CertificateTestsPage: React.FC = () => {
               className={`px-5 py-2 rounded-full text-xs font-bold transition-all duration-150 cursor-pointer ${
                 selectedFilter === f.id
                   ? 'bg-blue-600 text-white shadow-soft'
-                  : 'bg-white dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50'
+                  : 'bg-white dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700'
               }`}
             >
               {f.label}
