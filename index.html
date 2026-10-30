@@ -67,7 +67,7 @@ body.dark{--bg:#020617;--surface:#0f172a;--raised:#1e293b;--ink:#f8fafc;--body:#
       </div>
      </nav>
      <div class="header-actions">
-      <span class="metric-pill flame" title="Silsila">🔥 <span id="header-streak">0</span></span><span class="metric-pill energy" title="Diqqat energiyasi">♥ 5</span><span class="metric-pill xp" title="Tajriba"><span id="header-xp">0</span> XP</span><button type="button" class="icon-btn" id="search-open" aria-label="Qidiruvni ochish"><i data-lucide="search"></i></button><button type="button" class="icon-btn" id="theme-toggle" aria-label="Tungi rejimni yoqish"><i data-lucide="moon"></i></button><button type="button" class="icon-btn profile-btn" data-view="dashboard" aria-label="Natijalarim"><i data-lucide="user-round"></i></button><button type="button" class="icon-btn mobile-menu-btn" id="mobile-menu-open" aria-label="Barcha bo‘limlar" aria-expanded="false"><i data-lucide="menu"></i></button>
+      <span class="metric-pill flame" title="Silsila">🔥 <span id="header-streak">0</span></span><span class="metric-pill energy" title="Diqqat energiyasi">♥ <span id="header-energy">5</span></span><span class="metric-pill xp" title="Tajriba"><span id="header-xp">0</span> XP</span><button type="button" class="icon-btn" id="search-open" aria-label="Qidiruvni ochish"><i data-lucide="search"></i></button><button type="button" class="icon-btn" id="theme-toggle" aria-label="Tungi rejimni yoqish"><i data-lucide="moon"></i></button><button type="button" class="icon-btn profile-btn" data-view="dashboard" aria-label="Natijalarim"><i data-lucide="user-round"></i></button><button type="button" class="icon-btn mobile-menu-btn" id="mobile-menu-open" aria-label="Barcha bo‘limlar" aria-expanded="false"><i data-lucide="menu"></i></button>
      </div>
     </div>
    </header>
@@ -81,7 +81,7 @@ body.dark{--bg:#020617;--surface:#0f172a;--raised:#1e293b;--ink:#f8fafc;--body:#
         <p class="canva-text" data-template-id="hero-description" style="color: rgb(51, 65, 85); font-weight: 400; font-style: normal; font-size: 16px;">Kichik qadam — katta natija. Navbatdagi dars sizni kutmoqda.</p>
        </div>
        <div class="quick-metrics">
-        <span class="metric-pill flame">🔥 <span id="home-streak">0</span> kun</span><span class="metric-pill xp">✦ <span id="home-xp">0</span> XP</span><span class="metric-pill energy" title="Diqqat energiyasi — demo ko‘rsatkich">♥ 5 energiya</span>
+        <span class="metric-pill flame">🔥 <span id="home-streak">0</span> kun</span><span class="metric-pill xp">✦ <span id="home-xp">0</span> XP</span><span class="metric-pill energy" title="Diqqat energiyasi">♥ <span id="home-energy">5</span> energiya</span>
        </div>
       </div>
       <div class="hero canva-banner" data-template-id="hero-banner" style="background: rgb(238, 242, 255);">
@@ -412,29 +412,585 @@ body.dark{--bg:#020617;--surface:#0f172a;--raised:#1e293b;--ink:#f8fafc;--body:#
     <p id="detail-description"></p><button type="button" id="detail-start" class="primary">Darsga kirish →</button>
    </div>
   </div>
+  <div id="completion-overlay" class="overlay" hidden="">
+   <div class="modal card text-center" role="dialog" aria-modal="true" aria-labelledby="completion-modal-title">
+    <div class="mx-auto w-16 h-16 rounded-full bg-amber-100 text-amber-600 grid place-items-center text-3xl mb-3" aria-hidden="true">★</div>
+    <span class="eyebrow" style="color:var(--gold)">MUVAFFAQIYAT!</span>
+    <h2 id="completion-modal-title" class="my-2"></h2>
+    <p id="completion-modal-desc" class="muted"></p>
+    <div class="flex gap-2 justify-center flex-wrap mt-4">
+     <button type="button" class="secondary close-overlay">Darsda qolish</button>
+     <button type="button" class="primary" id="completion-next-btn">Navbatdagi darsga o‘tish →</button>
+    </div>
+   </div>
+  </div>
   <div id="toast" class="toast" role="status" aria-live="polite" hidden=""></div>
   <script>
+// Complete app script for Fly High German
 (() => {
-const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-const words=[
-{id:1,article:'der',german:'Tisch',uz:'stol',plural:'die Tische',level:'A1.1',type:'Ot',example:'Der Tisch ist groß.',exampleUz:'Stol katta.'},
-{id:2,article:'die',german:'Lampe',uz:'chiroq',plural:'die Lampen',level:'A1.1',type:'Ot',example:'Die Lampe ist schön.',exampleUz:'Chiroq chiroyli.'},
-{id:3,article:'das',german:'Buch',uz:'kitob',plural:'die Bücher',level:'A1.1',type:'Ot',example:'Das Buch ist neu.',exampleUz:'Kitob yangi.'},
-{id:4,article:'die',german:'Bücher',uz:'kitoblar',plural:'—',level:'A1.2',type:'Ot',pluralArticle:true,example:'Die Bücher sind hier.',exampleUz:'Kitoblar shu yerda.'},
-{id:5,article:'',german:'lernen',uz:'o‘rganmoq',plural:'—',level:'A1.1',type:'Fe’l',example:'Ich lerne Deutsch.',exampleUz:'Men nemis tilini o‘rganaman.'},
-{id:6,article:'',german:'schön',uz:'chiroyli',plural:'—',level:'A2.1',type:'Sifat',example:'Das ist schön.',exampleUz:'Bu chiroyli.'}
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+
+const words = [
+  // A1.1
+  {id:1, article:'der', german:'Tisch', uz:'stol', plural:'die Tische', level:'A1.1', type:'Ot', example:'Der Tisch ist groß und modern.', exampleUz:'Stol katta va zamonaviy.'},
+  {id:2, article:'die', german:'Lampe', uz:'chiroq', plural:'die Lampen', level:'A1.1', type:'Ot', example:'Die Lampe ist sehr schön.', exampleUz:'Chiroq juda chiroyli.'},
+  {id:3, article:'das', german:'Buch', uz:'kitob', plural:'die Bücher', level:'A1.1', type:'Ot', example:'Das Buch ist neu und interessant.', exampleUz:'Kitob yangi va qiziqarli.'},
+  {id:4, article:'', german:'lernen', uz:'o‘rganmoq', plural:'—', level:'A1.1', type:'Fe’l', example:'Ich lerne jeden Tag Deutsch.', exampleUz:'Men har kuni nemis tilini o‘rganaman.'},
+  {id:5, article:'', german:'schön', uz:'chiroyli', plural:'—', level:'A1.1', type:'Sifat', example:'Das Wetter in Berlin ist heute schön.', exampleUz:'Bugun Berlinda ob-havo chiroyli.'},
+  {id:6, article:'der', german:'Name', uz:'ism', plural:'die Namen', level:'A1.1', type:'Ot', example:'Mein Name ist Anna.', exampleUz:'Mening ismim Anna.'},
+  {id:7, article:'', german:'trinken', uz:'ichmoq', plural:'—', level:'A1.1', type:'Fe’l', example:'Wir trinken gerne Kaffee.', exampleUz:'Biz bajonidil kofe ichamiz.'},
+  {id:8, article:'', german:'danke', uz:'rahmat', plural:'—', level:'A1.1', type:'Boshqa', example:'Vielen Dank für Ihre Hilfe!', exampleUz:'Yordamingiz uchun katta rahmat!'},
+
+  // A1.2
+  {id:9, article:'die', german:'Bücher', uz:'kitoblar', plural:'—', level:'A1.2', type:'Ot', pluralArticle:true, example:'Die Bücher liegen auf dem Tisch.', exampleUz:'Kitoblar stol ustida turibdi.'},
+  {id:10, article:'die', german:'Familie', uz:'oila', plural:'die Familien', level:'A1.2', type:'Ot', example:'Meine Familie wohnt in Taschkent.', exampleUz:'Mening oilam Toshkentda yashaydi.'},
+  {id:11, article:'der', german:'Bruder', uz:'aka / uka', plural:'die Brüder', level:'A1.2', type:'Ot', example:'Mein Bruder lernt auch Deutsch.', exampleUz:'Mening akam ham nemis tilini o‘rganadi.'},
+  {id:12, article:'die', german:'Schwester', uz:'opa / singil', plural:'die Schwestern', level:'A1.2', type:'Ot', example:'Meine Schwester ist Studentin.', exampleUz:'Mening singlim talaba.'},
+  {id:13, article:'', german:'wohnen', uz:'yashamoq', plural:'—', level:'A1.2', type:'Fe’l', example:'Wo wohnen Sie zurzeit?', exampleUz:'Hozir qayerda yashaysiz?'},
+  {id:14, article:'', german:'essen', uz:'yemoq', plural:'—', level:'A1.2', type:'Fe’l', example:'Wir essen morgens Brot und Käse.', exampleUz:'Ertalab biz non va pishloq yeymiz.'},
+  {id:15, article:'der', german:'Kaffee', uz:'kofe', plural:'die Kaffees', level:'A1.2', type:'Ot', example:'Ein Kaffee bitte mit Milch.', exampleUz:'Iltimos, sutli bitta kofe.'},
+  {id:16, article:'', german:'klein', uz:'kichik', plural:'—', level:'A1.2', type:'Sifat', example:'Das Zimmer ist gemütlich, aber klein.', exampleUz:'Xona shinam, lekin kichik.'},
+
+  // A2.1
+  {id:17, article:'der', german:'Arzt', uz:'shifokor', plural:'die Ärzte', level:'A2.1', type:'Ot', example:'Der Arzt untersucht den Patienten.', exampleUz:'Shifokor bemorni ko‘rikdan o‘tkazmoqda.'},
+  {id:18, article:'die', german:'Wohnung', uz:'xonadon', plural:'die Wohnungen', level:'A2.1', type:'Ot', example:'Unsere neue Wohnung hat einen Balkon.', exampleUz:'Bizning yangi xonadonimizda balkon bor.'},
+  {id:19, article:'die', german:'Arbeit', uz:'ish', plural:'die Arbeiten', level:'A2.1', type:'Ot', example:'Er geht jeden Morgen zur Arbeit.', exampleUz:'U har tong ishga boradi.'},
+  {id:20, article:'', german:'fahren', uz:'(transportda) bormoq', plural:'—', level:'A2.1', type:'Fe’l', example:'Wir fahren morgen nach München.', exampleUz:'Biz ertaga Myunxenga boramiz.'},
+  {id:21, article:'', german:'schnell', uz:'tez', plural:'—', level:'A2.1', type:'Sifat', example:'Der ICE-Zug ist sehr schnell.', exampleUz:'ICE tezyurar poyezdi juda tez.'},
+  {id:22, article:'die', german:'Straße', uz:'ko‘cha', plural:'die Straßen', level:'A2.1', type:'Ot', example:'Diese Straße führt direkt zum Park.', exampleUz:'Bu ko‘cha to‘g‘ri parkka olib boradi.'},
+  {id:23, article:'', german:'teuer', uz:'qimmat', plural:'—', level:'A2.1', type:'Sifat', example:'Das Hotelzimmer war leider zu teuer.', exampleUz:'Mehmonxona xonasi afsuski juda qimmat edi.'},
+  {id:24, article:'', german:'reisen', uz:'sayohat qilmoq', plural:'—', level:'A2.1', type:'Fe’l', example:'Sie reist gerne durch ganz Europa.', exampleUz:'U butun Yevropa bo‘ylab sayohat qilishni yoqtiradi.'},
+
+  // A2.2
+  {id:25, article:'der', german:'Bahnhof', uz:'vokzal', plural:'die Bahnhöfe', level:'A2.2', type:'Ot', example:'Der Zug kommt pünktlich am Bahnhof an.', exampleUz:'Poyezd vokzalga o‘z vaqtida yetib keladi.'},
+  {id:26, article:'das', german:'Ticket', uz:'chipta', plural:'die Tickets', level:'A2.2', type:'Ot', example:'Ich habe das Ticket online gebucht.', exampleUz:'Men chiptani internet orqali buyurtma qildim.'},
+  {id:27, article:'der', german:'Flughafen', uz:'aeroport', plural:'die Flughäfen', level:'A2.2', type:'Ot', example:'Wir treffen uns am Flughafen Frankfurt.', exampleUz:'Biz Frankfurt aeroportida uchrashamiz.'},
+  {id:28, article:'', german:'bestellen', uz:'buyurtma bermoq', plural:'—', level:'A2.2', type:'Fe’l', example:'Möchten Sie schon das Essen bestellen?', exampleUz:'Ovqatni buyurtma berishni istaysizmi?'},
+  {id:29, article:'', german:'bezahlen', uz:'to‘lamoq', plural:'—', level:'A2.2', type:'Fe’l', example:'Kann ich mit Kreditkarte bezahlen?', exampleUz:'Kredit karta bilan to‘lasam bo‘ladimi?'},
+  {id:30, article:'', german:'pünktlich', uz:'o‘z vaqtida', plural:'—', level:'A2.2', type:'Sifat', example:'Die deutsche Bahn ist meistens pünktlich.', exampleUz:'Nemis temir yo‘li odatda o‘z vaqtida yuradi.'},
+  {id:31, article:'', german:'einfach', uz:'oddiy / oson', plural:'—', level:'A2.2', type:'Sifat', example:'Diese Grammatikregel ist sehr einfach.', exampleUz:'Bu grammatika qoidasi juda oson.'},
+  {id:32, article:'das', german:'Museum', uz:'muzey', plural:'die Museen', level:'A2.2', type:'Ot', example:'Am Sonntag besuchen wir das Kunstmuseum.', exampleUz:'Yakshanba kuni biz san’at muzeyiga boramiz.'},
+
+  // B1.1
+  {id:33, article:'die', german:'Erfahrung', uz:'tajriba', plural:'die Erfahrungen', level:'B1.1', type:'Ot', example:'Ich habe wertvolle Erfahrungen gesammelt.', exampleUz:'Men qimmatli tajribalar orttirdim.'},
+  {id:34, article:'die', german:'Entscheidung', uz:'qaror', plural:'die Entscheidungen', level:'B1.1', type:'Ot', example:'Das war eine sehr wichtige Entscheidung.', exampleUz:'Bu juda muhim qaror edi.'},
+  {id:35, article:'das', german:'Angebot', uz:'taklif', plural:'die Angebote', level:'B1.1', type:'Ot', example:'Das Unternehmen hat ein gutes Angebot gemacht.', exampleUz:'Kompaniya yaxshi taklif bildirdi.'},
+  {id:36, article:'', german:'vorschlagen', uz:'taklif qilmoq', plural:'—', level:'B1.1', type:'Fe’l', example:'Was schlagen Sie für das Projekt vor?', exampleUz:'Loyiha uchun nima taklif qilasiz?'},
+  {id:37, article:'', german:'vergleichen', uz:'taqqoslamoq', plural:'—', level:'B1.1', type:'Fe’l', example:'Man sollte immer die Preise vergleichen.', exampleUz:'Har doim narxlarni taqqoslash kerak.'},
+  {id:38, article:'', german:'wichtig', uz:'muhim', plural:'—', level:'B1.1', type:'Sifat', example:'Regelmäßiges Üben ist besonders wichtig.', exampleUz:'Muntazam mashq qilish ayniqsa muhim.'},
+  {id:39, article:'die', german:'Zukunft', uz:'kelajak', plural:'—', level:'B1.1', type:'Ot', example:'Wir planen optimistisch für die Zukunft.', exampleUz:'Biz kelajakka optimizm bilan reja tuzamiz.'},
+  {id:40, article:'', german:'erklären', uz:'tushuntirmoq', plural:'—', level:'B1.1', type:'Fe’l', example:'Können Sie diese Regel bitte nochmals erklären?', exampleUz:'Iltimos, ushbu qoidani yana bir bor tushuntirib bera olasizmi?'},
+
+  // B1.2
+  {id:41, article:'die', german:'Möglichkeit', uz:'imkoniyat', plural:'die Möglichkeiten', level:'B1.2', type:'Ot', example:'Deutschland bietet viele Bildungsmöglichkeiten.', exampleUz:'Germaniya ko‘plab ta’lim imkoniyatlarini taqdim etadi.'},
+  {id:42, article:'der', german:'Erfolg', uz:'muvaffaqiyat', plural:'die Erfolge', level:'B1.2', type:'Ot', example:'Fleißiges Lernen bringt sicheren Erfolg.', exampleUz:'Qunt bilan o‘rganish aniq muvaffaqiyat keltiradi.'},
+  {id:43, article:'das', german:'Ziel', uz:'maqsad', plural:'die Ziele', level:'B1.2', type:'Ot', example:'Mein Ziel ist das Goethe-Zertifikat B2.', exampleUz:'Mening maqsadim — Gyote B2 sertifikati.'},
+  {id:44, article:'', german:'erreichen', uz:'erishmoq', plural:'—', level:'B1.2', type:'Fe’l', example:'Mit Disziplin kann man jedes Ziel erreichen.', exampleUz:'Intizom bilan har qanday maqsadga erishish mumkin.'},
+  {id:45, article:'', german:'überzeugen', uz:'ishontirmoq', plural:'—', level:'B1.2', type:'Fe’l', example:'Seine Argumente konnten alle überzeugen.', exampleUz:'Uning dalillari barchani ishontira oldi.'},
+  {id:46, article:'', german:'erfolgreich', uz:'muvaffaqiyatli', plural:'—', level:'B1.2', type:'Sifat', example:'Sie hat die Prüfung sehr erfolgreich bestanden.', exampleUz:'U imtihondan juda muvaffaqiyatli o‘tdi.'},
+  {id:47, article:'die', german:'Verantwortung', uz:'mas’uliyat', plural:'die Verantwortungen', level:'B1.2', type:'Ot', example:'Er übernimmt gerne Verantwortung im Team.', exampleUz:'U jamoada bajonidil mas’uliyatni o‘z zimmasiga oladi.'},
+  {id:48, article:'', german:'entwickeln', uz:'rivojlantirmoq', plural:'—', level:'B1.2', type:'Fe’l', example:'Wir entwickeln moderne Lernprogramme.', exampleUz:'Biz zamonaviy o‘quv dasturlarini ishlab chiqamiz.'}
 ];
-const stages=['Kirish','Muloqot','Lug‘at','Grammatika','Tinglash','O‘qish','Yozish','Shadowing','Mashqlar'];
-const lessons=[{de:'Hallo!',uz:'Salomlashuv va tanishuv',unlocked:true},{de:'Wie heißt du?',uz:'Ism va o‘zingiz haqingizda',unlocked:true},{de:'Meine Familie',uz:'Oila haqida suhbat',unlocked:true},{de:'Im Café',uz:'Kafeda buyurtma berish',unlocked:false},{de:'Mein Alltag',uz:'Kundalik hayot',unlocked:false},{de:'In der Stadt',uz:'Shaharda yo‘l topish',unlocked:false}];
-const state={view:'home',step:0,completed:0,xp:0,minutes:0,streak:0,level:'Barchasi',type:'Barchasi',mode:'table',favorites:new Set(),mastered:new Set(),answered:new Set(),examFilter:'Hören',selectedExam:'Hören · A1',examSeconds:1200,examTimer:null,examRunning:false,examAnswers:{},attempts:[],audio:false,flashIndex:0};
-let toastTimer,lastFocus=null,speechToken=0;
-const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));
-function icons(){window.lucide?.createIcons()}
-function toast(msg){const el=$('#toast');el.textContent=msg;el.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.hidden=true,3500)}
-function celebrate(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;for(let i=0;i<12;i++){const n=document.createElement('span');n.className='burst';n.textContent=i%3?'✦':'★';n.style.left='50%';n.style.top='42%';n.style.color=['#f59e0b','#4338ca','#10b981'][i%3];n.style.setProperty('--dx',`${Math.cos(i*Math.PI/6)*130}px`);n.style.setProperty('--dy',`${Math.sin(i*Math.PI/6)*110}px`);document.body.append(n);setTimeout(()=>n.remove(),900)}}
-function closeMenus(){$('#library-menu').hidden=true;$('#library-toggle').setAttribute('aria-expanded','false');$('#mobile-sheet').hidden=true;$('#mobile-menu-open').setAttribute('aria-expanded','false')}
-function closeOverlays(restore=true){const open=$$('.overlay').some(el=>!el.hidden);$$('.overlay').forEach(el=>el.hidden=true);if(open&&restore)lastFocus?.focus()}
-function show(view,step){if(!$('#view-'+view))return;stopAudio();closeMenus();closeOverlays(false);state.view=view;if(Number.isInteger(step))state.step=step;$$('.view').forEach(el=>el.classList.toggle('active',el.id==='view-'+view));$$('[data-view]').forEach(el=>{const active=el.dataset.view===view&&!el.hasAttribute('data-step');el.classList.toggle('active',active);if(el.closest('nav'))el.setAttribute('aria-current',active?'page':'false')});if(view==='lesson')renderLesson();if(view==='dashboard')renderDashboard();if(view==='certificate')renderExamOptions();window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'})}
+
+const stages = ['Kirish','Muloqot','Lug‘at','Grammatika','Tinglash','O‘qish','Yozish','Shadowing','Mashqlar'];
+
+const lessons = [
+  {de:'Hallo!', uz:'Salomlashuv va tanishuv', unlocked:true},
+  {de:'Wie heißt du?', uz:'Ism va o‘zingiz haqingizda', unlocked:false},
+  {de:'Meine Familie', uz:'Oila haqida suhbat', unlocked:false},
+  {de:'Im Café', uz:'Kafeda buyurtma berish', unlocked:false},
+  {de:'Mein Alltag', uz:'Kundalik hayot va reja', unlocked:false},
+  {de:'In der Stadt', uz:'Shaharda yo‘l topish', unlocked:false}
+];
+
+const lessonData = [
+  // 0: Hallo!
+  {
+    title: 'Hallo! · Salomlashuv va tanishuv',
+    intro: {
+      phrase: 'Guten Tag!',
+      translation: 'Xayrli kun!',
+      desc: 'Bugun nemischa rasmiy va norasmiy salomlashish hamda o‘zingizni tanishtirish asoslarini o‘rganasiz.'
+    },
+    dialogue: [
+      {speaker:'Anna', persona:'anna', de:'Guten Tag! Wie heißt du?', uz:'Xayrli kun! Isming nima?'},
+      {speaker:'Ali', persona:'ali', de:'Ich heiße Ali. Und du?', uz:'Mening ismim Ali. Sening-chi?'},
+      {speaker:'Anna', persona:'anna', de:'Ich heiße Anna. Freut mich!', uz:'Mening ismim Anna. Tanishganimdan xursandman!'}
+    ],
+    vocabIds: [1, 2, 3, 4],
+    grammar: {
+      title1: 'V2 so‘z tartibi',
+      desc1: 'Tuslangan fe’l oddiy gapda har doim ikkinchi o‘rinda keladi: <strong>Ich lerne Deutsch.</strong>',
+      title2: 'Artikllar (der, die, das)',
+      desc2: 'Nemis tilida har bir ot o‘z jinsiga ko‘ra artikl oladi: <strong>der</strong> (muzskoy), <strong>die</strong> (jenskiy), <strong>das</strong> (sredniy).',
+      note: 'Xatolikdan saqlaning: “Ich Deutsch lerne” emas, fe’l doim 2-o‘rinda: “Ich lerne Deutsch”.'
+    },
+    listening: {
+      text: 'Ich lerne Deutsch.',
+      prompt: 'Audio gapda qaysi fe’l yangradi?',
+      choices: [['spreche', false], ['lerne', true], ['wohne', false]],
+      feedback: 'To‘g‘ri! Gapda “lerne” fe’li ishlatildi.'
+    },
+    reading: {
+      text: 'Ich heiße Sara. Ich komme aus Usbekistan. Ich lerne Deutsch und lese gern Bücher.',
+      translation: 'Mening ismim Sara. Men O‘zbekistondanman. Men nemis tilini o‘rganaman va kitob o‘qishni yaxshi ko‘raman.',
+      prompt: 'Sara qayerdan kelgan?',
+      choices: [['O‘zbekistondan', true], ['Germaniyadan', false], ['Avstriyadan', false]]
+    },
+    writing: {
+      prompt: '“Men nemis tilini o‘rganaman” jumlasini nemischa yozing.',
+      placeholder: 'Ich ...',
+      answers: ['ich lerne deutsch', 'ich lerne deutsch.'],
+      hint: 'Maslahat: Ich + lerne + Deutsch'
+    },
+    shadowing: {
+      text: 'Guten Tag! Ich heiße Anna.',
+      translation: 'Xayrli kun! Mening ismim Anna.'
+    },
+    quizzes: [
+      {id:'l0_q1', prompt:'1. “Kitob” so‘zining to‘g‘ri artikli qaysi?', choices:[['der Buch', false], ['das Buch', true], ['die Buch', false]], correctText:'To‘g‘ri: das Buch (sredniy rod).'},
+      {id:'l0_q2', prompt:'2. Ich ___ Deutsch.', choices:[['lerne', true], ['lernst', false], ['lernt', false]], correctText:'To‘g‘ri: “ich” olmoshi bilan -e qo‘shimchasi (lerne).'},
+      {id:'l0_q3', prompt:'3. die Lampe nimani anglatadi?', choices:[['chiroq', true], ['stol', false], ['kitob', false]], correctText:'To‘g‘ri: die Lampe — chiroq.'},
+      {id:'l0_q4', prompt:'4. “Wie heißt du?” savoliga mos javob:', choices:[['Ich heiße Ali', true], ['Ich komme Taschkent', false], ['Danke gut', false]], correctText:'To‘g‘ri: “Ich heiße ...” ismi aytiladi.'}
+    ]
+  },
+
+  // 1: Wie heißt du?
+  {
+    title: 'Wie heißt du? · O‘zingiz haqingizda suhbat',
+    intro: {
+      phrase: 'Freut mich, Sie kennenzulernen!',
+      translation: 'Siz bilan tanishganimdan mamnunman!',
+      desc: 'Bu darsda qayerdan ekansiz, qayerda yashaysiz va kasbingiz haqida suhbatlashishni o‘rganasiz.'
+    },
+    dialogue: [
+      {speaker:'Ali', persona:'ali', de:'Hallo Anna! Woher kommst du?', uz:'Salom Anna! Qayerdansan?'},
+      {speaker:'Anna', persona:'anna', de:'Ich komme aus Berlin. Und wo wohnst du?', uz:'Men Berlindanman. Sen qayerda yashaysan?'},
+      {speaker:'Ali', persona:'ali', de:'Ich wohne in Taschkent. Ich bin Student.', uz:'Men Toshkentda yashayman. Men talabaman.'}
+    ],
+    vocabIds: [6, 10, 13, 8],
+    grammar: {
+      title1: 'Savol so‘zlari (W-Fragen)',
+      desc1: '<strong>Woher</strong> (qayerdan), <strong>Wo</strong> (qayerda), <strong>Wie</strong> (qanday / qanaqa) gap boshida keladi.',
+      title2: 'Fe’l tuslanishi: kommen / wohnen',
+      desc2: 'ich <strong>komme</strong>, du <strong>kommst</strong>, er/sie <strong>kommt</strong>, wir <strong>kommen</strong>.',
+      note: 'Eslatma: Mamlakatdan kelishda “aus” (Ich komme aus Usbekistan), shaharda yashashda “in” (Ich wohne in Taschkent).'
+    },
+    listening: {
+      text: 'Woher kommen Sie?',
+      prompt: 'Savolda nima so‘ralmoqda?',
+      choices: [['Qayerda yashaysiz?', false], ['Qayerdan kelgansiz?', true], ['Ismingiz nima?', false]],
+      feedback: 'To‘g‘ri! “Woher” — qayerdan ma’nosini bildiradi.'
+    },
+    reading: {
+      text: 'Mein Name ist Martin. Ich komme aus Österreich und wohne in Wien. Ich spreche Deutsch und Englisch.',
+      translation: 'Mening ismim Martin. Men Avstriyadanman va Venada yashayman. Men nemischa va inglizcha gapiraman.',
+      prompt: 'Martin qaysi shaharda yashaydi?',
+      choices: [['Berlin', false], ['Wien', true], ['München', false]]
+    },
+    writing: {
+      prompt: '“Men Toshkentda yashayman” jumlasini nemischa yozing.',
+      placeholder: 'Ich wohne ...',
+      answers: ['ich wohne in taschkent', 'ich wohne in taschkent.'],
+      hint: 'Maslahat: Ich wohne in Taschkent'
+    },
+    shadowing: {
+      text: 'Woher kommen Sie? — Ich komme aus Usbekistan.',
+      translation: 'Qayerdansiz? — Men O‘zbekistondanman.'
+    },
+    quizzes: [
+      {id:'l1_q1', prompt:'1. “Woher kommst du?” savoliga qanday javob beriladi?', choices:[['Ich komme aus Taschkent', true], ['Ich wohne aus Taschkent', false]], correctText:'To‘g‘ri: komme aus ... shakli to‘g‘ri.'},
+      {id:'l1_q2', prompt:'2. Du ___ in Berlin.', choices:[['wohne', false], ['wohnst', true], ['wohnt', false]], correctText:'To‘g‘ri: “du” olmoshi uchun -st qo‘shimchasi (wohnst).'},
+      {id:'l1_q3', prompt:'3. “Wie heißt du?” nimani anglatadi?', choices:[['Qayerdansan?', false], ['Isming nima?', true], ['Yoshing nechada?', false]], correctText:'To‘g‘ri: Ismni so‘rash.'},
+      {id:'l1_q4', prompt:'4. “der Name” so‘zining ko‘pligi qaysi?', choices:[['die Namen', true], ['die Namer', false], ['die Names', false]], correctText:'To‘g‘ri: die Namen.'}
+    ]
+  },
+
+  // 2: Meine Familie
+  {
+    title: 'Meine Familie · Oila haqida suhbat',
+    intro: {
+      phrase: 'Das ist meine Familie.',
+      translation: 'Bu mening oilam.',
+      desc: 'Oila a’zolari (ota-ona, aka-uka, opa-singil) va egalik olmoshlari (mein/meine).'
+    },
+    dialogue: [
+      {speaker:'Anna', persona:'anna', de:'Ali, hast du Geschwister?', uz:'Ali, aka-uka yoki opa-singling bormi?'},
+      {speaker:'Ali', persona:'ali', de:'Ja, ich habe einen Bruder und eine Schwester.', uz:'Ha, bitta akam va bitta singlim bor.'},
+      {speaker:'Anna', persona:'anna', de:'Wie schön! Meine Familie ist klein.', uz:'Qanday ajoyib! Mening oilam kichik.'}
+    ],
+    vocabIds: [10, 11, 12, 16],
+    grammar: {
+      title1: 'Egalik olmoshlari: mein / meine',
+      desc1: 'Muzskoy va sredniy otlar uchun: <strong>mein Vater</strong>, <strong>mein Buch</strong>. Jenskiy va ko‘plik uchun: <strong>meine Mutter</strong>, <strong>meine Schwestern</strong>.',
+      title2: 'haben fe’li (ega bo‘lmoq)',
+      desc2: 'ich <strong>habe</strong>, du <strong>hast</strong>, er/sie <strong>hat</strong>, wir <strong>haben</strong>.',
+      note: 'Akkusativ qoidasi: Erkak jinsidagi otlar “einen” oladi: Ich habe <strong>einen</strong> Bruder.'
+    },
+    listening: {
+      text: 'Ich habe einen Bruder und eine Schwester.',
+      prompt: 'Suhbatdosh nechta aka-ukaga ega?',
+      choices: [['2 ta uka', false], ['1 ta aka/uka', true], ['Aka-ukasi yo‘q', false]],
+      feedback: 'To‘g‘ri! “einen Bruder” — bitta aka/uka.'
+    },
+    reading: {
+      text: 'Meine Familie wohnt in Samarkand. Mein Vater ist Ingenieur und meine Mutter ist Lehrerin. Wir haben ein großes Haus.',
+      translation: 'Mening oilam Samarqandda yashaydi. Otam muhandis, onam esa o‘qituvchi. Bizning katta uyimiz bor.',
+      prompt: 'Onaning kasbi nima?',
+      choices: [['Shifokor', false], ['O‘qituvchi (Lehrerin)', true], ['Muhandis', false]]
+    },
+    writing: {
+      prompt: '“Mening oilam katta” jumlasini nemischa yozing.',
+      placeholder: 'Meine Familie ...',
+      answers: ['meine familie ist gross', 'meine familie ist groß', 'meine familie ist groß.', 'meine familie ist gross.'],
+      hint: 'Maslahat: Meine Familie ist groß'
+    },
+    shadowing: {
+      text: 'Das ist mein Bruder und das ist meine Schwester.',
+      translation: 'Bu mening akam, bu esa singlim.'
+    },
+    quizzes: [
+      {id:'l2_q1', prompt:'1. Otam demoqchi bo‘lsangiz:', choices:[['mein Vater', true], ['meine Vater', false]], correctText:'To‘g‘ri: Vater — der Vater bo‘lgani uchun “mein Vater”.'},
+      {id:'l2_q2', prompt:'2. Du ___ eine Schwester.', choices:[['habe', false], ['hast', true], ['hat', false]], correctText:'To‘g‘ri: du hast.'},
+      {id:'l2_q3', prompt:'3. die Schwester so‘zining ko‘plik shakli:', choices:[['die Schwestern', true], ['die Schwestere', false]], correctText:'To‘g‘ri: die Schwestern.'},
+      {id:'l2_q4', prompt:'4. “Er hat einen Bruder” jumlasida “einen” qaysi kelishik?', choices:[['Nominativ', false], ['Akkusativ', true], ['Dativ', false]], correctText:'To‘g‘ri: haben fe’lidan so‘ng Akkusativ keladi.'}
+    ]
+  },
+
+  // 3: Im Café
+  {
+    title: 'Im Café · Kafeda buyurtma berish',
+    intro: {
+      phrase: 'Ich möchte bitte einen Kaffee.',
+      translation: 'Iltimos, bitta kofe xohlardim.',
+      desc: 'Restoran va kafeda muloyimlik bilan buyurtma berish, hisobni so‘rash va to‘lash.'
+    },
+    dialogue: [
+      {speaker:'Anna', persona:'anna', de:'Guten Tag! Was möchten Sie bestellen?', uz:'Xayrli kun! Nima buyurtma berasiz?'},
+      {speaker:'Ali', persona:'ali', de:'Ich möchte bitte einen Kaffee und ein Stück Kuchen.', uz:'Iltimos, bitta kofe va bir bo‘lak pirog xohlardim.'},
+      {speaker:'Anna', persona:'anna', de:'Sehr gerne! Zusammen oder getrennt zahlen?', uz:'Bajonidil! Birgalikda yoki alohida to‘laysizmi?'}
+    ],
+    vocabIds: [7, 14, 15, 29],
+    grammar: {
+      title1: 'Muloyim xohish: “Ich möchte...”',
+      desc1: 'Kafeda narsa so‘raganda: <strong>Ich möchte bitte...</strong> (Men ... xohlardim).',
+      title2: 'Akkusativ artikllari',
+      desc2: 'der Kaffee ➔ <strong>einen Kaffee</strong>, das Wasser ➔ <strong>ein Wasser</strong>, die Cola ➔ <strong>eine Cola</strong>.',
+      note: 'Hisob so‘rash iborasi: “Zahlen, bitte!” yoki “Die Rechnung, bitte!”'
+    },
+    listening: {
+      text: 'Was möchten Sie trinken? Einen Kaffee bitte.',
+      prompt: 'Mijoz qanday ichimlik buyurdi?',
+      choices: [['Choy', false], ['Kofe', true], ['Sharbat', false]],
+      feedback: 'To‘g‘ri! “Einen Kaffee bitte”.'
+    },
+    reading: {
+      text: 'Im Café Mozart kostet ein Espresso zwei Euro und ein Cappuccino drei Euro fünfzig. Man kann bar oder mit Karte bezahlen.',
+      translation: 'Motsart kafesida espresso 2 yevro, kapuchino esa 3.50 yevro turadi. Naqd yoki karta bilan to‘lash mumkin.',
+      prompt: 'Espresso narxi qancha?',
+      choices: [['2 yevro', true], ['3.50 yevro', false], ['5 yevro', false]]
+    },
+    writing: {
+      prompt: '“Iltimos, bitta kofe” jumlasini nemischa yozing.',
+      placeholder: 'Einen Kaffee ...',
+      answers: ['einen kaffee bitte', 'einen kaffee, bitte', 'einen kaffee bitte.', 'einen kaffee, bitte.'],
+      hint: 'Maslahat: Einen Kaffee bitte.'
+    },
+    shadowing: {
+      text: 'Ich möchte bitte bezahlen. Zusammen, bitte.',
+      translation: 'Iltimos, to‘lamoqchiman. Birgalikda hisoblang.'
+    },
+    quizzes: [
+      {id:'l3_q1', prompt:'1. “Ich möchte ___ Kaffee” (der Kaffee):', choices:[['einen', true], ['ein', false], ['eine', false]], correctText:'To‘g‘ri: Akkusativ erkak jinsi — einen.'},
+      {id:'l3_q2', prompt:'2. “Zahlen, bitte!” iborasining ma’nosi:', choices:[['Buyurtma berish', false], ['Hisobni to‘lash', true], ['Salomlashish', false]], correctText:'To‘g‘ri: Hisobni to‘lash.'},
+      {id:'l3_q3', prompt:'3. trinken fe’lining “wir” uchun shakli:', choices:[['trinke', false], ['trinkt', false], ['trinken', true]], correctText:'To‘g‘ri: wir trinken.'},
+      {id:'l3_q4', prompt:'4. “bezahlen” fe’lining ma’nosi:', choices:[['ichmoq', false], ['to‘lamoq', true], ['buyurtma bermoq', false]], correctText:'To‘g‘ri: bezahlen — to‘lamoq.'}
+    ]
+  },
+
+  // 4: Mein Alltag
+  {
+    title: 'Mein Alltag · Kundalik hayot va reja',
+    intro: {
+      phrase: 'Um wie viel Uhr stehst du auf?',
+      translation: 'Soat nechada o‘rningdan turasan?',
+      desc: 'Kundalik odatlar, vaqtni aytish va ajraladigan prefiksli fe’llar (aufstehen, anfangen).'
+    },
+    dialogue: [
+      {speaker:'Ali', persona:'ali', de:'Anna, wann beginnt dein Tag?', uz:'Anna, kuning qachon boshlanadi?'},
+      {speaker:'Anna', persona:'anna', de:'Ich stehe um sieben Uhr auf und frühstücke.', uz:'Men soat yettida turaman va nonushta qilaman.'},
+      {speaker:'Ali', persona:'ali', de:'Um acht Uhr fahre ich mit dem Bus zur Arbeit.', uz:'Soat sakkizda avtobusda ishga boraman.'}
+    ],
+    vocabIds: [19, 20, 21, 30],
+    grammar: {
+      title1: 'Ajraladigan fe’llar (Trennbare Verben)',
+      desc1: '<strong>aufstehen</strong>: Ich <strong>stehe</strong> um 7 Uhr <strong>auf</strong>. Prefiks gap oxiriga boradi!',
+      title2: 'Vaqtni ifodalash (um + Uhr)',
+      desc2: '<strong>Um</strong> 8 Uhr (soat 8 da), <strong>am</strong> Morgen (ertalab), <strong>am</strong> Abend (kechqurun).',
+      note: 'Diqqat qiling: prefiks har doim gapning eng oxirida keladi: Ich fange morgen an.'
+    },
+    listening: {
+      text: 'Der Zug fährt um neun Uhr ab.',
+      prompt: 'Poyezd soat nechada jo‘naydi?',
+      choices: [['Soat 7 da', false], ['Soat 8 da', false], ['Soat 9 da', true]],
+      feedback: 'To‘g‘ri! “um neun Uhr” — soat 9 da.'
+    },
+    reading: {
+      text: 'Jeden Morgen joggt Thomas eine halbe Stunde im Park. Danach trinkt er grünen Tee und liest die Nachrichten.',
+      translation: 'Har tong Tomas parkda yarim soat yuguradi. Shundan so‘ng u ko‘k choy ichadi va yangiliklarni o‘qiydi.',
+      prompt: 'Tomas parkda nima qiladi?',
+      choices: [['Kitob o‘qiydi', false], ['Yuguradi (joggt)', true], ['Kofe ichadi', false]]
+    },
+    writing: {
+      prompt: '“Men soat yettida turaman” jumlasini nemischa yozing.',
+      placeholder: 'Ich stehe um ...',
+      answers: ['ich stehe um sieben uhr auf', 'ich stehe um 7 uhr auf', 'ich stehe um sieben uhr auf.', 'ich stehe um 7 uhr auf.'],
+      hint: 'Maslahat: Ich stehe um sieben Uhr auf.'
+    },
+    shadowing: {
+      text: 'Ich stehe jeden Morgen früh auf.',
+      translation: 'Men har tong erta o‘rnimdan turaman.'
+    },
+    quizzes: [
+      {id:'l4_q1', prompt:'1. “aufstehen” fe’lining gapdagi to‘g‘ri tartibi:', choices:[['Ich aufstehe früh', false], ['Ich stehe früh auf', true]], correctText:'To‘g‘ri: prefiks (auf) gap oxiriga o‘tadi.'},
+      {id:'l4_q2', prompt:'2. Soat 8 da demoqchi bo‘lsangiz:', choices:[['am 8 Uhr', false], ['um 8 Uhr', true], ['in 8 Uhr', false]], correctText:'To‘g‘ri: soat uchun “um” ishlatiladi.'},
+      {id:'l4_q3', prompt:'3. “pünktlich” so‘zining ma’nosi:', choices:[['kech', false], ['o‘z vaqtida', true], ['tez', false]], correctText:'To‘g‘ri: pünktlich — punktual, o‘z vaqtida.'},
+      {id:'l4_q4', prompt:'4. Er ___ mit dem Zug nach Berlin.', choices:[['fahre', false], ['fährt', true], ['fahren', false]], correctText:'To‘g‘ri: er fährt (a ➔ ä o‘zgarishi bilan).'}
+    ]
+  },
+
+  // 5: In der Stadt
+  {
+    title: 'In der Stadt · Shaharda yo‘l topish',
+    intro: {
+      phrase: 'Entschuldigung, wo ist der Bahnhof?',
+      translation: 'Kechirasiz, vokzal qayerda?',
+      desc: 'Shaharda mo‘ljal olish, yo‘nalish so‘rash va tushuntirish (to‘g‘riga, o‘ngga, chapga).'
+    },
+    dialogue: [
+      {speaker:'Ali', persona:'ali', de:'Entschuldigung, wie komme ich zum Bahnhof?', uz:'Kechirasiz, vokzalga qanday borsam bo‘ladi?'},
+      {speaker:'Anna', persona:'anna', de:'Gehen Sie geradeaus und dann nach rechts.', uz:'To‘g‘riga yuring va keyin o‘ng tomonga buriling.'},
+      {speaker:'Ali', persona:'ali', de:'Vielen Dank für Ihre Hilfe!', uz:'Yordamingiz uchun katta rahmat!'}
+    ],
+    vocabIds: [22, 25, 26, 31],
+    grammar: {
+      title1: 'Yo‘nalish iboralari',
+      desc1: '<strong>geradeaus</strong> (to‘g‘riga), <strong>nach links</strong> (chapga), <strong>nach rechts</strong> (o‘ngga).',
+      title2: 'Buyruq mayli (Imperativ Sie)',
+      desc2: 'Hurmat shaklida: <strong>Gehen Sie...</strong> (Yuring), <strong>Biegen Sie ab...</strong> (Buriling).',
+      note: 'Dativ bilan qo‘llanish: zum Bahnhof (zu + dem), zur Post (zu + der).'
+    },
+    listening: {
+      text: 'Biegen Sie an der Kreuzung nach links ab.',
+      prompt: 'Qaysi tomonga burilish aytildi?',
+      choices: [['To‘g‘riga', false], ['O‘ngga', false], ['Chapga (nach links)', true]],
+      feedback: 'To‘g‘ri! “nach links” — chap tomonga.'
+    },
+    reading: {
+      text: 'Das Museum liegt direkt neben der Universität. Sie können mit der U-Bahn Linie 2 fahren und an der Station Stadtmitte aussteigen.',
+      translation: 'Muzey to‘g‘ridan-to‘g‘ri universitet yonida joylashgan. Siz 2-metro yo‘nalishida yurib, Stadtmitte bekatida tushishingiz mumkin.',
+      prompt: 'Muzey qayerda joylashgan?',
+      choices: [['Aeroportda', false], ['Universitet yonida', true], ['Park ichida', false]]
+    },
+    writing: {
+      prompt: '“To‘g‘riga yuring” jumlasini nemischa yozing.',
+      placeholder: 'Gehen Sie ...',
+      answers: ['gehen sie geradeaus', 'gehen sie geradeaus.'],
+      hint: 'Maslahat: Gehen Sie geradeaus'
+    },
+    shadowing: {
+      text: 'Entschuldigung, wo ist der Bahnhof? — Gehen Sie geradeaus.',
+      translation: 'Kechirasiz, vokzal qayerda? — To‘g‘riga yuring.'
+    },
+    quizzes: [
+      {id:'l5_q1', prompt:'1. “nach rechts” nimani anglatadi?', choices:[['chapga', false], ['o‘ngga', true], ['to‘g‘riga', false]], correctText:'To‘g‘ri: nach rechts — o‘ngga.'},
+      {id:'l5_q2', prompt:'2. “der Bahnhof” so‘zining ma’nosi:', choices:[['aeroport', false], ['vokzal', true], ['muzey', false]], correctText:'To‘g‘ri: der Bahnhof — temir yo‘l vokzali.'},
+      {id:'l5_q3', prompt:'3. Gehen ___ bitte geradeaus.', choices:[['du', false], ['Sie', true], ['ihr', false]], correctText:'To‘g‘ri: Gehen Sie (hurmat shakli).'},
+      {id:'l5_q4', prompt:'4. “chipta” so‘zi nemischada nima?', choices:[['das Ticket', true], ['die Straße', false], ['die Arbeit', false]], correctText:'To‘g‘ri: das Ticket.'}
+    ]
+  }
+];
+
+const STORAGE_KEY = 'fly_high_german_v2';
+
+const state = {
+  view: 'home',
+  step: 0,
+  currentLesson: 0,
+  completed: 0,
+  xp: 0,
+  minutes: 0,
+  streak: 0,
+  energy: 5,
+  lastActiveDate: '',
+  level: 'Barchasi',
+  type: 'Barchasi',
+  mode: 'table',
+  favorites: new Set(),
+  mastered: new Set(),
+  answered: new Set(),
+  examFilter: 'Hören',
+  selectedExam: 'Hören · A1',
+  examSeconds: 1200,
+  examTimer: null,
+  examRunning: false,
+  examAnswers: {},
+  attempts: [],
+  audio: false,
+  flashIndex: 0
+};
+
+let toastTimer, lastFocus = null;
+
+function saveState() {
+  try {
+    const data = {
+      completed: state.completed,
+      xp: state.xp,
+      minutes: state.minutes,
+      streak: state.streak,
+      energy: state.energy,
+      lastActiveDate: state.lastActiveDate,
+      favorites: [...state.favorites],
+      mastered: [...state.mastered],
+      answered: [...state.answered],
+      attempts: state.attempts,
+      unlocked: lessons.map(l => l.unlocked),
+      dark: document.body.classList.contains('dark')
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch (e) {
+    console.warn('Storage save error:', e);
+  }
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    if (Number.isInteger(data.completed)) state.completed = data.completed;
+    if (Number.isInteger(data.xp)) state.xp = data.xp;
+    if (Number.isInteger(data.minutes)) state.minutes = data.minutes;
+    if (Number.isInteger(data.streak)) state.streak = data.streak;
+    if (Number.isInteger(data.energy)) state.energy = Math.max(0, Math.min(5, data.energy));
+    if (data.lastActiveDate) state.lastActiveDate = data.lastActiveDate;
+    if (Array.isArray(data.favorites)) state.favorites = new Set(data.favorites);
+    if (Array.isArray(data.mastered)) state.mastered = new Set(data.mastered);
+    if (Array.isArray(data.answered)) state.answered = new Set(data.answered);
+    if (Array.isArray(data.attempts)) state.attempts = data.attempts;
+    if (Array.isArray(data.unlocked)) {
+      data.unlocked.forEach((u, i) => { if (lessons[i]) lessons[i].unlocked = Boolean(u); });
+    }
+    // Always unlock lessons up to completed
+    for (let i = 0; i <= state.completed && i < lessons.length; i++) {
+      lessons[i].unlocked = true;
+    }
+    if (data.dark) {
+      document.body.classList.add('dark');
+    }
+  } catch (e) {
+    console.warn('Storage load error:', e);
+  }
+}
+
+function checkStreak() {
+  const today = new Date().toISOString().slice(0, 10);
+  if (!state.lastActiveDate) {
+    state.streak = state.xp > 0 ? 1 : 0;
+    state.lastActiveDate = today;
+  } else if (state.lastActiveDate !== today) {
+    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+    if (state.lastActiveDate !== yesterday && state.streak > 0) {
+      state.streak = 1; // streak reset to 1 on return
+    }
+    state.lastActiveDate = today;
+  }
+  saveState();
+}
+
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));
+function icons() { window.lucide?.createIcons(); }
+function toast(msg) {
+  const el = $('#toast');
+  if (!el) return;
+  el.textContent = msg;
+  el.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.hidden = true, 3500);
+}
+
+function celebrate() {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  for (let i = 0; i < 16; i++) {
+    const n = document.createElement('span');
+    n.className = 'burst';
+    n.textContent = i % 3 ? '✦' : '★';
+    n.style.left = '50%';
+    n.style.top = '42%';
+    n.style.color = ['#f59e0b', '#4338ca', '#10b981', '#ef4444'][i % 4];
+    n.style.setProperty('--dx', `${Math.cos(i * Math.PI / 8) * 140}px`);
+    n.style.setProperty('--dy', `${Math.sin(i * Math.PI / 8) * 120}px`);
+    document.body.append(n);
+    setTimeout(() => n.remove(), 950);
+  }
+}
+
+function updateEnergyUI() {
+  const h = $('#header-energy');
+  if (h) h.textContent = `${state.energy}/5 ❤️`;
+  const home = $('#home-energy');
+  if (home) home.textContent = `${state.energy}/5`;
+}
+
+function decrementEnergy() {
+  state.energy = Math.max(0, state.energy - 1);
+  updateEnergyUI();
+  saveState();
+  toast(`Noto‘g‘ri javob! Energiya: ${state.energy}/5 ❤️`);
+}
+
+function replenishEnergy() {
+  if (state.energy < 5) {
+    state.energy = Math.min(5, state.energy + 1);
+    updateEnergyUI();
+    saveState();
+    toast(`+1 Energiya tiklandi! (${state.energy}/5 ❤️)`);
+  }
+}
+
+function closeMenus() {
+  $('#library-menu').hidden = true;
+  $('#library-toggle').setAttribute('aria-expanded', 'false');
+  $('#mobile-sheet').hidden = true;
+  $('#mobile-menu-open').setAttribute('aria-expanded', 'false');
+}
+
+function closeOverlays(restore = true) {
+  const open = $$('.overlay').some(el => !el.hidden);
+  $$('.overlay').forEach(el => el.hidden = true);
+  if (open && restore) lastFocus?.focus();
+}
+
+function show(view, step) {
+  if (!$('#view-' + view)) return;
+  stopAudio();
+  closeMenus();
+  closeOverlays(false);
+  state.view = view;
+  if (Number.isInteger(step)) state.step = step;
+  $$('.view').forEach(el => el.classList.toggle('active', el.id === 'view-' + view));
+  $$('[data-view]').forEach(el => {
+    const active = el.dataset.view === view && !el.hasAttribute('data-step');
+    el.classList.toggle('active', active);
+    if (el.closest('nav')) el.setAttribute('aria-current', active ? 'page' : 'false');
+  });
+  if (view === 'lesson') renderLesson();
+  if (view === 'dashboard') renderDashboard();
+  if (view === 'certificate') renderExamOptions();
+  window.scrollTo({top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'});
+}
+
 const AudioEngine = {
   activeAudio: null,
   activeToken: 0,
@@ -545,7 +1101,7 @@ const AudioEngine = {
     const deVoices = voices.filter(v => v.lang.toLowerCase().startsWith('de'));
     if (!deVoices.length) {
       cleanup();
-      toast('Nemischa audio uchun internet kerak (qurilmada nemischa ovoz paketi o‘rnatilmagan).');
+      toast('Nemischa audio uchun internet aloqasi kerak.');
       return;
     }
     const female = deVoices.find(v => /hedda|katja|marlene|vicki|female|zira|elke/i.test(v.name)) || deVoices[0];
@@ -656,203 +1212,1166 @@ function voiceButton(text, label, persona = '') {
 function voiceButtons(text, label, persona = '') {
   return `<span class="flex items-center gap-1">
     <button type="button" class="icon-btn" data-speak="${esc(text)}" ${persona ? `data-persona="${esc(persona)}"` : ''} title="Oddiy tezlikda tinglash" aria-label="${esc(label)}">▶</button>
-    <button type="button" class="turtle-btn" data-speak="${esc(text)}" data-persona="slow" title="Sekin talaffuz (0.65x)" aria-label="${esc(label)} sekin talaffuzi">🐢</button>
+    <button type="button" class="turtle-btn" data-speak="${esc(text)}" data-persona="slow" title="Sekin talaffuz (0.68x)" aria-label="${esc(label)} sekin talaffuzi">🐢</button>
   </span>`;
 }
-function earn(key,amount=10){if(state.answered.has(key))return;state.answered.add(key);state.xp+=amount;state.minutes=Math.min(20,state.minutes+1);renderDashboard();toast(`Ajoyib! +${amount} XP`);celebrate()}
-function renderLevels(){const names=['A1.1','A1.2','A2.1','A2.2','B1.1','B1.2'];$('#home-levels').innerHTML=names.map((name,i)=>`<article class="level-stop ${i===0?'active':'locked'}"><span class="node" aria-hidden="true">${i===0?'⚑':i===5?'🏅':'↗'}</span><div class="card locked-card"><span class="eyebrow">CEFR · ${name} · ${i===0?'FAOL':'KEYINGI MANZIL'}</span><strong>${i===0?'Birinchi qadam':i<2?'Asoslarni mustahkamlang':'Yangi daraja'}</strong><span class="meta">${i===0?'Salomlashish va oddiy suhbatlar':'Bosqich darslari xaritada ko‘rsatiladi'}</span><div class="progress-track my-3" role="progressbar" aria-label="${name} jarayoni" aria-valuenow="${i===0?Math.round(state.completed/6*100):0}" aria-valuemin="0" aria-valuemax="100"><div class="progress-fill" style="width:${i===0?state.completed/6*100:0}%"></div></div><span class="reward">+${i===0?'50':'100'} XP · ${i===0?'Boshlash mumkin':'Qulflangan'}</span><div class="mt-3"><button type="button" class="${i===0?'primary':'secondary'} small" data-view="courses">${i===0?'Darslarni ko‘rish':'Xaritani ko‘rish'} →</button></div></div></article>`).join('')}
-function renderRoadmap(){$('#roadmap-progress').textContent=`${state.completed} / 6 dars bajarildi`;$('#roadmap').innerHTML=lessons.map((l,i)=>`<div class="road-stop ${l.unlocked?'':'locked'}"><span class="dot" aria-hidden="true"></span><button type="button" class="card" data-lesson="${i}" aria-label="${esc(l.de)}: ${l.unlocked?'dars haqida':'qulflangan'}"><span class="eyebrow">${i<state.completed?'✓ Bajarilgan':l.unlocked?(i===state.completed?'★ Navbatdagi dars':'Ochiq'):'🔒 Qulflangan'} · ${i+1}-dars</span><strong>${esc(l.de)}</strong><span class="meta">${esc(l.uz)} · 25 daqiqa · +20 XP</span></button></div>`).join('');$('#modules').innerHTML=lessons.slice(0,3).map((l,i)=>`<article class="module card"><span class="eyebrow">0${i+1} · ${i<state.completed?'BAJARILGAN':'OCHIQ'}</span><h3>${esc(l.de)}</h3><p>${esc(l.uz)} · 25 daqiqa</p><div class="progress-track my-4"><div class="progress-fill" style="width:${i<state.completed?100:0}%"></div></div><button type="button" class="secondary small" data-lesson="${i}">Tafsilotlar →</button></article>`).join('')}
-function openDetail(i){const l=lessons[i];if(!l.unlocked){toast('Bu dars keyingi bosqichda ochiladi.');return}lastFocus=document.activeElement;$('#detail-title').textContent=`${i+1}-dars · ${l.de}`;$('#detail-description').textContent=`${l.uz}. Taxminan 25 daqiqa · 9 o‘quv bosqichi.`;$('#detail-start').onclick=()=>{closeOverlays();show('lesson',0)};$('#detail-overlay').hidden=false;$('#detail-overlay .close-overlay').focus()}
-function badge(w){return w.article?`<span class="article ${w.pluralArticle?'plural':w.article}">${w.pluralArticle?'die (pl.)':w.article}</span>`:''}
-function quiz(id,prompt,choices){return `<div class="learning-card"><strong>${prompt}</strong><div class="quiz-options">${choices.map(([label,correct])=>`<button type="button" class="quiz-choice" data-check="${id}" data-correct="${correct}">${label}</button>`).join('')}</div><p class="meta mt-3 mb-0" id="${id}-feedback" aria-live="polite"></p></div>`}
-function renderLesson(){
-$('#step-counter').textContent=`Bosqich ${state.step+1}/9 · ${stages[state.step]}`;$('#lesson-progress').style.width=`${(state.step+1)/9*100}%`;$('#lesson-progress-track').setAttribute('aria-valuenow',String(state.step+1));$('#step-eyebrow').textContent=`${String(state.step+1).padStart(2,'0')} / 09 · BUGUNGI VAZIFA`;$('#step-title').textContent=stages[state.step];$('#step-prev').disabled=state.step===0;$('#step-next').disabled=state.step===8;
-$('#stepper').innerHTML=stages.map((name,i)=>`<button type="button" class="step ${i===state.step?'active':i<state.step?'done':''}" data-stage="${i}" ${i===state.step?'aria-current="step"':''}><b>${i<state.step?'✓':i+1}</b><span>${name}</span></button>`).join('');
-const rows=words.slice(0,4).map(w=>`<div class="word-row">${badge(w)}<strong>${esc(w.german)}</strong><span class="meta">— ${esc(w.uz)} · ko‘plik: ${esc(w.plural)}</span><span class="ml-auto flex gap-2">${voiceButtons((w.article?w.article+' ':'')+w.german,w.german+' talaffuzi')}<button type="button" class="icon-btn" data-favorite="${w.id}" aria-label="${esc(w.german)} so‘zini sevimlilarga qo‘shish">${state.favorites.has(w.id)?'★':'☆'}</button></span></div>`).join('');
-const bodies=[
-`<p>Bugun nemischa salomlashish va o‘zingizni tanishtirishni o‘rganasiz. Keyingi qadamga o‘tib, namunaviy suhbatni tinglang.</p><div class="learning-card"><span class="eyebrow">BUGUNGI IBORA</span><h3>Guten Tag!</h3><p>Xayrli kun!</p>${voiceButtons('Guten Tag!','Guten Tag talaffuzi')}</div>`,
-`<p class="muted mb-3">Hayotiy vaziyatdagi jonli suhbatni tinglang. Anna va Ali turli ovozlarda suhbatlashadi:</p>
-<div class="dialogue-toolbar mb-3">
-  <div class="flex items-center gap-2">
-    <span class="eyebrow" style="color:var(--brand)">SUHBATDOSHLAR:</span>
-    <span class="speaker-tag female">👩 Anna</span>
-    <span class="speaker-tag male">👨 Ali</span>
-  </div>
-  <div class="flex items-center gap-2">
-    <button type="button" class="primary small" id="play-dialogue-all"><span>▶ Butun suhbatni tinglash</span></button>
-    <button type="button" class="secondary small" id="stop-dialogue-btn" style="display:none"><span>⏹ To‘xtatish</span></button>
-  </div>
-</div>
-<div class="dialogue-box" id="lesson-dialogue">
-  <div class="dialogue-turn female" data-turn="0">
-    <div class="turn-avatar" title="Anna (Ayol ovozi)">👩</div>
-    <div class="turn-content">
-      <div class="turn-meta">
-        <span class="speaker-tag female">Anna</span>
-        <button type="button" class="turn-btn" data-speak="Guten Tag! Wie heißt du?" data-persona="anna" data-turn-btn="0" aria-label="Annaning gapini tinglash"><span>▶ Tinglash</span></button>
-      </div>
-      <p class="turn-de">Guten Tag! Wie heißt du?</p>
-      <p class="turn-uz">Xayrli kun! Isming nima?</p>
-    </div>
-  </div>
-  <div class="dialogue-turn male" data-turn="1">
-    <div class="turn-avatar" title="Ali (Erkak ovozi)">👨</div>
-    <div class="turn-content">
-      <div class="turn-meta">
-        <span class="speaker-tag male">Ali</span>
-        <button type="button" class="turn-btn" data-speak="Ich heiße Ali. Und du?" data-persona="ali" data-turn-btn="1" aria-label="Alining gapini tinglash"><span>▶ Tinglash</span></button>
-      </div>
-      <p class="turn-de">Ich heiße Ali. Und du?</p>
-      <p class="turn-uz">Mening ismim Ali. Sening-chi?</p>
-    </div>
-  </div>
-  <div class="dialogue-turn female" data-turn="2">
-    <div class="turn-avatar" title="Anna (Ayol ovozi)">👩</div>
-    <div class="turn-content">
-      <div class="turn-meta">
-        <span class="speaker-tag female">Anna</span>
-        <button type="button" class="turn-btn" data-speak="Ich heiße Anna. Freut mich!" data-persona="anna" data-turn-btn="2" aria-label="Annaning gapini tinglash"><span>▶ Tinglash</span></button>
-      </div>
-      <p class="turn-de">Ich heiße Anna. Freut mich!</p>
-      <p class="turn-uz">Mening ismim Anna. Tanishganimdan xursandman!</p>
-    </div>
-  </div>
-</div>`,
-`<p>Nemis artikllari o‘z rangida: der — ko‘k, die — rose, das — yashil, ko‘plik — binafsha.</p><div class="learning-card">${rows}</div>`,
-`<p>Qoidani misol orqali eslab qoling.</p><div class="grid sm:grid-cols-2 gap-3"><div class="learning-card"><h3>V2 so‘z tartibi</h3><p>Tuslangan fe’l oddiy gapda ikkinchi o‘rinda: <strong>Ich lerne Deutsch.</strong></p></div><div class="learning-card"><h3>Fe’l tuslanishi</h3><p>ich <strong>lerne</strong> · du <strong>lernst</strong> · er/sie <strong>lernt</strong></p></div></div><div class="learning-card"><strong>Eslatma:</strong> “Ich Deutsch lerne” emas, “Ich lerne Deutsch”.</div>`,
-`<p>Gapni tinglang va eshitgan fe’lni tanlang.</p>${voiceButtons('Ich lerne Deutsch.','Gapni eshitish')}${quiz('listen','Qaysi fe’lni eshitdingiz?',[['spreche',false],['lerne',true],['wohne',false]])}`,
-`<div class="learning-card"><div class="flex items-start justify-between gap-3"><div><p><strong>Ich heiße Sara.</strong> Ich komme aus Usbekistan. Ich lerne Deutsch und lese gern Bücher.</p><small class="muted">Mening ismim Sara. Men O‘zbekistondanman. Men nemis tilini o‘rganaman va kitob o‘qishni yaxshi ko‘raman.</small></div>${voiceButton('Ich heiße Sara. Ich komme aus Usbekistan. Ich lerne Deutsch und lese gern Bücher.','Matnni tinglash','anna')}</div></div>${quiz('read','Sara qayerdan kelgan?',[['O‘zbekistondan',true],['Germaniyadan',false]])}`,
-`<p>“Men nemis tilini o‘rganaman” jumlasini nemischa yozing.</p><form id="writing-form" class="flex flex-wrap gap-2"><label for="writing-answer" class="sr-only">Nemischa jumla</label><input id="writing-answer" class="field flex-1" autocomplete="off" required placeholder="Ich ..."><button type="submit" class="primary">Tekshirish</button></form><p id="writing-feedback" class="meta mt-3" aria-live="polite"></p>`,
-`<div class="learning-card text-center"><div class="mx-auto w-20 h-20 rounded-full bg-indigo-100 text-indigo-700 grid place-items-center text-3xl mb-4" aria-hidden="true">◉</div><h3>Eshiting → gapiring → taqqoslang</h3><p>Mikrofon bu muhitda ishlamaydi. Namunani tinglang, jumlani ovoz chiqarib takrorlang va eshitganingiz bilan o‘zingiz taqqoslang. Ovoz yozib olinmaydi yoki avtomatik baholanmaydi.</p><div class="flex flex-wrap justify-center gap-2">${voiceButton('Guten Tag! Ich heiße Anna.','Shadowing namunasini eshitish')}<button type="button" id="shadow-demo" class="primary">Takrorladim</button><button type="button" id="shadow-retry" class="secondary">Yana eshitish</button></div><p id="shadow-feedback" class="meta mt-3" aria-live="polite"></p></div>`,
-`<p>Har bir savolga javob bering. To‘g‘ri javobdan so‘ng qisqa izoh ko‘rsatiladi.</p>${quiz('choose','1. “Kitob”ning to‘g‘ri artikli qaysi?',[['der Buch',false],['das Buch',true],['die Buch',false]])}${quiz('fill','2. Ich ___ Deutsch.',[['lerne',true],['lernst',false]])}<div class="learning-card"><strong>3. Deutsch / ich / lerne</strong><div class="mt-3"><button type="button" id="order-demo" class="secondary small">Tartibni tekshirish</button></div><p id="order-result" class="meta mt-2 mb-0" aria-live="polite"></p></div>${quiz('match','4. die Lampe nimani anglatadi?',[['chiroq',true],['stol',false]])}`
-];$('#lesson-body').innerHTML=bodies[state.step]
-}
-function filteredWords(){const q=$('#word-search').value.toLocaleLowerCase();return words.filter(w=>(state.level==='Barchasi'||w.level===state.level)&&(state.type==='Barchasi'||w.type===state.type)&&`${w.article} ${w.german} ${w.uz}`.toLocaleLowerCase().includes(q))}
-function renderFilters(){for(const [id,list,key] of [['level-filters',['Barchasi','A1.1','A1.2','A2.1'],'level'],['type-filters',['Barchasi','Ot','Fe’l','Sifat'],'type']])$('#'+id).innerHTML=list.map(v=>`<button type="button" class="filter-btn ${state[key]===v?'selected':''}" data-filter="${key}" data-value="${v}" aria-pressed="${state[key]===v}">${v}</button>`).join('')}
-function renderVocab(){const list=filteredWords();renderFilters();$('#vocab-count').textContent=`${list.length} ta so‘z ko‘rsatilmoqda`;for(const [id,active] of [['table-mode',state.mode==='table'],['flash-mode',state.mode==='flash']]){$('#'+id).classList.toggle('selected',active);$('#'+id).setAttribute('aria-pressed',String(active))}
-if(!list.length){$('#vocab-content').innerHTML='<div class="py-12 text-center"><strong>So‘z topilmadi ✦</strong><p class="muted">Qidiruvni yoki filtrni o‘zgartiring.</p></div>';return}
-if(state.mode==='flash'){state.flashIndex=Math.min(state.flashIndex,list.length-1);const w=list[state.flashIndex];$('#vocab-content').innerHTML=`<div class="max-w-lg mx-auto"><div class="flex justify-between items-center mb-3"><strong>So‘z mashqi</strong><span class="chip">${state.flashIndex+1}/${list.length} so‘z</span></div><button type="button" class="flash w-full" data-flip="${w.id}" aria-label="${esc(w.german)} kartasini aylantirish" aria-pressed="false"><span class="flash-inner"><span class="flash-face">${badge(w)}<strong>${esc(w.german)}</strong><small class="muted">Ma’nosini ko‘rish ↗</small></span><span class="flash-face flash-back"><strong>${esc(w.uz)}</strong><small>${esc(w.example)}</small></span></span></button><div class="flex gap-2 mt-4"><button type="button" class="secondary flex-1" id="flash-repeat">Qayta ko‘rsatish</button><button type="button" class="primary flex-1" id="flash-know">Bilaman ✓</button></div><div class="flex items-center justify-center gap-2 mt-4">${voiceButtons((w.article?w.article+' ':'')+w.german,w.german+' talaffuzi')}<button type="button" class="tertiary" id="flash-next">Keyingi →</button></div></div>`;return}
-$('#vocab-content').innerHTML=`<div class="grid sm:grid-cols-2 gap-3">${list.map(w=>`<article class="vocab-card card ${w.pluralArticle?'plural-border':w.article?w.article+'-border':''}"><div class="flex items-center justify-between gap-2"><div class="flex gap-1 flex-wrap">${badge(w)}<span class="chip">${w.level}</span><span class="chip">${w.type}</span></div><div class="flex gap-1"><button type="button" class="icon-btn" data-mastered="${w.id}" aria-pressed="${state.mastered.has(w.id)}" aria-label="${esc(w.german)}: yodlangan holatini almashtirish">${state.mastered.has(w.id)?'✓':'○'}</button><button type="button" class="icon-btn" data-favorite="${w.id}" aria-pressed="${state.favorites.has(w.id)}" aria-label="${esc(w.german)}: sevimli holatini almashtirish">${state.favorites.has(w.id)?'★':'☆'}</button></div></div><div class="flex items-center justify-between gap-3"><div><h3>${esc(w.german)}</h3><strong>${esc(w.uz)}</strong><p class="meta">Ko‘plik: ${esc(w.plural)}</p></div>${voiceButtons((w.article?w.article+' ':'')+w.german,w.german+' talaffuzi')}</div><div class="learning-card mb-0"><div class="flex items-center justify-between gap-2"><em>${esc(w.example)}</em>${voiceButton(w.example,w.german+' misolini eshitish')}</div><span class="meta">${esc(w.exampleUz)}</span></div></article>`).join('')}</div>`}
-function renderDashboard(){for(const id of ['header-xp','home-xp','lesson-xp'])$('#'+id).textContent=state.xp;for(const id of ['header-streak','home-streak'])$('#'+id).textContent=state.streak;$('#home-goal').textContent=`${state.minutes}/20`;$('#home-progress').textContent=`${state.completed}/6`;$('#home-mastered').textContent=`${state.mastered.size}/${words.length}`;$('#dash-streak').textContent=`${state.streak} kun`;$('#dash-xp').textContent=`${state.xp} XP`;$('#dash-goal').innerHTML=`${state.minutes}/20<br>daqiqa`;$('#goal-ring').style.background=`conic-gradient(#f59e0b 0 ${state.minutes/20*100}%,var(--raised) ${state.minutes/20*100}%)`;$('#dash-course-fill').style.width=`${state.completed/6*100}%`;$('#dash-course-label').textContent=`${state.completed} / 6 dars bajarildi`;$('#dash-mastered').textContent=`${state.mastered.size} / ${words.length} ta`;$('#dash-attempts').textContent=`${state.attempts.length} ta urinish`;const badges=[['','Birinchi qadam','Darsni oching',state.answered.size>0],['🔥','Izchil sayyoh','O‘quv ritmini davom ettiring',state.streak>0],['✓','So‘z yig‘uvchi','Birinchi so‘zni yodlang',state.mastered.size>0]];$('#badges-list').innerHTML=badges.map(([icon,title,desc,unlocked])=>`<article class="method card ${unlocked?'':'opacity-60'}"><span class="num" style="${unlocked?'background:#fffbeb;color:#b45309;box-shadow:0 0 20px #f59e0b55':'filter:grayscale(1)'}">${unlocked?icon:'🔒'}</span><h3>${title}</h3><p>${desc}</p><span class="meta">${unlocked?'✓ Ochilgan':'Qulflangan'}</span></article>`).join('');renderLevels();renderRoadmap()}
-function renderExamOptions(){$$('.segment button').forEach(b=>{const selected=b.dataset.examFilter===state.examFilter;b.classList.toggle('selected',selected);b.setAttribute('aria-pressed',String(selected))});const names=['A1','A2'].map(level=>`${state.examFilter} · ${level}`);$('#exam-options').innerHTML=names.map(name=>`<article class="exam-card card ${state.examFilter==='Hören'?'horen':state.examFilter==='Lesen'?'lesen':'kompleks'}"><span class="eyebrow">${esc(name.split(' · ')[1])} · ICHKI DEMO</span><h3>${state.examFilter==='Hören'?'🎧':state.examFilter==='Lesen'?'📖':'🏆'} ${esc(name.split(' · ')[0])} mashqi</h3><p class="meta">Nemis tilini tinglab yoki o‘qib tushunish bo‘yicha mashq.</p><div class="exam-meta"><span>Davomiylik<strong>20 daqiqa</strong></span><span>Savollar<strong>2 ta</strong></span><span>O‘tish bali<strong>60%</strong></span></div><span class="meta">Mukofot: natija kartasi · Urinishlar: ${state.attempts.filter(a=>a.name===name).length} ta</span><button type="button" class="${state.selectedExam===name?'primary':'secondary'}" data-exam="${esc(name)}" aria-pressed="${state.selectedExam===name}">${state.selectedExam===name?'Tanlangan ✓':'Tanlash →'}</button></article>`).join('')}
-function examClock(){const e=$('#exam-clock');if(e)e.textContent=`${String(Math.floor(state.examSeconds/60)).padStart(2,'0')}:${String(state.examSeconds%60).padStart(2,'0')}`}
-function startExam(){if(state.examRunning)return;state.examRunning=true;state.examSeconds=1200;state.examAnswers={};$('#exam-panel').innerHTML=`<div class="flex flex-wrap justify-between gap-2"><span class="eyebrow">${esc(state.selectedExam)} · DEMO MASHQ</span><strong id="exam-clock" aria-label="Qolgan vaqt">20:00</strong></div><h2 class="mt-5">Savollarga javob bering</h2><p class="meta">Taymer tugaganda tanlanmagan javoblar noto‘g‘ri hisoblanadi.</p><div class="learning-card"><strong>1. “Ich lerne Deutsch.” jumlasining ma’nosi qaysi?</strong><div class="mt-3">${voiceButton('Ich lerne Deutsch.','Nemischa jumlani eshitish')}</div><div class="quiz-options"><button type="button" class="quiz-choice" data-exam-q="one" data-exam-value="0">Men nemischa gapiraman</button><button type="button" class="quiz-choice" data-exam-q="one" data-exam-value="1">Men nemis tilini o‘rganaman</button><button type="button" class="quiz-choice" data-exam-q="one" data-exam-value="2">Men kitob o‘qiyman</button></div></div><div class="learning-card"><strong>2. “das Buch” nimani anglatadi?</strong><div class="quiz-options"><button type="button" class="quiz-choice" data-exam-q="two" data-exam-value="0">chiroq</button><button type="button" class="quiz-choice" data-exam-q="two" data-exam-value="1">kitob</button><button type="button" class="quiz-choice" data-exam-q="two" data-exam-value="2">stol</button></div></div><button type="button" id="exam-finish" class="primary">Javoblarni tekshirish</button>`;state.examTimer=setInterval(()=>{state.examSeconds=Math.max(0,state.examSeconds-1);examClock();if(state.examSeconds===0)finishExam()},1000)}
-function finishExam(){if(!state.examRunning)return;clearInterval(state.examTimer);state.examRunning=false;const correct=Number(state.examAnswers.one==='1')+Number(state.examAnswers.two==='1'),score=correct*50,passed=score>=60,attempt={name:state.selectedExam,score,correct,date:new Date().toLocaleDateString('uz-UZ')};state.attempts.push(attempt);const review=(number,selected,options,explanation)=>`<div class="learning-card"><strong>${number}. ${explanation}</strong><p class="meta">Sizning javobingiz: ${selected===undefined?'Tanlanmagan':options[Number(selected)]}</p><p style="color:var(--good)">To‘g‘ri javob: ${options[1]}</p></div>`;$('#exam-panel').innerHTML=`<span class="eyebrow">MASHQ YAKUNLANDI · ${esc(attempt.name)}</span><h2>Natija: ${score}/100</h2><p style="color:${passed?'var(--good)':'var(--bad)'}">${passed?'Ajoyib! Ichki demo mezoni bajarildi.':'Ichki demo mezoni bajarilmadi. Yana mashq qiling.'}</p><p class="meta">2 ta savoldan ${correct} tasiga to‘g‘ri javob berildi. O‘tish chegarasi: 60%.</p><div class="certificate-paper" id="certificate-paper"><div class="tricolor mx-auto mb-5" style="width:105px"><i></i><i></i><i></i></div><small>FOR GREAT NATION · FLY HIGH</small><h2>Ichki baholash natijasi</h2><p>${esc(attempt.name)} · ${score}/100 ball · ${attempt.date}</p><strong>${passed?'Demo mezonidan o‘tdi':'Mashqni qayta bajarish tavsiya etiladi'}</strong><p class="mt-5 text-xs">For Great Nation ichki baholashi. Bu rasmiy Goethe, telc yoki ÖSD sertifikati emas va tashqi tasdiqlash hujjati sifatida ishlatilmaydi.</p></div><details class="mt-5"><summary>Savollar va tushuntirishlarni ko‘rish</summary>${review('1',state.examAnswers.one,['Men nemischa gapiraman','Men nemis tilini o‘rganaman','Men kitob o‘qiyman'],'“Ich lerne Deutsch” — men nemis tilini o‘rganaman.')}${review('2',state.examAnswers.two,['chiroq','kitob','stol'],'“das Buch” — kitob.')}</details><div class="flex flex-wrap gap-2 mt-5 no-print"><button type="button" id="exam-download" class="primary">Natijani yuklab olish ↓</button><button type="button" id="exam-print" class="secondary">Chop etish</button><button type="button" id="exam-reset" class="secondary">Qayta boshlash</button></div>`;renderExamOptions();renderDashboard();if(passed)celebrate();toast('Demo mashq yakunlandi.')}
-function resetExam(){$('#exam-panel').innerHTML='<span class="eyebrow">TANLANGAN DEMO MASHQ</span><h2>Mashqqa tayyormisiz?</h2><p class="muted">Bo‘limni tanlang va taymerli mashqni boshlang.</p><button type="button" class="primary" id="exam-start">Mashqni boshlash</button>'}
-function openSearch(){lastFocus=document.activeElement;$('#search-overlay').hidden=false;$('#global-search').value='';searchResults();$('#global-search').focus()}
 
-function searchResults(){const q=$('#global-search').value.toLocaleLowerCase(),pages=[['Bosh sahifa','home'],['Kurslar','courses'],['Lug‘at','vocabulary'],['Shadowing','lesson'],['Demo testlar','certificate'],['Natijalar','dashboard']],found=pages.filter(([label])=>label.toLocaleLowerCase().includes(q)),vocab=words.filter(w=>q&&`${w.german} ${w.uz}`.toLocaleLowerCase().includes(q));$('#global-results').innerHTML=found.map(([label,view])=>`<button type="button" class="secondary w-full mb-2" data-search-view="${view}">${label} →</button>`).join('')+vocab.map(w=>`<button type="button" class="secondary w-full mb-2" data-search-word="${esc(w.german)}">${esc(w.german)} — ${esc(w.uz)}</button>`).join('')+(!found.length&&!vocab.length?'<p class="meta">Natija topilmadi. Boshqa so‘z kiriting.</p>':'')}
-document.addEventListener('click',e=>{const target=e.target;
-const nav=target.closest('[data-view]');if(nav){show(nav.dataset.view,nav.hasAttribute('data-step')?Number(nav.dataset.step):undefined);return}
-const lesson=target.closest('[data-lesson]');if(lesson){openDetail(Number(lesson.dataset.lesson));return}
-const stage=target.closest('[data-stage]');if(stage){state.step=Number(stage.dataset.stage);renderLesson();return}
-
-const phoneticChip=target.closest('[data-phonetic]');
-if(phoneticChip){
-  const p=phoneticChip.dataset.phonetic;
-  const phoneticsMap={'ä':'Ä. Äpfel.','ö':'Ö. Schön.','ü':'Ü. Über.','ß':'Eszett. Straße.','ei':'Ei. Eins.','ie':'I-E. Sieben.','eu':'Eu. Euro.','ch':'C-H. Ich.'};
-  phoneticChip.classList.add('active');
-  AudioEngine.speak(phoneticsMap[p]||p,{persona:'slow',btn:phoneticChip,onEnd:()=>phoneticChip.classList.remove('active')});
-  return;
-}
-if(target.closest('#phonetics-play')){
-  const chips=$$('#phonetic-chips .phonetic-chip');
-  const phoneticsMap={'ä':'Ä. Äpfel.','ö':'Ö. Schön.','ü':'Ü. Über.','ß':'Eszett. Straße.','ei':'Ei. Eins.','ie':'I-E. Sieben.','eu':'Eu. Euro.','ch':'C-H. Ich.'};
-  const items=chips.map(chip=>{
-    const p=chip.dataset.phonetic;
-    return {
-      text:phoneticsMap[p]||p,
-      persona:'slow',
-      pause:400,
-      btn:chip,
-      onStart:()=>chip.classList.add('active'),
-      onEnd:()=>chip.classList.remove('active')
-    };
-  });
-  AudioEngine.playSequence(items);
-  return;
+function earn(key, amount = 10) {
+  if (state.answered.has(key)) return;
+  state.answered.add(key);
+  state.xp += amount;
+  state.minutes = Math.min(20, state.minutes + 1);
+  if (state.streak === 0) state.streak = 1;
+  saveState();
+  renderDashboard();
+  toast(`Ajoyib! +${amount} XP`);
+  celebrate();
 }
 
-if(target.closest('#play-dialogue-all')){
-  const turns=[
-    {text:'Guten Tag! Wie heißt du?',persona:'anna',container:$('.dialogue-turn[data-turn="0"]'),btn:$('[data-turn-btn="0"]'),pause:480},
-    {text:'Ich heiße Ali. Und du?',persona:'ali',container:$('.dialogue-turn[data-turn="1"]'),btn:$('[data-turn-btn="1"]'),pause:480},
-    {text:'Ich heiße Anna. Freut mich!',persona:'anna',container:$('.dialogue-turn[data-turn="2"]'),btn:$('[data-turn-btn="2"]'),pause:480}
+function finishLesson() {
+  const cur = state.currentLesson;
+  const l = lessons[cur];
+  earn('lesson_complete_' + cur, 50);
+
+  if (state.completed <= cur) {
+    state.completed = cur + 1;
+  }
+  if (cur + 1 < lessons.length) {
+    lessons[cur + 1].unlocked = true;
+  }
+  replenishEnergy();
+  saveState();
+  renderDashboard();
+  celebrate();
+
+  // Show completion overlay modal
+  const modal = $('#completion-overlay');
+  if (modal) {
+    $('#completion-modal-title').textContent = `${l.de} darsi muvaffaqiyatli yakunlandi!`;
+    $('#completion-modal-desc').textContent = `Tabriklaymiz! Siz ushbu darsni to‘liq tamomladingiz va +50 XP ga ega bo‘ldingiz. Jami bajarilgan darslar: ${state.completed}/6.`;
+    const nextBtn = $('#completion-next-btn');
+    if (nextBtn) {
+      if (cur + 1 < lessons.length) {
+        nextBtn.textContent = `Navbatdagi dars (${lessons[cur + 1].de})ga o‘tish →`;
+        nextBtn.onclick = () => {
+          closeOverlays();
+          state.currentLesson = cur + 1;
+          state.step = 0;
+          show('lesson', 0);
+        };
+      } else {
+        nextBtn.textContent = 'Barcha darslar tamomlandi! Kurslarga qaytish →';
+        nextBtn.onclick = () => {
+          closeOverlays();
+          show('courses');
+        };
+      }
+    }
+    lastFocus = document.activeElement;
+    modal.hidden = false;
+    modal.querySelector('.close-overlay')?.focus();
+  }
+}
+
+function renderLevels() {
+  const names = ['A1.1','A1.2','A2.1','A2.2','B1.1','B1.2'];
+  $('#home-levels').innerHTML = names.map((name, i) => {
+    const isCurrent = i === 0;
+    const progress = i === 0 ? Math.round(state.completed / 6 * 100) : 0;
+    return `<article class="level-stop ${isCurrent ? 'active' : 'locked'}">
+      <span class="node" aria-hidden="true">${isCurrent ? '⚑' : i === 5 ? '🏅' : '↗'}</span>
+      <div class="card locked-card">
+        <span class="eyebrow">CEFR · ${name} · ${isCurrent ? 'FAOL' : 'KEYINGI MANZIL'}</span>
+        <strong>${isCurrent ? 'Birinchi qadam (Boshlang‘ich)' : i < 2 ? 'Asoslarni mustahkamlang' : 'Yangi daraja'}</strong>
+        <span class="meta">${isCurrent ? 'Salomlashish, tanishuv va kundalik muloqot' : 'Bosqich darslari xaritada ko‘rsatiladi'}</span>
+        <div class="progress-track my-3" role="progressbar" aria-label="${name} jarayoni" aria-valuenow="${progress}" aria-valuemin="0" aria-valuemax="100">
+          <div class="progress-fill" style="width:${progress}%"></div>
+        </div>
+        <span class="reward">+${isCurrent ? '50' : '100'} XP · ${isCurrent ? 'Boshlash mumkin' : 'Qulflangan'}</span>
+        <div class="mt-3">
+          <button type="button" class="${isCurrent ? 'primary' : 'secondary'} small" data-view="courses">${isCurrent ? 'Darslarni ko‘rish' : 'Xaritani ko‘rish'} →</button>
+        </div>
+      </div>
+    </article>`;
+  }).join('');
+}
+
+function renderRoadmap() {
+  $('#roadmap-progress').textContent = `${state.completed} / 6 dars bajarildi`;
+  $('#roadmap').innerHTML = lessons.map((l, i) => `<div class="road-stop ${l.unlocked ? '' : 'locked'}">
+    <span class="dot" aria-hidden="true"></span>
+    <button type="button" class="card" data-lesson="${i}" aria-label="${esc(l.de)}: ${l.unlocked ? 'dars haqida' : 'qulflangan'}">
+      <span class="eyebrow">${i < state.completed ? '✓ Bajarilgan' : l.unlocked ? (i === state.currentLesson ? '★ Joriy dars' : 'Ochiq') : '🔒 Qulflangan'} · ${i + 1}-dars</span>
+      <strong>${esc(l.de)}</strong>
+      <span class="meta">${esc(l.uz)} · 25 daqiqa · +50 XP</span>
+    </button>
+  </div>`).join('');
+
+  $('#modules').innerHTML = lessons.slice(0, 3).map((l, i) => `<article class="module card">
+    <span class="eyebrow">0${i + 1} · ${i < state.completed ? 'BAJARILGAN' : l.unlocked ? 'OCHIQ' : 'QULFLANGAN'}</span>
+    <h3>${esc(l.de)}</h3>
+    <p>${esc(l.uz)} · 25 daqiqa</p>
+    <div class="progress-track my-4">
+      <div class="progress-fill" style="width:${i < state.completed ? 100 : (i === state.currentLesson ? (state.step + 1) / 9 * 100 : 0)}%"></div>
+    </div>
+    <button type="button" class="secondary small" data-lesson="${i}">${l.unlocked ? 'Darsga kirish →' : '🔒 Qulflangan'}</button>
+  </article>`).join('');
+}
+
+function openDetail(i) {
+  const l = lessons[i];
+  if (!l.unlocked) {
+    toast('Bu dars oldingi darslarni tamomlagandan so‘ng ochiladi.');
+    return;
+  }
+  lastFocus = document.activeElement;
+  $('#detail-title').textContent = `${i + 1}-dars · ${l.de}`;
+  $('#detail-description').textContent = `${l.uz}. Taxminan 25 daqiqa · 9 ta bosqichli to‘liq o‘quv rejasi.`;
+  $('#detail-start').onclick = () => {
+    closeOverlays();
+    state.currentLesson = i;
+    state.step = 0;
+    show('lesson', 0);
+  };
+  $('#detail-overlay').hidden = false;
+  $('#detail-overlay .close-overlay').focus();
+}
+
+function badge(w) {
+  return w.article ? `<span class="article ${w.pluralArticle ? 'plural' : w.article}">${w.pluralArticle ? 'die (pl.)' : w.article}</span>` : '';
+}
+
+function quiz(id, prompt, choices) {
+  return `<div class="learning-card">
+    <strong>${prompt}</strong>
+    <div class="quiz-options">
+      ${choices.map(([label, correct]) => `<button type="button" class="quiz-choice" data-check="${id}" data-correct="${correct}">${label}</button>`).join('')}
+    </div>
+    <p class="meta mt-3 mb-0" id="${id}-feedback" aria-live="polite"></p>
+  </div>`;
+}
+
+function renderLesson() {
+  const curIdx = state.currentLesson;
+  const cur = lessonData[curIdx] || lessonData[0];
+  const lMeta = lessons[curIdx] || lessons[0];
+
+  $('#step-counter').textContent = `${curIdx + 1}-dars · Bosqich ${state.step + 1}/9 · ${stages[state.step]}`;
+  $('#lesson-progress').style.width = `${(state.step + 1) / 9 * 100}%`;
+  $('#lesson-progress-track').setAttribute('aria-valuenow', String(state.step + 1));
+  $('#step-eyebrow').textContent = `${String(state.step + 1).padStart(2, '0')} / 09 · ${esc(lMeta.de.toUpperCase())}`;
+  $('#step-title').textContent = stages[state.step];
+  $('#step-prev').disabled = state.step === 0;
+  $('#step-next').disabled = state.step === 8;
+
+  $('#stepper').innerHTML = stages.map((name, i) => `<button type="button" class="step ${i === state.step ? 'active' : i < state.step ? 'done' : ''}" data-stage="${i}" ${i === state.step ? 'aria-current="step"' : ''}>
+    <b>${i < state.step ? '✓' : i + 1}</b>
+    <span>${name}</span>
+  </button>`).join('');
+
+  // Lesson specific vocabulary
+  const vocabList = cur.vocabIds.map(id => words.find(w => w.id === id) || words[0]);
+  const rows = vocabList.map(w => `<div class="word-row">
+    ${badge(w)}
+    <strong>${esc(w.german)}</strong>
+    <span class="meta">— ${esc(w.uz)} · ko‘plik: ${esc(w.plural)}</span>
+    <span class="ml-auto flex gap-2">
+      ${voiceButtons((w.article ? w.article + ' ' : '') + w.german, w.german + ' talaffuzi')}
+      <button type="button" class="icon-btn" data-favorite="${w.id}" aria-label="${esc(w.german)} so‘zini sevimlilarga qo‘shish">${state.favorites.has(w.id) ? '★' : '☆'}</button>
+    </span>
+  </div>`).join('');
+
+  // Dialogue turns HTML
+  const dialogueTurnsHtml = cur.dialogue.map((turn, tIdx) => {
+    const isFemale = turn.persona === 'anna';
+    return `<div class="dialogue-turn ${isFemale ? 'female' : 'male'}" data-turn="${tIdx}">
+      <div class="turn-avatar" title="${esc(turn.speaker)}">${isFemale ? '👩' : '👨'}</div>
+      <div class="turn-content">
+        <div class="turn-meta">
+          <span class="speaker-tag ${isFemale ? 'female' : 'male'}">${esc(turn.speaker)}</span>
+          <button type="button" class="turn-btn" data-speak="${esc(turn.de)}" data-persona="${esc(turn.persona)}" data-turn-btn="${tIdx}" aria-label="${esc(turn.speaker)} gapini tinglash"><span>▶ Tinglash</span></button>
+        </div>
+        <p class="turn-de">${esc(turn.de)}</p>
+        <p class="turn-uz">${esc(turn.uz)}</p>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Step 8: Exercises + Lesson Completion Button
+  const exercisesHtml = `<p>Ushbu bosqichda dars bo‘yicha 4 ta interaktiv mashqni bajaring:</p>
+    ${cur.quizzes.map(q => quiz(q.id, q.prompt, q.choices)).join('')}
+    <div class="learning-card text-center mt-5" style="background:var(--card);border:2px solid var(--accent)">
+      <span class="eyebrow" style="color:var(--brand)">DARS YAKUNI</span>
+      <h3 class="my-2">Darsni muvaffaqiyatli yakunlash</h3>
+      <p class="muted">Barcha bosqichlarni ko‘rib chiqqan bo‘lsangiz, tugmani bosing va +50 XP ga ega bo‘ling!</p>
+      <button type="button" class="primary" id="finish-lesson-btn" style="padding:14px 28px;font-size:1.05rem;">
+        <span>🎉 Darsni yakunlash va +50 XP olish</span>
+      </button>
+    </div>`;
+
+  const bodies = [
+    // 0: Kirish
+    `<p>${esc(cur.intro.desc)}</p>
+     <div class="learning-card">
+       <span class="eyebrow">BUGUNGI KALIT IBORA</span>
+       <h3>${esc(cur.intro.phrase)}</h3>
+       <p>${esc(cur.intro.translation)}</p>
+       ${voiceButtons(cur.intro.phrase, cur.intro.phrase + ' talaffuzi')}
+     </div>`,
+
+    // 1: Muloqot
+    `<p class="muted mb-3">Hayotiy vaziyatdagi jonli suhbatni tinglang. Anna va Ali turli ovozlarda suhbatlashadi:</p>
+     <div class="dialogue-toolbar mb-3">
+       <div class="flex items-center gap-2">
+         <span class="eyebrow" style="color:var(--brand)">SUHBATDOSHLAR:</span>
+         <span class="speaker-tag female">👩 Anna</span>
+         <span class="speaker-tag male">👨 Ali</span>
+       </div>
+       <div class="flex items-center gap-2">
+         <button type="button" class="primary small" id="play-dialogue-all"><span>▶ Butun suhbatni tinglash</span></button>
+         <button type="button" class="secondary small" id="stop-dialogue-btn" style="display:none"><span>⏹ To‘xtatish</span></button>
+       </div>
+     </div>
+     <div class="dialogue-box" id="lesson-dialogue">
+       ${dialogueTurnsHtml}
+     </div>`,
+
+    // 2: Lug‘at
+    `<p>Ushbu darsning asosiy so‘zlari bilan tanishing. Artikllar o‘z rangida: der — ko‘k, die — qizil/pushti, das — yashil.</p>
+     <div class="learning-card">${rows}</div>`,
+
+    // 3: Grammatika
+    `<p>Grammatika qoidasini aniq namunalar orqali eslab qoling:</p>
+     <div class="grid sm:grid-cols-2 gap-3">
+       <div class="learning-card">
+         <h3>${cur.grammar.title1}</h3>
+         <p>${cur.grammar.desc1}</p>
+       </div>
+       <div class="learning-card">
+         <h3>${cur.grammar.title2}</h3>
+         <p>${cur.grammar.desc2}</p>
+       </div>
+     </div>
+     <div class="learning-card">
+       <strong>Eslatma:</strong> ${cur.grammar.note}
+     </div>`,
+
+    // 4: Tinglash
+    `<p>Audioni tinglang va savolga to‘g‘ri javob bering:</p>
+     <div class="learning-card text-center mb-3">
+       <div class="my-2">${voiceButtons(cur.listening.text, 'Audioni tinglash')}</div>
+       <span class="meta">Tinglash uchun tugmani bosing</span>
+     </div>
+     ${quiz('listen_' + curIdx, cur.listening.prompt, cur.listening.choices)}`,
+
+    // 5: O‘qish
+    `<div class="learning-card">
+       <div class="flex items-start justify-between gap-3">
+         <div>
+           <p style="font-size:1.05rem;line-height:1.6;">${cur.reading.text}</p>
+           <small class="muted">${cur.reading.translation}</small>
+         </div>
+         ${voiceButton(cur.reading.text, 'Matnni tinglash', 'anna')}
+       </div>
+     </div>
+     ${quiz('read_' + curIdx, cur.reading.prompt, cur.reading.choices)}`,
+
+    // 6: Yozish
+    `<p>${esc(cur.writing.prompt)}</p>
+     <form id="writing-form" class="flex flex-wrap gap-2">
+       <label for="writing-answer" class="sr-only">Nemischa jumla</label>
+       <input id="writing-answer" class="field flex-1" autocomplete="off" required placeholder="${esc(cur.writing.placeholder)}">
+       <button type="submit" class="primary">Tekshirish</button>
+     </form>
+     <p id="writing-feedback" class="meta mt-3" aria-live="polite"></p>`,
+
+    // 7: Shadowing
+    `<div class="learning-card text-center">
+       <div class="mx-auto w-20 h-20 rounded-full bg-indigo-100 text-indigo-700 grid place-items-center text-3xl mb-4" aria-hidden="true">◉</div>
+       <h3>Eshiting → gapiring → taqqoslang</h3>
+       <p class="muted">Namunani diqqat bilan eshiting, so‘ngra ovoz chiqarib takrorlang va o‘zingiz eshitganingiz bilan taqqoslang.</p>
+       <div class="learning-card mb-4" style="background:var(--raised)">
+         <h4 style="color:var(--brand)">${esc(cur.shadowing.text)}</h4>
+         <p class="meta mb-0">${esc(cur.shadowing.translation)}</p>
+       </div>
+       <div class="flex flex-wrap justify-center gap-2">
+         ${voiceButtons(cur.shadowing.text, 'Shadowing namunasini eshitish')}
+         <button type="button" id="shadow-demo" class="primary">Takrorladim ✓</button>
+         <button type="button" id="shadow-retry" class="secondary">Yana eshitish ↻</button>
+       </div>
+       <p id="shadow-feedback" class="meta mt-3" aria-live="polite"></p>
+     </div>`,
+
+    // 8: Mashqlar
+    exercisesHtml
   ];
-  AudioEngine.playSequence(turns);
-  return;
-}
-if(target.closest('#stop-dialogue-btn')){
-  AudioEngine.stop();
-  return;
+
+  $('#lesson-body').innerHTML = bodies[state.step];
 }
 
-const voice=target.closest('[data-speak]');
-if(voice){
-  const text=voice.dataset.speak;
-  const persona=voice.dataset.persona||null;
-  const container=voice.closest('.dialogue-turn');
-  const wasPlaying=voice.classList.contains('playing');
-  if(wasPlaying){
-    AudioEngine.stop();
-  } else {
-    AudioEngine.speak(text,{persona,btn:voice,container});
+function filteredWords() {
+  const q = $('#word-search')?.value.toLocaleLowerCase() || '';
+  return words.filter(w => {
+    const matchLevel = state.level === 'Barchasi' || w.level === state.level;
+    const matchType = state.type === 'Barchasi' || w.type === state.type;
+    const text = `${w.article} ${w.german} ${w.uz} ${w.example}`.toLocaleLowerCase();
+    const matchQ = text.includes(q);
+    return matchLevel && matchType && matchQ;
+  });
+}
+
+function renderFilters() {
+  const levelList = ['Barchasi', 'A1.1', 'A1.2', 'A2.1', 'A2.2', 'B1.1', 'B1.2'];
+  const typeList = ['Barchasi', 'Ot', 'Fe’l', 'Sifat', 'Boshqa'];
+
+  $('#level-filters').innerHTML = levelList.map(v => `<button type="button" class="filter-btn ${state.level === v ? 'selected' : ''}" data-filter="level" data-value="${v}" aria-pressed="${state.level === v}">${v}</button>`).join('');
+  $('#type-filters').innerHTML = typeList.map(v => `<button type="button" class="filter-btn ${state.type === v ? 'selected' : ''}" data-filter="type" data-value="${v}" aria-pressed="${state.type === v}">${v}</button>`).join('');
+}
+
+function renderVocab() {
+  const list = filteredWords();
+  renderFilters();
+  $('#vocab-count').textContent = `${list.length} ta so‘z ko‘rsatilmoqda`;
+
+  for (const [id, active] of [['table-mode', state.mode === 'table'], ['flash-mode', state.mode === 'flash']]) {
+    $('#' + id)?.classList.toggle('selected', active);
+    $('#' + id)?.setAttribute('aria-pressed', String(active));
   }
-  return;
+
+  if (!list.length) {
+    $('#vocab-content').innerHTML = '<div class="py-12 text-center"><strong>So‘z topilmadi ✦</strong><p class="muted">Qidiruv yoki daraja filtrini o‘zgartirib ko‘ring.</p></div>';
+    return;
+  }
+
+  if (state.mode === 'flash') {
+    state.flashIndex = Math.min(state.flashIndex, list.length - 1);
+    const w = list[state.flashIndex];
+    $('#vocab-content').innerHTML = `<div class="max-w-lg mx-auto">
+      <div class="flex justify-between items-center mb-3">
+        <strong>So‘z mashqi (Flashcard)</strong>
+        <span class="chip">${state.flashIndex + 1}/${list.length} so‘z</span>
+      </div>
+      <button type="button" class="flash w-full" id="active-flashcard" data-flip="${w.id}" aria-label="${esc(w.german)} kartasini aylantirish" aria-pressed="false">
+        <span class="flash-inner">
+          <span class="flash-face">
+            ${badge(w)}
+            <strong style="font-size:1.8rem;margin:12px 0;">${esc(w.german)}</strong>
+            <span class="chip mb-2">${w.level} · ${w.type}</span>
+            <small class="muted">Ma’nosini ko‘rish uchun bosing ↗</small>
+          </span>
+          <span class="flash-face flash-back">
+            <strong style="font-size:1.6rem;color:var(--brand);margin-bottom:8px;">${esc(w.uz)}</strong>
+            <p class="meta my-1">Ko‘plik: ${esc(w.plural)}</p>
+            <small style="font-style:italic;">“${esc(w.example)}”</small>
+            <small class="muted mt-1">${esc(w.exampleUz)}</small>
+          </span>
+        </span>
+      </button>
+      <div class="flex gap-2 mt-4">
+        <button type="button" class="secondary flex-1" id="flash-repeat">Qayta ko‘rsatish ↻</button>
+        <button type="button" class="primary flex-1" id="flash-know">Bilaman ✓</button>
+      </div>
+      <div class="flex items-center justify-center gap-2 mt-4">
+        ${voiceButtons((w.article ? w.article + ' ' : '') + w.german, w.german + ' talaffuzi')}
+        <button type="button" class="tertiary" id="flash-next">Keyingi →</button>
+      </div>
+    </div>`;
+    return;
+  }
+
+  $('#vocab-content').innerHTML = `<div class="grid sm:grid-cols-2 gap-3">
+    ${list.map(w => `<article class="vocab-card card ${w.pluralArticle ? 'plural-border' : w.article ? w.article + '-border' : ''}">
+      <div class="flex items-center justify-between gap-2">
+        <div class="flex gap-1 flex-wrap">
+          ${badge(w)}
+          <span class="chip">${w.level}</span>
+          <span class="chip">${w.type}</span>
+        </div>
+        <div class="flex gap-1">
+          <button type="button" class="icon-btn" data-mastered="${w.id}" aria-pressed="${state.mastered.has(w.id)}" aria-label="${esc(w.german)}: yodlangan holati">${state.mastered.has(w.id) ? '✓' : '○'}</button>
+          <button type="button" class="icon-btn" data-favorite="${w.id}" aria-pressed="${state.favorites.has(w.id)}" aria-label="${esc(w.german)}: sevimli">${state.favorites.has(w.id) ? '★' : '☆'}</button>
+        </div>
+      </div>
+      <div class="flex items-center justify-between gap-3">
+        <div>
+          <h3>${esc(w.german)}</h3>
+          <strong>${esc(w.uz)}</strong>
+          <p class="meta">Ko‘plik: ${esc(w.plural)}</p>
+        </div>
+        ${voiceButtons((w.article ? w.article + ' ' : '') + w.german, w.german + ' talaffuzi')}
+      </div>
+      <div class="learning-card mb-0">
+        <div class="flex items-center justify-between gap-2">
+          <em>${esc(w.example)}</em>
+          ${voiceButton(w.example, w.german + ' misolini eshitish')}
+        </div>
+        <span class="meta">${esc(w.exampleUz)}</span>
+      </div>
+    </article>`).join('')}
+  </div>`;
 }
 
-const fav=target.closest('[data-favorite]');if(fav){const id=Number(fav.dataset.favorite);state.favorites.has(id)?state.favorites.delete(id):state.favorites.add(id);state.view==='vocabulary'?renderVocab():renderLesson();toast(state.favorites.has(id)?'Sevimlilarga qo‘shildi.':'Sevimlilardan olindi.');return}
-const mastered=target.closest('[data-mastered]');if(mastered){const id=Number(mastered.dataset.mastered);state.mastered.has(id)?state.mastered.delete(id):state.mastered.add(id);renderVocab();renderDashboard();toast(state.mastered.has(id)?'So‘z yodlangan deb belgilandi.':'Yodlangan belgisi olib tashlandi.');return}
-const filter=target.closest('[data-filter]');if(filter){state[filter.dataset.filter]=filter.dataset.value;state.flashIndex=0;renderVocab();return}
-const flip=target.closest('[data-flip]');if(flip){const flipped=flip.classList.toggle('flipped');flip.setAttribute('aria-pressed',String(flipped));return}
-const check=target.closest('[data-check]');if(check){const group=check.dataset.check;if(state.answered.has(group)){toast('Bu mashq bajarilgan.');return}if(check.dataset.correct==='true'){check.classList.add('correct');$$(`[data-check="${group}"]`).forEach(b=>b.disabled=true);const feedback=$('#'+group+'-feedback');if(feedback)feedback.textContent=group==='choose'?'To‘g‘ri: Buch — das artikli bilan ishlatiladi.':group==='fill'?'To‘g‘ri: ich bilan lerne ishlatiladi.':group==='match'?'To‘g‘ri: Lampe — chiroq.':'To‘g‘ri javob!';earn(group)}else{check.classList.add('wrong');toast('Yana bir bor urinib ko‘ring.')}return}
-const ef=target.closest('[data-exam-filter]');if(ef){if(state.examRunning){toast('Avval joriy mashqni yakunlang.');return}state.examFilter=ef.dataset.examFilter;state.selectedExam=`${state.examFilter} · A1`;renderExamOptions();return}
-const ex=target.closest('[data-exam]');if(ex){if(state.examRunning){toast('Avval joriy mashqni yakunlang.');return}state.selectedExam=ex.dataset.exam;renderExamOptions();return}
-const answer=target.closest('[data-exam-q]');if(answer){state.examAnswers[answer.dataset.examQ]=answer.dataset.examValue;$$(`[data-exam-q="${answer.dataset.examQ}"]`).forEach(b=>b.classList.toggle('selected',b===answer));return}
-const sv=target.closest('[data-search-view]');if(sv){closeOverlays();show(sv.dataset.searchView,sv.dataset.searchView==='lesson'?7:undefined);return}
-const sw=target.closest('[data-search-word]');if(sw){closeOverlays();show('vocabulary');$('#word-search').value=sw.dataset.searchWord;renderVocab();return}
-if(target.closest('#library-toggle')){const menu=$('#library-menu');menu.hidden=!menu.hidden;$('#library-toggle').setAttribute('aria-expanded',String(!menu.hidden));return}
-if(target.closest('#mobile-menu-open')){const sheet=$('#mobile-sheet');sheet.hidden=!sheet.hidden;$('#mobile-menu-open').setAttribute('aria-expanded',String(!sheet.hidden));if(!sheet.hidden)$('#mobile-menu-close').focus();return}
-if(target.closest('#mobile-menu-close')){closeMenus();$('#mobile-menu-open').focus();return}
-if(target.closest('.close-overlay')||target.classList.contains('overlay')){closeOverlays();return}
-if(!target.closest('#library-wrap')){$('#library-menu').hidden=true;$('#library-toggle').setAttribute('aria-expanded','false')}
-if(target.closest('#search-open'))openSearch();
-if(target.closest('#theme-toggle')){document.body.classList.toggle('dark');const dark=document.body.classList.contains('dark');$('#theme-toggle').innerHTML=dark?'<i data-lucide="sun"></i>':'<i data-lucide="moon"></i>';$('#theme-toggle').setAttribute('aria-label',dark?'Yorug‘ rejimni yoqish':'Tungi rejimni yoqish');icons()}
-if(target.closest('#preview-play')){
-  const card=$('.audio-card');
-  const isPlaying=card?.classList.contains('playing');
-  if(isPlaying){
-    AudioEngine.stop();
-  } else {
-    card?.classList.add('playing');
-    AudioEngine.speak('Guten Tag! Ich lerne Deutsch.',{
-      btn:$('#preview-play'),
-      onEnd:()=>card?.classList.remove('playing')
+function renderDashboard() {
+  for (const id of ['header-xp', 'home-xp', 'lesson-xp']) {
+    const el = $('#' + id);
+    if (el) el.textContent = state.xp;
+  }
+  for (const id of ['header-streak', 'home-streak']) {
+    const el = $('#' + id);
+    if (el) el.textContent = state.streak;
+  }
+  updateEnergyUI();
+
+  if ($('#home-goal')) $('#home-goal').textContent = `${state.minutes}/20`;
+  if ($('#home-progress')) $('#home-progress').textContent = `${state.completed}/6`;
+  if ($('#home-mastered')) $('#home-mastered').textContent = `${state.mastered.size}/${words.length}`;
+  if ($('#dash-streak')) $('#dash-streak').textContent = `${state.streak} kun`;
+  if ($('#dash-xp')) $('#dash-xp').textContent = `${state.xp} XP`;
+  if ($('#dash-goal')) $('#dash-goal').innerHTML = `${state.minutes}/20<br>daqiqa`;
+  if ($('#goal-ring')) $('#goal-ring').style.background = `conic-gradient(#f59e0b 0 ${state.minutes / 20 * 100}%,var(--raised) ${state.minutes / 20 * 100}%)`;
+  if ($('#dash-course-fill')) $('#dash-course-fill').style.width = `${state.completed / 6 * 100}%`;
+  if ($('#dash-course-label')) $('#dash-course-label').textContent = `${state.completed} / 6 dars bajarildi`;
+  if ($('#dash-mastered')) $('#dash-mastered').textContent = `${state.mastered.size} / ${words.length} ta`;
+  if ($('#dash-attempts')) $('#dash-attempts').textContent = `${state.attempts.length} ta urinish`;
+
+  const badges = [
+    ['✦', 'Birinchi qadam', 'Darsni boshlang yoki mashq bajaring', state.answered.size > 0],
+    ['🔥', 'Izchil o‘quvchi', 'O‘quv ritmini davom ettiring', state.streak > 0],
+    ['✓', 'So‘z boyligi', 'Birinchi so‘zni yodlang', state.mastered.size > 0],
+    ['🎓', 'Boshlang‘ich kurs', 'Kamida 3 ta darsni yakunlang', state.completed >= 3],
+    ['🏅', 'Nemis tili bilimdoni', 'Barcha 6 ta darsni tamomlang', state.completed >= 6]
+  ];
+
+  if ($('#badges-list')) {
+    $('#badges-list').innerHTML = badges.map(([icon, title, desc, unlocked]) => `<article class="method card ${unlocked ? '' : 'opacity-60'}">
+      <span class="num" style="${unlocked ? 'background:#fffbeb;color:#b45309;box-shadow:0 0 20px #f59e0b55' : 'filter:grayscale(1)'}">${unlocked ? icon : '🔒'}</span>
+      <h3>${title}</h3>
+      <p>${desc}</p>
+      <span class="meta">${unlocked ? '✓ Ochilgan' : 'Qulflangan'}</span>
+    </article>`).join('');
+  }
+
+  renderLevels();
+  renderRoadmap();
+}
+
+const examBank = {
+  'Hören · A1': {
+    intro: 'Nemischa jumlalarni tinglang va audio mazmuniga oid savollarga javob bering.',
+    questions: [
+      {
+        id: 'q1',
+        audio: 'Guten Tag! Ich möchte einen Kaffee und ein Wasser bitte.',
+        prompt: '1. Audioda mijoz nima buyurtma qildi?',
+        choices: ['Faqat choy', 'Kofe va suv', 'Faqat non'],
+        correct: 1,
+        explanation: '“einen Kaffee und ein Wasser” — kofe va suv buyurtma qilindi.'
+      },
+      {
+        id: 'q2',
+        audio: 'Entschuldigung, wie komme ich zum Bahnhof? Gehen Sie geradeaus.',
+        prompt: '2. Suhbati qayerga borish haqida va qaysi yo‘nalish ko‘rsatildi?',
+        choices: ['Vokzalga, to‘g‘riga yurish', 'Aeroportga, o‘ngga yurish', 'Muzeyga, chapga yurish'],
+        correct: 0,
+        explanation: '“zum Bahnhof” (vokzalga) va “geradeaus” (to‘g‘riga) aytildi.'
+      }
+    ]
+  },
+  'Hören · A2': {
+    intro: 'A2 darajadagi kundalik suhbatlarni tinglang va to‘g‘ri javobni belgilang.',
+    questions: [
+      {
+        id: 'q1',
+        audio: 'Der Zug nach Frankfurt fährt um vierzehn Uhr dreißig auf Gleis vier ab.',
+        prompt: '1. Frankfurt poyezdi soat nechada jo‘naydi?',
+        choices: ['13:30 da', '14:30 da', '15:00 da'],
+        correct: 1,
+        explanation: '“vierzehn Uhr dreißig” — soat 14:30.'
+      },
+      {
+        id: 'q2',
+        audio: 'Haben Sie am Samstag Zeit? Wir können ins Museum gehen.',
+        prompt: '2. Taklif qaysi kunga va qayerga berilmoqda?',
+        choices: ['Juma kuni kinoga', 'Shanba kuni muzeyga', 'Yakshanba kuni teatrga'],
+        correct: 1,
+        explanation: '“am Samstag” (shanba kuni) va “ins Museum” (muzeyga).'
+      }
+    ]
+  },
+  'Lesen · A1': {
+    intro: 'Berilgan qisqa e’lon va matnlarni o‘qib tushuning.',
+    questions: [
+      {
+        id: 'q1',
+        passage: 'Liebe Gäste, das Café Mozart hat täglich von 8:00 bis 20:00 Uhr geöffnet. Montags Ruhetag.',
+        prompt: '1. Kafe dushanba kuni ishlaydimi?',
+        choices: ['Ha, har kuni ishlaydi', 'Yo‘q, dushanba dam olish kuni (Ruhetag)', 'Faqat 20:00 gacha ishlaydi'],
+        correct: 1,
+        explanation: '“Montags Ruhetag” — dushanba kuni dam olish kuni.'
+      },
+      {
+        id: 'q2',
+        passage: 'Mein Name ist Anna. Ich wohne seit zwei Monaten in Berlin und lerne Deutsch an einer Sprachschule.',
+        prompt: '2. Anna Berlinda necha oydan beri yashaydi?',
+        choices: ['1 oy', '2 oy (zwei Monaten)', '1 yil'],
+        correct: 1,
+        explanation: '“seit zwei Monaten” — ikki oydan beri.'
+      }
+    ]
+  },
+  'Lesen · A2': {
+    intro: 'A2 darajadagi e-mail va xabarlarni o‘qish sinovi.',
+    questions: [
+      {
+        id: 'q1',
+        passage: 'Hallo Thomas, mein Flug hat leider Verspätung. Ich komme erst um 18:00 Uhr am Flughafen an. Kannst du mich abholen?',
+        prompt: '1. Nima uchun yozuvchi kech qolmoqda?',
+        choices: ['Poyezd bekor qilingan', 'Parvoz kechikkan (Flug hat Verspätung)', 'Ishxonada qolgan'],
+        correct: 1,
+        explanation: '“Flug hat leider Verspätung” — samolyot reysi kechikkan.'
+      },
+      {
+        id: 'q2',
+        passage: 'Wohnungsanzeige: 2-Zimmer-Wohnung im Zentrum, 55 qm, mit Einbauküche und Balkon. Miete: 750 Euro warm.',
+        prompt: '2. Xonadonning qanday qulayliklari bor?',
+        choices: ['Garaj va basseyn', 'Oshxona mebeli va balkon', 'Faqat podval'],
+        correct: 1,
+        explanation: '“mit Einbauküche und Balkon” — o‘rnatilgan oshxona va balkon.'
+      }
+    ]
+  },
+  'Kompleks · A1': {
+    intro: 'Lug‘at, grammatika va nutq qoidalarini jamlagan sinov.',
+    questions: [
+      {
+        id: 'q1',
+        prompt: '1. “Ich lerne Deutsch” jumlasida fe’l qaysi o‘rinda kelgan?',
+        choices: ['1-o‘rinda', '2-o‘rinda (V2 qoidasi)', 'Oxirida'],
+        correct: 1,
+        explanation: 'Nemis tilida oddiy gapda tuslangan fe’l har doim 2-o‘rinda keladi.'
+      },
+      {
+        id: 'q2',
+        prompt: '2. “das Buch” so‘zining ko‘plik shakli qaysi?',
+        choices: ['die Bucher', 'die Bücher', 'die Buches'],
+        correct: 1,
+        explanation: 'die Bücher (Umlaut + er).'
+      }
+    ]
+  },
+  'Kompleks · A2': {
+    intro: 'A2 darajadagi grammatika va so‘z qo‘llash imtihoni.',
+    questions: [
+      {
+        id: 'q1',
+        prompt: '1. “aufstehen” fe’lining to‘g‘ri qo‘llanishi qaysi?',
+        choices: ['Ich aufstehe um 7 Uhr.', 'Ich stehe um 7 Uhr auf.', 'Ich um 7 Uhr aufstehe.'],
+        correct: 1,
+        explanation: 'Ajraladigan prefikslar (auf-) gap oxiriga boradi.'
+      },
+      {
+        id: 'q2',
+        prompt: '2. “Wir fahren mit ___ Bus” (der Bus, Dativ):',
+        choices: ['dem', 'den', 'der'],
+        correct: 0,
+        explanation: 'mit predlogi har doim Dativ talab qiladi: mit dem Bus.'
+      }
+    ]
+  }
+};
+
+function renderExamOptions() {
+  $$('.segment button').forEach(b => {
+    const selected = b.dataset.examFilter === state.examFilter;
+    b.classList.toggle('selected', selected);
+    b.setAttribute('aria-pressed', String(selected));
+  });
+
+  const names = ['A1', 'A2'].map(level => `${state.examFilter} · ${level}`);
+  $('#exam-options').innerHTML = names.map(name => {
+    const attempts = state.attempts.filter(a => a.name === name);
+    const bestScore = attempts.length ? Math.max(...attempts.map(a => a.score)) : null;
+    return `<article class="exam-card card ${state.examFilter === 'Hören' ? 'horen' : state.examFilter === 'Lesen' ? 'lesen' : 'kompleks'}">
+      <span class="eyebrow">${esc(name.split(' · ')[1])} · SINOV MASHQI</span>
+      <h3>${state.examFilter === 'Hören' ? '🎧' : state.examFilter === 'Lesen' ? '📖' : '🏆'} ${esc(name.split(' · ')[0])} mashqi</h3>
+      <p class="meta">${examBank[name]?.intro || 'Nemis tilini baholash bo‘yicha amaliy mashq.'}</p>
+      <div class="exam-meta">
+        <span>Davomiylik<strong>20 daqiqa</strong></span>
+        <span>Savollar<strong>2 ta</strong></span>
+        <span>O‘tish bali<strong>60%</strong></span>
+      </div>
+      <span class="meta">Eng yaxshi natija: ${bestScore !== null ? `${bestScore}/100` : 'Hali topshirilmagan'} · Urinishlar: ${attempts.length} ta</span>
+      <button type="button" class="${state.selectedExam === name ? 'primary' : 'secondary'}" data-exam="${esc(name)}" aria-pressed="${state.selectedExam === name}">${state.selectedExam === name ? 'Tanlangan ✓' : 'Tanlash →'}</button>
+    </article>`;
+  }).join('');
+}
+
+function examClock() {
+  const e = $('#exam-clock');
+  if (e) e.textContent = `${String(Math.floor(state.examSeconds / 60)).padStart(2, '0')}:${String(state.examSeconds % 60).padStart(2, '0')}`;
+}
+
+function startExam() {
+  if (state.examRunning) return;
+  state.examRunning = true;
+  state.examSeconds = 1200;
+  state.examAnswers = {};
+
+  const currentExam = examBank[state.selectedExam] || examBank['Hören · A1'];
+
+  const questionsHtml = currentExam.questions.map((q, idx) => `<div class="learning-card">
+    ${q.audio ? `<div class="mb-3 p-3" style="background:var(--raised);border-radius:10px;">
+      <span class="eyebrow" style="color:var(--brand)">AUDIO TOPSHIRIQ:</span>
+      <div class="my-2">${voiceButtons(q.audio, 'Imtihon audiosini tinglash')}</div>
+      <small class="muted">Tugmani bosib jumlani tinglang va javobni tanlang</small>
+    </div>` : ''}
+    ${q.passage ? `<div class="mb-3 p-3" style="background:var(--raised);border-radius:10px;">
+      <span class="eyebrow" style="color:var(--brand)">MATN:</span>
+      <p class="my-2" style="font-size:1.02rem;">${esc(q.passage)}</p>
+    </div>` : ''}
+    <strong>${esc(q.prompt)}</strong>
+    <div class="quiz-options mt-3">
+      ${q.choices.map((label, cIdx) => `<button type="button" class="quiz-choice" data-exam-q="${q.id}" data-exam-value="${cIdx}">${esc(label)}</button>`).join('')}
+    </div>
+  </div>`).join('');
+
+  $('#exam-panel').innerHTML = `<div class="flex flex-wrap justify-between gap-2">
+    <span class="eyebrow">${esc(state.selectedExam)} · DEMO MASHQ</span>
+    <strong id="exam-clock" aria-label="Qolgan vaqt">20:00</strong>
+  </div>
+  <h2 class="mt-4">Savollarga javob bering</h2>
+  <p class="meta">Vaqt tugaganda belgilanmagan savollar noto‘g‘ri deb hisoblanadi.</p>
+  ${questionsHtml}
+  <button type="button" id="exam-finish" class="primary mt-4">Javoblarni tekshirish va yakunlash</button>`;
+
+  state.examTimer = setInterval(() => {
+    state.examSeconds = Math.max(0, state.examSeconds - 1);
+    examClock();
+    if (state.examSeconds === 0) finishExam();
+  }, 1000);
+}
+
+function finishExam() {
+  if (!state.examRunning) return;
+  clearInterval(state.examTimer);
+  state.examRunning = false;
+
+  const currentExam = examBank[state.selectedExam] || examBank['Hören · A1'];
+  let correctCount = 0;
+
+  const reviewHtml = currentExam.questions.map((q, idx) => {
+    const userVal = state.examAnswers[q.id];
+    const isCorrect = userVal !== undefined && Number(userVal) === q.correct;
+    if (isCorrect) correctCount++;
+    const selectedText = userVal !== undefined ? q.choices[Number(userVal)] : 'Tanlanmagan';
+    const correctText = q.choices[q.correct];
+
+    return `<div class="learning-card" style="border-left:4px solid ${isCorrect ? 'var(--good)' : 'var(--bad)'}">
+      <strong>${esc(q.prompt)}</strong>
+      <p class="meta my-1">Sizning javobingiz: <span style="color:${isCorrect ? 'var(--good)' : 'var(--bad)'}">${esc(selectedText)}</span></p>
+      ${!isCorrect ? `<p class="meta my-1" style="color:var(--good)">To‘g‘ri javob: <strong>${esc(correctText)}</strong></p>` : ''}
+      <small class="muted">${esc(q.explanation)}</small>
+    </div>`;
+  }).join('');
+
+  const total = currentExam.questions.length;
+  const score = Math.round((correctCount / total) * 100);
+  const passed = score >= 60;
+  const attempt = {
+    name: state.selectedExam,
+    score,
+    correct: correctCount,
+    total,
+    date: new Date().toLocaleDateString('uz-UZ')
+  };
+  state.attempts.push(attempt);
+  if (passed) earn('exam_' + state.selectedExam, 30);
+  saveState();
+
+  $('#exam-panel').innerHTML = `<span class="eyebrow">MASHQ YAKUNLANDI · ${esc(attempt.name)}</span>
+  <h2>Natija: ${score}/100</h2>
+  <p style="color:${passed ? 'var(--good)' : 'var(--bad)'};font-weight:600;">${passed ? 'Tabriklaymiz! Siz o‘tish mezonini muvaffaqiyatli bajardingiz.' : 'Mezon bajarilmadi (kamida 60% kerak). Qayta mashq qiling.'}</p>
+  <p class="meta">${total} ta savoldan ${correctCount} tasiga to‘g‘ri javob berildi.</p>
+  <div class="certificate-paper" id="certificate-paper">
+    <div class="tricolor mx-auto mb-5" style="width:105px"><i></i><i></i><i></i></div>
+    <small>FOR GREAT NATION · FLY HIGH</small>
+    <h2>Ichki baholash natijasi</h2>
+    <p>${esc(attempt.name)} · ${score}/100 ball · ${attempt.date}</p>
+    <strong>${passed ? 'Mezondan o‘tdi ✓' : 'Qayta urinish tavsiya etiladi'}</strong>
+    <p class="mt-5 text-xs">For Great Nation ichki o‘quv platformasi baholashi. Bu rasmiy Goethe yoki telc hujjati emas.</p>
+  </div>
+  <details class="mt-5">
+    <summary>Savollar tahlili va tushuntirishlar</summary>
+    <div class="mt-3">${reviewHtml}</div>
+  </details>
+  <div class="flex flex-wrap gap-2 mt-5 no-print">
+    <button type="button" id="exam-download" class="primary">Natijani yuklab olish ↓</button>
+    <button type="button" id="exam-print" class="secondary">Chop etish</button>
+    <button type="button" id="exam-reset" class="secondary">Boshqa mashqni tanlash</button>
+  </div>`;
+
+  renderExamOptions();
+  renderDashboard();
+  if (passed) celebrate();
+  toast('Baholash yakunlandi.');
+}
+
+function resetExam() {
+  $('#exam-panel').innerHTML = `<span class="eyebrow">TANLANGAN SINOV MASHQI</span>
+  <h2>Mashqqa tayyormisiz?</h2>
+  <p class="muted">Tegishli bo‘lim va darajani tanlab, taymerli mashqni boshlang.</p>
+  <button type="button" class="primary" id="exam-start">Mashqni boshlash</button>`;
+}
+
+function openSearch() {
+  lastFocus = document.activeElement;
+  $('#search-overlay').hidden = false;
+  $('#global-search').value = '';
+  searchResults();
+  $('#global-search').focus();
+}
+
+function searchResults() {
+  const q = ($('#global-search')?.value || '').trim().toLocaleLowerCase();
+  const pages = [
+    ['Bosh sahifa', 'home'],
+    ['Kurslar', 'courses'],
+    ['Lug‘at', 'vocabulary'],
+    ['Shadowing', 'lesson'],
+    ['Demo testlar', 'certificate'],
+    ['Natijalar', 'dashboard']
+  ];
+
+  const foundPages = pages.filter(([label]) => label.toLocaleLowerCase().includes(q));
+
+  const foundLessons = lessons.map((l, idx) => ({l, idx})).filter(({l}) => {
+    return q && `${l.de} ${l.uz}`.toLocaleLowerCase().includes(q);
+  });
+
+  const foundVocab = words.filter(w => {
+    return q && `${w.article} ${w.german} ${w.uz}`.toLocaleLowerCase().includes(q);
+  }).slice(0, 8);
+
+  let html = '';
+  if (foundPages.length) {
+    html += '<strong class="meta mb-2 block">Bo‘limlar:</strong>';
+    html += foundPages.map(([label, view]) => `<button type="button" class="secondary w-full mb-2 text-left" data-search-view="${view}">📌 ${label} →</button>`).join('');
+  }
+  if (foundLessons.length) {
+    html += '<strong class="meta my-2 block">Darslar:</strong>';
+    html += foundLessons.map(({l, idx}) => `<button type="button" class="secondary w-full mb-2 text-left" data-search-lesson="${idx}">📖 ${idx + 1}-dars: ${esc(l.de)} (${esc(l.uz)})</button>`).join('');
+  }
+  if (foundVocab.length) {
+    html += '<strong class="meta my-2 block">So‘zlar:</strong>';
+    html += foundVocab.map(w => `<button type="button" class="secondary w-full mb-2 text-left" data-search-word="${esc(w.german)}">🗣 ${esc(w.german)} — ${esc(w.uz)} (${w.level})</button>`).join('');
+  }
+
+  if (!foundPages.length && !foundLessons.length && !foundVocab.length) {
+    html = '<p class="meta text-center py-4">Natija topilmadi. Boshqa so‘z yoki mavzuni qidirib ko‘ring.</p>';
+  }
+
+  $('#global-results').innerHTML = html;
+}
+
+// Global Event Listeners
+document.addEventListener('click', e => {
+  const target = e.target;
+
+  const nav = target.closest('[data-view]');
+  if (nav) {
+    show(nav.dataset.view, nav.hasAttribute('data-step') ? Number(nav.dataset.step) : undefined);
+    return;
+  }
+
+  const lesson = target.closest('[data-lesson]');
+  if (lesson) {
+    openDetail(Number(lesson.dataset.lesson));
+    return;
+  }
+
+  const stage = target.closest('[data-stage]');
+  if (stage) {
+    state.step = Number(stage.dataset.stage);
+    renderLesson();
+    return;
+  }
+
+  const phoneticChip = target.closest('[data-phonetic]');
+  if (phoneticChip) {
+    const p = phoneticChip.dataset.phonetic;
+    const phoneticsMap = {'ä':'Ä. Äpfel.','ö':'Ö. Schön.','ü':'Ü. Über.','ß':'Eszett. Straße.','ei':'Ei. Eins.','ie':'I-E. Sieben.','eu':'Eu. Euro.','ch':'C-H. Ich.'};
+    phoneticChip.classList.add('active');
+    AudioEngine.speak(phoneticsMap[p] || p, {persona:'slow', btn:phoneticChip, onEnd:() => phoneticChip.classList.remove('active')});
+    return;
+  }
+
+  if (target.closest('#phonetics-play')) {
+    const chips = $$('#phonetic-chips .phonetic-chip');
+    const phoneticsMap = {'ä':'Ä. Äpfel.','ö':'Ö. Schön.','ü':'Ü. Über.','ß':'Eszett. Straße.','ei':'Ei. Eins.','ie':'I-E. Sieben.','eu':'Eu. Euro.','ch':'C-H. Ich.'};
+    const items = chips.map(chip => {
+      const p = chip.dataset.phonetic;
+      return {
+        text: phoneticsMap[p] || p,
+        persona: 'slow',
+        pause: 400,
+        btn: chip,
+        onStart: () => chip.classList.add('active'),
+        onEnd: () => chip.classList.remove('active')
+      };
     });
+    AudioEngine.playSequence(items);
+    return;
   }
-}
-if(target.closest('#step-prev')){state.step=Math.max(0,state.step-1);renderLesson()}
-if(target.closest('#step-next')){state.step=Math.min(8,state.step+1);renderLesson()}
-if(target.closest('#table-mode')){state.mode='table';renderVocab()}
-if(target.closest('#flash-mode')){state.mode='flash';state.flashIndex=0;renderVocab()}
-if(target.closest('#flash-next')||target.closest('#flash-repeat')){const list=filteredWords();state.flashIndex=list.length?(state.flashIndex+1)%list.length:0;renderVocab()}
-if(target.closest('#flash-know')){const list=filteredWords(),w=list[state.flashIndex];if(w){state.mastered.add(w.id);renderDashboard();state.flashIndex=(state.flashIndex+1)%list.length;renderVocab();toast('So‘z yodlangan deb belgilandi.')} }
-if(target.closest('#shadow-demo')){earn('shadow');$('#shadow-feedback').textContent='Takrorlash bosqichi bajarildi. Ovozingiz avtomatik baholanmadi.'}
-if(target.closest('#shadow-retry'))speak('Guten Tag! Ich heiße Anna.');
-if(target.closest('#order-demo')){earn('order');$('#order-result').textContent='To‘g‘ri tartib: Ich lerne Deutsch.'}
-if(target.closest('#exam-start'))startExam();
-if(target.closest('#exam-finish'))finishExam();
-if(target.closest('#exam-reset'))resetExam();
-if(target.closest('#exam-print'))window.print();
-if(target.closest('#exam-download')){const last=state.attempts.at(-1),a=document.createElement('a');a.href=URL.createObjectURL(new Blob([`FOR GREAT NATION · FLY HIGH\nICHKI DEMO BAHOLASH\n${last.name}\nNatija: ${last.score}/100\nSana: ${last.date}\nBu rasmiy Goethe, telc yoki ÖSD sertifikati emas.\n`],{type:'text/plain;charset=utf-8'}));a.download='fly-high-demo-natija.txt';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+
+  if (target.closest('#play-dialogue-all')) {
+    const cur = lessonData[state.currentLesson] || lessonData[0];
+    const turns = cur.dialogue.map((turn, tIdx) => ({
+      text: turn.de,
+      persona: turn.persona,
+      container: $(`.dialogue-turn[data-turn="${tIdx}"]`),
+      btn: $(`[data-turn-btn="${tIdx}"]`),
+      pause: 480
+    }));
+    AudioEngine.playSequence(turns);
+    return;
+  }
+
+  if (target.closest('#stop-dialogue-btn')) {
+    AudioEngine.stop();
+    return;
+  }
+
+  const voice = target.closest('[data-speak]');
+  if (voice) {
+    const text = voice.dataset.speak;
+    const persona = voice.dataset.persona || null;
+    const container = voice.closest('.dialogue-turn');
+    const wasPlaying = voice.classList.contains('playing');
+    if (wasPlaying) {
+      AudioEngine.stop();
+    } else {
+      AudioEngine.speak(text, {persona, btn: voice, container});
+    }
+    return;
+  }
+
+  const fav = target.closest('[data-favorite]');
+  if (fav) {
+    const id = Number(fav.dataset.favorite);
+    state.favorites.has(id) ? state.favorites.delete(id) : state.favorites.add(id);
+    saveState();
+    state.view === 'vocabulary' ? renderVocab() : renderLesson();
+    toast(state.favorites.has(id) ? 'Sevimlilarga qo‘shildi.' : 'Sevimlilardan olindi.');
+    return;
+  }
+
+  const mastered = target.closest('[data-mastered]');
+  if (mastered) {
+    const id = Number(mastered.dataset.mastered);
+    state.mastered.has(id) ? state.mastered.delete(id) : state.mastered.add(id);
+    saveState();
+    renderVocab();
+    renderDashboard();
+    toast(state.mastered.has(id) ? 'So‘z yodlangan deb belgilandi.' : 'Yodlangan belgisi olib tashlandi.');
+    return;
+  }
+
+  const filter = target.closest('[data-filter]');
+  if (filter) {
+    state[filter.dataset.filter] = filter.dataset.value;
+    state.flashIndex = 0;
+    renderVocab();
+    return;
+  }
+
+  const flip = target.closest('[data-flip]');
+  if (flip) {
+    const flipped = flip.classList.toggle('flipped');
+    flip.setAttribute('aria-pressed', String(flipped));
+    return;
+  }
+
+  const check = target.closest('[data-check]');
+  if (check) {
+    const group = check.dataset.check;
+    if (state.answered.has(group)) {
+      toast('Bu mashq allaqachon bajarilgan.');
+      return;
+    }
+    if (check.dataset.correct === 'true') {
+      check.classList.add('correct');
+      $$(`[data-check="${group}"]`).forEach(b => b.disabled = true);
+      const feedback = $('#' + group + '-feedback');
+      if (feedback) feedback.textContent = 'To‘g‘ri javob!';
+      earn(group);
+    } else {
+      check.classList.add('wrong');
+      decrementEnergy();
+    }
+    return;
+  }
+
+  const ef = target.closest('[data-exam-filter]');
+  if (ef) {
+    if (state.examRunning) {
+      toast('Avval joriy mashqni yakunlang.');
+      return;
+    }
+    state.examFilter = ef.dataset.examFilter;
+    state.selectedExam = `${state.examFilter} · A1`;
+    renderExamOptions();
+    return;
+  }
+
+  const ex = target.closest('[data-exam]');
+  if (ex) {
+    if (state.examRunning) {
+      toast('Avval joriy mashqni yakunlang.');
+      return;
+    }
+    state.selectedExam = ex.dataset.exam;
+    renderExamOptions();
+    return;
+  }
+
+  const answer = target.closest('[data-exam-q]');
+  if (answer) {
+    state.examAnswers[answer.dataset.examQ] = answer.dataset.examValue;
+    $$(`[data-exam-q="${answer.dataset.examQ}"]`).forEach(b => b.classList.toggle('selected', b === answer));
+    return;
+  }
+
+  const sv = target.closest('[data-search-view]');
+  if (sv) {
+    closeOverlays();
+    show(sv.dataset.searchView, sv.dataset.searchView === 'lesson' ? 7 : undefined);
+    return;
+  }
+
+  const sl = target.closest('[data-search-lesson]');
+  if (sl) {
+    closeOverlays();
+    state.currentLesson = Number(sl.dataset.searchLesson);
+    state.step = 0;
+    show('lesson', 0);
+    return;
+  }
+
+  const sw = target.closest('[data-search-word]');
+  if (sw) {
+    closeOverlays();
+    show('vocabulary');
+    const input = $('#word-search');
+    if (input) input.value = sw.dataset.searchWord;
+    renderVocab();
+    return;
+  }
+
+  if (target.closest('#library-toggle')) {
+    const menu = $('#library-menu');
+    menu.hidden = !menu.hidden;
+    $('#library-toggle').setAttribute('aria-expanded', String(!menu.hidden));
+    return;
+  }
+
+  if (target.closest('#mobile-menu-open')) {
+    const sheet = $('#mobile-sheet');
+    sheet.hidden = !sheet.hidden;
+    $('#mobile-menu-open').setAttribute('aria-expanded', String(!sheet.hidden));
+    if (!sheet.hidden) $('#mobile-menu-close').focus();
+    return;
+  }
+
+  if (target.closest('#mobile-menu-close')) {
+    closeMenus();
+    $('#mobile-menu-open').focus();
+    return;
+  }
+
+  if (target.closest('.close-overlay') || target.classList.contains('overlay')) {
+    closeOverlays();
+    return;
+  }
+
+  if (!target.closest('#library-wrap')) {
+    $('#library-menu').hidden = true;
+    $('#library-toggle').setAttribute('aria-expanded', 'false');
+  }
+
+  if (target.closest('#search-open')) openSearch();
+
+  if (target.closest('#theme-toggle')) {
+    document.body.classList.toggle('dark');
+    const dark = document.body.classList.contains('dark');
+    $('#theme-toggle').innerHTML = dark ? '<i data-lucide="sun"></i>' : '<i data-lucide="moon"></i>';
+    $('#theme-toggle').setAttribute('aria-label', dark ? 'Yorug‘ rejimni yoqish' : 'Tungi rejimni yoqish');
+    saveState();
+    icons();
+  }
+
+  if (target.closest('#preview-play')) {
+    const card = $('.audio-card');
+    const isPlaying = card?.classList.contains('playing');
+    if (isPlaying) {
+      AudioEngine.stop();
+    } else {
+      card?.classList.add('playing');
+      AudioEngine.speak('Guten Tag! Ich lerne Deutsch.', {
+        btn: $('#preview-play'),
+        onEnd: () => card?.classList.remove('playing')
+      });
+    }
+  }
+
+  if (target.closest('#step-prev')) {
+    state.step = Math.max(0, state.step - 1);
+    renderLesson();
+  }
+
+  if (target.closest('#step-next')) {
+    state.step = Math.min(8, state.step + 1);
+    renderLesson();
+  }
+
+  if (target.closest('#table-mode')) {
+    state.mode = 'table';
+    renderVocab();
+  }
+
+  if (target.closest('#flash-mode')) {
+    state.mode = 'flash';
+    state.flashIndex = 0;
+    renderVocab();
+  }
+
+  if (target.closest('#flash-next')) {
+    const list = filteredWords();
+    state.flashIndex = list.length ? (state.flashIndex + 1) % list.length : 0;
+    renderVocab();
+  }
+
+  if (target.closest('#flash-repeat')) {
+    const list = filteredWords();
+    toast('Ushbu so‘z takrorlash uchun ro‘yxatda saqlandi.');
+    state.flashIndex = list.length ? (state.flashIndex + 1) % list.length : 0;
+    renderVocab();
+  }
+
+  if (target.closest('#flash-know')) {
+    const list = filteredWords();
+    const w = list[state.flashIndex];
+    if (w) {
+      state.mastered.add(w.id);
+      saveState();
+      renderDashboard();
+      toast('So‘z yodlangan deb belgilandi! (+5 XP)');
+      state.flashIndex = (state.flashIndex + 1) % list.length;
+      renderVocab();
+    }
+  }
+
+  if (target.closest('#finish-lesson-btn')) {
+    finishLesson();
+  }
+
+  if (target.closest('#shadow-demo')) {
+    earn('shadow_' + state.currentLesson);
+    $('#shadow-feedback').textContent = 'Ajoyib! Ovoz chiqarib takrorlash bosqichi muvaffaqiyatli bajarildi.';
+  }
+
+  if (target.closest('#shadow-retry')) {
+    const cur = lessonData[state.currentLesson] || lessonData[0];
+    speak(cur.shadowing.text);
+  }
+
+  if (target.closest('#exam-start')) startExam();
+  if (target.closest('#exam-finish')) finishExam();
+  if (target.closest('#exam-reset')) resetExam();
+  if (target.closest('#exam-print')) window.print();
+
+  if (target.closest('#exam-download')) {
+    const last = state.attempts.at(-1) || {name: state.selectedExam, score: 0, date: new Date().toLocaleDateString('uz-UZ')};
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([`FOR GREAT NATION · FLY HIGH\nICHKI SINOV NATIJASI\n${last.name}\nNatija: ${last.score}/100\nSana: ${last.date}\nIzoh: Bu rasmiy Goethe yoki telc hujjati emas.\n`], {type: 'text/plain;charset=utf-8'}));
+    a.download = `fly-high-natija-${Date.now()}.txt`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  }
 });
-document.addEventListener('submit',e=>{e.preventDefault();if(e.target.id==='writing-form'){const value=$('#writing-answer').value.toLocaleLowerCase().replace(/[.!?]/g,'').replace(/\s+/g,' ').trim();if(value==='ich lerne deutsch'){$('#writing-feedback').textContent='To‘g‘ri! Ich lerne Deutsch.';earn('writing')}else $('#writing-feedback').textContent='Yana urinib ko‘ring. Maslahat: Ich ... Deutsch.'}});
-document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openSearch()}if(e.key==='Escape'){closeOverlays();closeMenus()}const modal=$('.overlay:not([hidden]) .modal');if(e.key==='Tab'&&modal){const items=[...modal.querySelectorAll('button:not(:disabled),input:not(:disabled)')];if(!items.length)return;const first=items[0],last=items.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});
-$('#word-search').addEventListener('input',()=>{state.flashIndex=0;renderVocab()});$('#global-search').addEventListener('input',searchResults);
-$('#audio-speaker')?.addEventListener('change',e=>{toast(e.target.value==='ali'?'Ovoz tanlandi: 👨 Ali (Erkak ovozi)':'Ovoz tanlandi: 👩 Anna (Ayol ovozi)')});
-$('#audio-speed')?.addEventListener('change',e=>{toast(`Talaffuz tezligi: ${e.target.value}x`)});
-renderDashboard();renderLesson();renderVocab();renderExamOptions();icons();
+
+document.addEventListener('submit', e => {
+  e.preventDefault();
+  if (e.target.id === 'writing-form') {
+    const cur = lessonData[state.currentLesson] || lessonData[0];
+    const val = $('#writing-answer').value.toLocaleLowerCase().replace(/[.!?]/g, '').replace(/\s+/g, ' ').trim();
+    const isOk = cur.writing.answers.some(ans => ans.replace(/[.!?]/g, '').trim() === val);
+    if (isOk) {
+      $('#writing-feedback').textContent = `To‘g‘ri javob! Ajoyib natija.`;
+      $('#writing-feedback').style.color = 'var(--good)';
+      earn('writing_' + state.currentLesson);
+    } else {
+      $('#writing-feedback').textContent = `Yana urinib ko‘ring. ${cur.writing.hint}`;
+      $('#writing-feedback').style.color = 'var(--bad)';
+      decrementEnergy();
+    }
+  }
+});
+
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+    e.preventDefault();
+    openSearch();
+  }
+  if (e.key === 'Escape') {
+    closeOverlays();
+    closeMenus();
+  }
+  const modal = $('.overlay:not([hidden]) .modal');
+  if (e.key === 'Tab' && modal) {
+    const items = [...modal.querySelectorAll('button:not(:disabled), input:not(:disabled)')];
+    if (!items.length) return;
+    const first = items[0], last = items.at(-1);
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }
+});
+
+$('#word-search')?.addEventListener('input', () => {
+  state.flashIndex = 0;
+  renderVocab();
+});
+
+$('#global-search')?.addEventListener('input', searchResults);
+
+$('#audio-speaker')?.addEventListener('change', e => {
+  toast(e.target.value === 'ali' ? 'Ovoz tanlandi: 👨 Ali (Erkak ovozi)' : 'Ovoz tanlandi: 👩 Anna (Ayol ovozi)');
+});
+
+$('#audio-speed')?.addEventListener('change', e => {
+  toast(`Talaffuz tezligi: ${e.target.value}x`);
+});
+
+// Initialization
+loadState();
+checkStreak();
+renderDashboard();
+renderLesson();
+renderVocab();
+renderExamOptions();
+icons();
+
+// Sync theme toggle icon
+if (document.body.classList.contains('dark')) {
+  const btn = $('#theme-toggle');
+  if (btn) btn.innerHTML = '<i data-lucide="sun"></i>';
+}
 })();
+
 </script>
  
 </body></html>
