@@ -981,7 +981,12 @@ function show(view, step) {
   if (Number.isInteger(step)) state.step = step;
   $$('.view').forEach(el => el.classList.toggle('active', el.id === 'view-' + view));
   $$('[data-view]').forEach(el => {
-    const active = el.dataset.view === view && !el.hasAttribute('data-step');
+    let active = false;
+    if (el.hasAttribute('data-step')) {
+      active = el.dataset.view === view && Number(el.dataset.step) === state.step;
+    } else {
+      active = el.dataset.view === view && (view !== 'lesson' || state.step !== 7);
+    }
     el.classList.toggle('active', active);
     if (el.closest('nav')) el.setAttribute('aria-current', active ? 'page' : 'false');
   });
@@ -1486,21 +1491,7 @@ function renderLesson() {
      <p id="writing-feedback" class="meta mt-3" aria-live="polite"></p>`,
 
     // 7: Shadowing
-    `<div class="learning-card text-center">
-       <div class="mx-auto w-20 h-20 rounded-full bg-indigo-100 text-indigo-700 grid place-items-center text-3xl mb-4" aria-hidden="true">◉</div>
-       <h3>Eshiting → gapiring → taqqoslang</h3>
-       <p class="muted">Namunani diqqat bilan eshiting, so‘ngra ovoz chiqarib takrorlang va o‘zingiz eshitganingiz bilan taqqoslang.</p>
-       <div class="learning-card mb-4" style="background:var(--raised)">
-         <h4 style="color:var(--brand)">${esc(cur.shadowing.text)}</h4>
-         <p class="meta mb-0">${esc(cur.shadowing.translation)}</p>
-       </div>
-       <div class="flex flex-wrap justify-center gap-2">
-         ${voiceButtons(cur.shadowing.text, 'Shadowing namunasini eshitish')}
-         <button type="button" id="shadow-demo" class="primary">Takrorladim ✓</button>
-         <button type="button" id="shadow-retry" class="secondary">Yana eshitish ↻</button>
-       </div>
-       <p id="shadow-feedback" class="meta mt-3" aria-live="polite"></p>
-     </div>`,
+    `<div class="learning-card text-center"><div class="mx-auto w-20 h-20 rounded-full bg-indigo-100 text-indigo-700 grid place-items-center text-3xl mb-4" aria-hidden="true">◉</div><h3>Eshiting → gapiring → taqqoslang</h3><p>Mikrofon bu muhitda ishlamaydi. Namunani tinglang, jumlani ovoz chiqarib takrorlang va eshitganingiz bilan o‘zingiz taqqoslang. Ovoz yozib olinmaydi yoki avtomatik baholanmaydi.</p><div class="flex flex-wrap justify-center gap-2">${voiceButton('Guten Tag! Ich heiße Anna.','Shadowing namunasini eshitish')}<button type="button" id="shadow-demo" class="primary">Takrorladim</button><button type="button" id="shadow-retry" class="secondary">Yana eshitish</button></div><p id="shadow-feedback" class="meta mt-3" aria-live="polite"></p></div>`,
 
     // 8: Mashqlar
     exercisesHtml
@@ -2275,13 +2266,12 @@ document.addEventListener('click', e => {
   }
 
   if (target.closest('#shadow-demo')) {
-    earn('shadow_' + state.currentLesson);
-    $('#shadow-feedback').textContent = 'Ajoyib! Ovoz chiqarib takrorlash bosqichi muvaffaqiyatli bajarildi.';
+    earn('shadow');
+    $('#shadow-feedback').textContent = 'Takrorlash bosqichi bajarildi. Ovozingiz avtomatik baholanmadi.';
   }
 
   if (target.closest('#shadow-retry')) {
-    const cur = lessonData[state.currentLesson] || lessonData[0];
-    speak(cur.shadowing.text);
+    speak('Guten Tag! Ich heiße Anna.');
   }
 
   if (target.closest('#exam-start')) startExam();
