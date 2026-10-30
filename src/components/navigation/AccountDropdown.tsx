@@ -13,7 +13,7 @@ import {
   LogIn, 
   ChevronDown,
   Flame,
-  Award
+  Mic
 } from 'lucide-react';
 
 export const AccountDropdown: React.FC = () => {
@@ -140,12 +140,12 @@ export const AccountDropdown: React.FC = () => {
             </Link>
 
             <Link
-              to="/certificate-tests"
+              to="/shadowing"
               onClick={() => setIsOpen(false)}
               className="flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-950/40 transition"
             >
-              <Award size={15} className="text-amber-500" />
-              <span>Sertifikat testlarim</span>
+              <Mic size={15} className="text-amber-500" />
+              <span>Shadowing mashqlari</span>
             </Link>
 
             <Link

@@ -8,7 +8,7 @@ import {
   Tv, 
   Layers, 
   BookOpen, 
-  Award, 
+  Mic, 
   X,
   Sparkles,
   ChevronDown
@@ -369,20 +369,20 @@ export const HomePage: React.FC = () => {
               </div>
             </Link>
 
-            {/* 4. Sertifikat testlari */}
+            {/* 4. Shadowing Studio */}
             <Link
-              to="/certificate-tests"
+              to="/shadowing"
               className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-2xs hover:shadow-card hover:-translate-y-0.5 transition-all duration-200 flex items-center space-x-4 group"
             >
-              <div className="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800/80 text-amber-600 dark:text-amber-400 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
-                <Award size={22} />
+              <div className="w-12 h-12 rounded-2xl bg-cyan-50 dark:bg-cyan-950/60 border border-cyan-200 dark:border-cyan-800/80 text-cyan-600 dark:text-cyan-400 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+                <Mic size={22} />
               </div>
               <div>
                 <h4 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                  Sertifikat testlari
+                  Shadowing Studio
                 </h4>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                  A1–B1 darajalar uchun
+                  Talaffuz va tinglash mashqi
                 </p>
               </div>
             </Link>

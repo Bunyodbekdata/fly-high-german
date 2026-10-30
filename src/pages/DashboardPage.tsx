@@ -10,7 +10,7 @@ import {
   Bookmark, 
   FileText, 
   Headphones, 
-  Award, 
+  Mic, 
   Trophy, 
   Settings, 
   Flame, 
@@ -100,7 +100,7 @@ export const DashboardPage: React.FC = () => {
     { to: '/vocabulary', label: 'Lug‘at', icon: Bookmark, active: false },
     { to: '/grammar', label: 'Grammatika', icon: FileText, active: false },
     { to: '/listening', label: 'Tinglab tushunish', icon: Headphones, active: false },
-    { to: '/certificate-tests', label: 'Testlar', icon: Award, active: false },
+    { to: '/shadowing', label: 'Shadowing', icon: Mic, active: false },
     { to: '/profile', label: 'Yutuqlar va Profil', icon: Trophy, active: false },
   ];
 
