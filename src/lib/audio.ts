@@ -26,6 +26,7 @@ class AudioService {
   private currentAudio: HTMLAudioElement | null = null;
   private isPlayingAudio = false;
   private queueAbortController: AbortController | null = null;
+  private isExplicitlyStopped = false;
   private germanVoice: SpeechSynthesisVoice | null = null;
   private voicesLoaded = false;
   private mediaRecorder: MediaRecorder | null = null;
@@ -268,6 +269,7 @@ class AudioService {
     const effectiveRate = rate !== undefined ? rate : this.getSpeed();
     const cleanedText = this.cleanGermanText(text);
     this.lastFailureReason = null;
+    this.isExplicitlyStopped = false;
     if (!cleanedText) return { ok: false };
 
     this.notifyState(true);
@@ -278,7 +280,7 @@ class AudioService {
     try {
       // 1. Primary Engine: Web Speech API (zero latency, offline capable, authentic German pronunciation)
       if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-        spoke = await this.playViaWebSpeech(cleanedText, effectiveRate);
+        spoke = await this.playViaWebSpeech(cleanedText, effectiveRate, abortController.signal);
       }
 
       // 2. Secondary Engine: If Web Speech produced no output, try online audio stream
@@ -378,7 +380,7 @@ class AudioService {
    * Speaks German with native German voices or built-in de-DE speech synthesis.
    * Intelligent sentence chunking ensures Chrome/Edge never freeze on long passages.
    */
-  private async playViaWebSpeech(text: string, rate: number): Promise<boolean> {
+  private async playViaWebSpeech(text: string, rate: number, signal: AbortSignal): Promise<boolean> {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
       this.markFailure('unsupported');
       return false;
