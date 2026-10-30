@@ -59,7 +59,7 @@ body.dark{--bg:#020617;--surface:#0f172a;--raised:#1e293b;--ink:#f8fafc;--body:#
    <header class="site-header canva-header" data-template-id="site-header" style="background: rgb(255, 255, 255);">
     <div class="inner header-row">
      <button type="button" class="brand" data-view="home" aria-label="FLY HIGH — For Great Nation, Deutsch lernen"> <span class="brand-mark" aria-hidden="true"><span class="tricolor"><i></i><i></i><i></i></span><b>FGN</b></span><span class="brand-text"><strong class="canva-text" data-template-id="brand-name" style="color: rgb(15, 23, 42); font-weight: 400; font-style: normal; font-size: 16px;">FLY HIGH</strong><small class="canva-text" data-template-id="brand-subtitle" style="color: rgb(100, 116, 139); font-weight: 400; font-style: normal; font-size: 16px;">FOR GREAT NATION</small></span> </button>
-     <nav class="desktop-nav" aria-label="Asosiy navigatsiya"><button type="button" class="nav-btn active" data-view="home"><i data-lucide="house"></i><span class="canva-text" data-template-id="nav-home" style="color: rgb(0, 0, 0); font-weight: 700; font-style: normal; font-size: 15px;">Bosh sahifa</span></button> <button type="button" class="nav-btn" data-view="courses"><i data-lucide="map"></i><span class="canva-text" data-template-id="nav-courses" style="color: rgb(0, 0, 0); font-weight: 700; font-style: normal; font-size: 15px;">Kurslar</span></button> <button type="button" class="nav-btn" data-view="vocabulary"><i data-lucide="book-open"></i><span class="canva-text" data-template-id="nav-vocabulary" style="color: rgb(0, 0, 0); font-weight: 700; font-style: normal; font-size: 15px;">Lug‘at</span></button> <button type="button" class="nav-btn" data-view="lesson" data-step="7"><i data-lucide="mic"></i><span class="canva-text" data-template-id="nav-shadowing" style="font-weight: 400; font-style: normal; font-size: 16px;">Shadowing</span></button> <button type="button" class="nav-btn" data-view="certificate"><i data-lucide="award"></i><span class="canva-text" data-template-id="nav-certificate" style="color: rgb(0, 0, 0); font-weight: 700; font-style: normal; font-size: 15px;">Testlar</span></button>
+     <nav class="desktop-nav" aria-label="Asosiy navigatsiya"><button type="button" class="nav-btn active" data-view="home"><i data-lucide="house"></i><span class="canva-text" data-template-id="nav-home" style="color: rgb(0, 0, 0); font-weight: 700; font-style: normal; font-size: 15px;">Bosh sahifa</span></button> <button type="button" class="nav-btn" data-view="courses"><i data-lucide="map"></i><span class="canva-text" data-template-id="nav-courses" style="color: rgb(0, 0, 0); font-weight: 700; font-style: normal; font-size: 15px;">Kurslar</span></button> <button type="button" class="nav-btn" data-view="vocabulary"><i data-lucide="book-open"></i><span class="canva-text" data-template-id="nav-vocabulary" style="color: rgb(0, 0, 0); font-weight: 700; font-style: normal; font-size: 15px;">Lug‘at</span></button> <button type="button" class="nav-btn" data-view="shadowing"><i data-lucide="mic"></i><span class="canva-text" data-template-id="nav-shadowing" style="font-weight: 700; font-style: normal; font-size: 15px;">Shadowing</span></button> <button type="button" class="nav-btn" data-view="certificate"><i data-lucide="award"></i><span class="canva-text" data-template-id="nav-certificate" style="color: rgb(0, 0, 0); font-weight: 700; font-style: normal; font-size: 15px;">Testlar</span></button>
       <div class="nav-wrap" id="library-wrap">
        <button type="button" id="library-toggle" class="nav-btn" aria-expanded="false" aria-controls="library-menu"><i data-lucide="library"></i><span class="canva-text" data-template-id="library-toggle-label" style="color: rgb(0, 0, 0); font-weight: 700; font-style: normal; font-size: 15px;">Kutubxona</span></button>
        <div class="dropdown" id="library-menu" hidden=""><button type="button" class="nav-btn canva-button" data-template-id="nav-grammar" data-view="lesson" data-step="3" style="font-weight: 400; font-style: normal; font-size: 16px;">Grammatika</button> <button type="button" class="nav-btn canva-button" data-template-id="nav-listening" data-view="lesson" data-step="4" style="font-weight: 400; font-style: normal; font-size: 16px;">Tinglash</button> <button type="button" class="nav-btn canva-button" data-template-id="nav-reading" data-view="lesson" data-step="5" style="font-weight: 400; font-style: normal; font-size: 16px;">O‘qish</button>
@@ -296,6 +296,25 @@ body.dark{--bg:#020617;--surface:#0f172a;--raised:#1e293b;--ink:#f8fafc;--body:#
      <p id="vocab-count" class="meta" aria-live="polite"></p>
      <div id="vocab-content" class="card p-4 sm:p-6"></div>
     </section>
+    <section id="view-shadowing" class="view" aria-label="Shadowing va Talaffuz studiyasi">
+      <div class="page-heading">
+        <span class="eyebrow" style="color:var(--brand)">TALAFFUZ VA NUTQ STUDIYASI ✦</span>
+        <h1 class="canva-text" style="font-weight: 800; font-size: 32px; margin-bottom: 8px;">Shadowing & Talaffuz</h1>
+        <p class="muted" style="font-size: 16px; margin-top: 0;">Nemischa jonli jumlalarni tinglang, ovoz chiqarib takrorlang va o‘z talaffuzingizni mustahkamlang.</p>
+      </div>
+      <div class="toolbar card mb-4">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div class="flex gap-2" id="shadow-filters">
+            <button type="button" class="filter-btn selected" data-shadow-level="Barchasi" aria-pressed="true">Barchasi</button>
+            <button type="button" class="filter-btn" data-shadow-level="A1" aria-pressed="false">A1 Boshlang‘ich</button>
+            <button type="button" data-shadow-level="A2" class="filter-btn" aria-pressed="false">A2 Davomiy</button>
+            <button type="button" data-shadow-level="B1" class="filter-btn" aria-pressed="false">B1 Erkin</button>
+          </div>
+          <span class="meta" id="shadow-count">8 ta audio mashq</span>
+        </div>
+      </div>
+      <div class="grid sm:grid-cols-2 gap-4" id="shadow-grid"></div>
+    </section>
     <section id="view-certificate" class="view" aria-label="Ichki demo testlar">
      <div class="page-heading">
       <span class="eyebrow" style="color:#b45309">ICHKI BAHOLASH · DEMO</span>
@@ -373,7 +392,7 @@ body.dark{--bg:#020617;--surface:#0f172a;--raised:#1e293b;--ink:#f8fafc;--body:#
     </section>
    </main>
    <nav class="dock" aria-label="Mobil navigatsiya">
-    <button type="button" class="active" data-view="home"><i data-lucide="house"></i><span>Uy</span></button><button type="button" data-view="courses"><i data-lucide="map"></i><span>Kurslar</span></button><button type="button" data-view="vocabulary"><i data-lucide="book-open"></i><span>Lug‘at</span></button><button type="button" data-view="lesson" data-step="7"><i data-lucide="mic"></i><span>Talaffuz</span></button><button type="button" data-view="certificate"><i data-lucide="award"></i><span>Testlar</span></button><button type="button" data-view="dashboard"><i data-lucide="user-round"></i><span>Natijalar</span></button>
+    <button type="button" class="active" data-view="home"><i data-lucide="house"></i><span>Uy</span></button><button type="button" data-view="courses"><i data-lucide="map"></i><span>Kurslar</span></button><button type="button" data-view="vocabulary"><i data-lucide="book-open"></i><span>Lug‘at</span></button><button type="button" data-view="shadowing"><i data-lucide="mic"></i><span>Shadowing</span></button><button type="button" data-view="certificate"><i data-lucide="award"></i><span>Testlar</span></button><button type="button" data-view="dashboard"><i data-lucide="user-round"></i><span>Natijalar</span></button>
    </nav>
    <footer class="site-footer canva-footer" data-template-id="site-footer" style="background: rgb(248, 250, 252);">
     <div class="inner footer-grid">
@@ -385,7 +404,7 @@ body.dark{--bg:#020617;--surface:#0f172a;--raised:#1e293b;--ink:#f8fafc;--body:#
       <h2>O‘quv yo‘li</h2><button type="button" data-view="courses">Kurslar xaritasi</button><button type="button" data-view="lesson">Birinchi dars</button><button type="button" data-view="dashboard">Natijalar</button>
      </div>
      <div>
-      <h2>Mashq qiling</h2><button type="button" data-view="vocabulary">Lug‘at</button><button type="button" data-view="lesson" data-step="7">Shadowing</button><button type="button" data-view="certificate">Demo testlar</button>
+      <h2>Mashq qiling</h2><button type="button" data-view="vocabulary">Lug‘at</button><button type="button" data-view="shadowing">Shadowing</button><button type="button" data-view="certificate">Demo testlar</button>
      </div>
     </div>
    </footer>
@@ -393,7 +412,7 @@ body.dark{--bg:#020617;--surface:#0f172a;--raised:#1e293b;--ink:#f8fafc;--body:#
   <div id="mobile-sheet" class="mobile-sheet" hidden="" role="dialog" aria-label="Barcha bo‘limlar">
    <div class="flex justify-between items-center mb-2">
     <strong>Bo‘limlar</strong><button type="button" id="mobile-menu-close" style="width:auto" aria-label="Menyuni yopish">✕</button>
-   </div><button type="button" data-view="home">Bosh sahifa</button><button type="button" data-view="courses">Kurslar</button><button type="button" data-view="vocabulary">Lug‘at</button><button type="button" data-view="lesson" data-step="3">Grammatika</button><button type="button" data-view="lesson" data-step="4">Tinglash</button><button type="button" data-view="lesson" data-step="5">O‘qish</button><button type="button" data-view="lesson" data-step="7">Shadowing</button><button type="button" data-view="certificate">Demo testlar</button><button type="button" data-view="dashboard">Natijalar</button>
+   </div><button type="button" data-view="home">Bosh sahifa</button><button type="button" data-view="courses">Kurslar</button><button type="button" data-view="vocabulary">Lug‘at</button><button type="button" data-view="lesson" data-step="3">Grammatika</button><button type="button" data-view="lesson" data-step="4">Tinglash</button><button type="button" data-view="lesson" data-step="5">O‘qish</button><button type="button" data-view="shadowing">Shadowing</button><button type="button" data-view="certificate">Demo testlar</button><button type="button" data-view="dashboard">Natijalar</button>
   </div>
   <div id="search-overlay" class="overlay" hidden="">
    <div class="modal card" role="dialog" aria-modal="true" aria-labelledby="search-title">
@@ -490,6 +509,18 @@ const words = [
   {id:46, article:'', german:'erfolgreich', uz:'muvaffaqiyatli', plural:'—', level:'B1.2', type:'Sifat', example:'Sie hat die Prüfung sehr erfolgreich bestanden.', exampleUz:'U imtihondan juda muvaffaqiyatli o‘tdi.'},
   {id:47, article:'die', german:'Verantwortung', uz:'mas’uliyat', plural:'die Verantwortungen', level:'B1.2', type:'Ot', example:'Er übernimmt gerne Verantwortung im Team.', exampleUz:'U jamoada bajonidil mas’uliyatni o‘z zimmasiga oladi.'},
   {id:48, article:'', german:'entwickeln', uz:'rivojlantirmoq', plural:'—', level:'B1.2', type:'Fe’l', example:'Wir entwickeln moderne Lernprogramme.', exampleUz:'Biz zamonaviy o‘quv dasturlarini ishlab chiqamiz.'}
+];
+
+
+const shadowSentences = [
+  {id:1, level:'A1', de:'Guten Tag! Ich heiße Anna. Freut mich, Sie kennenzulernen!', uz:'Xayrli kun! Mening ismim Anna. Tanishganimdan xursandman!', tip:'Salomlashuv va tanishuv'},
+  {id:2, level:'A1', de:'Wie geht es Ihnen? — Danke, mir geht es sehr gut.', uz:'Ahvollaringiz qanday? — Rahmat, ahvolim juda yaxshi.', tip:'Hol-ahvol so‘rash'},
+  {id:3, level:'A1', de:'Ich lerne jeden Tag fleißig Deutsch, um in Deutschland zu studieren.', uz:'Men Germaniyada o‘qish uchun har kuni nemis tilini qunt bilan o‘rganaman.', tip:'Maqsad bildirish'},
+  {id:4, level:'A1', de:'Ich möchte bitte einen Kaffee und ein Stück Kuchen bestellen.', uz:'Iltimos, bitta kofe va bir bo‘lak pirog buyurtma bermoqchiman.', tip:'Kafeda buyurtma berish'},
+  {id:5, level:'A2', de:'Entschuldigung, wo ist der nächste Bahnhof? — Gehen Sie bitte geradeaus.', uz:'Kechirasiz, eng yaqin vokzal qayerda? — Iltimos, to‘g‘riga yuring.', tip:'Shaharda yo‘l so‘rash'},
+  {id:6, level:'A2', de:'Ich stehe jeden Morgen um sieben Uhr auf und frühstücke mit der Familie.', uz:'Men har tong soat 7 da turaman va oilam bilan birga nonushta qilaman.', tip:'Kundalik hayot tartibi'},
+  {id:7, level:'B1', de:'Können Sie diese Grammatikregel bitte noch einmal langsam erklären?', uz:'Iltimos, ushbu grammatika qoidasini yana bir bor sekinroq tushuntira olasizmi?', tip:'Muloyim iltimos'},
+  {id:8, level:'B1', de:'Mit regelmäßiger Übung und Ausdauer erreicht man jedes sprachliche Ziel.', uz:'Muntazam mashq va sabr-toqat bilan har qanday til maqsadiga erishish mumkin.', tip:'Motivatsiya va intizom'}
 ];
 
 const stages = ['Kirish','Muloqot','Lug‘at','Grammatika','Tinglash','O‘qish','Yozish','Shadowing','Mashqlar'];
@@ -837,7 +868,9 @@ const state = {
   examAnswers: {},
   attempts: [],
   audio: false,
-  flashIndex: 0
+  flashIndex: 0,
+  shadowFilter: "Barchasi",
+  shadowCompleted: new Set()
 };
 
 let toastTimer, lastFocus = null;
@@ -855,6 +888,7 @@ function saveState() {
       mastered: [...state.mastered],
       answered: [...state.answered],
       attempts: state.attempts,
+      shadowCompleted: [...state.shadowCompleted],
       unlocked: lessons.map(l => l.unlocked),
       dark: document.body.classList.contains('dark')
     };
@@ -879,6 +913,7 @@ function loadState() {
     if (Array.isArray(data.mastered)) state.mastered = new Set(data.mastered);
     if (Array.isArray(data.answered)) state.answered = new Set(data.answered);
     if (Array.isArray(data.attempts)) state.attempts = data.attempts;
+    if (Array.isArray(data.shadowCompleted)) state.shadowCompleted = new Set(data.shadowCompleted);
     if (Array.isArray(data.unlocked)) {
       data.unlocked.forEach((u, i) => { if (lessons[i]) lessons[i].unlocked = Boolean(u); });
     }
@@ -993,6 +1028,8 @@ function show(view, step) {
   if (view === 'lesson') renderLesson();
   if (view === 'dashboard') renderDashboard();
   if (view === 'certificate') renderExamOptions();
+renderShadowing();
+  if (view === 'shadowing') renderShadowing();
   window.scrollTo({top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'});
 }
 
@@ -1354,6 +1391,42 @@ function quiz(id, prompt, choices) {
     </div>
     <p class="meta mt-3 mb-0" id="${id}-feedback" aria-live="polite"></p>
   </div>`;
+}
+
+
+function renderShadowing() {
+  const filter = state.shadowFilter || 'Barchasi';
+  const list = shadowSentences.filter(s => filter === 'Barchasi' || s.level === filter);
+
+  $('#shadow-filters button').forEach(b => {
+    const isSel = b.dataset.shadowLevel === filter;
+    b.classList.toggle('selected', isSel);
+    b.setAttribute('aria-pressed', String(isSel));
+  });
+
+  const countEl = $('#shadow-count');
+  if (countEl) countEl.textContent = `${list.length} ta audio mashq`;
+
+  const grid = $('#shadow-grid');
+  if (!grid) return;
+
+  grid.innerHTML = list.map(s => {
+    const isDone = state.shadowCompleted.has(s.id);
+    return `<article class="card p-5" style="border-left:4px solid ${isDone ? 'var(--good)' : 'var(--brand)'}">
+      <div class="flex justify-between items-center mb-2">
+        <span class="chip">${s.level} · ${esc(s.tip)}</span>
+        <span class="meta" style="color:${isDone ? 'var(--good)' : 'var(--muted)'}">${isDone ? '✓ Bajarildi' : 'Takrorlash kerak'}</span>
+      </div>
+      <h3 style="font-size:1.15rem;margin:8px 0;line-height:1.5;">${esc(s.de)}</h3>
+      <p class="muted mb-4" style="font-size:0.95rem;">${esc(s.uz)}</p>
+      <div class="flex flex-wrap items-center justify-between gap-2 mt-auto pt-3 border-t" style="border-color:var(--line)">
+        ${voiceButtons(s.de, s.de + ' talaffuzini tinglash')}
+        <button type="button" class="${isDone ? 'secondary' : 'primary'} small" data-shadow-id="${s.id}">
+          ${isDone ? 'Qayta takrorlash ↻' : 'Takrorladim ✓ (+10 XP)'}
+        </button>
+      </div>
+    </article>`;
+  }).join('');
 }
 
 function renderLesson() {
@@ -1928,7 +2001,7 @@ function searchResults() {
     ['Bosh sahifa', 'home'],
     ['Kurslar', 'courses'],
     ['Lug‘at', 'vocabulary'],
-    ['Shadowing', 'lesson'],
+    ['Shadowing studiyasi', 'shadowing'],
     ['Demo testlar', 'certificate'],
     ['Natijalar', 'dashboard']
   ];
@@ -1967,6 +2040,26 @@ function searchResults() {
 // Global Event Listeners
 document.addEventListener('click', e => {
   const target = e.target;
+
+  
+  const sf = target.closest('[data-shadow-level]');
+  if (sf) {
+    state.shadowFilter = sf.dataset.shadowLevel;
+    renderShadowing();
+    return;
+  }
+
+  const sDone = target.closest('[data-shadow-id]');
+  if (sDone) {
+    const id = Number(sDone.dataset.shadowId);
+    const isFirst = !state.shadowCompleted.has(id);
+    state.shadowCompleted.add(id);
+    if (isFirst) earn('shadow_studio_' + id, 10);
+    saveState();
+    renderShadowing();
+    toast(isFirst ? 'Ajoyib natija! +10 XP berildi.' : 'Jumla qayta takrorlandi.');
+    return;
+  }
 
   const nav = target.closest('[data-view]');
   if (nav) {
