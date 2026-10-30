@@ -59,7 +59,7 @@ body.dark{--bg:#020617;--surface:#0f172a;--raised:#1e293b;--ink:#f8fafc;--body:#
    <header class="site-header canva-header" data-template-id="site-header" style="background: rgb(255, 255, 255);">
     <div class="inner header-row">
      <button type="button" class="brand" data-view="home" aria-label="FLY HIGH — For Great Nation, Deutsch lernen"> <span class="brand-mark" aria-hidden="true"><span class="tricolor"><i></i><i></i><i></i></span><b>FGN</b></span><span class="brand-text"><strong class="canva-text" data-template-id="brand-name" style="color: rgb(15, 23, 42); font-weight: 400; font-style: normal; font-size: 16px;">FLY HIGH</strong><small class="canva-text" data-template-id="brand-subtitle" style="color: rgb(100, 116, 139); font-weight: 400; font-style: normal; font-size: 16px;">FOR GREAT NATION</small></span> </button>
-     <nav class="desktop-nav" aria-label="Asosiy navigatsiya"><button type="button" class="nav-btn active" data-view="home"><i data-lucide="house"></i><span class="canva-text" data-template-id="nav-home" style="color: rgb(0, 0, 0); font-weight: 700; font-style: normal; font-size: 15px;">Bosh sahifa</span></button> <button type="button" class="nav-btn" data-view="courses"><i data-lucide="map"></i><span class="canva-text" data-template-id="nav-courses" style="color: rgb(0, 0, 0); font-weight: 700; font-style: normal; font-size: 15px;">Kurslar</span></button> <button type="button" class="nav-btn" data-view="vocabulary"><i data-lucide="book-open"></i><span class="canva-text" data-template-id="nav-vocabulary" style="color: rgb(0, 0, 0); font-weight: 700; font-style: normal; font-size: 15px;">Lug‘at</span></button> <button type="button" class="nav-btn" data-view="shadowing"><i data-lucide="mic"></i><span class="canva-text" data-template-id="nav-shadowing" style="font-weight: 700; font-style: normal; font-size: 15px;">Shadowing</span></button> <button type="button" class="nav-btn" data-view="certificate"><i data-lucide="award"></i><span class="canva-text" data-template-id="nav-certificate" style="color: rgb(0, 0, 0); font-weight: 700; font-style: normal; font-size: 15px;">Testlar</span></button>
+     <nav class="desktop-nav" aria-label="Asosiy navigatsiya"><button type="button" class="nav-btn active" data-view="home"><i data-lucide="house"></i><span class="canva-text" data-template-id="nav-home" style="color: rgb(0, 0, 0); font-weight: 700; font-style: normal; font-size: 15px;">Bosh sahifa</span></button> <button type="button" class="nav-btn" data-view="courses"><i data-lucide="map"></i><span class="canva-text" data-template-id="nav-courses" style="color: rgb(0, 0, 0); font-weight: 700; font-style: normal; font-size: 15px;">Kurslar</span></button> <button type="button" class="nav-btn" data-view="vocabulary"><i data-lucide="book-open"></i><span class="canva-text" data-template-id="nav-vocabulary" style="color: rgb(0, 0, 0); font-weight: 700; font-style: normal; font-size: 15px;">Lug‘at</span></button> <button type="button" class="nav-btn" data-view="shadowing"><i data-lucide="mic"></i><span class="canva-text" data-template-id="nav-shadowing" style="font-weight: 700; font-style: normal; font-size: 15px;">Shadowing</span></button> 
       <div class="nav-wrap" id="library-wrap">
        <button type="button" id="library-toggle" class="nav-btn" aria-expanded="false" aria-controls="library-menu"><i data-lucide="library"></i><span class="canva-text" data-template-id="library-toggle-label" style="color: rgb(0, 0, 0); font-weight: 700; font-style: normal; font-size: 15px;">Kutubxona</span></button>
        <div class="dropdown" id="library-menu" hidden=""><button type="button" class="nav-btn canva-button" data-template-id="nav-grammar" data-view="lesson" data-step="3" style="font-weight: 400; font-style: normal; font-size: 16px;">Grammatika</button> <button type="button" class="nav-btn canva-button" data-template-id="nav-listening" data-view="lesson" data-step="4" style="font-weight: 400; font-style: normal; font-size: 16px;">Tinglash</button> <button type="button" class="nav-btn canva-button" data-template-id="nav-reading" data-view="lesson" data-step="5" style="font-weight: 400; font-style: normal; font-size: 16px;">O‘qish</button>
@@ -315,22 +315,7 @@ body.dark{--bg:#020617;--surface:#0f172a;--raised:#1e293b;--ink:#f8fafc;--body:#
       </div>
       <div class="grid sm:grid-cols-2 gap-4" id="shadow-grid"></div>
     </section>
-    <section id="view-certificate" class="view" aria-label="Ichki demo testlar">
-     <div class="page-heading">
-      <span class="eyebrow" style="color:#b45309">ICHKI BAHOLASH · DEMO</span>
-      <h1 class="canva-text" data-template-id="certificate-heading" style="font-weight: 800; font-style: normal; font-size: 32px;">Bilimingizni sinab ko‘ring.</h1>
-      <p class="canva-text" data-template-id="certificate-intro" style="color: rgb(100, 116, 139); font-weight: 400; font-style: normal; font-size: 16px;">Hören va Lesen mashqlari. Natijalar For Great Nation ichki baholashi bo‘lib, rasmiy Goethe, telc yoki ÖSD sertifikati emas.</p>
-     </div>
-     <div class="segment" role="group" aria-label="Test turini tanlash">
-      <button type="button" data-exam-filter="Hören" class="selected" aria-pressed="true">🎧 Hören</button><button type="button" data-exam-filter="Lesen" aria-pressed="false">📖 Lesen</button><button type="button" data-exam-filter="Kompleks" aria-pressed="false">🏆 Kompleks</button>
-     </div>
-     <div class="exam-grid" id="exam-options"></div>
-     <article class="card p-6 sm:p-8 mt-5" id="exam-panel">
-      <span class="eyebrow">TANLANGAN DEMO MASHQ</span>
-      <h2>Mashqqa tayyormisiz?</h2>
-      <p class="muted">Bo‘limni tanlang va taymerli mashqni boshlang.</p><button type="button" class="primary" id="exam-start">Mashqni boshlash</button>
-     </article>
-    </section>
+    
     <section id="view-dashboard" class="view" aria-label="Natijalar">
      <div class="page-heading">
       <span class="eyebrow">SIZNING O‘QUV PANELINGIZ</span>
@@ -379,9 +364,9 @@ body.dark{--bg:#020617;--surface:#0f172a;--raised:#1e293b;--ink:#f8fafc;--body:#
         <p class="meta">Yodlangan so‘zlar</p><button type="button" class="tertiary small" data-view="vocabulary">So‘zlarni takrorlash →</button>
        </article>
        <article class="dash-card card">
-        <span class="eyebrow" style="color:#b45309">DEMO BAHOLASH</span>
-        <h3 id="dash-attempts"></h3>
-        <p class="meta">Bajarilgan test urinishlari</p><button type="button" class="tertiary small" data-view="certificate">Testlarga o‘tish →</button>
+        <span class="eyebrow" style="color:#0284c7">SHADOWING</span>
+        <h3 id="dash-shadow">Faol</h3>
+        <p class="meta">Talaffuz va tinglash mashqlari</p><button type="button" class="tertiary small" data-view="shadowing">Mashqqa o‘tish →</button>
        </article>
       </div>
      </div>
@@ -392,7 +377,7 @@ body.dark{--bg:#020617;--surface:#0f172a;--raised:#1e293b;--ink:#f8fafc;--body:#
     </section>
    </main>
    <nav class="dock" aria-label="Mobil navigatsiya">
-    <button type="button" class="active" data-view="home"><i data-lucide="house"></i><span>Uy</span></button><button type="button" data-view="courses"><i data-lucide="map"></i><span>Kurslar</span></button><button type="button" data-view="vocabulary"><i data-lucide="book-open"></i><span>Lug‘at</span></button><button type="button" data-view="shadowing"><i data-lucide="mic"></i><span>Shadowing</span></button><button type="button" data-view="certificate"><i data-lucide="award"></i><span>Testlar</span></button><button type="button" data-view="dashboard"><i data-lucide="user-round"></i><span>Natijalar</span></button>
+    <button type="button" class="active" data-view="home"><i data-lucide="house"></i><span>Uy</span></button><button type="button" data-view="courses"><i data-lucide="map"></i><span>Kurslar</span></button><button type="button" data-view="vocabulary"><i data-lucide="book-open"></i><span>Lug‘at</span></button><button type="button" data-view="shadowing"><i data-lucide="mic"></i><span>Shadowing</span></button><button type="button" data-view="dashboard"><i data-lucide="user-round"></i><span>Natijalar</span></button>
    </nav>
    <footer class="site-footer canva-footer" data-template-id="site-footer" style="background: rgb(248, 250, 252);">
     <div class="inner footer-grid">
@@ -404,7 +389,7 @@ body.dark{--bg:#020617;--surface:#0f172a;--raised:#1e293b;--ink:#f8fafc;--body:#
       <h2>O‘quv yo‘li</h2><button type="button" data-view="courses">Kurslar xaritasi</button><button type="button" data-view="lesson">Birinchi dars</button><button type="button" data-view="dashboard">Natijalar</button>
      </div>
      <div>
-      <h2>Mashq qiling</h2><button type="button" data-view="vocabulary">Lug‘at</button><button type="button" data-view="shadowing">Shadowing</button><button type="button" data-view="certificate">Demo testlar</button>
+      <h2>Mashq qiling</h2><button type="button" data-view="vocabulary">Lug‘at</button><button type="button" data-view="shadowing">Shadowing</button>
      </div>
     </div>
    </footer>
@@ -412,7 +397,7 @@ body.dark{--bg:#020617;--surface:#0f172a;--raised:#1e293b;--ink:#f8fafc;--body:#
   <div id="mobile-sheet" class="mobile-sheet" hidden="" role="dialog" aria-label="Barcha bo‘limlar">
    <div class="flex justify-between items-center mb-2">
     <strong>Bo‘limlar</strong><button type="button" id="mobile-menu-close" style="width:auto" aria-label="Menyuni yopish">✕</button>
-   </div><button type="button" data-view="home">Bosh sahifa</button><button type="button" data-view="courses">Kurslar</button><button type="button" data-view="vocabulary">Lug‘at</button><button type="button" data-view="lesson" data-step="3">Grammatika</button><button type="button" data-view="lesson" data-step="4">Tinglash</button><button type="button" data-view="lesson" data-step="5">O‘qish</button><button type="button" data-view="shadowing">Shadowing</button><button type="button" data-view="certificate">Demo testlar</button><button type="button" data-view="dashboard">Natijalar</button>
+   </div><button type="button" data-view="home">Bosh sahifa</button><button type="button" data-view="courses">Kurslar</button><button type="button" data-view="vocabulary">Lug‘at</button><button type="button" data-view="lesson" data-step="3">Grammatika</button><button type="button" data-view="lesson" data-step="4">Tinglash</button><button type="button" data-view="lesson" data-step="5">O‘qish</button><button type="button" data-view="shadowing">Shadowing</button><button type="button" data-view="dashboard">Natijalar</button>
   </div>
   <div id="search-overlay" class="overlay" hidden="">
    <div class="modal card" role="dialog" aria-modal="true" aria-labelledby="search-title">
@@ -1027,7 +1012,7 @@ function show(view, step) {
   });
   if (view === 'lesson') renderLesson();
   if (view === 'dashboard') renderDashboard();
-  if (view === 'certificate') renderExamOptions();
+  // if (view === 'certificate') renderExamOptions();
 renderShadowing();
   if (view === 'shadowing') renderShadowing();
   window.scrollTo({top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'});
@@ -1863,6 +1848,7 @@ const examBank = {
 };
 
 function renderExamOptions() {
+      if (!document.getElementById("exam-options")) return;
   $$('.segment button').forEach(b => {
     const selected = b.dataset.examFilter === state.examFilter;
     b.classList.toggle('selected', selected);
@@ -2020,7 +2006,7 @@ function searchResults() {
     ['Kurslar', 'courses'],
     ['Lug‘at', 'vocabulary'],
     ['Shadowing studiyasi', 'shadowing'],
-    ['Demo testlar', 'certificate'],
+    
     ['Natijalar', 'dashboard']
   ];
 
