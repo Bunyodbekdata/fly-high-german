@@ -14,6 +14,39 @@ body.dark{--bg:#020617;--surface:#0f172a;--raised:#1e293b;--ink:#f8fafc;--body:#
 @media(max-width:1150px){.desktop-nav{gap:0}.nav-btn{padding-inline:9px}.header-actions .metric-pill.energy{display:none}}@media(max-width:990px){.desktop-nav{display:none}.header-row{justify-content:space-between}.mobile-menu-btn{display:inline-flex}.method-grid,.module-grid,.exam-grid,.dash-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:680px){.inner{width:calc(100% - 32px)}.header-row{min-height:64px}.brand-text strong{font-size:14px}.brand-text small{font-size:8px}.header-actions .metric-pill,.profile-btn{display:none}.hero{display:flex;flex-direction:column-reverse}.hero-image-wrap{height:155px;min-height:155px}.hero-image-wrap:after{background:linear-gradient(0deg,#eef2ff,transparent 75%)}.dark .hero-image-wrap:after{background:linear-gradient(0deg,#1e1b4b,transparent 75%)}.hero-copy{padding:24px}.hero h2{font-size:32px}.hero p{font-size:13px}.actions{flex-direction:column}.actions button{width:100%}.stats{grid-template-columns:repeat(2,1fr)}.stat{padding:15px}.section{padding:32px 0}.method-grid,.module-grid,.exam-grid,.dash-grid,.flash-grid{grid-template-columns:1fr}.learning-path:before,.roadmap:before{left:18px}.level-stop,.level-stop:nth-child(even),.road-stop,.road-stop:nth-child(even){width:calc(100% - 20px);margin-left:20px;text-align:left;padding:10px 0 10px 27px}.level-stop .node,.level-stop:nth-child(odd) .node{left:-18px;right:auto}.road-stop .dot,.road-stop:nth-child(odd) .dot{left:-12px;right:auto}.phonetics img{width:75%}.phonetics>div{padding:23px}.lesson-controls{position:sticky;bottom:calc(83px + env(safe-area-inset-bottom));z-index:12;padding:9px;background:var(--surface);border:1px solid var(--line);border-radius:21px}.lesson-controls button{flex:1}.dock{display:flex;position:fixed;z-index:48;left:10px;right:10px;bottom:calc(8px + env(safe-area-inset-bottom));padding:5px;justify-content:space-between;background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(20px);border:1px solid var(--line);border-radius:25px;box-shadow:0 12px 35px #02061735}.dock button{position:relative;min-width:0;min-height:58px;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:0;background:none;color:var(--muted);font-size:9px;font-weight:800;border-radius:19px}.dock button svg{width:23px;height:23px}.dock button span{font-size:10px}.dock button.active{color:var(--brand);background:var(--tint)}.dock button.active:after{content:"";position:absolute;bottom:3px;width:14px;height:3px;border-radius:99px;background:var(--gold)}.site-footer{padding-bottom:115px}.footer-grid{grid-template-columns:1fr 1fr}.footer-grid>div:first-child{grid-column:1/-1}.toast{bottom:calc(94px + env(safe-area-inset-bottom))}.mobile-sheet{display:block;position:fixed;z-index:70;left:12px;right:12px;bottom:calc(90px + env(safe-area-inset-bottom));max-height:calc(70 * min(var(--vh,1vh),1vh));overflow:auto;padding:17px;background:var(--surface);border:1px solid var(--line);border-radius:25px;box-shadow:0 20px 45px #0004}.mobile-sheet button{width:100%;min-height:46px;text-align:left;background:transparent;border:0;border-radius:14px;padding:10px 13px;color:var(--ink);font-weight:800}.mobile-sheet button:hover{background:var(--tint)}.greeting{align-items:flex-start}.quick-metrics{width:100%}.quick-metrics .metric-pill{min-height:40px;flex:1}.audio-card{padding:17px}.segment button{font-size:11px;padding:6px}.exam-meta{font-size:10px}}
 @media print{.site-header,.dock,.site-footer,.no-print,.lesson-controls{display:none!important}body{background:#fff!important}.certificate-paper{box-shadow:none;max-width:none;border-radius:0}.view:not(.active){display:none!important}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+/* Multi-Speaker Audio & Dialogue Styling */
+.dialogue-box{display:flex;flex-direction:column;gap:12px;margin:14px 0}
+.dialogue-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:12px 16px;background:var(--raised);border-radius:18px;border:1px solid var(--line)}
+.speaker-tag{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:800}
+.speaker-tag.female{background:#fff1f2;color:#be123c;border:1px solid #fecdd3}
+.speaker-tag.male{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}
+.dialogue-turn{display:flex;gap:12px;align-items:flex-start;padding:14px;border-radius:20px;border:2px solid var(--line);background:var(--surface);transition:all .25s ease}
+.dialogue-turn.female{border-left:6px solid #e11d48}
+.dialogue-turn.male{border-left:6px solid #2563eb}
+.dialogue-turn.active-turn{border-color:var(--brand);background:var(--tint);box-shadow:0 0 20px rgba(99,102,241,0.25);transform:scale(1.01)}
+.turn-avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-size:20px;background:var(--raised);border:2px solid var(--line);flex-shrink:0;transition:transform .2s}
+.dialogue-turn.female .turn-avatar{background:#fff1f2;border-color:#fecdd3}
+.dialogue-turn.male .turn-avatar{background:#eff6ff;border-color:#bfdbfe}
+.dialogue-turn.active-turn .turn-avatar{transform:scale(1.15);box-shadow:0 0 12px var(--brand)}
+.turn-content{flex:1}
+.turn-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.turn-de{font-weight:800;font-size:16px;color:var(--ink);margin:4px 0}
+.turn-uz{font-size:13px;color:var(--muted);margin:0 0 10px}
+.turn-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:99px;border:1px solid var(--line);background:var(--surface);font-size:12px;font-weight:700;color:var(--body);cursor:pointer;transition:all .18s}
+.turn-btn:hover{border-color:var(--brand);color:var(--brand);transform:translateY(-1px)}
+.turn-btn.playing,.voice-btn.playing{background:var(--brand);color:#fff;border-color:var(--brand)}
+.dark .dialogue-turn.female{border-left-color:#f43f5e}
+.dark .dialogue-turn.male{border-left-color:#38bdf8}
+.dark .dialogue-turn.female .turn-avatar{background:#4c0519;border-color:#881337}
+.dark .dialogue-turn.male .turn-avatar{background:#172554;border-color:#1e40af}
+.phonetic-grid{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.phonetic-chip{display:inline-flex;flex-direction:column;align-items:center;padding:8px 14px;border-radius:14px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;cursor:pointer;font-weight:800;font-size:16px;min-width:54px;transition:all .18s}
+.phonetic-chip small{font-size:10px;opacity:.8;font-weight:600}
+.phonetic-chip:hover,.phonetic-chip.active{background:#f59e0b;color:#111;border-color:#f59e0b;transform:translateY(-2px);box-shadow:0 4px 14px rgba(245,158,11,0.5)}
+.turtle-btn{display:inline-flex;align-items:center;justify-content:center;min-width:38px;height:38px;padding:4px 8px;border-radius:99px;background:var(--surface);border:1px solid var(--line);color:var(--ink);font-size:14px;cursor:pointer;transition:all .18s}
+.turtle-btn:hover{border-color:#f59e0b;color:#b45309;background:#fffbeb;transform:translateY(-1px)}
+.turtle-btn.playing{background:#f59e0b;color:#fff;border-color:#f59e0b}
 </style>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.577.0/dist/umd/lucide.min.js" type="text/javascript"></script>
   <script src="https://cdn.tailwindcss.com/3.4.17" type="text/javascript"></script>
@@ -176,10 +209,20 @@ body.dark{--bg:#020617;--surface:#0f172a;--raised:#1e293b;--ink:#f8fafc;--body:#
       <div>
        <span class="eyebrow" style="color:#fbbf24">BOSHLASH UCHUN ✦</span>
        <h2 class="canva-text" data-template-id="phonetics-heading" style="color: rgb(255, 255, 255); font-weight: 800; font-style: normal; font-size: 24px;">Fonetika laboratoriyasi</h2>
-       <p class="canva-text" data-template-id="phonetics-description" style="color: rgb(255, 255, 255); font-weight: 400; font-style: normal; font-size: 16px;">Nemis tiliga xos tovushlarni tinglang.</p>
-       <div class="phonetic-letters">
-        ä · ö · ü · ß · ei · ie · eu · ch
-       </div><button type="button" id="phonetics-play" class="secondary small mt-4">Talaffuzni eshitish ↗</button>
+       <p class="canva-text" data-template-id="phonetics-description" style="color: rgb(255, 255, 255); font-weight: 400; font-style: normal; font-size: 16px;">Nemis tiliga xos tovushlarni tinglang. Har bir tovushni bosib eshitishingiz mumkin:</p>
+       <div class="phonetic-grid" id="phonetic-chips">
+        <button type="button" class="phonetic-chip" data-phonetic="ä"><span>ä</span><small>[e:]</small></button>
+        <button type="button" class="phonetic-chip" data-phonetic="ö"><span>ö</span><small>[ø:]</small></button>
+        <button type="button" class="phonetic-chip" data-phonetic="ü"><span>ü</span><small>[y:]</small></button>
+        <button type="button" class="phonetic-chip" data-phonetic="ß"><span>ß</span><small>[s]</small></button>
+        <button type="button" class="phonetic-chip" data-phonetic="ei"><span>ei</span><small>[ay]</small></button>
+        <button type="button" class="phonetic-chip" data-phonetic="ie"><span>ie</span><small>[i:]</small></button>
+        <button type="button" class="phonetic-chip" data-phonetic="eu"><span>eu</span><small>[oy]</small></button>
+        <button type="button" class="phonetic-chip" data-phonetic="ch"><span>ch</span><small>[x/ç]</small></button>
+       </div>
+       <div class="flex gap-2 flex-wrap mt-3">
+        <button type="button" id="phonetics-play" class="secondary small"><span>▶ Barchasini ketma-ket tinglash</span></button>
+       </div>
       </div>
      </div>
      <div class="section">
@@ -205,8 +248,13 @@ body.dark{--bg:#020617;--surface:#0f172a;--raised:#1e293b;--ink:#f8fafc;--body:#
          <span class="eyebrow">A1.1 · 1-DARS · 25 DAQIQA</span>
          <h1 class="canva-text" data-template-id="lesson-heading" style="font-weight: 800; font-style: normal; font-size: 32px;">Hallo! Tanishuvni boshlaymiz.</h1>
         </div>
-        <div>
-         <label class="canva-text font-bold text-sm" data-template-id="audio-speed-label" for="audio-speed" style="font-weight: 700; font-style: normal; font-size: 16px;">Audio tezligi</label><select id="audio-speed" class="field ml-2"><option value="0.75">0.75x</option><option value="0.9">0.9x</option><option value="1" selected="">1.0x</option></select>
+        <div class="flex items-center gap-3 flex-wrap">
+         <div>
+          <label class="canva-text font-bold text-sm" data-template-id="audio-speed-label" for="audio-speed" style="font-weight: 700; font-style: normal; font-size: 16px;">Tezlik</label><select id="audio-speed" class="field ml-2"><option value="0.75">0.75x (Sekin)</option><option value="0.9">0.9x</option><option value="1" selected="">1.0x (Oddiy)</option></select>
+         </div>
+         <div>
+          <label class="canva-text font-bold text-sm" for="audio-speaker" style="font-weight: 700; font-style: normal; font-size: 16px;">Ovoz</label><select id="audio-speaker" class="field ml-2"><option value="anna" selected="">👩 Anna (Ayol)</option><option value="ali">👨 Ali (Erkak)</option></select>
+         </div>
         </div>
        </div>
        <div class="flex justify-between gap-2 mt-4">
@@ -387,26 +435,210 @@ function celebrate(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)r
 function closeMenus(){$('#library-menu').hidden=true;$('#library-toggle').setAttribute('aria-expanded','false');$('#mobile-sheet').hidden=true;$('#mobile-menu-open').setAttribute('aria-expanded','false')}
 function closeOverlays(restore=true){const open=$$('.overlay').some(el=>!el.hidden);$$('.overlay').forEach(el=>el.hidden=true);if(open&&restore)lastFocus?.focus()}
 function show(view,step){if(!$('#view-'+view))return;stopAudio();closeMenus();closeOverlays(false);state.view=view;if(Number.isInteger(step))state.step=step;$$('.view').forEach(el=>el.classList.toggle('active',el.id==='view-'+view));$$('[data-view]').forEach(el=>{const active=el.dataset.view===view&&!el.hasAttribute('data-step');el.classList.toggle('active',active);if(el.closest('nav'))el.setAttribute('aria-current',active?'page':'false')});if(view==='lesson')renderLesson();if(view==='dashboard')renderDashboard();if(view==='certificate')renderExamOptions();window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'})}
-function stopAudio(){speechToken++;window.speechSynthesis?.cancel();state.audio=false;$('.audio-card')?.classList.remove('playing')}
-function speak(text){if(state.audio){stopAudio();return}if(!('speechSynthesis' in window)){toast('Bu brauzer talaffuzni ijro etmaydi.');return}const voices=window.speechSynthesis.getVoices();if(voices.length&&!voices.some(v=>v.lang.toLowerCase().startsWith('de'))){toast('Nemischa ovoz topilmadi. Qurilma ovoz sozlamalarini tekshiring.');return}stopAudio();const token=++speechToken,u=new SpeechSynthesisUtterance(text);u.lang='de-DE';u.rate=Number($('#audio-speed').value);const de=voices.find(v=>v.lang.toLowerCase().startsWith('de'));if(de)u.voice=de;u.onend=()=>{if(token===speechToken){state.audio=false;$('.audio-card')?.classList.remove('playing')}};u.onerror=()=>{if(token===speechToken){state.audio=false;$('.audio-card')?.classList.remove('playing');toast('Ovozni ijro etib bo‘lmadi. Qayta urinib ko‘ring.')}};state.audio=true;$('.audio-card')?.classList.add('playing');window.speechSynthesis.speak(u)}
+const AudioEngine = {
+  voices: [],
+  femaleVoice: null,
+  maleVoice: null,
+  activeToken: 0,
+  isPlaying: false,
+
+  init() {
+    if (!('speechSynthesis' in window)) return;
+    const scan = () => {
+      this.voices = window.speechSynthesis.getVoices();
+      const de = this.voices.filter(v => v.lang.toLowerCase().startsWith('de'));
+      if (de.length) {
+        this.femaleVoice = de.find(v => /hedda|katja|marlene|vicki|female|zira|elke|mady/i.test(v.name)) || de[0];
+        this.maleVoice = de.find(v => /stefan|conrad|hans|martin|male|bernd|florian/i.test(v.name)) || de.find(v => v !== this.femaleVoice) || de[0];
+      }
+    };
+    scan();
+    window.speechSynthesis.onvoiceschanged = scan;
+  },
+
+  stop() {
+    this.activeToken++;
+    this.isPlaying = false;
+    window.speechSynthesis?.cancel();
+    state.audio = false;
+    $('.audio-card')?.classList.remove('playing');
+    $$('.turn-btn.playing, .icon-btn.playing, .turtle-btn.playing, .phonetic-chip.active, .dialogue-turn.active-turn').forEach(el => {
+      el.classList.remove('playing', 'active', 'active-turn');
+    });
+    const stopBtn = $('#stop-dialogue-btn');
+    if (stopBtn) stopBtn.style.display = 'none';
+  },
+
+  speak(text, options = {}) {
+    if (!('speechSynthesis' in window)) {
+      toast('Bu brauzer ovozli talaffuzni qo‘llab-quvvatlamaydi.');
+      return;
+    }
+    const hadPlaying = this.isPlaying;
+    const sameBtn = options.btn && options.btn.classList.contains('playing');
+    this.stop();
+    if (hadPlaying && sameBtn) return;
+
+    const token = ++this.activeToken;
+    this.isPlaying = true;
+    state.audio = true;
+
+    const baseRate = Number($('#audio-speed')?.value || 1);
+    const persona = options.persona || $('#audio-speaker')?.value || 'anna';
+
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'de-DE';
+
+    if (persona === 'slow') {
+      u.rate = 0.65;
+      u.pitch = 1.02;
+      if (this.femaleVoice) u.voice = this.femaleVoice;
+    } else if (persona === 'ali') {
+      u.pitch = 0.82;
+      u.rate = Math.max(0.65, baseRate * 0.94);
+      if (this.maleVoice) u.voice = this.maleVoice;
+    } else {
+      u.pitch = 1.22;
+      u.rate = Math.max(0.68, baseRate * 0.98);
+      if (this.femaleVoice) u.voice = this.femaleVoice;
+    }
+
+    if (options.btn) options.btn.classList.add('playing');
+    if (options.container) options.container.classList.add('active-turn');
+
+    const cleanup = () => {
+      if (token === this.activeToken) {
+        this.isPlaying = false;
+        state.audio = false;
+        options.btn?.classList.remove('playing');
+        options.container?.classList.remove('active-turn');
+        $('.audio-card')?.classList.remove('playing');
+        options.onEnd?.();
+      }
+    };
+
+    u.onend = cleanup;
+    u.onerror = () => {
+      cleanup();
+    };
+
+    window.speechSynthesis.speak(u);
+  },
+
+  async playSequence(items, onFinish) {
+    this.stop();
+    const token = ++this.activeToken;
+    this.isPlaying = true;
+    state.audio = true;
+
+    const stopBtn = $('#stop-dialogue-btn');
+    if (stopBtn) stopBtn.style.display = 'inline-flex';
+
+    for (let i = 0; i < items.length; i++) {
+      if (token !== this.activeToken) return;
+      const item = items[i];
+      await new Promise(resolve => {
+        item.onStart?.();
+        this.speak(item.text, {
+          persona: item.persona,
+          btn: item.btn,
+          container: item.container,
+          onEnd: () => {
+            item.onEnd?.();
+            setTimeout(resolve, item.pause || 480);
+          }
+        });
+      });
+    }
+
+    if (token === this.activeToken) {
+      this.isPlaying = false;
+      state.audio = false;
+      if (stopBtn) stopBtn.style.display = 'none';
+      onFinish?.();
+    }
+  }
+};
+AudioEngine.init();
+
+function stopAudio() {
+  AudioEngine.stop();
+}
+function speak(text, persona = null, btn = null) {
+  AudioEngine.speak(text, { persona, btn });
+}
+function voiceButton(text, label, persona = '') {
+  return `<button type="button" class="icon-btn" data-speak="${esc(text)}" ${persona ? `data-persona="${esc(persona)}"` : ''} aria-label="${esc(label)}">▶</button>`;
+}
+function voiceButtons(text, label, persona = '') {
+  return `<span class="flex items-center gap-1">
+    <button type="button" class="icon-btn" data-speak="${esc(text)}" ${persona ? `data-persona="${esc(persona)}"` : ''} title="Oddiy tezlikda tinglash" aria-label="${esc(label)}">▶</button>
+    <button type="button" class="turtle-btn" data-speak="${esc(text)}" data-persona="slow" title="Sekin talaffuz (0.65x)" aria-label="${esc(label)} sekin talaffuzi">🐢</button>
+  </span>`;
+}
 function earn(key,amount=10){if(state.answered.has(key))return;state.answered.add(key);state.xp+=amount;state.minutes=Math.min(20,state.minutes+1);renderDashboard();toast(`Ajoyib! +${amount} XP`);celebrate()}
 function renderLevels(){const names=['A1.1','A1.2','A2.1','A2.2','B1.1','B1.2'];$('#home-levels').innerHTML=names.map((name,i)=>`<article class="level-stop ${i===0?'active':'locked'}"><span class="node" aria-hidden="true">${i===0?'⚑':i===5?'🏅':'↗'}</span><div class="card locked-card"><span class="eyebrow">CEFR · ${name} · ${i===0?'FAOL':'KEYINGI MANZIL'}</span><strong>${i===0?'Birinchi qadam':i<2?'Asoslarni mustahkamlang':'Yangi daraja'}</strong><span class="meta">${i===0?'Salomlashish va oddiy suhbatlar':'Bosqich darslari xaritada ko‘rsatiladi'}</span><div class="progress-track my-3" role="progressbar" aria-label="${name} jarayoni" aria-valuenow="${i===0?Math.round(state.completed/6*100):0}" aria-valuemin="0" aria-valuemax="100"><div class="progress-fill" style="width:${i===0?state.completed/6*100:0}%"></div></div><span class="reward">+${i===0?'50':'100'} XP · ${i===0?'Boshlash mumkin':'Qulflangan'}</span><div class="mt-3"><button type="button" class="${i===0?'primary':'secondary'} small" data-view="courses">${i===0?'Darslarni ko‘rish':'Xaritani ko‘rish'} →</button></div></div></article>`).join('')}
 function renderRoadmap(){$('#roadmap-progress').textContent=`${state.completed} / 6 dars bajarildi`;$('#roadmap').innerHTML=lessons.map((l,i)=>`<div class="road-stop ${l.unlocked?'':'locked'}"><span class="dot" aria-hidden="true"></span><button type="button" class="card" data-lesson="${i}" aria-label="${esc(l.de)}: ${l.unlocked?'dars haqida':'qulflangan'}"><span class="eyebrow">${i<state.completed?'✓ Bajarilgan':l.unlocked?(i===state.completed?'★ Navbatdagi dars':'Ochiq'):'🔒 Qulflangan'} · ${i+1}-dars</span><strong>${esc(l.de)}</strong><span class="meta">${esc(l.uz)} · 25 daqiqa · +20 XP</span></button></div>`).join('');$('#modules').innerHTML=lessons.slice(0,3).map((l,i)=>`<article class="module card"><span class="eyebrow">0${i+1} · ${i<state.completed?'BAJARILGAN':'OCHIQ'}</span><h3>${esc(l.de)}</h3><p>${esc(l.uz)} · 25 daqiqa</p><div class="progress-track my-4"><div class="progress-fill" style="width:${i<state.completed?100:0}%"></div></div><button type="button" class="secondary small" data-lesson="${i}">Tafsilotlar →</button></article>`).join('')}
 function openDetail(i){const l=lessons[i];if(!l.unlocked){toast('Bu dars keyingi bosqichda ochiladi.');return}lastFocus=document.activeElement;$('#detail-title').textContent=`${i+1}-dars · ${l.de}`;$('#detail-description').textContent=`${l.uz}. Taxminan 25 daqiqa · 9 o‘quv bosqichi.`;$('#detail-start').onclick=()=>{closeOverlays();show('lesson',0)};$('#detail-overlay').hidden=false;$('#detail-overlay .close-overlay').focus()}
 function badge(w){return w.article?`<span class="article ${w.pluralArticle?'plural':w.article}">${w.pluralArticle?'die (pl.)':w.article}</span>`:''}
-function voiceButton(text,label){return `<button type="button" class="icon-btn" data-speak="${esc(text)}" aria-label="${esc(label)}">▶</button>`}
 function quiz(id,prompt,choices){return `<div class="learning-card"><strong>${prompt}</strong><div class="quiz-options">${choices.map(([label,correct])=>`<button type="button" class="quiz-choice" data-check="${id}" data-correct="${correct}">${label}</button>`).join('')}</div><p class="meta mt-3 mb-0" id="${id}-feedback" aria-live="polite"></p></div>`}
 function renderLesson(){
 $('#step-counter').textContent=`Bosqich ${state.step+1}/9 · ${stages[state.step]}`;$('#lesson-progress').style.width=`${(state.step+1)/9*100}%`;$('#lesson-progress-track').setAttribute('aria-valuenow',String(state.step+1));$('#step-eyebrow').textContent=`${String(state.step+1).padStart(2,'0')} / 09 · BUGUNGI VAZIFA`;$('#step-title').textContent=stages[state.step];$('#step-prev').disabled=state.step===0;$('#step-next').disabled=state.step===8;
 $('#stepper').innerHTML=stages.map((name,i)=>`<button type="button" class="step ${i===state.step?'active':i<state.step?'done':''}" data-stage="${i}" ${i===state.step?'aria-current="step"':''}><b>${i<state.step?'✓':i+1}</b><span>${name}</span></button>`).join('');
-const rows=words.slice(0,4).map(w=>`<div class="word-row">${badge(w)}<strong>${esc(w.german)}</strong><span class="meta">— ${esc(w.uz)} · ko‘plik: ${esc(w.plural)}</span><span class="ml-auto flex gap-2">${voiceButton((w.article?w.article+' ':'')+w.german,w.german+' talaffuzi')}<button type="button" class="icon-btn" data-favorite="${w.id}" aria-label="${esc(w.german)} so‘zini sevimlilarga qo‘shish">${state.favorites.has(w.id)?'★':'☆'}</button></span></div>`).join('');
+const rows=words.slice(0,4).map(w=>`<div class="word-row">${badge(w)}<strong>${esc(w.german)}</strong><span class="meta">— ${esc(w.uz)} · ko‘plik: ${esc(w.plural)}</span><span class="ml-auto flex gap-2">${voiceButtons((w.article?w.article+' ':'')+w.german,w.german+' talaffuzi')}<button type="button" class="icon-btn" data-favorite="${w.id}" aria-label="${esc(w.german)} so‘zini sevimlilarga qo‘shish">${state.favorites.has(w.id)?'★':'☆'}</button></span></div>`).join('');
 const bodies=[
-`<p>Bugun nemischa salomlashish va o‘zingizni tanishtirishni o‘rganasiz. Keyingi qadamga o‘tib, namunaviy suhbatni tinglang.</p><div class="learning-card"><span class="eyebrow">BUGUNGI IBORA</span><h3>Guten Tag!</h3><p>Xayrli kun!</p>${voiceButton('Guten Tag!','Guten Tag talaffuzi')}</div>`,
-`<p>Hayotiy vaziyatdagi qisqa suhbatni tinglang.</p><div class="learning-card"><p><strong>Anna:</strong> Guten Tag! Wie heißt du?</p><p><strong>Ali:</strong> Ich heiße Ali. Und du?</p><p><strong>Anna:</strong> Ich heiße Anna. Freut mich!</p>${voiceButton('Guten Tag! Wie heißt du? Ich heiße Ali. Und du? Ich heiße Anna. Freut mich!','Suhbatni eshitish')}</div>`,
+`<p>Bugun nemischa salomlashish va o‘zingizni tanishtirishni o‘rganasiz. Keyingi qadamga o‘tib, namunaviy suhbatni tinglang.</p><div class="learning-card"><span class="eyebrow">BUGUNGI IBORA</span><h3>Guten Tag!</h3><p>Xayrli kun!</p>${voiceButtons('Guten Tag!','Guten Tag talaffuzi')}</div>`,
+`<p class="muted mb-3">Hayotiy vaziyatdagi jonli suhbatni tinglang. Anna va Ali turli ovozlarda suhbatlashadi:</p>
+<div class="dialogue-toolbar mb-3">
+  <div class="flex items-center gap-2">
+    <span class="eyebrow" style="color:var(--brand)">SUHBATDOSHLAR:</span>
+    <span class="speaker-tag female">👩 Anna</span>
+    <span class="speaker-tag male">👨 Ali</span>
+  </div>
+  <div class="flex items-center gap-2">
+    <button type="button" class="primary small" id="play-dialogue-all"><span>▶ Butun suhbatni tinglash</span></button>
+    <button type="button" class="secondary small" id="stop-dialogue-btn" style="display:none"><span>⏹ To‘xtatish</span></button>
+  </div>
+</div>
+<div class="dialogue-box" id="lesson-dialogue">
+  <div class="dialogue-turn female" data-turn="0">
+    <div class="turn-avatar" title="Anna (Ayol ovozi)">👩</div>
+    <div class="turn-content">
+      <div class="turn-meta">
+        <span class="speaker-tag female">Anna</span>
+        <button type="button" class="turn-btn" data-speak="Guten Tag! Wie heißt du?" data-persona="anna" data-turn-btn="0" aria-label="Annaning gapini tinglash"><span>▶ Tinglash</span></button>
+      </div>
+      <p class="turn-de">Guten Tag! Wie heißt du?</p>
+      <p class="turn-uz">Xayrli kun! Isming nima?</p>
+    </div>
+  </div>
+  <div class="dialogue-turn male" data-turn="1">
+    <div class="turn-avatar" title="Ali (Erkak ovozi)">👨</div>
+    <div class="turn-content">
+      <div class="turn-meta">
+        <span class="speaker-tag male">Ali</span>
+        <button type="button" class="turn-btn" data-speak="Ich heiße Ali. Und du?" data-persona="ali" data-turn-btn="1" aria-label="Alining gapini tinglash"><span>▶ Tinglash</span></button>
+      </div>
+      <p class="turn-de">Ich heiße Ali. Und du?</p>
+      <p class="turn-uz">Mening ismim Ali. Sening-chi?</p>
+    </div>
+  </div>
+  <div class="dialogue-turn female" data-turn="2">
+    <div class="turn-avatar" title="Anna (Ayol ovozi)">👩</div>
+    <div class="turn-content">
+      <div class="turn-meta">
+        <span class="speaker-tag female">Anna</span>
+        <button type="button" class="turn-btn" data-speak="Ich heiße Anna. Freut mich!" data-persona="anna" data-turn-btn="2" aria-label="Annaning gapini tinglash"><span>▶ Tinglash</span></button>
+      </div>
+      <p class="turn-de">Ich heiße Anna. Freut mich!</p>
+      <p class="turn-uz">Mening ismim Anna. Tanishganimdan xursandman!</p>
+    </div>
+  </div>
+</div>`,
 `<p>Nemis artikllari o‘z rangida: der — ko‘k, die — rose, das — yashil, ko‘plik — binafsha.</p><div class="learning-card">${rows}</div>`,
 `<p>Qoidani misol orqali eslab qoling.</p><div class="grid sm:grid-cols-2 gap-3"><div class="learning-card"><h3>V2 so‘z tartibi</h3><p>Tuslangan fe’l oddiy gapda ikkinchi o‘rinda: <strong>Ich lerne Deutsch.</strong></p></div><div class="learning-card"><h3>Fe’l tuslanishi</h3><p>ich <strong>lerne</strong> · du <strong>lernst</strong> · er/sie <strong>lernt</strong></p></div></div><div class="learning-card"><strong>Eslatma:</strong> “Ich Deutsch lerne” emas, “Ich lerne Deutsch”.</div>`,
-`<p>Gapni tinglang va eshitgan fe’lni tanlang.</p>${voiceButton('Ich lerne Deutsch.','Gapni eshitish')}${quiz('listen','Qaysi fe’lni eshitdingiz?',[['spreche',false],['lerne',true],['wohne',false]])}`,
-`<div class="learning-card"><p><strong>Ich heiße Sara.</strong> Ich komme aus Usbekistan. Ich lerne Deutsch und lese gern Bücher.</p></div>${quiz('read','Sara qayerdan kelgan?',[['O‘zbekistondan',true],['Germaniyadan',false]])}`,
+`<p>Gapni tinglang va eshitgan fe’lni tanlang.</p>${voiceButtons('Ich lerne Deutsch.','Gapni eshitish')}${quiz('listen','Qaysi fe’lni eshitdingiz?',[['spreche',false],['lerne',true],['wohne',false]])}`,
+`<div class="learning-card"><div class="flex items-start justify-between gap-3"><div><p><strong>Ich heiße Sara.</strong> Ich komme aus Usbekistan. Ich lerne Deutsch und lese gern Bücher.</p><small class="muted">Mening ismim Sara. Men O‘zbekistondanman. Men nemis tilini o‘rganaman va kitob o‘qishni yaxshi ko‘raman.</small></div>${voiceButton('Ich heiße Sara. Ich komme aus Usbekistan. Ich lerne Deutsch und lese gern Bücher.','Matnni tinglash','anna')}</div></div>${quiz('read','Sara qayerdan kelgan?',[['O‘zbekistondan',true],['Germaniyadan',false]])}`,
 `<p>“Men nemis tilini o‘rganaman” jumlasini nemischa yozing.</p><form id="writing-form" class="flex flex-wrap gap-2"><label for="writing-answer" class="sr-only">Nemischa jumla</label><input id="writing-answer" class="field flex-1" autocomplete="off" required placeholder="Ich ..."><button type="submit" class="primary">Tekshirish</button></form><p id="writing-feedback" class="meta mt-3" aria-live="polite"></p>`,
 `<div class="learning-card text-center"><div class="mx-auto w-20 h-20 rounded-full bg-indigo-100 text-indigo-700 grid place-items-center text-3xl mb-4" aria-hidden="true">◉</div><h3>Eshiting → gapiring → taqqoslang</h3><p>Mikrofon bu muhitda ishlamaydi. Namunani tinglang, jumlani ovoz chiqarib takrorlang va eshitganingiz bilan o‘zingiz taqqoslang. Ovoz yozib olinmaydi yoki avtomatik baholanmaydi.</p><div class="flex flex-wrap justify-center gap-2">${voiceButton('Guten Tag! Ich heiße Anna.','Shadowing namunasini eshitish')}<button type="button" id="shadow-demo" class="primary">Takrorladim</button><button type="button" id="shadow-retry" class="secondary">Yana eshitish</button></div><p id="shadow-feedback" class="meta mt-3" aria-live="polite"></p></div>`,
 `<p>Har bir savolga javob bering. To‘g‘ri javobdan so‘ng qisqa izoh ko‘rsatiladi.</p>${quiz('choose','1. “Kitob”ning to‘g‘ri artikli qaysi?',[['der Buch',false],['das Buch',true],['die Buch',false]])}${quiz('fill','2. Ich ___ Deutsch.',[['lerne',true],['lernst',false]])}<div class="learning-card"><strong>3. Deutsch / ich / lerne</strong><div class="mt-3"><button type="button" id="order-demo" class="secondary small">Tartibni tekshirish</button></div><p id="order-result" class="meta mt-2 mb-0" aria-live="polite"></p></div>${quiz('match','4. die Lampe nimani anglatadi?',[['chiroq',true],['stol',false]])}`
@@ -416,8 +648,8 @@ function filteredWords(){const q=$('#word-search').value.toLocaleLowerCase();ret
 function renderFilters(){for(const [id,list,key] of [['level-filters',['Barchasi','A1.1','A1.2','A2.1'],'level'],['type-filters',['Barchasi','Ot','Fe’l','Sifat'],'type']])$('#'+id).innerHTML=list.map(v=>`<button type="button" class="filter-btn ${state[key]===v?'selected':''}" data-filter="${key}" data-value="${v}" aria-pressed="${state[key]===v}">${v}</button>`).join('')}
 function renderVocab(){const list=filteredWords();renderFilters();$('#vocab-count').textContent=`${list.length} ta so‘z ko‘rsatilmoqda`;for(const [id,active] of [['table-mode',state.mode==='table'],['flash-mode',state.mode==='flash']]){$('#'+id).classList.toggle('selected',active);$('#'+id).setAttribute('aria-pressed',String(active))}
 if(!list.length){$('#vocab-content').innerHTML='<div class="py-12 text-center"><strong>So‘z topilmadi ✦</strong><p class="muted">Qidiruvni yoki filtrni o‘zgartiring.</p></div>';return}
-if(state.mode==='flash'){state.flashIndex=Math.min(state.flashIndex,list.length-1);const w=list[state.flashIndex];$('#vocab-content').innerHTML=`<div class="max-w-lg mx-auto"><div class="flex justify-between items-center mb-3"><strong>So‘z mashqi</strong><span class="chip">${state.flashIndex+1}/${list.length} so‘z</span></div><button type="button" class="flash w-full" data-flip="${w.id}" aria-label="${esc(w.german)} kartasini aylantirish" aria-pressed="false"><span class="flash-inner"><span class="flash-face">${badge(w)}<strong>${esc(w.german)}</strong><small class="muted">Ma’nosini ko‘rish ↗</small></span><span class="flash-face flash-back"><strong>${esc(w.uz)}</strong><small>${esc(w.example)}</small></span></span></button><div class="flex gap-2 mt-4"><button type="button" class="secondary flex-1" id="flash-repeat">Qayta ko‘rsatish</button><button type="button" class="primary flex-1" id="flash-know">Bilaman ✓</button></div><div class="flex items-center justify-center gap-2 mt-4">${voiceButton((w.article?w.article+' ':'')+w.german,w.german+' talaffuzi')}<button type="button" class="tertiary" id="flash-next">Keyingi →</button></div></div>`;return}
-$('#vocab-content').innerHTML=`<div class="grid sm:grid-cols-2 gap-3">${list.map(w=>`<article class="vocab-card card ${w.pluralArticle?'plural-border':w.article?w.article+'-border':''}"><div class="flex items-center justify-between gap-2"><div class="flex gap-1 flex-wrap">${badge(w)}<span class="chip">${w.level}</span><span class="chip">${w.type}</span></div><div class="flex gap-1"><button type="button" class="icon-btn" data-mastered="${w.id}" aria-pressed="${state.mastered.has(w.id)}" aria-label="${esc(w.german)}: yodlangan holatini almashtirish">${state.mastered.has(w.id)?'✓':'○'}</button><button type="button" class="icon-btn" data-favorite="${w.id}" aria-pressed="${state.favorites.has(w.id)}" aria-label="${esc(w.german)}: sevimli holatini almashtirish">${state.favorites.has(w.id)?'★':'☆'}</button></div></div><div class="flex items-center justify-between gap-3"><div><h3>${esc(w.german)}</h3><strong>${esc(w.uz)}</strong><p class="meta">Ko‘plik: ${esc(w.plural)}</p></div>${voiceButton((w.article?w.article+' ':'')+w.german,w.german+' talaffuzi')}</div><div class="learning-card mb-0"><div class="flex items-center justify-between gap-2"><em>${esc(w.example)}</em>${voiceButton(w.example,w.german+' misolini eshitish')}</div><span class="meta">${esc(w.exampleUz)}</span></div></article>`).join('')}</div>`}
+if(state.mode==='flash'){state.flashIndex=Math.min(state.flashIndex,list.length-1);const w=list[state.flashIndex];$('#vocab-content').innerHTML=`<div class="max-w-lg mx-auto"><div class="flex justify-between items-center mb-3"><strong>So‘z mashqi</strong><span class="chip">${state.flashIndex+1}/${list.length} so‘z</span></div><button type="button" class="flash w-full" data-flip="${w.id}" aria-label="${esc(w.german)} kartasini aylantirish" aria-pressed="false"><span class="flash-inner"><span class="flash-face">${badge(w)}<strong>${esc(w.german)}</strong><small class="muted">Ma’nosini ko‘rish ↗</small></span><span class="flash-face flash-back"><strong>${esc(w.uz)}</strong><small>${esc(w.example)}</small></span></span></button><div class="flex gap-2 mt-4"><button type="button" class="secondary flex-1" id="flash-repeat">Qayta ko‘rsatish</button><button type="button" class="primary flex-1" id="flash-know">Bilaman ✓</button></div><div class="flex items-center justify-center gap-2 mt-4">${voiceButtons((w.article?w.article+' ':'')+w.german,w.german+' talaffuzi')}<button type="button" class="tertiary" id="flash-next">Keyingi →</button></div></div>`;return}
+$('#vocab-content').innerHTML=`<div class="grid sm:grid-cols-2 gap-3">${list.map(w=>`<article class="vocab-card card ${w.pluralArticle?'plural-border':w.article?w.article+'-border':''}"><div class="flex items-center justify-between gap-2"><div class="flex gap-1 flex-wrap">${badge(w)}<span class="chip">${w.level}</span><span class="chip">${w.type}</span></div><div class="flex gap-1"><button type="button" class="icon-btn" data-mastered="${w.id}" aria-pressed="${state.mastered.has(w.id)}" aria-label="${esc(w.german)}: yodlangan holatini almashtirish">${state.mastered.has(w.id)?'✓':'○'}</button><button type="button" class="icon-btn" data-favorite="${w.id}" aria-pressed="${state.favorites.has(w.id)}" aria-label="${esc(w.german)}: sevimli holatini almashtirish">${state.favorites.has(w.id)?'★':'☆'}</button></div></div><div class="flex items-center justify-between gap-3"><div><h3>${esc(w.german)}</h3><strong>${esc(w.uz)}</strong><p class="meta">Ko‘plik: ${esc(w.plural)}</p></div>${voiceButtons((w.article?w.article+' ':'')+w.german,w.german+' talaffuzi')}</div><div class="learning-card mb-0"><div class="flex items-center justify-between gap-2"><em>${esc(w.example)}</em>${voiceButton(w.example,w.german+' misolini eshitish')}</div><span class="meta">${esc(w.exampleUz)}</span></div></article>`).join('')}</div>`}
 function renderDashboard(){for(const id of ['header-xp','home-xp','lesson-xp'])$('#'+id).textContent=state.xp;for(const id of ['header-streak','home-streak'])$('#'+id).textContent=state.streak;$('#home-goal').textContent=`${state.minutes}/20`;$('#home-progress').textContent=`${state.completed}/6`;$('#home-mastered').textContent=`${state.mastered.size}/${words.length}`;$('#dash-streak').textContent=`${state.streak} kun`;$('#dash-xp').textContent=`${state.xp} XP`;$('#dash-goal').innerHTML=`${state.minutes}/20<br>daqiqa`;$('#goal-ring').style.background=`conic-gradient(#f59e0b 0 ${state.minutes/20*100}%,var(--raised) ${state.minutes/20*100}%)`;$('#dash-course-fill').style.width=`${state.completed/6*100}%`;$('#dash-course-label').textContent=`${state.completed} / 6 dars bajarildi`;$('#dash-mastered').textContent=`${state.mastered.size} / ${words.length} ta`;$('#dash-attempts').textContent=`${state.attempts.length} ta urinish`;const badges=[['','Birinchi qadam','Darsni oching',state.answered.size>0],['🔥','Izchil sayyoh','O‘quv ritmini davom ettiring',state.streak>0],['✓','So‘z yig‘uvchi','Birinchi so‘zni yodlang',state.mastered.size>0]];$('#badges-list').innerHTML=badges.map(([icon,title,desc,unlocked])=>`<article class="method card ${unlocked?'':'opacity-60'}"><span class="num" style="${unlocked?'background:#fffbeb;color:#b45309;box-shadow:0 0 20px #f59e0b55':'filter:grayscale(1)'}">${unlocked?icon:'🔒'}</span><h3>${title}</h3><p>${desc}</p><span class="meta">${unlocked?'✓ Ochilgan':'Qulflangan'}</span></article>`).join('');renderLevels();renderRoadmap()}
 function renderExamOptions(){$$('.segment button').forEach(b=>{const selected=b.dataset.examFilter===state.examFilter;b.classList.toggle('selected',selected);b.setAttribute('aria-pressed',String(selected))});const names=['A1','A2'].map(level=>`${state.examFilter} · ${level}`);$('#exam-options').innerHTML=names.map(name=>`<article class="exam-card card ${state.examFilter==='Hören'?'horen':state.examFilter==='Lesen'?'lesen':'kompleks'}"><span class="eyebrow">${esc(name.split(' · ')[1])} · ICHKI DEMO</span><h3>${state.examFilter==='Hören'?'🎧':state.examFilter==='Lesen'?'📖':'🏆'} ${esc(name.split(' · ')[0])} mashqi</h3><p class="meta">Nemis tilini tinglab yoki o‘qib tushunish bo‘yicha mashq.</p><div class="exam-meta"><span>Davomiylik<strong>20 daqiqa</strong></span><span>Savollar<strong>2 ta</strong></span><span>O‘tish bali<strong>60%</strong></span></div><span class="meta">Mukofot: natija kartasi · Urinishlar: ${state.attempts.filter(a=>a.name===name).length} ta</span><button type="button" class="${state.selectedExam===name?'primary':'secondary'}" data-exam="${esc(name)}" aria-pressed="${state.selectedExam===name}">${state.selectedExam===name?'Tanlangan ✓':'Tanlash →'}</button></article>`).join('')}
 function examClock(){const e=$('#exam-clock');if(e)e.textContent=`${String(Math.floor(state.examSeconds/60)).padStart(2,'0')}:${String(state.examSeconds%60).padStart(2,'0')}`}
@@ -431,7 +663,61 @@ document.addEventListener('click',e=>{const target=e.target;
 const nav=target.closest('[data-view]');if(nav){show(nav.dataset.view,nav.hasAttribute('data-step')?Number(nav.dataset.step):undefined);return}
 const lesson=target.closest('[data-lesson]');if(lesson){openDetail(Number(lesson.dataset.lesson));return}
 const stage=target.closest('[data-stage]');if(stage){state.step=Number(stage.dataset.stage);renderLesson();return}
-const voice=target.closest('[data-speak]');if(voice){speak(voice.dataset.speak);return}
+
+const phoneticChip=target.closest('[data-phonetic]');
+if(phoneticChip){
+  const p=phoneticChip.dataset.phonetic;
+  const phoneticsMap={'ä':'ä... Äpfel','ö':'ö... schön','ü':'ü... über','ß':'Eszett... Straße','ei':'ei... eins','ie':'ie... sieben','eu':'eu... Euro','ch':'ch... ich'};
+  phoneticChip.classList.add('active');
+  AudioEngine.speak(phoneticsMap[p]||p,{persona:'slow',onEnd:()=>phoneticChip.classList.remove('active')});
+  return;
+}
+if(target.closest('#phonetics-play')){
+  const chips=$$('#phonetic-chips .phonetic-chip');
+  const phoneticsMap={'ä':'ä... Äpfel','ö':'ö... schön','ü':'ü... über','ß':'Eszett... Straße','ei':'ei... eins','ie':'ie... sieben','eu':'eu... Euro','ch':'ch... ich'};
+  const items=chips.map(chip=>{
+    const p=chip.dataset.phonetic;
+    return {
+      text:phoneticsMap[p]||p,
+      persona:'slow',
+      pause:350,
+      btn:chip,
+      onStart:()=>chip.classList.add('active'),
+      onEnd:()=>chip.classList.remove('active')
+    };
+  });
+  AudioEngine.playSequence(items);
+  return;
+}
+
+if(target.closest('#play-dialogue-all')){
+  const turns=[
+    {text:'Guten Tag! Wie heißt du?',persona:'anna',container:$('.dialogue-turn[data-turn="0"]'),btn:$('[data-turn-btn="0"]'),pause:480},
+    {text:'Ich heiße Ali. Und du?',persona:'ali',container:$('.dialogue-turn[data-turn="1"]'),btn:$('[data-turn-btn="1"]'),pause:480},
+    {text:'Ich heiße Anna. Freut mich!',persona:'anna',container:$('.dialogue-turn[data-turn="2"]'),btn:$('[data-turn-btn="2"]'),pause:480}
+  ];
+  AudioEngine.playSequence(turns);
+  return;
+}
+if(target.closest('#stop-dialogue-btn')){
+  AudioEngine.stop();
+  return;
+}
+
+const voice=target.closest('[data-speak]');
+if(voice){
+  const text=voice.dataset.speak;
+  const persona=voice.dataset.persona||null;
+  const container=voice.closest('.dialogue-turn');
+  const wasPlaying=voice.classList.contains('playing');
+  if(wasPlaying){
+    AudioEngine.stop();
+  } else {
+    AudioEngine.speak(text,{persona,btn:voice,container});
+  }
+  return;
+}
+
 const fav=target.closest('[data-favorite]');if(fav){const id=Number(fav.dataset.favorite);state.favorites.has(id)?state.favorites.delete(id):state.favorites.add(id);state.view==='vocabulary'?renderVocab():renderLesson();toast(state.favorites.has(id)?'Sevimlilarga qo‘shildi.':'Sevimlilardan olindi.');return}
 const mastered=target.closest('[data-mastered]');if(mastered){const id=Number(mastered.dataset.mastered);state.mastered.has(id)?state.mastered.delete(id):state.mastered.add(id);renderVocab();renderDashboard();toast(state.mastered.has(id)?'So‘z yodlangan deb belgilandi.':'Yodlangan belgisi olib tashlandi.');return}
 const filter=target.closest('[data-filter]');if(filter){state[filter.dataset.filter]=filter.dataset.value;state.flashIndex=0;renderVocab();return}
@@ -449,8 +735,19 @@ if(target.closest('.close-overlay')||target.classList.contains('overlay')){close
 if(!target.closest('#library-wrap')){$('#library-menu').hidden=true;$('#library-toggle').setAttribute('aria-expanded','false')}
 if(target.closest('#search-open'))openSearch();
 if(target.closest('#theme-toggle')){document.body.classList.toggle('dark');const dark=document.body.classList.contains('dark');$('#theme-toggle').innerHTML=dark?'<i data-lucide="sun"></i>':'<i data-lucide="moon"></i>';$('#theme-toggle').setAttribute('aria-label',dark?'Yorug‘ rejimni yoqish':'Tungi rejimni yoqish');icons()}
-if(target.closest('#preview-play'))speak('Guten Tag! Ich lerne Deutsch.');
-if(target.closest('#phonetics-play'))speak('ä, ö, ü, ß, ei, ie, eu, ch');
+if(target.closest('#preview-play')){
+  const card=$('.audio-card');
+  const isPlaying=card?.classList.contains('playing');
+  if(isPlaying){
+    AudioEngine.stop();
+  } else {
+    card?.classList.add('playing');
+    AudioEngine.speak('Guten Tag! Ich lerne Deutsch.',{
+      btn:$('#preview-play'),
+      onEnd:()=>card?.classList.remove('playing')
+    });
+  }
+}
 if(target.closest('#step-prev')){state.step=Math.max(0,state.step-1);renderLesson()}
 if(target.closest('#step-next')){state.step=Math.min(8,state.step+1);renderLesson()}
 if(target.closest('#table-mode')){state.mode='table';renderVocab()}
@@ -469,6 +766,8 @@ if(target.closest('#exam-download')){const last=state.attempts.at(-1),a=document
 document.addEventListener('submit',e=>{e.preventDefault();if(e.target.id==='writing-form'){const value=$('#writing-answer').value.toLocaleLowerCase().replace(/[.!?]/g,'').replace(/\s+/g,' ').trim();if(value==='ich lerne deutsch'){$('#writing-feedback').textContent='To‘g‘ri! Ich lerne Deutsch.';earn('writing')}else $('#writing-feedback').textContent='Yana urinib ko‘ring. Maslahat: Ich ... Deutsch.'}});
 document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openSearch()}if(e.key==='Escape'){closeOverlays();closeMenus()}const modal=$('.overlay:not([hidden]) .modal');if(e.key==='Tab'&&modal){const items=[...modal.querySelectorAll('button:not(:disabled),input:not(:disabled)')];if(!items.length)return;const first=items[0],last=items.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});
 $('#word-search').addEventListener('input',()=>{state.flashIndex=0;renderVocab()});$('#global-search').addEventListener('input',searchResults);
+$('#audio-speaker')?.addEventListener('change',e=>{toast(e.target.value==='ali'?'Ovoz tanlandi: 👨 Ali (Erkak ovozi)':'Ovoz tanlandi: 👩 Anna (Ayol ovozi)')});
+$('#audio-speed')?.addEventListener('change',e=>{toast(`Talaffuz tezligi: ${e.target.value}x`)});
 renderDashboard();renderLesson();renderVocab();renderExamOptions();icons();
 })();
 </script>
