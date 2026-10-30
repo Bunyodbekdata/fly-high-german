@@ -1,6 +1,5 @@
 User-agent: *
 Allow: /
 Disallow: /admin
-Disallow: /certificate-tests/results/
 
 Sitemap: https://greatnation.uz/sitemap.xml
