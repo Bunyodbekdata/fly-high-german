@@ -35,7 +35,7 @@ body.dark{--bg:#020617;--surface:#0f172a;--raised:#1e293b;--ink:#f8fafc;--body:#
 .turn-uz{font-size:13px;color:var(--muted);margin:0 0 10px}
 .turn-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:99px;border:1px solid var(--line);background:var(--surface);font-size:12px;font-weight:700;color:var(--body);cursor:pointer;transition:all .18s}
 .turn-btn:hover{border-color:var(--brand);color:var(--brand);transform:translateY(-1px)}
-.turn-btn.playing,.voice-btn.playing{background:var(--brand);color:#fff;border-color:var(--brand)}
+.turn-btn.playing,.voice-btn.playing,.icon-btn.playing{background:var(--brand);color:#fff;border-color:var(--brand)}
 .dark .dialogue-turn.female{border-left-color:#f43f5e}
 .dark .dialogue-turn.male{border-left-color:#38bdf8}
 .dark .dialogue-turn.female .turn-avatar{background:#4c0519;border-color:#881337}
@@ -1055,24 +1055,34 @@ const AudioEngine = {
       try {
         this.activeAudio.pause();
         this.activeAudio.currentTime = 0;
+        this.activeAudio.src = '';
+        this.activeAudio.load();
       } catch (e) {}
       this.activeAudio = null;
     }
-    window.speechSynthesis?.cancel();
+    if (window.speechSynthesis) {
+      try {
+        window.speechSynthesis.cancel();
+      } catch (e) {}
+    }
 
     $('.audio-card')?.classList.remove('playing');
-    $$('.turn-btn.playing, .icon-btn.playing, .turtle-btn.playing, .phonetic-chip.active, .dialogue-turn.active-turn').forEach(el => {
+    $('.turn-btn.playing, .icon-btn.playing, .turtle-btn.playing, .phonetic-chip.active, .dialogue-turn.active-turn').forEach(el => {
       el.classList.remove('playing', 'active', 'active-turn');
+      const icon = el.querySelector('.audio-icon');
+      if (icon) icon.textContent = el.classList.contains('turtle-btn') ? '🐢' : '▶';
     });
     const stopBtn = $('#stop-dialogue-btn');
     if (stopBtn) stopBtn.style.display = 'none';
   },
 
   speak(text, options = {}) {
-    const hadPlaying = this.isPlaying;
     const sameBtn = options.btn && options.btn.classList.contains('playing');
+    if (sameBtn) {
+      this.stop();
+      return;
+    }
     this.stop();
-    if (hadPlaying && sameBtn) return;
 
     const token = ++this.activeToken;
     this.isPlaying = true;
@@ -1081,14 +1091,22 @@ const AudioEngine = {
     const baseRate = Number($('#audio-speed')?.value || 1);
     const persona = options.persona || $('#audio-speaker')?.value || 'anna';
 
-    if (options.btn) options.btn.classList.add('playing');
+    if (options.btn) {
+      options.btn.classList.add('playing');
+      const icon = options.btn.querySelector('.audio-icon');
+      if (icon) icon.textContent = '⏹';
+    }
     if (options.container) options.container.classList.add('active-turn');
 
     const cleanup = () => {
       if (token === this.activeToken) {
         this.isPlaying = false;
         state.audio = false;
-        options.btn?.classList.remove('playing');
+        if (options.btn) {
+          options.btn.classList.remove('playing');
+          const icon = options.btn.querySelector('.audio-icon');
+          if (icon) icon.textContent = options.btn.classList.contains('turtle-btn') ? '🐢' : '▶';
+        }
         options.container?.classList.remove('active-turn');
         $('.audio-card')?.classList.remove('playing');
         options.onEnd?.();
@@ -1249,12 +1267,12 @@ function speak(text, persona = null, btn = null) {
   AudioEngine.speak(text, { persona, btn });
 }
 function voiceButton(text, label, persona = '') {
-  return `<button type="button" class="icon-btn" data-speak="${esc(text)}" ${persona ? `data-persona="${esc(persona)}"` : ''} aria-label="${esc(label)}">▶</button>`;
+  return `<button type="button" class="icon-btn" data-speak="${esc(text)}" ${persona ? `data-persona="${esc(persona)}"` : ''} aria-label="${esc(label)}"><span class="audio-icon">▶</span></button>`;
 }
 function voiceButtons(text, label, persona = '') {
   return `<span class="flex items-center gap-1">
-    <button type="button" class="icon-btn" data-speak="${esc(text)}" ${persona ? `data-persona="${esc(persona)}"` : ''} title="Oddiy tezlikda tinglash" aria-label="${esc(label)}">▶</button>
-    <button type="button" class="turtle-btn" data-speak="${esc(text)}" data-persona="slow" title="Sekin talaffuz (0.68x)" aria-label="${esc(label)} sekin talaffuzi">🐢</button>
+    <button type="button" class="icon-btn" data-speak="${esc(text)}" ${persona ? `data-persona="${esc(persona)}"` : ''} title="Oddiy tezlikda tinglash" aria-label="${esc(label)}"><span class="audio-icon">▶</span></button>
+    <button type="button" class="turtle-btn" data-speak="${esc(text)}" data-persona="slow" title="Sekin talaffuz (0.68x)" aria-label="${esc(label)} sekin talaffuzi"><span class="audio-icon">🐢</span></button>
   </span>`;
 }
 
