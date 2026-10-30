@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, BookOpen, Bookmark, Award, User } from 'lucide-react';
+import { Home, BookOpen, Bookmark, Award, User, Mic } from 'lucide-react';
 import { MobileAccountSheet } from '../components/navigation/MobileAccountSheet';
 import { useAuth } from '../context/AuthContext';
 
@@ -9,12 +9,12 @@ export const MobileNav: React.FC = () => {
   const { user } = useAuth();
   const [isAccountOpen, setIsAccountOpen] = useState(false);
 
-  // Exact 5 items matching Reference Image 5:
-  // Bosh sahifa | Darslar | Lug'at | Testlar | Profil
+  // Nav items: Bosh sahifa | Darslar | Lug'at | Shadowing | Testlar
   const links = [
     { to: '/', label: 'Bosh sahifa', icon: Home },
     { to: '/courses', label: 'Darslar', icon: BookOpen },
     { to: '/vocabulary', label: 'Lug‘at', icon: Bookmark },
+    { to: '/shadowing', label: 'Shadowing', icon: Mic },
     { to: '/certificate-tests', label: 'Testlar', icon: Award },
   ];
 

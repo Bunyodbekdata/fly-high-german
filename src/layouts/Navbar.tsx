@@ -24,12 +24,13 @@ export const Navbar: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isColorGuideOpen, setIsColorGuideOpen] = useState(false);
 
-  // Nav links: Bosh sahifa | Darslar | Lug'at | Grammatika | Testlar
+  // Nav links: Bosh sahifa | Darslar | Lug'at | Grammatika | Shadowing | Testlar
   const navLinks = [
     { to: '/', label: 'Bosh sahifa' },
     { to: '/courses', label: 'Darslar' },
     { to: '/vocabulary', label: 'Lug‘at' },
     { to: '/grammar', label: 'Grammatika' },
+    { to: '/shadowing', label: 'Shadowing' },
     { to: '/certificate-tests', label: 'Testlar' },
   ];
 
