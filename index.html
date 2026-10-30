@@ -436,31 +436,32 @@ function closeMenus(){$('#library-menu').hidden=true;$('#library-toggle').setAtt
 function closeOverlays(restore=true){const open=$$('.overlay').some(el=>!el.hidden);$$('.overlay').forEach(el=>el.hidden=true);if(open&&restore)lastFocus?.focus()}
 function show(view,step){if(!$('#view-'+view))return;stopAudio();closeMenus();closeOverlays(false);state.view=view;if(Number.isInteger(step))state.step=step;$$('.view').forEach(el=>el.classList.toggle('active',el.id==='view-'+view));$$('[data-view]').forEach(el=>{const active=el.dataset.view===view&&!el.hasAttribute('data-step');el.classList.toggle('active',active);if(el.closest('nav'))el.setAttribute('aria-current',active?'page':'false')});if(view==='lesson')renderLesson();if(view==='dashboard')renderDashboard();if(view==='certificate')renderExamOptions();window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'})}
 const AudioEngine = {
-  voices: [],
-  femaleVoice: null,
-  maleVoice: null,
+  activeAudio: null,
   activeToken: 0,
   isPlaying: false,
 
-  init() {
-    if (!('speechSynthesis' in window)) return;
-    const scan = () => {
-      this.voices = window.speechSynthesis.getVoices();
-      const de = this.voices.filter(v => v.lang.toLowerCase().startsWith('de'));
-      if (de.length) {
-        this.femaleVoice = de.find(v => /hedda|katja|marlene|vicki|female|zira|elke|mady/i.test(v.name)) || de[0];
-        this.maleVoice = de.find(v => /stefan|conrad|hans|martin|male|bernd|florian/i.test(v.name)) || de.find(v => v !== this.femaleVoice) || de[0];
-      }
-    };
-    scan();
-    window.speechSynthesis.onvoiceschanged = scan;
+  getAudioUrl(text) {
+    const clean = encodeURIComponent(text.trim());
+    if (window.location.protocol.startsWith('http')) {
+      return `/api/tts?q=${clean}`;
+    }
+    return `https://translate.google.com/translate_tts?ie=UTF-8&tl=de&client=tw-ob&q=${clean}`;
   },
 
   stop() {
     this.activeToken++;
     this.isPlaying = false;
-    window.speechSynthesis?.cancel();
     state.audio = false;
+
+    if (this.activeAudio) {
+      try {
+        this.activeAudio.pause();
+        this.activeAudio.currentTime = 0;
+      } catch (e) {}
+      this.activeAudio = null;
+    }
+    window.speechSynthesis?.cancel();
+
     $('.audio-card')?.classList.remove('playing');
     $$('.turn-btn.playing, .icon-btn.playing, .turtle-btn.playing, .phonetic-chip.active, .dialogue-turn.active-turn').forEach(el => {
       el.classList.remove('playing', 'active', 'active-turn');
@@ -470,10 +471,6 @@ const AudioEngine = {
   },
 
   speak(text, options = {}) {
-    if (!('speechSynthesis' in window)) {
-      toast('Bu brauzer ovozli talaffuzni qo‘llab-quvvatlamaydi.');
-      return;
-    }
     const hadPlaying = this.isPlaying;
     const sameBtn = options.btn && options.btn.classList.contains('playing');
     this.stop();
@@ -485,23 +482,6 @@ const AudioEngine = {
 
     const baseRate = Number($('#audio-speed')?.value || 1);
     const persona = options.persona || $('#audio-speaker')?.value || 'anna';
-
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'de-DE';
-
-    if (persona === 'slow') {
-      u.rate = 0.65;
-      u.pitch = 1.02;
-      if (this.femaleVoice) u.voice = this.femaleVoice;
-    } else if (persona === 'ali') {
-      u.pitch = 0.82;
-      u.rate = Math.max(0.65, baseRate * 0.94);
-      if (this.maleVoice) u.voice = this.maleVoice;
-    } else {
-      u.pitch = 1.22;
-      u.rate = Math.max(0.68, baseRate * 0.98);
-      if (this.femaleVoice) u.voice = this.femaleVoice;
-    }
 
     if (options.btn) options.btn.classList.add('playing');
     if (options.container) options.container.classList.add('active-turn');
@@ -517,17 +497,85 @@ const AudioEngine = {
       }
     };
 
-    u.onend = cleanup;
-    u.onerror = () => {
+    const audio = new Audio();
+    this.activeAudio = audio;
+
+    if (persona === 'slow') {
+      audio.playbackRate = 0.68;
+      audio.preservesPitch = true;
+    } else if (persona === 'ali') {
+      audio.playbackRate = Math.max(0.72, baseRate * 0.88);
+      audio.preservesPitch = false;
+    } else {
+      audio.playbackRate = Math.max(0.85, baseRate * 1.05);
+      audio.preservesPitch = false;
+    }
+
+    audio.onplay = () => {
+      if (token !== this.activeToken) {
+        try { audio.pause(); } catch (e) {}
+        return;
+      }
+      options.onStart?.();
+    };
+
+    audio.onended = () => {
       cleanup();
     };
 
+    audio.onerror = () => {
+      if (token !== this.activeToken) return;
+      this.fallbackSpeechSynthesis(text, persona, baseRate, cleanup);
+    };
+
+    audio.src = this.getAudioUrl(text);
+    audio.play().catch(() => {
+      if (token !== this.activeToken) return;
+      this.fallbackSpeechSynthesis(text, persona, baseRate, cleanup);
+    });
+  },
+
+  fallbackSpeechSynthesis(text, persona, baseRate, cleanup) {
+    if (!('speechSynthesis' in window)) {
+      cleanup();
+      toast('Audio ijro etib bo‘lmadi.');
+      return;
+    }
+    const voices = window.speechSynthesis.getVoices();
+    const deVoices = voices.filter(v => v.lang.toLowerCase().startsWith('de'));
+    if (!deVoices.length) {
+      cleanup();
+      toast('Nemischa audio uchun internet kerak (qurilmada nemischa ovoz paketi o‘rnatilmagan).');
+      return;
+    }
+    const female = deVoices.find(v => /hedda|katja|marlene|vicki|female|zira|elke/i.test(v.name)) || deVoices[0];
+    const male = deVoices.find(v => /stefan|conrad|hans|martin|male|bernd/i.test(v.name)) || deVoices.find(v => v !== female) || deVoices[0];
+
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'de-DE';
+
+    if (persona === 'slow') {
+      u.rate = 0.65;
+      u.pitch = 1.02;
+      u.voice = female;
+    } else if (persona === 'ali') {
+      u.pitch = 0.82;
+      u.rate = Math.max(0.65, baseRate * 0.94);
+      u.voice = male;
+    } else {
+      u.pitch = 1.22;
+      u.rate = Math.max(0.68, baseRate * 0.98);
+      u.voice = female;
+    }
+
+    u.onend = cleanup;
+    u.onerror = cleanup;
     window.speechSynthesis.speak(u);
   },
 
   async playSequence(items, onFinish) {
     this.stop();
-    const token = ++this.activeToken;
+    const seqToken = ++this.activeToken;
     this.isPlaying = true;
     state.audio = true;
 
@@ -535,23 +583,59 @@ const AudioEngine = {
     if (stopBtn) stopBtn.style.display = 'inline-flex';
 
     for (let i = 0; i < items.length; i++) {
-      if (token !== this.activeToken) return;
+      if (seqToken !== this.activeToken) return;
       const item = items[i];
       await new Promise(resolve => {
+        if (seqToken !== this.activeToken) return resolve();
         item.onStart?.();
-        this.speak(item.text, {
-          persona: item.persona,
-          btn: item.btn,
-          container: item.container,
-          onEnd: () => {
-            item.onEnd?.();
-            setTimeout(resolve, item.pause || 480);
+
+        const persona = item.persona || 'anna';
+        const baseRate = Number($('#audio-speed')?.value || 1);
+
+        if (item.btn) item.btn.classList.add('playing');
+        if (item.container) item.container.classList.add('active-turn');
+
+        const endItem = () => {
+          item.btn?.classList.remove('playing');
+          item.container?.classList.remove('active-turn');
+          item.onEnd?.();
+          setTimeout(resolve, item.pause || 480);
+        };
+
+        const audio = new Audio();
+        this.activeAudio = audio;
+
+        if (persona === 'slow') {
+          audio.playbackRate = 0.68;
+          audio.preservesPitch = true;
+        } else if (persona === 'ali') {
+          audio.playbackRate = Math.max(0.72, baseRate * 0.88);
+          audio.preservesPitch = false;
+        } else {
+          audio.playbackRate = Math.max(0.85, baseRate * 1.05);
+          audio.preservesPitch = false;
+        }
+
+        audio.onended = () => {
+          if (seqToken === this.activeToken) endItem();
+        };
+
+        audio.onerror = () => {
+          if (seqToken === this.activeToken) {
+            this.fallbackSpeechSynthesis(item.text, persona, baseRate, endItem);
+          }
+        };
+
+        audio.src = this.getAudioUrl(item.text);
+        audio.play().catch(() => {
+          if (seqToken === this.activeToken) {
+            this.fallbackSpeechSynthesis(item.text, persona, baseRate, endItem);
           }
         });
       });
     }
 
-    if (token === this.activeToken) {
+    if (seqToken === this.activeToken) {
       this.isPlaying = false;
       state.audio = false;
       if (stopBtn) stopBtn.style.display = 'none';
@@ -559,7 +643,6 @@ const AudioEngine = {
     }
   }
 };
-AudioEngine.init();
 
 function stopAudio() {
   AudioEngine.stop();
@@ -667,20 +750,20 @@ const stage=target.closest('[data-stage]');if(stage){state.step=Number(stage.dat
 const phoneticChip=target.closest('[data-phonetic]');
 if(phoneticChip){
   const p=phoneticChip.dataset.phonetic;
-  const phoneticsMap={'ä':'ä... Äpfel','ö':'ö... schön','ü':'ü... über','ß':'Eszett... Straße','ei':'ei... eins','ie':'ie... sieben','eu':'eu... Euro','ch':'ch... ich'};
+  const phoneticsMap={'ä':'Ä. Äpfel.','ö':'Ö. Schön.','ü':'Ü. Über.','ß':'Eszett. Straße.','ei':'Ei. Eins.','ie':'I-E. Sieben.','eu':'Eu. Euro.','ch':'C-H. Ich.'};
   phoneticChip.classList.add('active');
-  AudioEngine.speak(phoneticsMap[p]||p,{persona:'slow',onEnd:()=>phoneticChip.classList.remove('active')});
+  AudioEngine.speak(phoneticsMap[p]||p,{persona:'slow',btn:phoneticChip,onEnd:()=>phoneticChip.classList.remove('active')});
   return;
 }
 if(target.closest('#phonetics-play')){
   const chips=$$('#phonetic-chips .phonetic-chip');
-  const phoneticsMap={'ä':'ä... Äpfel','ö':'ö... schön','ü':'ü... über','ß':'Eszett... Straße','ei':'ei... eins','ie':'ie... sieben','eu':'eu... Euro','ch':'ch... ich'};
+  const phoneticsMap={'ä':'Ä. Äpfel.','ö':'Ö. Schön.','ü':'Ü. Über.','ß':'Eszett. Straße.','ei':'Ei. Eins.','ie':'I-E. Sieben.','eu':'Eu. Euro.','ch':'C-H. Ich.'};
   const items=chips.map(chip=>{
     const p=chip.dataset.phonetic;
     return {
       text:phoneticsMap[p]||p,
       persona:'slow',
-      pause:350,
+      pause:400,
       btn:chip,
       onStart:()=>chip.classList.add('active'),
       onEnd:()=>chip.classList.remove('active')

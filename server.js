@@ -13,8 +13,52 @@ const MIME_TYPES = {
   '.svg': 'image/svg+xml'
 };
 
+const ttsCache = new Map();
+
 const server = http.createServer((req, res) => {
   let cleanUrl = req.url.split('?')[0];
+
+  // High-fidelity German TTS streaming proxy
+  if (cleanUrl === '/api/tts') {
+    try {
+      const urlObj = new URL(req.url, `http://localhost:${PORT}`);
+      const text = (urlObj.searchParams.get('q') || '').trim();
+      if (!text) {
+        res.writeHead(400, { 'Content-Type': 'text/plain' });
+        return res.end('Missing text parameter');
+      }
+      if (ttsCache.has(text)) {
+        res.writeHead(200, {
+          'Content-Type': 'audio/mpeg',
+          'Access-Control-Allow-Origin': '*',
+          'Cache-Control': 'public, max-age=86400'
+        });
+        return res.end(ttsCache.get(text));
+      }
+      const targetUrl = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=de&client=tw-ob&q=' + encodeURIComponent(text);
+      fetch(targetUrl, { headers: { 'User-Agent': 'Mozilla/5.0' } })
+        .then(async resp => {
+          if (!resp.ok) throw new Error('Status ' + resp.status);
+          const buf = Buffer.from(await resp.arrayBuffer());
+          ttsCache.set(text, buf);
+          res.writeHead(200, {
+            'Content-Type': 'audio/mpeg',
+            'Access-Control-Allow-Origin': '*',
+            'Cache-Control': 'public, max-age=86400'
+          });
+          res.end(buf);
+        })
+        .catch(err => {
+          res.writeHead(502, { 'Content-Type': 'text/plain' });
+          res.end('TTS Error: ' + err.message);
+        });
+      return;
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'text/plain' });
+      return res.end(e.message);
+    }
+  }
+
   let filePath = path.join(__dirname, cleanUrl === '/' ? 'index.html' : cleanUrl);
 
   const ext = path.extname(filePath).toLowerCase();
