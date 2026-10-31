@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /admin
 
-Sitemap: https://greatnation.uz/sitemap.xml
+Sitemap: https://lerne-deutsch.uz/sitemap.xml
